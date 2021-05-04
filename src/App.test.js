@@ -12,9 +12,19 @@ import AppRoot from './App';
 */
 
 describe('AppRoot component', () => {
-	it('displays a StrongMotionStaton using mock graphql payload', () => {
 
-	//lets us mock out the graphql service (amongst other things)
+it('displays `Loading...` while waiting for data', () => {
+	const environment = createMockEnvironment();
+  	const testRenderer = TestRenderer.create(
+        <AppRoot environment={environment} />
+     );
+  	expect(testRenderer.toJSON()).toContain('Loading OK...')
+  	expect(testRenderer).toMatchSnapshot() 
+})
+
+it('displays a StrongMotionStaton using mock graphql payload', () => {
+
+	// //lets us mock out the graphql service (amongst other things)
 	const environment = createMockEnvironment();
 
 	//this defines the data we want our query to return

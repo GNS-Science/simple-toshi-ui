@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`AppRoot component displays \`Loading...\` while waiting for data 1`] = `"Loading OK..."`;
+
 exports[`AppRoot component displays a StrongMotionStaton using mock graphql payload 1`] = `
 <div
   className="App"
