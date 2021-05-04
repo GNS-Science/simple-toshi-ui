@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AppRoot component displays a StrongMotionStaton using mock graphql payload 1`] = `
+<div
+  className="App"
+>
+  <header
+    className="App-header"
+  >
+    <img
+      alt="logo"
+      className="App-logo"
+      src="logo.svg"
+    />
+    <p>
+      This data arrives via graphql query from a dev server (see toshi-api flask-relay)
+    </p>
+    <p />
+    <p>
+      <strong>
+        StrongMotionStation
+      </strong>
+       id: "U3Ryb25nTW90aW9uU3RhdGlvbjow"
+    </p>
+    <p>
+      site_code: 
+      &lt;mock-value-for-field-"site_code"&gt;
+    </p>
+    <p>
+      created: 
+      &lt;mock-value-for-field-"created"&gt;
+    </p>
+  </header>
+</div>
+`;

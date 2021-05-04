@@ -28,12 +28,6 @@ query AppStrongMotionStationQuery {
 }
 `;
 
-// Immediately load the query as our app starts. For a real app, we'd move this
-// into our routing configuration, preloading data as we transition to new routes.
-const preloadedQuery = loadQuery(RelayEnvironment, AppStrongMotionStationQuery, {
-  /* query variables */
-});
-
 // Inner component that reads the preloaded query results via `usePreloadedQuery()`.
 // This works as follows:
 // - If the query has completed, it returns the results of the query.
@@ -44,6 +38,7 @@ const preloadedQuery = loadQuery(RelayEnvironment, AppStrongMotionStationQuery, 
 //   handling the failure case here.
 function App(props) {
   const data = usePreloadedQuery(AppStrongMotionStationQuery, props.preloadedQuery);
+  // console.log("preloadedQuery", data);
 
   return (
     <div className="App">
@@ -65,9 +60,17 @@ function App(props) {
 //   Relay Environment instance
 // - <Suspense> specifies a fallback in case a child suspends.
 function AppRoot(props) {
+  const environment = props.environment || RelayEnvironment;
+  // Immediately load the query as our app starts. For a real app, we'd move this
+  // into our routing configuration, preloading data as we transition to new routes.
+  const preloadedQuery = loadQuery(environment, AppStrongMotionStationQuery, {
+    /* query variables */
+  });
+  
+  // console.log('E', environment);
   return (
-    <RelayEnvironmentProvider environment={RelayEnvironment}>
-      <Suspense fallback={'Loading...'}>
+    <RelayEnvironmentProvider environment={environment}>
+      <Suspense fallback={'Loading OK...'}>
         <App preloadedQuery={preloadedQuery} />
       </Suspense>
     </RelayEnvironmentProvider>
