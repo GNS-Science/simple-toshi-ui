@@ -18,8 +18,8 @@ it('displays `Loading...` while waiting for data', () => {
   	const testRenderer = TestRenderer.create(
         <AppRoot environment={environment} />
      );
-  	expect(testRenderer.toJSON()).toContain('Loading OK...')
-  	expect(testRenderer).toMatchSnapshot() 
+  	//expect(testRenderer.toJSON()).toContain('Loading OK...')
+  	expect(testRenderer).toMatchSnapshot() //contains ProgressCircle
 })
 
 it('displays a StrongMotionStaton using mock graphql payload', () => {

@@ -1,37 +1,126 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AppRoot component displays \`Loading...\` while waiting for data 1`] = `"Loading OK..."`;
+exports[`AppRoot component displays \`Loading...\` while waiting for data 1`] = `
+<div
+  className="MuiContainer-root MuiContainer-maxWidthLg"
+>
+  <div
+    className="MuiBox-root MuiBox-root-6 makeStyles-progress-3"
+  >
+    <div
+      className="MuiCircularProgress-root MuiCircularProgress-colorPrimary MuiCircularProgress-indeterminate"
+      role="progressbar"
+      style={
+        Object {
+          "height": 40,
+          "width": 40,
+        }
+      }
+    >
+      <svg
+        className="MuiCircularProgress-svg"
+        viewBox="22 22 44 44"
+      >
+        <circle
+          className="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
+          cx={44}
+          cy={44}
+          fill="none"
+          r={20.2}
+          strokeWidth={3.6}
+          style={Object {}}
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+`;
 
 exports[`AppRoot component displays a StrongMotionStaton using mock graphql payload 1`] = `
 <div
-  className="App"
+  className="MuiContainer-root MuiContainer-maxWidthSm"
 >
-  <header
-    className="App-header"
+  <div
+    className="MuiBox-root MuiBox-root-7"
   >
     <img
       alt="logo"
       className="App-logo"
       src="logo.svg"
     />
-    <p>
-      This data arrives via graphql query from a dev server (see toshi-api flask-relay)
-    </p>
-    <p />
-    <p>
-      <strong>
+  </div>
+  <div
+    className="MuiPaper-root MuiCard-root makeStyles-root-1 MuiPaper-elevation1 MuiPaper-rounded"
+  >
+    <div
+      className="MuiCardContent-root"
+    >
+      <p
+        className="MuiTypography-root makeStyles-title-4 MuiTypography-body1 MuiTypography-colorTextSecondary MuiTypography-gutterBottom"
+      >
         StrongMotionStation
-      </strong>
-       id: "U3Ryb25nTW90aW9uU3RhdGlvbjow"
-    </p>
-    <p>
-      site_code: 
-      &lt;mock-value-for-field-"site_code"&gt;
-    </p>
-    <p>
-      created: 
-      &lt;mock-value-for-field-"created"&gt;
-    </p>
-  </header>
+      </p>
+      <h2
+        className="MuiTypography-root makeStyles-pos-5 MuiTypography-h5"
+      >
+        strong
+        <span
+          className="makeStyles-bullet-2"
+        >
+          •
+        </span>
+        motion
+        <span
+          className="makeStyles-bullet-2"
+        >
+          •
+        </span>
+        station
+      </h2>
+      <p
+        className="MuiTypography-root makeStyles-pos-5 MuiTypography-body1"
+      >
+        id: "U3Ryb25nTW90aW9uU3RhdGlvbjow"
+        <br />
+        site_code: 
+        &lt;mock-value-for-field-"site_code"&gt;
+        <br />
+        created: 
+        &lt;mock-value-for-field-"created"&gt;
+      </p>
+      <p
+        className="MuiTypography-root makeStyles-pos-5 MuiTypography-body1 MuiTypography-colorTextSecondary"
+      >
+        This data arrived via graphql query from a toshi-api.
+      </p>
+    </div>
+    <div
+      className="MuiCardActions-root MuiCardActions-spacing"
+    >
+      <button
+        className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textSizeSmall MuiButton-sizeSmall"
+        disabled={false}
+        onBlur={[Function]}
+        onDragLeave={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        onMouseDown={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        onTouchEnd={[Function]}
+        onTouchMove={[Function]}
+        onTouchStart={[Function]}
+        tabIndex={0}
+        type="button"
+      >
+        <span
+          className="MuiButton-label"
+        >
+          Learn More
+        </span>
+      </button>
+    </div>
+  </div>
 </div>
 `;

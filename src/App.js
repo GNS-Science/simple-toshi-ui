@@ -12,7 +12,42 @@ import {
 
 import RelayEnvironment from './RelayEnvironment';
 
+import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import Link from '@material-ui/core/Link';
+
+import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+
 const { Suspense } = React;
+
+const useStyles = makeStyles({
+  root: {
+    minWidth: 275,
+  },
+  bullet: {
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)',
+  },
+  progress: {
+    verticalAlign: 'middle',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  title: {
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
+  },
+});
 
 // Define a query
 const AppStrongMotionStationQuery = graphql`
@@ -46,19 +81,45 @@ function App(props) {
   const data = usePreloadedQuery(AppStrongMotionStationQuery, props.preloadedQuery);
   // console.log("preloadedQuery", data);
 
+  const classes = useStyles();
+  const bull = <span className={classes.bullet} >•</span>;
+
   return (
-    <div className="App">
-      <header className="App-header">
+    <Container maxWidth="sm">
+      <Box my={4}>
         <img src={logo} className="App-logo" alt="logo" />
-        <p>This data arrives via graphql query from a dev server (see toshi-api flask-relay)</p>
-        <p />
-        <p><strong>StrongMotionStation</strong> id: "U3Ryb25nTW90aW9uU3RhdGlvbjow"</p>
-        <p>site_code:&nbsp;{data.strong_motion_station.site_code}</p>
-        <p>created:&nbsp;{data.strong_motion_station.created}</p>      
-      </header>
-    </div>
-  );
-}
+      </Box>
+
+      <Card className={classes.root}>
+        <CardContent>
+          <Typography className={classes.title} color="textSecondary" gutterBottom>
+            StrongMotionStation
+          </Typography>
+
+          <Typography variant="h5" component="h2" className={classes.pos}>
+            strong{bull}motion{bull}station
+          </Typography>
+
+          <Typography className={classes.pos} component="p">
+            id: "U3Ryb25nTW90aW9uU3RhdGlvbjow"<br />
+            site_code: {data.strong_motion_station.site_code}<br />
+            created: {data.strong_motion_station.created} 
+          </Typography>
+
+          <Typography className={classes.pos} color="textSecondary">
+              This data arrived via graphql query from a toshi-api.
+          </Typography>
+
+        </CardContent>
+        
+        <CardActions>
+          <Button size="small">Learn More</Button>
+        </CardActions>
+      </Card>
+    </Container>
+  )
+};
+
 
 // The above component needs to know how to access the Relay environment, and we
 // need to specify a fallback in case it suspends:
@@ -70,11 +131,22 @@ function AppRoot(props) {
   // console.log('E', environment);
   return (
     <RelayEnvironmentProvider environment={env}>
-      <Suspense fallback={'Loading OK...'}>
+      <Suspense fallback={<Loading />}>
         <App preloadedQuery={preloadedQuery} />
       </Suspense>
     </RelayEnvironmentProvider>
   );
 }
+
+function Loading() {
+  const classes = useStyles();
+  return (
+    <Container>
+      <Box className={classes.progress} width="100%" height="100%">
+        <CircularProgress />
+      </Box>
+    </Container>
+  )
+};
 
 export default AppRoot;
