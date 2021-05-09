@@ -15,7 +15,7 @@ import RelayEnvironment from './RelayEnvironment';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import Link from '@material-ui/core/Link';
+//import Link from '@material-ui/core/Link';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
