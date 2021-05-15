@@ -1,12 +1,19 @@
-**simple-toshi-ui** is a basic react UI for Toshi API. It's experimental and  using react-relay as this is a graphql API.
+**simple-toshi-ui** is a basic react UI for Toshi API. 
 
-# Getting Started with Create React App
+It's experimental 
+
+- using react-relay as this is a graphql API, see https://create-react-app.dev/docs/adding-relay
+  and https://relay.dev/docs/getting-started/installation-and-setup/
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
 In the project directory, you can run:
+
+### `yarn relay`
+
+(re)generate compiled graphql artifacts. Do this after adding new graphql views and/or any schema changes.
 
 ### `yarn start`
 

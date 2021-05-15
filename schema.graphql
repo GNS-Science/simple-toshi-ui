@@ -1,0 +1,846 @@
+schema {
+  query: QueryRoot
+  mutation: MutationRoot
+}
+
+union ChildTaskUnion = GeneralTask | RuptureGenerationTask
+
+type CreateFile {
+  ok: Boolean
+  file_result: File
+}
+
+type CreateFileRelation {
+  ok: Boolean
+  file_relation: FileRelation
+}
+
+input CreateGeneralTaskInput {
+  """When the taskrecord was created"""
+  created: DateTime
+
+  """When task was updated"""
+  updated: DateTime
+
+  """The name of the person or process responsible for the task"""
+  agent_name: String
+
+  """A title always helps"""
+  title: String
+
+  """Some description of the task, potentially Markdown"""
+  description: String
+  clientMutationId: String
+}
+
+type CreateGeneralTaskPayload {
+  general_task: GeneralTask
+  clientMutationId: String
+}
+
+input CreateGrandInversionTaskInput {
+  result: EventResult!
+  state: EventState!
+
+  """The time the task was created"""
+  created: DateTime
+
+  """The final duraton of the task in seconds"""
+  duration: Float
+
+  """The input arguments for the Rupture generator"""
+  arguments: GrandInversionArgsInput
+
+  """The metrics from rupture generation"""
+  metrics: GrandInversionMetricsInput
+
+  """The git references for the software"""
+  git_refs: GitReferencesInput
+  clientMutationId: String
+}
+
+type CreateGrandInversionTaskPayload {
+  task_result: GrandInversionTask
+  clientMutationId: String
+}
+
+input CreateRuptureGenerationTaskInput {
+  result: EventResult!
+  state: EventState!
+
+  """The time the task was created"""
+  created: DateTime
+
+  """The final duraton of the task in seconds"""
+  duration: Float
+
+  """The input arguments for the Rupture generator"""
+  arguments: RuptureGenerationArgsInput
+
+  """The metrics from rupture generation"""
+  metrics: RuptureGenerationMetricsInput
+
+  """The git references for the software"""
+  git_refs: GitReferencesInput
+  clientMutationId: String
+}
+
+type CreateRuptureGenerationTaskPayload {
+  task_result: RuptureGenerationTask
+  clientMutationId: String
+}
+
+type CreateSmsFile {
+  ok: Boolean
+  file_result: SmsFile
+}
+
+input CreateStrongMotionStationInput {
+  """When the SMS record was created"""
+  created: DateTime
+
+  """When SMS record was updated"""
+  updated: DateTime
+
+  """A unique, four character SMS identifier"""
+  site_code: String
+
+  """The NZS1170.5 Site Class"""
+  site_class: SmsSiteClass
+
+  """The data source used for site classification"""
+  site_class_basis: SmsSiteClassBasis
+
+  """Array of Vs30 mean measurements"""
+  Vs30_mean: [Float]
+
+  """Array of Vs30 mean measurements"""
+  Vs30_std_dev: [Float]
+
+  """Indicate whether subsurface investigations have encountered bedrock"""
+  bedrock_encountered: Boolean
+
+  """Indicate presence of soils that can liquify"""
+  liquefiable: Boolean
+
+  """Indicate presence of soft clay or peat soils"""
+  soft_clay_or_peat: Boolean
+  clientMutationId: String
+}
+
+type CreateStrongMotionStationPayload {
+  strong_motion_station: StrongMotionStation
+  clientMutationId: String
+}
+
+type CreateTaskTaskRelation {
+  ok: Boolean
+  thing_relation: TaskTaskRelation
+}
+
+"""
+The `DateTime` scalar type represents a DateTime
+value as specified by
+[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+"""
+scalar DateTime
+
+"""Arguments passed into the opensha Grand Inversion task"""
+input EnergyChangeCompletionCriteriaInput {
+  """
+  The minimum absolute delta (previousE - e ) to signifiy completion. Set to 0 to ignore.
+  """
+  energy_delta: Float
+
+  """
+  The minimum percentage delta (e as percentage of previousE) to signifiy completion. Set to 0 to ignore.
+  """
+  energy_percent_delta: Float
+
+  """How many minutes to look back for the previousE value"""
+  look_back_mins: Float
+}
+
+"""Arguments passed into the opensha Grand Inversion task"""
+type EnergyChangeCompletionCriteriaOutput {
+  """
+  The minimum absolute delta (previousE - e ) to signifiy completion. Set to 0 to ignore.
+  """
+  energy_delta: Float
+
+  """
+  The minimum percentage delta (e as percentage of previousE) to signifiy completion. Set to 0 to ignore.
+  """
+  energy_percent_delta: Float
+
+  """How many minutes to look back for the previousE value"""
+  look_back_mins: Float
+}
+
+enum EventResult {
+  FAILURE
+  SUCCESS
+  UNDEFINED
+}
+
+enum EventState {
+  SCHEDULED
+  STARTED
+  DONE
+  UNDEFINED
+}
+
+"""A data file"""
+type File implements Node {
+  """The ID of the object."""
+  id: ID!
+
+  """The name of the file"""
+  file_name: String
+
+  """The base64-encoded md5 digest of the file"""
+  md5_digest: String
+
+  """The size of the file in bytes"""
+  file_size: Int
+
+  """A pre-signed URL to download the file from s3"""
+  file_url: String
+
+  """A pre-signed URL to post the data to s3"""
+  post_url: String
+
+  """things related to this data file"""
+  relations(before: String, after: String, first: Int, last: Int): FileRelationConnection
+}
+
+"""A Relay connection for Files"""
+type FileConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [FileEdge]!
+}
+
+"""A Relay edge containing a `File` and its cursor."""
+type FileEdge {
+  """The item at the end of the edge"""
+  node: File
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type FileRelation implements Node {
+  """The ID of the object."""
+  id: ID!
+  thing: Thing!
+  file: FileUnion!
+  role: FileRole!
+  thing_id: String
+  file_id: String
+}
+
+type FileRelationConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [FileRelationEdge]!
+}
+
+"""A Relay edge containing a `FileRelation` and its cursor."""
+type FileRelationEdge {
+  """The item at the end of the edge"""
+  node: FileRelation
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+enum FileRole {
+  READ
+  WRITE
+  READ_WRITE
+  UNDEFINED
+}
+
+union FileUnion = SmsFile | File
+
+"""
+A General Task capture metadata and related inputs/outputs for arbitrary tasks
+that may not happen often enough to justify automation and/or a custom schema type.
+"""
+type GeneralTask implements Node & Thing {
+  """The ID of the object."""
+  id: ID!
+
+  """When the task record was created"""
+  created: DateTime
+
+  """Files associated with this object."""
+  files(before: String, after: String, first: Int, last: Int): FileRelationConnection
+
+  """When the task record was last updated"""
+  updated: DateTime
+
+  """The name of the person or process responsible for the task"""
+  agent_name: String
+
+  """A title always helps"""
+  title: String
+
+  """Some description of the task, potentially Markdown"""
+  description: String
+
+  """sub-tasks of this task"""
+  children(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
+
+  """parent task(s) of this task"""
+  parents(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
+}
+
+"""Arguments passed into the opensha Rupture Generator"""
+input GitReferencesInput {
+  """git ref for opensha-ucerf3"""
+  opensha_ucerf3: String
+
+  """git ref for opensha-commons"""
+  opensha_commons: String
+
+  """git ref for opensha-core"""
+  opensha_core: String
+
+  """git ref for nshm-nz-opensha"""
+  nshm_nz_opensha: String
+}
+
+"""Arguments passed into the opensha Rupture Generator"""
+type GitReferencesOutput {
+  """git ref for opensha-ucerf3"""
+  opensha_ucerf3: String
+
+  """git ref for opensha-commons"""
+  opensha_commons: String
+
+  """git ref for opensha-core"""
+  opensha_core: String
+
+  """git ref for nshm-nz-opensha"""
+  nshm_nz_opensha: String
+}
+
+"""Arguments passed into the opensha Grand Inversion task"""
+input GrandInversionArgsInput {
+  """interval in seconds between annealing thread syncs"""
+  sync_interval: Int
+  gutenberg_richter_mfd: GutenbergRichterMFDInput
+  energy_completion_criteria: EnergyChangeCompletionCriteriaInput
+  time_completion_criteria: TimeCompletionCriteriaInput
+  constraints: [GrandInversionConstraintInput]
+}
+
+"""Arguments passed into the opensha Grand Inversion task"""
+type GrandInversionArgsOutput {
+  """interval in seconds between annealing thread syncs"""
+  sync_interval: Int
+  gutenberg_richter_mfd: GutenbergRichterMFDOutput
+  energy_completion_criteria: EnergyChangeCompletionCriteriaOutput
+  time_completion_criteria: TimeCompletionCriteriaOutput
+  constraints: [GrandInversionConstraintOutput]
+}
+
+"""Arguments passed into the opensha Grand Inversion task"""
+input GrandInversionConstraintInput {
+  constraint_type: GrandInversionConstraintType
+
+  """Weighting for this constraint"""
+  constraint_weight: Int
+}
+
+"""Arguments passed into the opensha Grand Inversion task"""
+type GrandInversionConstraintOutput {
+  constraint_type: GrandInversionConstraintType
+
+  """Weighting for this constraint"""
+  constraint_weight: Int
+}
+
+"""supported contraints"""
+enum GrandInversionConstraintType {
+  MFD_Inequality
+  MFD_Equality
+  Slip_Rate
+}
+
+"""The metrics returned from the opensha Rupture Generator"""
+input GrandInversionMetricsInput {
+  """Final inversion energy total."""
+  total_energy: Float
+
+  """Count of fault subsections."""
+  subsection_count: Int
+}
+
+"""The metrics returned from the opensha Rupture Generator"""
+type GrandInversionMetricsOutput {
+  """Final inversion energy total."""
+  total_energy: Float
+
+  """Count of fault subsections."""
+  subsection_count: Int
+}
+
+"""An GrandInversionTask in the NSHM process"""
+type GrandInversionTask implements Node & Thing {
+  """The ID of the object."""
+  id: ID!
+
+  """The time the event was created"""
+  created: DateTime
+
+  """Files associated with this object."""
+  files(before: String, after: String, first: Int, last: Int): FileRelationConnection
+  result: EventResult
+  state: EventState
+
+  """the final duraton of the event in seconds"""
+  duration: Float
+
+  """parent task(s) of this task"""
+  parents(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
+  arguments: GrandInversionArgsOutput
+  metrics: GrandInversionMetricsOutput
+  git_refs: GitReferencesOutput
+}
+
+input GutenbergRichterMFDInput {
+  """
+  The expected number of M>=5's ruptures per year. TODO: OK? ref David Rhodes/Chris Roland? [KKS, CBC]
+  """
+  total_rate_m5: Float
+
+  """G-R b-value"""
+  b_value: Float
+
+  """Minimum magnitude 5.05d"""
+  mfd_min: Float
+
+  """Maximum magnitude 8.85d"""
+  mfd_max: Float
+
+  """
+  magnitude to switch from MFD equality to MFD inequality. TODO: how to validate
+  this number for NZ? (ref Morgan Page in USGS/UCERF3) [KKS, CBC]
+  """
+  mfd_transition_mag: Float
+
+  """Number of MFD buckets?"""
+  mfd_num: Int
+}
+
+type GutenbergRichterMFDOutput {
+  """
+  The expected number of M>=5's ruptures per year. TODO: OK? ref David Rhodes/Chris Roland? [KKS, CBC]
+  """
+  total_rate_m5: Float
+
+  """G-R b-value"""
+  b_value: Float
+
+  """Minimum magnitude 5.05d"""
+  mfd_min: Float
+
+  """Maximum magnitude 8.85d"""
+  mfd_max: Float
+
+  """
+  magnitude to switch from MFD equality to MFD inequality. TODO: how to validate
+  this number for NZ? (ref Morgan Page in USGS/UCERF3) [KKS, CBC]
+  """
+  mfd_transition_mag: Float
+
+  """Number of MFD buckets?"""
+  mfd_num: Int
+}
+
+type MutationRoot {
+  create_rupture_generation_task(input: CreateRuptureGenerationTaskInput!): CreateRuptureGenerationTaskPayload
+  update_rupture_generation_task(input: UpdateRuptureGenerationTaskInput!): UpdateRuptureGenerationTaskPayload
+  create_file(file_name: String, file_size: Int, md5_digest: String = "The base64-encoded md5 digest of the file"): CreateFile
+  create_file_relation(file_id: ID!, role: FileRole!, thing_id: ID!): CreateFileRelation
+  create_strong_motion_station(input: CreateStrongMotionStationInput!): CreateStrongMotionStationPayload
+  create_sms_file(file_name: String, file_size: Int, file_type: SmsFileType!, md5_digest: String = "The base64-encoded md5 digest of the file"): CreateSmsFile
+  create_general_task(input: CreateGeneralTaskInput!): CreateGeneralTaskPayload
+  create_task_relation(child_id: ID!, parent_id: ID!): CreateTaskTaskRelation
+  create_grand_inversion_task(input: CreateGrandInversionTaskInput!): CreateGrandInversionTaskPayload
+}
+
+"""An object with an ID"""
+interface Node {
+  """The ID of the object."""
+  id: ID!
+}
+
+"""
+The Relay compliant `PageInfo` type, containing data necessary to paginate this connection.
+"""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
+"""This is the entry point for all graphql query operations"""
+type QueryRoot {
+  """List Opensha Rupture Generation tasks."""
+  rupture_generation_tasks(before: String, after: String, first: Int, last: Int): RuptureGenerationTaskConnection
+
+  """The files."""
+  files(before: String, after: String, first: Int, last: Int): FileConnection
+
+  """The ID of the object"""
+  node(id: ID!): Node
+  search(search_term: String): Search
+
+  """The ID of the object"""
+  file(id: ID!): File
+  strong_motion_station(id: ID!): StrongMotionStation
+
+  """The list of strong motion stations"""
+  strong_motion_stations(before: String, after: String, first: Int, last: Int): StrongMotionStationConnection
+}
+
+"""Arguments passed into the opensha Rupture Generator"""
+input RuptureGenerationArgsInput {
+  """Maximum jump distance in km"""
+  max_jump_distance: Float
+
+  """
+  maximum ratio of subsection length to DDW for building subsections. Default is 0.5
+  """
+  max_sub_section_length: Float
+
+  """Minimum subsections per parent allowed in a rupture. Default is 2"""
+  min_sub_sections_per_parent: Int
+
+  """Maximum aggregated azimuth change allowed in a rupture."""
+  max_cumulative_azimuth: Float
+
+  """The rupture permutation strategy to use"""
+  permutation_strategy: RupturePermutationStrategy
+}
+
+"""Arguments passed into the opensha Rupture Generator"""
+type RuptureGenerationArgsOutput {
+  """Maximum jump distance in km"""
+  max_jump_distance: Float
+
+  """
+  maximum ratio of subsection length to DDW for building subsections. Default is 0.5
+  """
+  max_sub_section_length: Float
+
+  """Minimum subsections per parent allowed in a rupture. Default is 2"""
+  min_sub_sections_per_parent: Int
+
+  """Maximum aggregated azimuth change allowed in a rupture."""
+  max_cumulative_azimuth: Float
+
+  """The rupture permutation strategy to use"""
+  permutation_strategy: RupturePermutationStrategy
+}
+
+"""The metrics returned from the opensha Rupture Generator"""
+input RuptureGenerationMetricsInput {
+  """Count of ruptures produced."""
+  rupture_count: Int
+
+  """Count of fault subsections produced."""
+  subsection_count: Int
+
+  """Count of cluster connections (deprecated"""
+  possible_cluster_connection_count: Int
+
+  """
+  Count of cluster connections produced. NB both jump directions are considered.
+  """
+  cluster_connection_count: Int
+}
+
+"""The metrics returned from the opensha Rupture Generator"""
+type RuptureGenerationMetricsOutput {
+  """Count of ruptures produced."""
+  rupture_count: Int
+
+  """Count of fault subsections produced."""
+  subsection_count: Int
+
+  """Count of cluster connections (deprecated"""
+  possible_cluster_connection_count: Int
+
+  """
+  Count of cluster connections produced. NB both jump directions are considered.
+  """
+  cluster_connection_count: Int
+}
+
+"""An RuptureGenerationTask in the NSHM process"""
+type RuptureGenerationTask implements Node & Thing {
+  """The ID of the object."""
+  id: ID!
+
+  """The time the event was created"""
+  created: DateTime
+
+  """Files associated with this object."""
+  files(before: String, after: String, first: Int, last: Int): FileRelationConnection
+  result: EventResult
+  state: EventState
+
+  """the final duraton of the event in seconds"""
+  duration: Float
+
+  """parent task(s) of this task"""
+  parents(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
+  arguments: RuptureGenerationArgsOutput
+  metrics: RuptureGenerationMetricsOutput
+  git_refs: GitReferencesOutput
+}
+
+"""A list of RuptureGenerationTask items"""
+type RuptureGenerationTaskConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [RuptureGenerationTaskEdge]!
+}
+
+"""A Relay edge containing a `RuptureGenerationTask` and its cursor."""
+type RuptureGenerationTaskEdge {
+  """The item at the end of the edge"""
+  node: RuptureGenerationTask
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+"""The available rupture generation strategies"""
+enum RupturePermutationStrategy {
+  UCERF3
+  DOWNDIP
+  POINTS
+}
+
+type Search {
+  ok: Boolean
+  search_result(before: String, after: String, first: Int, last: Int): SearchResultConnection
+}
+
+union SearchResult = File | RuptureGenerationTask | StrongMotionStation | SmsFile | GeneralTask | GrandInversionTask
+
+type SearchResultConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [SearchResultEdge]!
+  total_count: Int
+}
+
+"""A Relay edge containing a `SearchResult` and its cursor."""
+type SearchResultEdge {
+  """The item at the end of the edge"""
+  node: SearchResult
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type SmsFile implements Node {
+  """The ID of the object."""
+  id: ID!
+
+  """The name of the file"""
+  file_name: String
+
+  """The base64-encoded md5 digest of the file"""
+  md5_digest: String
+
+  """The size of the file in bytes"""
+  file_size: Int
+
+  """A pre-signed URL to download the file from s3"""
+  file_url: String
+
+  """A pre-signed URL to post the data to s3"""
+  post_url: String
+
+  """things related to this data file"""
+  relations(before: String, after: String, first: Int, last: Int): FileRelationConnection
+  file_type: SmsFileType!
+}
+
+enum SmsFileType {
+  BH
+  CPT
+  DH
+  HVSR
+  SW
+}
+
+"""NZS1170.5 Site Class, one of A,B,C,D,E"""
+enum SmsSiteClass {
+  A
+  B
+  C
+  D
+  E
+}
+
+"""NZS1170.5 Site Class Basis, one of Vs,SPT,su"""
+enum SmsSiteClassBasis {
+  Vs
+  SPT
+  su
+}
+
+"""A Strong Motion Station """
+type StrongMotionStation implements Node & Thing {
+  """The ID of the object."""
+  id: ID!
+
+  """When the SMS record was created"""
+  created: DateTime
+
+  """Files associated with this object."""
+  files(before: String, after: String, first: Int, last: Int): FileRelationConnection
+
+  """When SMS record was updated"""
+  updated: DateTime
+
+  """A unique, four character SMS identifier"""
+  site_code: String
+
+  """The NZS1170.5 Site Class"""
+  site_class: SmsSiteClass
+
+  """The data source used for site classification"""
+  site_class_basis: SmsSiteClassBasis
+
+  """Array of Vs30 mean measurements"""
+  Vs30_mean: [Float]
+
+  """Array of Vs30 mean measurements"""
+  Vs30_std_dev: [Float]
+
+  """Indicate whether subsurface investigations have encountered bedrock"""
+  bedrock_encountered: Boolean
+
+  """Indicate presence of soils that can liquify"""
+  liquefiable: Boolean
+
+  """Indicate presence of soft clay or peat soils"""
+  soft_clay_or_peat: Boolean
+}
+
+"""A list of StrongMotionStation items"""
+type StrongMotionStationConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [StrongMotionStationEdge]!
+}
+
+"""A Relay edge containing a `StrongMotionStation` and its cursor."""
+type StrongMotionStationEdge {
+  """The item at the end of the edge"""
+  node: StrongMotionStation
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type TaskTaskRelation implements Node {
+  """The ID of the object."""
+  id: ID!
+  parent: GeneralTask!
+  child: ChildTaskUnion!
+  parent_id: String
+  child_id: String
+}
+
+type TaskTaskRelationConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [TaskTaskRelationEdge]!
+}
+
+"""A Relay edge containing a `TaskTaskRelation` and its cursor."""
+type TaskTaskRelationEdge {
+  """The item at the end of the edge"""
+  node: TaskTaskRelation
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+"""A Thing in the NSHM saga"""
+interface Thing {
+  """When the thing was created"""
+  created: DateTime
+
+  """Files associated with this object."""
+  files(before: String, after: String, first: Int, last: Int): FileRelationConnection
+}
+
+input TimeCompletionCriteriaInput {
+  """the number of minutes to run (maximum)"""
+  minutes: Int
+}
+
+type TimeCompletionCriteriaOutput {
+  """the number of minutes to run (maximum)"""
+  minutes: Int
+}
+
+input UpdateRuptureGenerationTaskInput {
+  task_id: ID!
+  result: EventResult
+  state: EventState
+
+  """The time the task was created"""
+  created: DateTime
+
+  """The final duraton of the task in seconds"""
+  duration: Float
+
+  """The input arguments for the Rupture generator"""
+  arguments: RuptureGenerationArgsInput
+
+  """The metrics from rupture generation"""
+  metrics: RuptureGenerationMetricsInput
+
+  """The git references for the software"""
+  git_refs: GitReferencesInput
+  clientMutationId: String
+}
+
+type UpdateRuptureGenerationTaskPayload {
+  task_result: RuptureGenerationTask
+  clientMutationId: String
+}
+
