@@ -2,12 +2,14 @@ import React from 'react';
 import './App.css';
 import logo from './logo.svg';
 
-import graphql from 'babel-plugin-relay/macro';
+import { graphql } from 'babel-plugin-relay/macro';
 
 import {
   RelayEnvironmentProvider,
   loadQuery,
   usePreloadedQuery,
+  Environment,
+  PreloadedQuery,
 } from 'react-relay/hooks';
 
 import RelayEnvironment from './RelayEnvironment';
@@ -23,6 +25,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { AppStrongMotionStationQuery } from './__generated__/AppStrongMotionStationQuery.graphql';
 
 
 const { Suspense } = React;
@@ -50,7 +53,7 @@ const useStyles = makeStyles({
 });
 
 // Define a query
-const AppStrongMotionStationQuery = graphql`
+const appStrongMotionStationQuery = graphql`
 query AppStrongMotionStationQuery {
   strong_motion_station(id: "U3Ryb25nTW90aW9uU3RhdGlvbjow") {
     soft_clay_or_peat
@@ -65,7 +68,7 @@ query AppStrongMotionStationQuery {
 
 // Immediately load the query as our app starts. For a real app, we'd move this
 // into our routing configuration, preloading data as we transition to new routes.
-const preloadedQuery = loadQuery(RelayEnvironment, AppStrongMotionStationQuery, {
+const preloadedQuery = loadQuery<AppStrongMotionStationQuery>(RelayEnvironment, appStrongMotionStationQuery, {
   /* query variables */
 });
 
@@ -77,8 +80,8 @@ const preloadedQuery = loadQuery(RelayEnvironment, AppStrongMotionStationQuery, 
 //   fallback.
 // - If the query failed, it throws the failure error. For simplicity we aren't
 //   handling the failure case here.
-function App(props) {
-  const data = usePreloadedQuery(AppStrongMotionStationQuery, props.preloadedQuery);
+function App(props: { preloadedQuery: PreloadedQuery<AppStrongMotionStationQuery> }) {
+  const data = usePreloadedQuery<AppStrongMotionStationQuery>(appStrongMotionStationQuery, props.preloadedQuery);
   // console.log("preloadedQuery", data);
 
   const classes = useStyles();
@@ -102,8 +105,8 @@ function App(props) {
 
           <Typography className={classes.pos} component="p">
             id: "U3Ryb25nTW90aW9uU3RhdGlvbjow"<br />
-            site_code: {data.strong_motion_station.site_code}<br />
-            created: {data.strong_motion_station.created} 
+            site_code: {data?.strong_motion_station?.site_code}<br />
+            created: {data?.strong_motion_station?.created}
           </Typography>
 
           <Typography className={classes.pos} color="textSecondary">
@@ -111,7 +114,7 @@ function App(props) {
           </Typography>
 
         </CardContent>
-        
+
         <CardActions>
           <Button size="small">Learn More</Button>
         </CardActions>
@@ -126,8 +129,8 @@ function App(props) {
 // - <RelayEnvironmentProvider> tells child components how to talk to the current
 //   Relay Environment instance
 // - <Suspense> specifies a fallback in case a child suspends.
-function AppRoot(props) {
-  const env = props.environment || RelayEnvironment;  
+function AppRoot(props: { environment?: Environment }) {
+  const env = props.environment || RelayEnvironment;
   // console.log('E', environment);
   return (
     <RelayEnvironmentProvider environment={env}>

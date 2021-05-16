@@ -4,11 +4,11 @@ import AppStrongMotionStationQuery from './__generated__/AppStrongMotionStationQ
 import AppRoot from './App';
 
 /*
- * 
+ *
  * https://relay.dev/docs/guides/testing-relay-components/
  *
  * https://medium.com/dooboolab/testing-relay-hook-with-react-testing-library-d432f903b8d2
- * 
+ *
 */
 
 describe('AppRoot component', () => {
@@ -38,7 +38,7 @@ it('displays a StrongMotionStaton using mock graphql payload', () => {
 				Vs30_mean: [23]
 			}),
 	};
- 
+
  	//create a query operation
 	environment.mock.queuePendingOperation(AppStrongMotionStationQuery, {A:1})
 
@@ -46,7 +46,7 @@ it('displays a StrongMotionStaton using mock graphql payload', () => {
 	environment.mock.queueOperationResolver(
   		(operation) => MockPayloadGenerator.generate(operation, mockResolver),
 	);
-	
+
 	//create the test subject
   	const testRenderer = TestRenderer.create(
         <AppRoot environment={environment} />

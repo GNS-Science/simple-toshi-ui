@@ -1,30 +1,25 @@
-/**
- * @flow
- */
-
+/* tslint:disable */
 /* eslint-disable */
+// @ts-nocheck
 
-'use strict';
-
-/*::
-import type { ConcreteRequest } from 'relay-runtime';
+import { ConcreteRequest } from "relay-runtime";
 export type SmsSiteClass = "A" | "B" | "C" | "D" | "E" | "%future added value";
-export type AppStrongMotionStationQueryVariables = {||};
-export type AppStrongMotionStationQueryResponse = {|
-  +strong_motion_station: ?{|
-    +soft_clay_or_peat: ?boolean,
-    +id: string,
-    +created: ?any,
-    +Vs30_mean: ?$ReadOnlyArray<?number>,
-    +site_code: ?string,
-    +site_class: ?SmsSiteClass,
-  |}
-|};
-export type AppStrongMotionStationQuery = {|
-  variables: AppStrongMotionStationQueryVariables,
-  response: AppStrongMotionStationQueryResponse,
-|};
-*/
+export type AppStrongMotionStationQueryVariables = {};
+export type AppStrongMotionStationQueryResponse = {
+    readonly strong_motion_station: {
+        readonly soft_clay_or_peat: boolean | null;
+        readonly id: string;
+        readonly created: unknown | null;
+        readonly Vs30_mean: ReadonlyArray<number | null> | null;
+        readonly site_code: string | null;
+        readonly site_class: SmsSiteClass | null;
+    } | null;
+};
+export type AppStrongMotionStationQuery = {
+    readonly response: AppStrongMotionStationQueryResponse;
+    readonly variables: AppStrongMotionStationQueryVariables;
+};
+
 
 
 /*
@@ -40,7 +35,7 @@ query AppStrongMotionStationQuery {
 }
 */
 
-const node/*: ConcreteRequest*/ = (function(){
+const node: ConcreteRequest = (function(){
 var v0 = [
   {
     "alias": null,
@@ -129,7 +124,5 @@ return {
   }
 };
 })();
-// prettier-ignore
-(node/*: any*/).hash = '512b0c455c4e5b9c9a4ffaeefd065b9d';
-
-module.exports = node;
+(node as any).hash = '512b0c455c4e5b9c9a4ffaeefd065b9d';
+export default node;
