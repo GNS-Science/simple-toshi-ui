@@ -19,7 +19,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "relay": "relay-compiler --src ./src --schema ./schema.graphql --language typescript"
+    "relay": "relay-compiler --src ./src --schema ./schema.graphql --language typescript",
+    "lint": "eslint ./src/**/*.{js,ts,tsx} --quiet --fix"
   },
   "eslintConfig": {
     "extends": [
@@ -47,9 +48,14 @@
     "@types/react-relay": "^11.0.1",
     "@types/react-test-renderer": "^17.0.1",
     "@types/relay-test-utils": "^6.0.4",
+    "@typescript-eslint/eslint-plugin": "^4.23.0",
+    "@typescript-eslint/parser": "^4.23.0",
     "babel-plugin-relay": "^11.0.2",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
     "get-graphql-schema": "^2.1.2",
     "graphql": "^15.5.0",
+    "prettier": "^2.3.0",
     "react-test-renderer": "^17.0.2",
     "relay-compiler": "^11.0.2",
     "relay-compiler-language-typescript": "^14.0.0",

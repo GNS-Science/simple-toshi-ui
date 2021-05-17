@@ -1,6 +1,7 @@
-import { Variables } from "relay-runtime";
+import { Variables } from 'relay-runtime';
+import { GraphQLResponse } from 'relay-runtime';
 
-async function fetchGraphQL(text: string | null | undefined, variables: Variables) {
+const fetchGraphQL = async (text: string | null | undefined, variables: Variables): Promise<GraphQLResponse> => {
   const REACT_APP_GITHUB_AUTH_TOKEN = process.env.REACT_APP_GITHUB_AUTH_TOKEN;
 
   // Fetch data from GitHub's GraphQL API:
@@ -8,7 +9,7 @@ async function fetchGraphQL(text: string | null | undefined, variables: Variable
     method: 'POST',
     headers: {
       Authorization: `bearer ${REACT_APP_GITHUB_AUTH_TOKEN}`,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       query: text,
@@ -18,6 +19,6 @@ async function fetchGraphQL(text: string | null | undefined, variables: Variable
 
   // Get the response as JSON
   return await response.json();
-}
+};
 
 export default fetchGraphQL;
