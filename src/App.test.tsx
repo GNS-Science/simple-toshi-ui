@@ -1,8 +1,6 @@
 import TestRenderer from 'react-test-renderer';
 import { createMockEnvironment, MockPayloadGenerator } from 'relay-test-utils';
-import AppStrongMotionStationQuery, {
-  AppStrongMotionStationQueryResponse,
-} from './__generated__/AppStrongMotionStationQuery.graphql';
+import AppStrongMotionStationQuery from './__generated__/AppStrongMotionStationQuery.graphql';
 import AppRoot from './App';
 
 /*
