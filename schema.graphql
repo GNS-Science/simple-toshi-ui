@@ -69,19 +69,21 @@ input CreateRuptureGenerationTaskInput {
   state: EventState!
 
   """The time the task was created"""
-  created: DateTime
+  created: DateTime!
 
   """The final duraton of the task in seconds"""
   duration: Float
 
-  """The input arguments for the Rupture generator"""
-  arguments: RuptureGenerationArgsInput
+  """
+  input arguments for the rupture generation task, as a list of Key Value pairs.
+  """
+  arguments: [KeyValuePairInput]
 
-  """The metrics from rupture generation"""
-  metrics: RuptureGenerationMetricsInput
+  """execution environment details, as a list of Key Value pairs."""
+  environment: [KeyValuePairInput]
 
-  """The git references for the software"""
-  git_refs: GitReferencesInput
+  """result metrics from the task, as a list of Key Value pairs."""
+  metrics: [KeyValuePairInput]
   clientMutationId: String
 }
 
@@ -209,6 +211,9 @@ type File implements Node {
 
   """A pre-signed URL to post the data to s3"""
   post_url: String
+
+  """additional file meta data, as a list of Key Value pairs."""
+  meta: [KeyValuePair]
 
   """things related to this data file"""
   relations(before: String, after: String, first: Int, last: Int): FileRelationConnection
@@ -465,10 +470,35 @@ type GutenbergRichterMFDOutput {
   mfd_num: Int
 }
 
+"""Simple container for string-based KV pair data"""
+type KeyValuePair {
+  """key"""
+  k: String
+
+  """value"""
+  v: String
+}
+
+"""Simple container for string-based KV pair data"""
+input KeyValuePairInput {
+  """key"""
+  k: String
+
+  """value"""
+  v: String
+}
+
 type MutationRoot {
   create_rupture_generation_task(input: CreateRuptureGenerationTaskInput!): CreateRuptureGenerationTaskPayload
   update_rupture_generation_task(input: UpdateRuptureGenerationTaskInput!): UpdateRuptureGenerationTaskPayload
-  create_file(file_name: String, file_size: Int, md5_digest: String = "The base64-encoded md5 digest of the file"): CreateFile
+  create_file(
+    file_name: String
+    file_size: Int
+    md5_digest: String = "The base64-encoded md5 digest of the file"
+
+    """additional file meta data, as a list of Key Value pairs."""
+    meta: [KeyValuePairInput]
+  ): CreateFile
   create_file_relation(file_id: ID!, role: FileRole!, thing_id: ID!): CreateFileRelation
   create_strong_motion_station(input: CreateStrongMotionStationInput!): CreateStrongMotionStationPayload
   create_sms_file(file_name: String, file_size: Int, file_type: SmsFileType!, md5_digest: String = "The base64-encoded md5 digest of the file"): CreateSmsFile
@@ -520,80 +550,6 @@ type QueryRoot {
   strong_motion_stations(before: String, after: String, first: Int, last: Int): StrongMotionStationConnection
 }
 
-"""Arguments passed into the opensha Rupture Generator"""
-input RuptureGenerationArgsInput {
-  """Maximum jump distance in km"""
-  max_jump_distance: Float
-
-  """
-  maximum ratio of subsection length to DDW for building subsections. Default is 0.5
-  """
-  max_sub_section_length: Float
-
-  """Minimum subsections per parent allowed in a rupture. Default is 2"""
-  min_sub_sections_per_parent: Int
-
-  """Maximum aggregated azimuth change allowed in a rupture."""
-  max_cumulative_azimuth: Float
-
-  """The rupture permutation strategy to use"""
-  permutation_strategy: RupturePermutationStrategy
-}
-
-"""Arguments passed into the opensha Rupture Generator"""
-type RuptureGenerationArgsOutput {
-  """Maximum jump distance in km"""
-  max_jump_distance: Float
-
-  """
-  maximum ratio of subsection length to DDW for building subsections. Default is 0.5
-  """
-  max_sub_section_length: Float
-
-  """Minimum subsections per parent allowed in a rupture. Default is 2"""
-  min_sub_sections_per_parent: Int
-
-  """Maximum aggregated azimuth change allowed in a rupture."""
-  max_cumulative_azimuth: Float
-
-  """The rupture permutation strategy to use"""
-  permutation_strategy: RupturePermutationStrategy
-}
-
-"""The metrics returned from the opensha Rupture Generator"""
-input RuptureGenerationMetricsInput {
-  """Count of ruptures produced."""
-  rupture_count: Int
-
-  """Count of fault subsections produced."""
-  subsection_count: Int
-
-  """Count of cluster connections (deprecated"""
-  possible_cluster_connection_count: Int
-
-  """
-  Count of cluster connections produced. NB both jump directions are considered.
-  """
-  cluster_connection_count: Int
-}
-
-"""The metrics returned from the opensha Rupture Generator"""
-type RuptureGenerationMetricsOutput {
-  """Count of ruptures produced."""
-  rupture_count: Int
-
-  """Count of fault subsections produced."""
-  subsection_count: Int
-
-  """Count of cluster connections (deprecated"""
-  possible_cluster_connection_count: Int
-
-  """
-  Count of cluster connections produced. NB both jump directions are considered.
-  """
-  cluster_connection_count: Int
-}
-
 """An RuptureGenerationTask in the NSHM process"""
 type RuptureGenerationTask implements Node & Thing {
   """The ID of the object."""
@@ -612,9 +568,17 @@ type RuptureGenerationTask implements Node & Thing {
 
   """parent task(s) of this task"""
   parents(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
-  arguments: RuptureGenerationArgsOutput
-  metrics: RuptureGenerationMetricsOutput
-  git_refs: GitReferencesOutput
+
+  """
+  input arguments for the rupture generation task, as a list of Key Value pairs.
+  """
+  arguments: [KeyValuePair]
+
+  """execution environment details, as a list of Key Value pairs."""
+  environment: [KeyValuePair]
+
+  """result metrics from the task, as a list of Key Value pairs."""
+  metrics: [KeyValuePair]
 }
 
 """A list of RuptureGenerationTask items"""
@@ -633,13 +597,6 @@ type RuptureGenerationTaskEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
-}
-
-"""The available rupture generation strategies"""
-enum RupturePermutationStrategy {
-  UCERF3
-  DOWNDIP
-  POINTS
 }
 
 type Search {
@@ -685,6 +642,9 @@ type SmsFile implements Node {
 
   """A pre-signed URL to post the data to s3"""
   post_url: String
+
+  """additional file meta data, as a list of Key Value pairs."""
+  meta: [KeyValuePair]
 
   """things related to this data file"""
   relations(before: String, after: String, first: Int, last: Int): FileRelationConnection
@@ -828,14 +788,16 @@ input UpdateRuptureGenerationTaskInput {
   """The final duraton of the task in seconds"""
   duration: Float
 
-  """The input arguments for the Rupture generator"""
-  arguments: RuptureGenerationArgsInput
+  """
+  input arguments for the rupture generation task, as a list of Key Value pairs.
+  """
+  arguments: [KeyValuePairInput]
 
-  """The metrics from rupture generation"""
-  metrics: RuptureGenerationMetricsInput
+  """execution environment details, as a list of Key Value pairs."""
+  environment: [KeyValuePairInput]
 
-  """The git references for the software"""
-  git_refs: GitReferencesInput
+  """result metrics from the task, as a list of Key Value pairs."""
+  metrics: [KeyValuePairInput]
   clientMutationId: String
 }
 
