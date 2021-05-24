@@ -37,7 +37,91 @@ exports[`AppRoot component displays \`Loading...\` while waiting for data 1`] = 
 `;
 
 exports[`AppRoot component displays a StrongMotionStaton using mock graphql payload 1`] = `
-<AppRoot
-  environment={"RelayModernEnvironment(RelayModernMockEnvironment)"}
-/>
+<div
+  className="MuiContainer-root MuiContainer-maxWidthSm"
+>
+  <div
+    className="MuiBox-root MuiBox-root-7"
+  >
+    <img
+      alt="logo"
+      className="App-logo"
+      src="logo.svg"
+    />
+  </div>
+  <div
+    className="MuiPaper-root MuiCard-root makeStyles-root-1 MuiPaper-elevation1 MuiPaper-rounded"
+  >
+    <div
+      className="MuiCardContent-root"
+    >
+      <p
+        className="MuiTypography-root makeStyles-title-4 MuiTypography-body1 MuiTypography-colorTextSecondary MuiTypography-gutterBottom"
+      >
+        StrongMotionStation
+      </p>
+      <h2
+        className="MuiTypography-root makeStyles-pos-5 MuiTypography-h5"
+      >
+        strong
+        <span
+          className="makeStyles-bullet-2"
+        >
+          •
+        </span>
+        motion
+        <span
+          className="makeStyles-bullet-2"
+        >
+          •
+        </span>
+        station
+      </h2>
+      <p
+        className="MuiTypography-root makeStyles-pos-5 MuiTypography-body1"
+      >
+        id: 
+        id
+        <br />
+        site_code: 
+        site_code
+        <br />
+        created: 
+        2020-10-10T23:00:00+00:00
+      </p>
+      <p
+        className="MuiTypography-root makeStyles-pos-5 MuiTypography-body1 MuiTypography-colorTextSecondary"
+      >
+        This data arrived via graphql query from a toshi-api.
+      </p>
+    </div>
+    <div
+      className="MuiCardActions-root MuiCardActions-spacing"
+    >
+      <button
+        className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textSizeSmall MuiButton-sizeSmall"
+        disabled={false}
+        onBlur={[Function]}
+        onDragLeave={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        onMouseDown={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        onTouchEnd={[Function]}
+        onTouchMove={[Function]}
+        onTouchStart={[Function]}
+        tabIndex={0}
+        type="button"
+      >
+        <span
+          className="MuiButton-label"
+        >
+          Learn More
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
 `;

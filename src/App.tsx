@@ -22,6 +22,9 @@ import {
   Typography,
 } from '@material-ui/core';
 
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import RuptureGenerationTask from './components/RuptureGenerationTask';
+
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
@@ -96,7 +99,7 @@ function App(props: { preloadedQuery: PreloadedQuery<AppStrongMotionStationQuery
           </Typography>
 
           <Typography className={classes.pos} component="p">
-            id: &quot;U3Ryb25nTW90aW9uU3RhdGlvbjow&quot;
+            id: {data?.strong_motion_station?.id}
             <br />
             site_code: {data?.strong_motion_station?.site_code}
             <br />
@@ -127,7 +130,16 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
   return (
     <RelayEnvironmentProvider environment={env}>
       <React.Suspense fallback={<Loading />}>
-        <App preloadedQuery={preloadedQuery} />
+        <BrowserRouter>
+          <Switch>
+            <Route path="/RuptureGenerationTask/:id">
+              <RuptureGenerationTask />
+            </Route>
+            <Route path="/">
+              <App preloadedQuery={preloadedQuery} />
+            </Route>
+          </Switch>
+        </BrowserRouter>
       </React.Suspense>
     </RelayEnvironmentProvider>
   );

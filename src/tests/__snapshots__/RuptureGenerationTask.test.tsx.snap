@@ -1,0 +1,453 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RuptureGenerationTask component displays a RuptureGenerationTask using mock graphql payload 1`] = `
+<div
+  className="MuiContainer-root MuiContainer-maxWidthMd"
+  style={
+    Object {
+      "paddingTop": "40px",
+      "wordWrap": "break-word",
+    }
+  }
+>
+  <h5
+    className="MuiTypography-root MuiTypography-h5 MuiTypography-gutterBottom"
+  >
+    Rupture Generation Task (id: 
+    1234
+    )
+  </h5>
+  <div
+    className="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-3"
+  >
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"
+    >
+      <ul
+        className="MuiList-root MuiList-dense MuiList-padding"
+      >
+        <li
+          className="MuiListItem-root MuiListItem-dense MuiListItem-gutters"
+          disabled={false}
+        >
+          <div
+            className="MuiListItemText-root MuiListItemText-dense MuiListItemText-multiline"
+          >
+            <span
+              className="MuiTypography-root MuiListItemText-primary MuiTypography-body2 MuiTypography-displayBlock"
+            >
+              Created
+            </span>
+            <p
+              className="MuiTypography-root MuiListItemText-secondary MuiTypography-body2 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
+            >
+              2021-05-19T07:04:42.283510+00:00
+            </p>
+          </div>
+        </li>
+        <li
+          className="MuiListItem-root MuiListItem-dense MuiListItem-gutters"
+          disabled={false}
+        >
+          <div
+            className="MuiListItemText-root MuiListItemText-dense MuiListItemText-multiline"
+          >
+            <span
+              className="MuiTypography-root MuiListItemText-primary MuiTypography-body2 MuiTypography-displayBlock"
+            >
+              Duration
+            </span>
+            <p
+              className="MuiTypography-root MuiListItemText-secondary MuiTypography-body2 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
+            >
+              60
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"
+    >
+      <ul
+        className="MuiList-root MuiList-dense MuiList-padding"
+      >
+        <li
+          className="MuiListItem-root MuiListItem-dense MuiListItem-gutters"
+          disabled={false}
+        >
+          <div
+            className="MuiListItemText-root MuiListItemText-dense MuiListItemText-multiline"
+          >
+            <span
+              className="MuiTypography-root MuiListItemText-primary MuiTypography-body2 MuiTypography-displayBlock"
+            >
+              Result
+            </span>
+            <p
+              className="MuiTypography-root MuiListItemText-secondary makeStyles-success-1 MuiTypography-body2 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
+            >
+              SUCCESS
+            </p>
+          </div>
+        </li>
+        <li
+          className="MuiListItem-root MuiListItem-dense MuiListItem-gutters"
+          disabled={false}
+        >
+          <div
+            className="MuiListItemText-root MuiListItemText-dense MuiListItemText-multiline"
+          >
+            <span
+              className="MuiTypography-root MuiListItemText-primary MuiTypography-body2 MuiTypography-displayBlock"
+            >
+              State
+            </span>
+            <p
+              className="MuiTypography-root MuiListItemText-secondary makeStyles-success-1 MuiTypography-body2 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
+            >
+              DONE
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div
+    className="MuiPaper-root makeStyles-root-4 MuiPaper-elevation1 MuiPaper-rounded"
+  >
+    <table
+      className="MuiTable-root makeStyles-table-5 MuiTable-stickyHeader"
+      role={null}
+    >
+      <thead
+        className="MuiTableHead-root"
+        role={null}
+      >
+        <tr
+          className="MuiTableRow-root WithStyles(ForwardRef(TableRow))-root-7 MuiTableRow-head"
+          role={null}
+        >
+          <th
+            aria-sort={null}
+            className="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall MuiTableCell-stickyHeader"
+            colSpan={2}
+            scope="col"
+          >
+            Arguments
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        className="MuiTableBody-root"
+        role={null}
+      >
+        <tr
+          className="MuiTableRow-root WithStyles(ForwardRef(TableRow))-root-7"
+          role={null}
+        >
+          <td
+            aria-sort={null}
+            className="MuiTableCell-root MuiTableCell-body makeStyles-tableCell-6 MuiTableCell-sizeSmall"
+          >
+            testArgument
+          </td>
+          <td
+            aria-sort={null}
+            className="MuiTableCell-root MuiTableCell-body makeStyles-tableCell-6 MuiTableCell-sizeSmall"
+          >
+            testArgumentValue
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div
+    className="MuiPaper-root makeStyles-root-4 MuiPaper-elevation1 MuiPaper-rounded"
+  >
+    <table
+      className="MuiTable-root makeStyles-table-5 MuiTable-stickyHeader"
+      role={null}
+    >
+      <thead
+        className="MuiTableHead-root"
+        role={null}
+      >
+        <tr
+          className="MuiTableRow-root WithStyles(ForwardRef(TableRow))-root-7 MuiTableRow-head"
+          role={null}
+        >
+          <th
+            aria-sort={null}
+            className="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall MuiTableCell-stickyHeader"
+            colSpan={2}
+            scope="col"
+          >
+            Environment
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        className="MuiTableBody-root"
+        role={null}
+      >
+        <tr
+          className="MuiTableRow-root WithStyles(ForwardRef(TableRow))-root-7"
+          role={null}
+        >
+          <td
+            aria-sort={null}
+            className="MuiTableCell-root MuiTableCell-body makeStyles-tableCell-6 MuiTableCell-sizeSmall"
+          >
+            testEnvironment
+          </td>
+          <td
+            aria-sort={null}
+            className="MuiTableCell-root MuiTableCell-body makeStyles-tableCell-6 MuiTableCell-sizeSmall"
+          >
+            testEnvironmentValue
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div
+    className="MuiPaper-root makeStyles-root-4 MuiPaper-elevation1 MuiPaper-rounded"
+  >
+    <table
+      className="MuiTable-root makeStyles-table-5 MuiTable-stickyHeader"
+      role={null}
+    >
+      <thead
+        className="MuiTableHead-root"
+        role={null}
+      >
+        <tr
+          className="MuiTableRow-root WithStyles(ForwardRef(TableRow))-root-7 MuiTableRow-head"
+          role={null}
+        >
+          <th
+            aria-sort={null}
+            className="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall MuiTableCell-stickyHeader"
+            colSpan={2}
+            scope="col"
+          >
+            Metrics
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        className="MuiTableBody-root"
+        role={null}
+      >
+        <tr
+          className="MuiTableRow-root WithStyles(ForwardRef(TableRow))-root-7"
+          role={null}
+        >
+          <td
+            aria-sort={null}
+            className="MuiTableCell-root MuiTableCell-body makeStyles-tableCell-6 MuiTableCell-sizeSmall"
+          >
+            testMetric
+          </td>
+          <td
+            aria-sort={null}
+            className="MuiTableCell-root MuiTableCell-body makeStyles-tableCell-6 MuiTableCell-sizeSmall"
+          >
+            testMetricValue
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+`;
+
+exports[`RuptureGenerationTask component displays not found when no matching id 1`] = `
+<div
+  className="MuiContainer-root MuiContainer-maxWidthMd"
+  style={
+    Object {
+      "paddingTop": "40px",
+      "wordWrap": "break-word",
+    }
+  }
+>
+  <h5
+    className="MuiTypography-root MuiTypography-h5 MuiTypography-gutterBottom"
+  >
+    Rupture Generation Task (id: 
+    Not found
+    )
+  </h5>
+  <div
+    className="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-3"
+  >
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"
+    >
+      <ul
+        className="MuiList-root MuiList-dense MuiList-padding"
+      >
+        <li
+          className="MuiListItem-root MuiListItem-dense MuiListItem-gutters"
+          disabled={false}
+        >
+          <div
+            className="MuiListItemText-root MuiListItemText-dense"
+          >
+            <span
+              className="MuiTypography-root MuiListItemText-primary MuiTypography-body2 MuiTypography-displayBlock"
+            >
+              Created
+            </span>
+          </div>
+        </li>
+        <li
+          className="MuiListItem-root MuiListItem-dense MuiListItem-gutters"
+          disabled={false}
+        >
+          <div
+            className="MuiListItemText-root MuiListItemText-dense"
+          >
+            <span
+              className="MuiTypography-root MuiListItemText-primary MuiTypography-body2 MuiTypography-displayBlock"
+            >
+              Duration
+            </span>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"
+    >
+      <ul
+        className="MuiList-root MuiList-dense MuiList-padding"
+      >
+        <li
+          className="MuiListItem-root MuiListItem-dense MuiListItem-gutters"
+          disabled={false}
+        >
+          <div
+            className="MuiListItemText-root MuiListItemText-dense"
+          >
+            <span
+              className="MuiTypography-root MuiListItemText-primary MuiTypography-body2 MuiTypography-displayBlock"
+            >
+              Result
+            </span>
+          </div>
+        </li>
+        <li
+          className="MuiListItem-root MuiListItem-dense MuiListItem-gutters"
+          disabled={false}
+        >
+          <div
+            className="MuiListItemText-root MuiListItemText-dense"
+          >
+            <span
+              className="MuiTypography-root MuiListItemText-primary MuiTypography-body2 MuiTypography-displayBlock"
+            >
+              State
+            </span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div
+    className="MuiPaper-root makeStyles-root-11 MuiPaper-elevation1 MuiPaper-rounded"
+  >
+    <table
+      className="MuiTable-root makeStyles-table-12 MuiTable-stickyHeader"
+      role={null}
+    >
+      <thead
+        className="MuiTableHead-root"
+        role={null}
+      >
+        <tr
+          className="MuiTableRow-root WithStyles(ForwardRef(TableRow))-root-14 MuiTableRow-head"
+          role={null}
+        >
+          <th
+            aria-sort={null}
+            className="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall MuiTableCell-stickyHeader"
+            colSpan={2}
+            scope="col"
+          >
+            Arguments
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        className="MuiTableBody-root"
+        role={null}
+      />
+    </table>
+  </div>
+  <div
+    className="MuiPaper-root makeStyles-root-11 MuiPaper-elevation1 MuiPaper-rounded"
+  >
+    <table
+      className="MuiTable-root makeStyles-table-12 MuiTable-stickyHeader"
+      role={null}
+    >
+      <thead
+        className="MuiTableHead-root"
+        role={null}
+      >
+        <tr
+          className="MuiTableRow-root WithStyles(ForwardRef(TableRow))-root-14 MuiTableRow-head"
+          role={null}
+        >
+          <th
+            aria-sort={null}
+            className="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall MuiTableCell-stickyHeader"
+            colSpan={2}
+            scope="col"
+          >
+            Environment
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        className="MuiTableBody-root"
+        role={null}
+      />
+    </table>
+  </div>
+  <div
+    className="MuiPaper-root makeStyles-root-11 MuiPaper-elevation1 MuiPaper-rounded"
+  >
+    <table
+      className="MuiTable-root makeStyles-table-12 MuiTable-stickyHeader"
+      role={null}
+    >
+      <thead
+        className="MuiTableHead-root"
+        role={null}
+      >
+        <tr
+          className="MuiTableRow-root WithStyles(ForwardRef(TableRow))-root-14 MuiTableRow-head"
+          role={null}
+        >
+          <th
+            aria-sort={null}
+            className="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall MuiTableCell-stickyHeader"
+            colSpan={2}
+            scope="col"
+          >
+            Metrics
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        className="MuiTableBody-root"
+        role={null}
+      />
+    </table>
+  </div>
+</div>
+`;

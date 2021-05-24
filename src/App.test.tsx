@@ -1,8 +1,6 @@
 import TestRenderer from 'react-test-renderer';
 import { createMockEnvironment, MockPayloadGenerator } from 'relay-test-utils';
-import AppStrongMotionStationQuery, {
-  AppStrongMotionStationQueryResponse,
-} from './__generated__/AppStrongMotionStationQuery.graphql';
+import AppStrongMotionStationQuery from './__generated__/AppStrongMotionStationQuery.graphql';
 import AppRoot from './App';
 
 /*
@@ -27,15 +25,13 @@ describe('AppRoot component', () => {
 
     //this defines the data we want our query to return
     const mockResolver = {
-      StrongMotionStaton: (): AppStrongMotionStationQueryResponse => ({
-        strong_motion_station: {
-          id: 'id',
-          site_code: 'site_code',
-          site_class: 'A',
-          created: '2020-10-10T23:00:00+00:00',
-          soft_clay_or_peat: false,
-          Vs30_mean: [23],
-        },
+      StrongMotionStation: () => ({
+        id: 'id',
+        site_code: 'site_code',
+        site_class: 'A',
+        created: '2020-10-10T23:00:00+00:00',
+        soft_clay_or_peat: false,
+        Vs30_mean: [23],
       }),
     };
 
@@ -46,7 +42,7 @@ describe('AppRoot component', () => {
     environment.mock.queueOperationResolver((operation) => MockPayloadGenerator.generate(operation, mockResolver));
 
     //create the test subject
-    const testRenderer = <AppRoot environment={environment} />;
+    const testRenderer = TestRenderer.create(<AppRoot environment={environment} />);
 
     /*
      * this may be useful later ....
