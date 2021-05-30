@@ -73,10 +73,18 @@ const RuptureGenerationTask: React.FC = () => {
     },
   );
 
+  if (!data?.node) {
+    return (
+      <Typography variant="h5" gutterBottom>
+        Rupture Generation Task: Id Not Found
+      </Typography>
+    );
+  }
+
   return (
     <>
       <Typography variant="h5" gutterBottom>
-        Rupture Generation Task (id: {data?.node?.id ?? 'Not found'})
+        Rupture Generation Task (id: {data?.node?.id})
       </Typography>
       <InfoTable
         created={data?.node?.created ? (data?.node?.created as string) : undefined}

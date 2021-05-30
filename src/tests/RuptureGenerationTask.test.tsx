@@ -4,12 +4,26 @@ import { createMockEnvironment, MockPayloadGenerator, RelayMockEnvironment } fro
 import RuptureGenerationTask from '../components/RuptureGenerationTask';
 import ReactRouter from 'react-router';
 import { RelayEnvironmentProvider } from 'react-relay/hooks';
+import { cleanup, render } from '@testing-library/react';
 
 const mockResolver = {
   RuptureGenerationTask: () => ({
     id: '1234',
     duration: 60,
     created: '2021-05-19T07:04:42.283510+00:00',
+    files: {
+      edges: {
+        node: {
+          id: 'node-id',
+          role: 'WRITE',
+          file: {
+            id: 'file-id',
+            file_name: 'test.log',
+            file_url: '//test.log',
+          },
+        },
+      },
+    },
     arguments: [
       {
         k: 'testArgument',
@@ -34,7 +48,7 @@ const mockResolver = {
 };
 
 const setup = (environment: RelayMockEnvironment) => {
-  return TestRenderer.create(
+  return render(
     <RelayEnvironmentProvider environment={environment}>
       <Suspense fallback="Loading...">
         <RuptureGenerationTask />
@@ -44,18 +58,24 @@ const setup = (environment: RelayMockEnvironment) => {
 };
 
 describe('RuptureGenerationTask component', () => {
-  it('displays a RuptureGenerationTask using mock graphql payload', () => {
+  afterEach(() => {
+    cleanup();
+  });
+
+  it('displays a RuptureGenerationTask using mock graphql payload', async () => {
     jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ id: '1234' });
     const environment = createMockEnvironment();
     environment.mock.queueOperationResolver((operation) => MockPayloadGenerator.generate(operation, mockResolver));
 
-    const renderer = setup(environment);
-
-    expect(renderer).toMatchSnapshot();
-    renderer.unmount();
+    const { findByText } = setup(environment);
+    expect(await findByText('Created')).toBeVisible();
+    expect(await findByText('File')).toBeVisible();
+    expect(await findByText('Arguments')).toBeVisible();
+    expect(await findByText('Environment')).toBeVisible();
+    expect(await findByText('Metrics')).toBeVisible();
   });
 
-  it('displays not found when no matching id', () => {
+  it('displays not found when no matching id', async () => {
     jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ id: '1234' });
     const environment = createMockEnvironment();
     environment.mock.queueOperationResolver((operation) =>
@@ -66,20 +86,17 @@ describe('RuptureGenerationTask component', () => {
       }),
     );
 
-    const renderer = setup(environment);
-
-    expect(renderer).toMatchSnapshot();
-    renderer.unmount();
+    const { findByText } = setup(environment);
+    expect(await findByText('Rupture Generation Task: Id Not Found')).toBeVisible();
   });
 
   it('calls graphql query with url param', () => {
     jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ id: '1234' });
     const environment = createMockEnvironment();
 
-    const renderer = setup(environment);
+    setup(environment);
 
     const variables = environment.mock.getMostRecentOperation().request.variables;
     expect(variables).toStrictEqual({ id: '1234' });
-    renderer.unmount();
   });
 });
