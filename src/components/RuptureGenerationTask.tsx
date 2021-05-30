@@ -8,6 +8,8 @@ import KeyValueTable from './KeyValueTable';
 import InfoTable from './InfoTable';
 import FileTable from './FileTable';
 
+const REFRESH_PERIOD = 30000;
+
 interface RuptureGenerationTaskParams {
   id: string;
 }
@@ -58,7 +60,7 @@ const RuptureGenerationTask: React.FC = () => {
   const [fetchKey, setFetchKey] = React.useState<number>(0);
 
   React.useEffect(() => {
-    const timeout = setTimeout(() => setFetchKey(fetchKey + 1), 300000);
+    const timeout = setTimeout(() => setFetchKey(fetchKey + 1), REFRESH_PERIOD);
     return () => {
       clearTimeout(timeout);
     };
