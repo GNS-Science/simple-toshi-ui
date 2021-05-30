@@ -8,7 +8,7 @@ import KeyValueTable from './KeyValueTable';
 import InfoTable from './InfoTable';
 import FileTable from './FileTable';
 
-const REFRESH_PERIOD = 30000;
+const REFRESH_PERIOD = 300000;
 
 interface RuptureGenerationTaskParams {
   id: string;
