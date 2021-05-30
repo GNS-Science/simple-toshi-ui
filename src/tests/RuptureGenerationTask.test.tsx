@@ -14,7 +14,6 @@ const mockResolver = {
     files: {
       edges: {
         node: {
-          id: 'node-id',
           role: 'WRITE',
           file: {
             id: 'file-id',

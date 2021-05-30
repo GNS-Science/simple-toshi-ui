@@ -28,7 +28,6 @@ const AlternatingRow = withStyles((theme) => ({
 export interface FileTableProps {
   data?: readonly ({
     readonly node: {
-      readonly id: string;
       readonly role: FileRole;
       readonly file: {
         readonly id?: string | undefined;
