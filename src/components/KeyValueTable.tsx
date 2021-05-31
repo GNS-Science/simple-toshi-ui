@@ -46,9 +46,7 @@ const KeyValueTable: React.FC<KeyValueTableProps> = ({ header, data }: KeyValueT
           {data?.map((kv) => (
             <AlternatingRow key={kv?.k}>
               <TableCell className={classes.tableCell}>{kv?.k}</TableCell>
-              <TableCell className={classes.tableCell}>
-                <TruncateText text={kv?.v ?? ''} />
-              </TableCell>
+              <TableCell className={classes.tableCell}>{kv?.v}</TableCell>
             </AlternatingRow>
           ))}
         </TableBody>
