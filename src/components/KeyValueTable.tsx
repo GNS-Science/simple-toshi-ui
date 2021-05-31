@@ -1,6 +1,5 @@
 import React from 'react';
 import { makeStyles, Paper, Table, TableBody, TableCell, TableHead, TableRow, withStyles } from '@material-ui/core';
-import TruncateText from './TruncateText';
 
 const useStyles = makeStyles({
   root: {
