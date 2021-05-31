@@ -83,8 +83,8 @@ function App(props: { preloadedQuery: PreloadedQuery<AppStrongMotionStationQuery
   const bull = <span className={classes.bullet}>•</span>;
 
   return (
-    <Container maxWidth="sm">
-      <Box my={4}>
+    <>
+      <Box my={4} textAlign="center">
         <img src={logo} className="App-logo" alt="logo" />
       </Box>
 
@@ -115,7 +115,7 @@ function App(props: { preloadedQuery: PreloadedQuery<AppStrongMotionStationQuery
           <Button size="small">Learn More</Button>
         </CardActions>
       </Card>
-    </Container>
+    </>
   );
 }
 
@@ -131,14 +131,16 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
     <RelayEnvironmentProvider environment={env}>
       <React.Suspense fallback={<Loading />}>
         <BrowserRouter>
-          <Switch>
-            <Route path="/RuptureGenerationTask/:id">
-              <RuptureGenerationTask />
-            </Route>
-            <Route path="/">
-              <App preloadedQuery={preloadedQuery} />
-            </Route>
-          </Switch>
+          <Container maxWidth="md" style={{ paddingTop: '40px', wordWrap: 'break-word' }}>
+            <Switch>
+              <Route path="/RuptureGenerationTask/:id">
+                <RuptureGenerationTask />
+              </Route>
+              <Route path="/">
+                <App preloadedQuery={preloadedQuery} />
+              </Route>
+            </Switch>
+          </Container>
         </BrowserRouter>
       </React.Suspense>
     </RelayEnvironmentProvider>
@@ -148,7 +150,7 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
 function Loading() {
   const classes = useStyles();
   return (
-    <Container>
+    <Container maxWidth="md" style={{ paddingTop: '40px', wordWrap: 'break-word' }}>
       <Box className={classes.progress} width="100%" height="100%">
         <CircularProgress />
       </Box>

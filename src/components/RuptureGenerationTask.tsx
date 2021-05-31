@@ -3,8 +3,12 @@ import { graphql } from 'babel-plugin-relay/macro';
 import { useParams } from 'react-router-dom';
 import { RuptureGenerationTaskQuery } from './__generated__/RuptureGenerationTaskQuery.graphql';
 import { useLazyLoadQuery } from 'react-relay/hooks';
-import { Container, Grid, List, ListItem, ListItemText, makeStyles, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import KeyValueTable from './KeyValueTable';
+import InfoTable from './InfoTable';
+import FileTable from './FileTable';
+
+const REFRESH_PERIOD = 3600000;
 
 interface RuptureGenerationTaskParams {
   id: string;
@@ -20,6 +24,20 @@ const ruptureGenerationTaskQuery = graphql`
         created
         result
         state
+        files {
+          edges {
+            node {
+              role
+              file {
+                ... on File {
+                  id
+                  file_name
+                  file_url
+                }
+              }
+            }
+          }
+        }
         arguments {
           k
           v
@@ -37,64 +55,50 @@ const ruptureGenerationTaskQuery = graphql`
   }
 `;
 
-const useStyles = makeStyles((theme) => ({
-  success: {
-    color: theme.palette.success.main,
-  },
-  failure: {
-    color: theme.palette.error.main,
-  },
-  warning: {
-    color: theme.palette.warning.main,
-  },
-}));
-
 const RuptureGenerationTask: React.FC = () => {
-  const classes = useStyles();
   const { id } = useParams<RuptureGenerationTaskParams>();
+  const [fetchKey, setFetchKey] = React.useState<number>(0);
 
-  const data = useLazyLoadQuery<RuptureGenerationTaskQuery>(ruptureGenerationTaskQuery, { id });
+  React.useEffect(() => {
+    const timeout = setTimeout(() => setFetchKey(fetchKey + 1), REFRESH_PERIOD);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [fetchKey]);
+
+  const data = useLazyLoadQuery<RuptureGenerationTaskQuery>(
+    ruptureGenerationTaskQuery,
+    { id },
+    {
+      fetchKey: fetchKey,
+      fetchPolicy: 'network-only',
+    },
+  );
+
+  if (!data?.node) {
+    return (
+      <Typography variant="h5" gutterBottom>
+        Rupture Generation Task: Id Not Found
+      </Typography>
+    );
+  }
 
   return (
-    <Container maxWidth="md" style={{ paddingTop: '40px', wordWrap: 'break-word' }}>
+    <>
       <Typography variant="h5" gutterBottom>
-        Rupture Generation Task (id: {data?.node?.id ?? 'Not found'})
+        Rupture Generation Task (id: {data?.node?.id})
       </Typography>
-
-      <Grid container spacing={3}>
-        <Grid item xs={6}>
-          <List dense>
-            <ListItem>
-              <ListItemText primary="Created" secondary={data?.node?.created as string} />
-            </ListItem>
-            <ListItem>
-              <ListItemText primary="Duration" secondary={data?.node?.duration} />
-            </ListItem>
-          </List>
-        </Grid>
-        <Grid item xs={6}>
-          <List dense>
-            <ListItem>
-              <ListItemText
-                primary="Result"
-                secondary={data?.node?.result}
-                classes={{ secondary: data?.node?.result === 'SUCCESS' ? classes.success : classes.failure }}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary="State"
-                secondary={data?.node?.state}
-                classes={{ secondary: data?.node?.state === 'DONE' ? classes.success : classes.warning }}
-              />
-            </ListItem>
-          </List>
-        </Grid>
-      </Grid>
-      <KeyValueTable header="Arguments" data={data?.node?.arguments} />
-      <KeyValueTable header="Environment" data={data?.node?.environment} />
-      <KeyValueTable header="Metrics" data={data?.node?.metrics} />
-    </Container>
+      <InfoTable
+        created={data?.node?.created ? (data?.node?.created as string) : undefined}
+        duration={data?.node?.duration}
+        state={data?.node?.state}
+        result={data?.node?.result}
+      />
+      {data?.node?.files && <FileTable data={data?.node?.files?.edges} />}
+      {data?.node?.arguments && <KeyValueTable header="Arguments" data={data?.node?.arguments} />}
+      {data?.node?.environment && <KeyValueTable header="Environment" data={data?.node?.environment} />}
+      {data?.node?.metrics && <KeyValueTable header="Metrics" data={data?.node?.metrics} />}
+    </>
   );
 };
 

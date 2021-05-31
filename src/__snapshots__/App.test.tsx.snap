@@ -2,7 +2,13 @@
 
 exports[`AppRoot component displays \`Loading...\` while waiting for data 1`] = `
 <div
-  className="MuiContainer-root MuiContainer-maxWidthLg"
+  className="MuiContainer-root MuiContainer-maxWidthMd"
+  style={
+    Object {
+      "paddingTop": "40px",
+      "wordWrap": "break-word",
+    }
+  }
 >
   <div
     className="MuiBox-root MuiBox-root-6 makeStyles-progress-3"
@@ -38,7 +44,13 @@ exports[`AppRoot component displays \`Loading...\` while waiting for data 1`] = 
 
 exports[`AppRoot component displays a StrongMotionStaton using mock graphql payload 1`] = `
 <div
-  className="MuiContainer-root MuiContainer-maxWidthSm"
+  className="MuiContainer-root MuiContainer-maxWidthMd"
+  style={
+    Object {
+      "paddingTop": "40px",
+      "wordWrap": "break-word",
+    }
+  }
 >
   <div
     className="MuiBox-root MuiBox-root-7"
