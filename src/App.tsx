@@ -24,6 +24,7 @@ import {
 
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import RuptureGenerationTask from './components/RuptureGenerationTask';
+import FileDetail from './components/FileDetail';
 
 const useStyles = makeStyles({
   root: {
@@ -135,6 +136,9 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
             <Switch>
               <Route path="/RuptureGenerationTask/:id">
                 <RuptureGenerationTask />
+              </Route>
+              <Route path="/FileDetail/:id">
+                <FileDetail />
               </Route>
               <Route path="/">
                 <App preloadedQuery={preloadedQuery} />
