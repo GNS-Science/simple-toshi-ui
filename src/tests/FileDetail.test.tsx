@@ -54,7 +54,7 @@ describe('FileDetail component', () => {
     );
 
     const { findByText } = setup(environment);
-    expect(await findByText('File Not Found')).toBeVisible();
+    expect(await findByText('File ID Not Found')).toBeVisible();
   });
 
   it('calls graphql query with url param', () => {

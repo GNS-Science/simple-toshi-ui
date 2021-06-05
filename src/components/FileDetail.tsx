@@ -4,7 +4,6 @@ import React from 'react';
 import { useLazyLoadQuery } from 'react-relay';
 import { useParams } from 'react-router-dom';
 import KeyValueTable from './KeyValueTable';
-import TruncateText from './TruncateText';
 import { FileDetailQuery } from './__generated__/FileDetailQuery.graphql';
 
 interface FileDetailParams {
@@ -36,7 +35,7 @@ const FileDetail: React.FC = () => {
   if (!data?.node) {
     return (
       <Typography variant="h5" gutterBottom>
-        File Detail: Id Not Found
+        File ID Not Found
       </Typography>
     );
   }
