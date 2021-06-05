@@ -42,22 +42,6 @@ describe('FileDetail component', () => {
     expect(await findByText('test_md5')).toBeVisible();
   });
 
-  it('truncates long filename', async () => {
-    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ id: '1234' });
-    const environment = createMockEnvironment();
-    environment.mock.queueOperationResolver((operation) =>
-      MockPayloadGenerator.generate(operation, {
-        File: () => ({
-          file_name:
-            'RupSet_Az_FM(CFM_0_3_SANSTVZ)_mxSbScLn(0.5)_mxAzCh(60.0)_mxCmAzCh(560.0)_mxJpDs(5.0)_mxTtAzCh(60.0)_thFc(0.0).zip',
-        }),
-      }),
-    );
-
-    const { findByText } = setup(environment);
-    expect(await findByText('RupSet_Az_FM(CFM_0_3_SANS ... tAzCh(60.0)_thFc(0.0).zip')).toBeVisible();
-  });
-
   it('displays not found when no matching id', async () => {
     jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ id: '1234' });
     const environment = createMockEnvironment();
@@ -70,7 +54,7 @@ describe('FileDetail component', () => {
     );
 
     const { findByText } = setup(environment);
-    expect(await findByText('File Detail: Id Not Found')).toBeVisible();
+    expect(await findByText('File Not Found')).toBeVisible();
   });
 
   it('calls graphql query with url param', () => {

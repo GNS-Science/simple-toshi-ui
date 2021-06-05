@@ -44,17 +44,19 @@ const FileDetail: React.FC = () => {
   return (
     <>
       <Typography variant="h5" gutterBottom>
-        File Detail (id: {data?.node?.id})
+        <a href={data?.node?.file_url ?? ''}>Download</a>
       </Typography>
-      <a href={data?.node?.file_url ?? ''}>Download</a>
       <Typography>
-        <strong>File name:</strong> <TruncateText text={data?.node?.file_name ?? ''} />
+        <strong>File name:</strong> {data?.node?.file_name}
       </Typography>
       <Typography>
         <strong>File size:</strong> {data?.node?.file_size} bytes
       </Typography>
       <Typography>
         <strong>MD5 digest:</strong> {data?.node?.md5_digest}
+      </Typography>
+      <Typography>
+        <strong>File ID:</strong> {data?.node?.id}
       </Typography>
 
       {data?.node?.meta && <KeyValueTable header="Meta" data={data?.node?.meta} />}
