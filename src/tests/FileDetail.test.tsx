@@ -38,7 +38,7 @@ describe('FileDetail component', () => {
     const { findByText } = setup(environment);
     expect(await findByText('Download')).toHaveAttribute('href', 'test_url');
     expect(await findByText('testFile.zip')).toBeVisible();
-    expect(await findByText('1000 bytes')).toBeVisible();
+    expect(await findByText('1000 Bytes')).toBeVisible();
     expect(await findByText('test_md5')).toBeVisible();
   });
 
