@@ -2,7 +2,7 @@ import { Typography } from '@material-ui/core';
 import { graphql } from 'babel-plugin-relay/macro';
 import React from 'react';
 import { useLazyLoadQuery } from 'react-relay';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import KeyValueTable from './KeyValueTable';
 import { FileDetailQuery } from './__generated__/FileDetailQuery.graphql';
 
@@ -22,6 +22,18 @@ const fileDetailQuery = graphql`
         meta {
           k
           v
+        }
+        relations {
+          edges {
+            node {
+              role
+              thing {
+                ... on Node {
+                  id
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -72,6 +84,19 @@ const FileDetail: React.FC = () => {
       </Typography>
       <Typography>
         <strong>File ID:</strong> {data?.node?.id}
+      </Typography>
+      <Typography>
+        <strong>Written by: </strong>
+        {data?.node?.relations?.edges
+          ?.filter((e) => e?.node?.role === 'WRITE')
+          ?.map((e, i, { length }) => {
+            return (
+              <React.Fragment key={e?.node?.thing?.id}>
+                <Link to={`/RuptureGenerationTask/${e?.node?.thing?.id}`}>{e?.node?.thing?.id}</Link>
+                {i + 1 !== length && <span>, </span>}
+              </React.Fragment>
+            );
+          })}
       </Typography>
 
       {data?.node?.meta && <KeyValueTable header="Meta" data={data?.node?.meta} />}

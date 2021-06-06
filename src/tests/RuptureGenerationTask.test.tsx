@@ -1,9 +1,10 @@
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { createMockEnvironment, MockPayloadGenerator, RelayMockEnvironment } from 'relay-test-utils';
 import RuptureGenerationTask from '../components/RuptureGenerationTask';
 import ReactRouter from 'react-router';
 import { RelayEnvironmentProvider } from 'react-relay/hooks';
 import { cleanup, render } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 
 const mockResolver = {
   RuptureGenerationTask: () => ({
@@ -11,16 +12,18 @@ const mockResolver = {
     duration: 60,
     created: '2021-05-19T07:04:42.283510+00:00',
     files: {
-      edges: {
-        node: {
-          role: 'WRITE',
-          file: {
-            id: 'file-id',
-            file_name: 'test.log',
-            file_url: '//test.log',
+      edges: [
+        {
+          node: {
+            role: 'WRITE',
+            file: {
+              id: 'file-id',
+              file_name: 'test.log',
+              file_url: '//test.log',
+            },
           },
         },
-      },
+      ],
     },
     arguments: [
       {
@@ -49,7 +52,9 @@ const setup = (environment: RelayMockEnvironment) => {
   return render(
     <RelayEnvironmentProvider environment={environment}>
       <Suspense fallback="Loading...">
-        <RuptureGenerationTask />
+        <BrowserRouter>
+          <RuptureGenerationTask />
+        </BrowserRouter>
       </Suspense>
     </RelayEnvironmentProvider>,
   );
@@ -68,6 +73,7 @@ describe('RuptureGenerationTask component', () => {
     const { findByText } = setup(environment);
     expect(await findByText('Created')).toBeVisible();
     expect(await findByText('File')).toBeVisible();
+    expect(await findByText('[more]')).toHaveAttribute('href', '/FileDetail/file-id');
     expect(await findByText('Arguments')).toBeVisible();
     expect(await findByText('Environment')).toBeVisible();
     expect(await findByText('Metrics')).toBeVisible();

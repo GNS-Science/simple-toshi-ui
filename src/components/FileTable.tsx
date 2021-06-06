@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles, Paper, Table, TableBody, TableCell, TableHead, TableRow, withStyles } from '@material-ui/core';
 import TruncateText from './TruncateText';
 import { FileRole } from './__generated__/RuptureGenerationTaskQuery.graphql';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles({
   root: {
@@ -62,6 +63,9 @@ const FileTable: React.FC<FileTableProps> = ({ data }: FileTableProps) => {
               <TableCell className={classes.tableCell}>{e?.node?.role}</TableCell>
               <TableCell className={classes.tableCell}>
                 <a href={e?.node?.file?.file_url ?? ''}>Get file</a>
+              </TableCell>
+              <TableCell className={classes.tableCell}>
+                <Link to={`/FileDetail/${e?.node?.file?.id}`}>[more]</Link>
               </TableCell>
             </AlternatingRow>
           ))}

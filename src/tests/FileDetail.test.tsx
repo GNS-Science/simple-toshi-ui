@@ -1,9 +1,10 @@
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { createMockEnvironment, MockPayloadGenerator, RelayMockEnvironment } from 'relay-test-utils';
 import FileDetail from '../components/FileDetail';
 import ReactRouter from 'react-router';
 import { RelayEnvironmentProvider } from 'react-relay/hooks';
 import { cleanup, render } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 
 const mockResolver = {
   File: () => ({
@@ -12,6 +13,18 @@ const mockResolver = {
     file_size: 1000,
     file_url: 'test_url',
     md5_digest: 'test_md5',
+    relations: {
+      edges: [
+        {
+          node: {
+            role: 'WRITE',
+            thing: {
+              id: 'task-id',
+            },
+          },
+        },
+      ],
+    },
   }),
 };
 
@@ -19,7 +32,9 @@ const setup = (environment: RelayMockEnvironment) => {
   return render(
     <RelayEnvironmentProvider environment={environment}>
       <Suspense fallback="Loading...">
-        <FileDetail />
+        <BrowserRouter>
+          <FileDetail />
+        </BrowserRouter>
       </Suspense>
     </RelayEnvironmentProvider>,
   );
@@ -37,6 +52,7 @@ describe('FileDetail component', () => {
 
     const { findByText } = setup(environment);
     expect(await findByText('Download')).toHaveAttribute('href', 'test_url');
+    expect(await findByText('task-id')).toHaveAttribute('href', '/RuptureGenerationTask/task-id');
     expect(await findByText('testFile.zip')).toBeVisible();
     expect(await findByText('1000 Bytes')).toBeVisible();
     expect(await findByText('test_md5')).toBeVisible();
