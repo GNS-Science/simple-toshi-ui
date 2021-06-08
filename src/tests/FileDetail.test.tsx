@@ -19,7 +19,7 @@ const mockResolver = {
           node: {
             role: 'WRITE',
             thing: {
-              id: 'task-id',
+              id: 'UnVwdHVyZUdlbmVyYXRpb25UYXNrOjQ=',
             },
           },
         },
@@ -52,7 +52,10 @@ describe('FileDetail component', () => {
 
     const { findByText } = setup(environment);
     expect(await findByText('Download')).toHaveAttribute('href', 'test_url');
-    expect(await findByText('task-id')).toHaveAttribute('href', '/RuptureGenerationTask/task-id');
+    expect(await findByText('RuptureGenerationTask:4')).toHaveAttribute(
+      'href',
+      '/RuptureGenerationTask/UnVwdHVyZUdlbmVyYXRpb25UYXNrOjQ=',
+    );
     expect(await findByText('testFile.zip')).toBeVisible();
     expect(await findByText('1000 Bytes')).toBeVisible();
     expect(await findByText('test_md5')).toBeVisible();
