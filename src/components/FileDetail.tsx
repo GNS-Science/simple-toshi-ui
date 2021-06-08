@@ -28,6 +28,22 @@ const fileDetailQuery = graphql`
   }
 `;
 
+/**
+ * Formats bytes to human readable string. Adapted from:
+ * https://stackoverflow.com/questions/15900485/correct-way-to-convert-size-in-bytes-to-kb-mb-gb-in-javascript/
+ */
+const formatBytes = (bytes: number, decimals = 2): string => {
+  if (bytes === 0) return '0 Bytes';
+
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+};
+
 const FileDetail: React.FC = () => {
   const { id } = useParams<FileDetailParams>();
   const data = useLazyLoadQuery<FileDetailQuery>(fileDetailQuery, { id });
@@ -49,7 +65,7 @@ const FileDetail: React.FC = () => {
         <strong>File name:</strong> {data?.node?.file_name}
       </Typography>
       <Typography>
-        <strong>File size:</strong> {data?.node?.file_size} bytes
+        <strong>File size:</strong> {formatBytes(data?.node?.file_size ?? 0)}
       </Typography>
       <Typography>
         <strong>MD5 digest:</strong> {data?.node?.md5_digest}

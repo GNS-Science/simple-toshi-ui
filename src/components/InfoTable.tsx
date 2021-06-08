@@ -1,5 +1,6 @@
 import React from 'react';
 import { Grid, List, ListItem, ListItemText, makeStyles } from '@material-ui/core';
+import { format, formatDuration, intervalToDuration, secondsToMilliseconds } from 'date-fns';
 
 const useStyles = makeStyles((theme) => ({
   success: {
@@ -22,15 +23,21 @@ export interface InfoTableProps {
 
 const InfoTable: React.FC<InfoTableProps> = ({ created, duration, result, state }: InfoTableProps) => {
   const classes = useStyles();
+  const durationInterval = intervalToDuration({
+    start: 0,
+    end: secondsToMilliseconds(duration ?? 0),
+  });
+
+  const formattedDate = created ? format(new Date(created), 'PPPppp') : '';
   return (
     <Grid container spacing={3}>
       <Grid item xs={6}>
         <List dense>
           <ListItem>
-            <ListItemText primary="Created" secondary={created} />
+            <ListItemText primary="Created" secondary={formattedDate} />
           </ListItem>
           <ListItem>
-            <ListItemText primary="Duration" secondary={duration} />
+            <ListItemText primary="Duration" secondary={formatDuration(durationInterval)} />
           </ListItem>
         </List>
       </Grid>
