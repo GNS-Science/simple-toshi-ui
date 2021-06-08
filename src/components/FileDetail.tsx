@@ -2,7 +2,7 @@ import { Typography } from '@material-ui/core';
 import { graphql } from 'babel-plugin-relay/macro';
 import React from 'react';
 import { useLazyLoadQuery } from 'react-relay';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import KeyValueTable from './KeyValueTable';
 import { FileDetailQuery } from './__generated__/FileDetailQuery.graphql';
 
@@ -22,6 +22,18 @@ const fileDetailQuery = graphql`
         meta {
           k
           v
+        }
+        relations {
+          edges {
+            node {
+              role
+              thing {
+                ... on Node {
+                  id
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -59,7 +71,7 @@ const FileDetail: React.FC = () => {
   return (
     <>
       <Typography variant="h5" gutterBottom>
-        <a href={data?.node?.file_url ?? ''}>Download</a>
+        File Detail (id: {data?.node?.id})
       </Typography>
       <Typography>
         <strong>File name:</strong> {data?.node?.file_name}
@@ -71,7 +83,22 @@ const FileDetail: React.FC = () => {
         <strong>MD5 digest:</strong> {data?.node?.md5_digest}
       </Typography>
       <Typography>
-        <strong>File ID:</strong> {data?.node?.id}
+        <strong>Written by: </strong>
+        {data?.node?.relations?.edges
+          ?.filter((e) => e?.node?.role === 'WRITE')
+          ?.map((e, i, { length }) => {
+            return (
+              <React.Fragment key={e?.node?.thing?.id}>
+                <Link to={`/RuptureGenerationTask/${e?.node?.thing?.id}`}>
+                  {Buffer.from(e?.node?.thing?.id ?? '', 'base64').toString()}
+                </Link>
+                {i + 1 !== length && <span>, </span>}
+              </React.Fragment>
+            );
+          })}
+      </Typography>
+      <Typography>
+        <a href={data?.node?.file_url ?? ''}>Download</a>
       </Typography>
 
       {data?.node?.meta && <KeyValueTable header="Meta" data={data?.node?.meta} />}
