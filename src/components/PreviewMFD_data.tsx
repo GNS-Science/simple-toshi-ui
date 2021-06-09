@@ -141,7 +141,7 @@ export const d1 = [
 //   return data.filter((x) => x[0] > 5).map((x) => x[0]);
 // };
 
-export const onlyRate = (data: number[][]) => {
+export const onlyRate = (data: number[][]): number[] => {
   return data.filter((x) => x[0] > 5).map((x) => x[1]);
 };
 
@@ -149,7 +149,7 @@ export const onlyRate = (data: number[][]) => {
 //   return [onlyY(data), onlyX(data)];
 // };
 
-export const magAndRate = (data: number[][]) => {
+export const magAndRate = (data: number[][]): number[][] => {
   return data.filter((x) => x[0] > 5);
 };
 
@@ -158,9 +158,9 @@ export interface IMagRate {
   rate: number;
 }
 
-export function magRateData<IMagRate>(data: number[][]) {
+export function magRateData(data: number[][]): Array<IMagRate> {
   return magAndRate(data).map((mr) => {
     const min = 1e-15; //log scales cannot include 0
-    return { mag: mr[0], rate: Math.max(mr[1], min) };
+    return { mag: mr[0], rate: Math.max(mr[1], min) } as IMagRate;
   });
 }
