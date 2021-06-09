@@ -6,7 +6,6 @@ name: CD into AWS S3 simple-toshi-ui
 on:
   push:
     branches: [ main ]
-  pull_request:
 
 jobs:
   build:
