@@ -226,6 +226,7 @@ type FileConnection {
 
   """Contains the nodes in this connection."""
   edges: [FileEdge]!
+  total_count: Int
 }
 
 """A Relay edge containing a `File` and its cursor."""
@@ -253,6 +254,7 @@ type FileRelationConnection {
 
   """Contains the nodes in this connection."""
   edges: [FileRelationEdge]!
+  total_count: Int
 }
 
 """A Relay edge containing a `FileRelation` and its cursor."""
@@ -588,6 +590,7 @@ type RuptureGenerationTaskConnection {
 
   """Contains the nodes in this connection."""
   edges: [RuptureGenerationTaskEdge]!
+  total_count: Int
 }
 
 """A Relay edge containing a `RuptureGenerationTask` and its cursor."""
@@ -747,6 +750,7 @@ type TaskTaskRelationConnection {
 
   """Contains the nodes in this connection."""
   edges: [TaskTaskRelationEdge]!
+  total_count: Int
 }
 
 """A Relay edge containing a `TaskTaskRelation` and its cursor."""
