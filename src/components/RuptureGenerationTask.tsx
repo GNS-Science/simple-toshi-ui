@@ -95,7 +95,7 @@ const RuptureGenerationTask: React.FC = () => {
         state={data?.node?.state}
         result={data?.node?.result}
       />
-      {data?.node?.files && <FileTable data={data?.node?.files?.edges} />}
+      {!!data?.node?.files?.edges?.length && <FileTable data={data?.node?.files?.edges} />}
       {data?.node?.arguments && <KeyValueTable header="Arguments" data={data?.node?.arguments} />}
       {data?.node?.environment && <KeyValueTable header="Environment" data={data?.node?.environment} />}
       {data?.node?.metrics && <KeyValueTable header="Metrics" data={data?.node?.metrics} />}
