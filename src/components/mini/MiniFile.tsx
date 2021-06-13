@@ -10,12 +10,12 @@ interface MiniFileProps {
   file_name?: string | null;
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
-    margin: '16px 0px',
-    padding: '8px',
+    margin: `${theme.spacing(2)}px 0px`,
+    padding: theme.spacing(1),
   },
-});
+}));
 
 const MiniFile: React.FC<MiniFileProps> = ({ id, file_size, file_name }: MiniFileProps) => {
   const classes = useStyles();
