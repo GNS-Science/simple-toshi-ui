@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const MiniGeneralTask: React.FC<MiniGeneralTaskProps> = ({
-  id,
   title,
   description,
   created,
