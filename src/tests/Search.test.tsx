@@ -47,8 +47,9 @@ describe('Search component', () => {
 
     const { findByText, findByDisplayValue } = setup(environment);
     const searchInput = await findByDisplayValue('');
+    const searchButton = await findByText('Search');
     userEvent.type(searchInput, 'test');
-
+    userEvent.click(searchButton);
     expect(await findByText('File'));
     expect(await findByText('[more]')).toHaveAttribute('href', '/FileDetail/file-id');
   });
@@ -78,7 +79,9 @@ describe('Search component', () => {
 
     const { findByText, findByDisplayValue } = setup(environment);
     const searchInput = await findByDisplayValue('');
+    const searchButton = await findByText('Search');
     userEvent.type(searchInput, 'test');
+    userEvent.click(searchButton);
     expect(await findByText('Rupture Generation Task'));
     expect(await findByText('[more]')).toHaveAttribute('href', '/RuptureGenerationTask/ruptureGenerationTask-id');
   });
@@ -107,7 +110,9 @@ describe('Search component', () => {
 
     const { findByText, findByDisplayValue } = setup(environment);
     const searchInput = await findByDisplayValue('');
+    const searchButton = await findByText('Search');
     userEvent.type(searchInput, 'test');
+    userEvent.click(searchButton);
     expect(await findByText('General Task'));
   });
 });
