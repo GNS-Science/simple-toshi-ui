@@ -25,6 +25,7 @@ import {
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import RuptureGenerationTask from './components/RuptureGenerationTask';
 import FileDetail from './components/FileDetail';
+import Search from './components/Search';
 import PreviewMFD from './components/PreviewMFD';
 import PreviewLineMFD from './components/PreviewLineMFD';
 
@@ -141,6 +142,9 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
               </Route>
               <Route path="/FileDetail/:id">
                 <FileDetail />
+              </Route>
+              <Route path="/Search">
+                <Search />
               </Route>
               <Route path="/PreviewMFD">
                 <PreviewMFD />

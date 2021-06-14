@@ -44,7 +44,7 @@ const fileDetailQuery = graphql`
  * Formats bytes to human readable string. Adapted from:
  * https://stackoverflow.com/questions/15900485/correct-way-to-convert-size-in-bytes-to-kb-mb-gb-in-javascript/
  */
-const formatBytes = (bytes: number, decimals = 2): string => {
+export const formatBytes = (bytes: number, decimals = 2): string => {
   if (bytes === 0) return '0 Bytes';
 
   const k = 1024;
