@@ -145,6 +145,7 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
               </Route>
               <Route path="/Search">
                 <Search />
+              </Route>
               <Route path="/PreviewMFD">
                 <PreviewMFD />
               </Route>
