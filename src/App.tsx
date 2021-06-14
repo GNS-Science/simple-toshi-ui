@@ -26,6 +26,8 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import RuptureGenerationTask from './components/RuptureGenerationTask';
 import FileDetail from './components/FileDetail';
 import Search from './components/Search';
+import PreviewMFD from './components/PreviewMFD';
+import PreviewLineMFD from './components/PreviewLineMFD';
 
 const useStyles = makeStyles({
   root: {
@@ -143,6 +145,11 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
               </Route>
               <Route path="/Search">
                 <Search />
+              <Route path="/PreviewMFD">
+                <PreviewMFD />
+              </Route>
+              <Route path="/PreviewLineMFD">
+                <PreviewLineMFD />
               </Route>
               <Route path="/">
                 <App preloadedQuery={preloadedQuery} />
