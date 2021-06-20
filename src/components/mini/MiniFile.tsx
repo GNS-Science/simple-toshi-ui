@@ -31,7 +31,7 @@ const MiniFile: React.FC<MiniFileProps> = ({ id, file_size, file_name }: MiniFil
         <strong>File size:</strong> {formatBytes(file_size ?? 0)}
       </Typography>
       <Typography>
-        <Link to={`FileDetail/${id}`}>[more]</Link>
+        <Link to={`/FileDetail/${id}`}>[more]</Link>
       </Typography>
     </Card>
   );

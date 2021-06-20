@@ -64,7 +64,7 @@ const MiniRuptureGenerationTask: React.FC<MiniRuptureGenerationTaskProps> = ({
         <span className={result === 'SUCCESS' ? classes.success : classes.failure}> {result}</span>
       </Typography>
       <Typography>
-        <Link to={`RuptureGenerationTask/${id}`}>[more]</Link>
+        <Link to={`/RuptureGenerationTask/${id}`}>[more]</Link>
       </Typography>
     </Card>
   );
