@@ -28,6 +28,7 @@ import FileDetail from './components/FileDetail';
 import Search from './components/Search';
 import PreviewMFD from './components/PreviewMFD';
 import PreviewLineMFD from './components/PreviewLineMFD';
+import GeneralTask from './components/GeneralTask';
 
 const useStyles = makeStyles({
   root: {
@@ -151,6 +152,9 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
               </Route>
               <Route path="/PreviewLineMFD">
                 <PreviewLineMFD />
+              </Route>
+              <Route path="/GeneralTask/:id">
+                <GeneralTask />
               </Route>
               <Route path="/">
                 <App preloadedQuery={preloadedQuery} />

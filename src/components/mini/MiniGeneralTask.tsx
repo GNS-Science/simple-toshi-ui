@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, makeStyles, Typography } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 
 interface MiniGeneralTaskProps {
@@ -17,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const MiniGeneralTask: React.FC<MiniGeneralTaskProps> = ({
+  id,
   title,
   description,
   created,
@@ -40,6 +42,9 @@ const MiniGeneralTask: React.FC<MiniGeneralTaskProps> = ({
       </Typography>
       <Typography>
         <strong>Total count:</strong> {total_count}
+      </Typography>
+      <Typography>
+        <Link to={`/GeneralTask/${id}`}>[more]</Link>
       </Typography>
     </Card>
   );
