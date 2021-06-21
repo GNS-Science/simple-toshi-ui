@@ -29,6 +29,7 @@ import Search from './components/Search';
 import PreviewMFD from './components/PreviewMFD';
 import PreviewLineMFD from './components/PreviewLineMFD';
 import GeneralTask from './components/GeneralTask';
+import RuptureSetDiags from './components/RuptureSetDiags';
 
 const useStyles = makeStyles({
   root: {
@@ -147,14 +148,17 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
               <Route path="/Search">
                 <Search />
               </Route>
-              <Route path="/PreviewMFD">
-                <PreviewMFD />
-              </Route>
-              <Route path="/PreviewLineMFD">
-                <PreviewLineMFD />
-              </Route>
               <Route path="/GeneralTask/:id">
                 <GeneralTask />
+              </Route>
+              <Route path="/preview/MFD">
+                <PreviewMFD />
+              </Route>
+              <Route path="/Preview/lineMFD">
+                <PreviewLineMFD />
+              </Route>
+              <Route path="/preview/diags">
+                <RuptureSetDiags />
               </Route>
               <Route path="/">
                 <App preloadedQuery={preloadedQuery} />

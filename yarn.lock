@@ -3469,6 +3469,11 @@ buffer@^4.3.0:
     ieee754 "^1.1.4"
     isarray "^1.0.0"
 
+build-url-ts@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/build-url-ts/-/build-url-ts-6.0.1.tgz#017c0397b044df5db92d587d8634c7464f3d9c32"
+  integrity sha512-hd7KdiTLQUI1JYOzC8uJQj98eUaDlpRxNQIF87+v+4WzEUa4eldVGok5OENSXGIDo138IrZIwci1XSbuusmsfQ==
+
 builtin-modules@^3.1.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/builtin-modules/-/builtin-modules-3.2.0.tgz#45d5db99e7ee5e6bc4f362e008bf917ab5049887"
