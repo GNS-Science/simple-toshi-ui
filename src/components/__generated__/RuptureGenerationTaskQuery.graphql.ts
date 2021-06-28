@@ -41,6 +41,15 @@ export type RuptureGenerationTaskQueryResponse = {
             readonly k: string | null;
             readonly v: string | null;
         } | null> | null;
+        readonly parents?: {
+            readonly edges: ReadonlyArray<{
+                readonly node: {
+                    readonly parent: {
+                        readonly id: string;
+                    };
+                } | null;
+            } | null>;
+        } | null;
     } | null;
 };
 export type RuptureGenerationTaskQuery = {
@@ -94,6 +103,16 @@ query RuptureGenerationTaskQuery(
       metrics {
         k
         v
+      }
+      parents {
+        edges {
+          node {
+            parent {
+              id
+            }
+            id
+          }
+        }
       }
     }
   }
@@ -225,7 +244,20 @@ v12 = {
   "selections": (v9/*: any*/),
   "storageKey": null
 },
-v13 = {
+v13 = [
+  (v2/*: any*/)
+],
+v14 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "GeneralTask",
+  "kind": "LinkedField",
+  "name": "parent",
+  "plural": false,
+  "selections": (v13/*: any*/),
+  "storageKey": null
+},
+v15 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -304,7 +336,41 @@ return {
               },
               (v10/*: any*/),
               (v11/*: any*/),
-              (v12/*: any*/)
+              (v12/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "TaskTaskRelationConnection",
+                "kind": "LinkedField",
+                "name": "parents",
+                "plural": false,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "TaskTaskRelationEdge",
+                    "kind": "LinkedField",
+                    "name": "edges",
+                    "plural": true,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "TaskTaskRelation",
+                        "kind": "LinkedField",
+                        "name": "node",
+                        "plural": false,
+                        "selections": [
+                          (v14/*: any*/)
+                        ],
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              }
             ],
             "type": "RuptureGenerationTask",
             "abstractKey": null
@@ -330,7 +396,7 @@ return {
         "name": "node",
         "plural": false,
         "selections": [
-          (v13/*: any*/),
+          (v15/*: any*/),
           (v2/*: any*/),
           {
             "kind": "InlineFragment",
@@ -373,13 +439,11 @@ return {
                             "name": "file",
                             "plural": false,
                             "selections": [
-                              (v13/*: any*/),
+                              (v15/*: any*/),
                               (v8/*: any*/),
                               {
                                 "kind": "InlineFragment",
-                                "selections": [
-                                  (v2/*: any*/)
-                                ],
+                                "selections": (v13/*: any*/),
                                 "type": "Node",
                                 "abstractKey": "__isNode"
                               }
@@ -397,7 +461,42 @@ return {
               },
               (v10/*: any*/),
               (v11/*: any*/),
-              (v12/*: any*/)
+              (v12/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "TaskTaskRelationConnection",
+                "kind": "LinkedField",
+                "name": "parents",
+                "plural": false,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "TaskTaskRelationEdge",
+                    "kind": "LinkedField",
+                    "name": "edges",
+                    "plural": true,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "TaskTaskRelation",
+                        "kind": "LinkedField",
+                        "name": "node",
+                        "plural": false,
+                        "selections": [
+                          (v14/*: any*/),
+                          (v2/*: any*/)
+                        ],
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              }
             ],
             "type": "RuptureGenerationTask",
             "abstractKey": null
@@ -408,14 +507,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "4ee2cd807d8524b227b9129ad3013809",
+    "cacheID": "8a3adfde02d9afcb2cab765ae59d64f5",
     "id": null,
     "metadata": {},
     "name": "RuptureGenerationTaskQuery",
     "operationKind": "query",
-    "text": "query RuptureGenerationTaskQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    id\n    ... on RuptureGenerationTask {\n      id\n      duration\n      created\n      result\n      state\n      files {\n        edges {\n          node {\n            id\n            role\n            file {\n              __typename\n              ... on File {\n                id\n                file_name\n                file_url\n              }\n              ... on Node {\n                __isNode: __typename\n                id\n              }\n            }\n          }\n        }\n      }\n      arguments {\n        k\n        v\n      }\n      environment {\n        k\n        v\n      }\n      metrics {\n        k\n        v\n      }\n    }\n  }\n}\n"
+    "text": "query RuptureGenerationTaskQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    id\n    ... on RuptureGenerationTask {\n      id\n      duration\n      created\n      result\n      state\n      files {\n        edges {\n          node {\n            id\n            role\n            file {\n              __typename\n              ... on File {\n                id\n                file_name\n                file_url\n              }\n              ... on Node {\n                __isNode: __typename\n                id\n              }\n            }\n          }\n        }\n      }\n      arguments {\n        k\n        v\n      }\n      environment {\n        k\n        v\n      }\n      metrics {\n        k\n        v\n      }\n      parents {\n        edges {\n          node {\n            parent {\n              id\n            }\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'a013e5314584f39d1df548d873b0f40e';
+(node as any).hash = '55e3d7994fbf212a6a9a4f33206513ed';
 export default node;
