@@ -105,19 +105,4 @@ function Preview(): React.ReactElement {
   );
 }
 
-/*
-              <Route path="/Preview/lineMFD">
-                <PreviewLineMFD />
-              </Route>
-              <Route path="/preview/diags">
-                <RuptureSetDiags />
-              </Route>
-              <Route path="/preview/views">
-                <RuptureSetViews />
-              </Route>
-              <Route path="/preview/hazard">
-                <HazardMap />
-              </Route>
-*/
-
 export default Preview;
