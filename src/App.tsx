@@ -30,6 +30,8 @@ import PreviewMFD from './components/PreviewMFD';
 import PreviewLineMFD from './components/PreviewLineMFD';
 import GeneralTask from './components/GeneralTask';
 import RuptureSetDiags from './components/RuptureSetDiags';
+import RuptureSetViews from './components/RuptureSetViews';
+import HazardMap from './components/HazardMap';
 
 const useStyles = makeStyles({
   root: {
@@ -159,6 +161,12 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
               </Route>
               <Route path="/preview/diags">
                 <RuptureSetDiags />
+              </Route>
+              <Route path="/preview/views">
+                <RuptureSetViews />
+              </Route>
+              <Route path="/preview/hazard">
+                <HazardMap />
               </Route>
               <Route path="/">
                 <App preloadedQuery={preloadedQuery} />
