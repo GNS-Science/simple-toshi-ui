@@ -1,13 +1,13 @@
 import { LatLngExpression } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { MapContainer, Marker, TileLayer, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer } from 'react-leaflet';
 import React from 'react';
 import { Typography, Box, Card } from '@material-ui/core';
 
 const HazardMap: React.FC = () => {
   // Default coordinates set to Masterton station
   const nz_centre: LatLngExpression = [-40.946, 174.167];
-  const position: LatLngExpression = [-40.946, 175.667]; //Masterton
+  // const position: LatLngExpression = [-40.946, 175.667]; //Masterton
   const zoom = 5;
 
   //L.tileLayer.provider('Esri.DeLorme').;

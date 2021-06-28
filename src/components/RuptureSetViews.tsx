@@ -1,26 +1,22 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-//import CardActionArea from '@material-ui/core/CardActionArea';
+// prettier-ignore
 import {
   Box,
-  Button,
   Card,
-  CardActions,
   CardContent,
   CardMedia,
-  CircularProgress,
-  Container,
   Typography,
 } from '@material-ui/core';
 
 import buildUrl from 'build-url-ts';
+import PreviewMFD from '../components/PreviewMFD';
 
 const reportBaseUrl = 'http://nzshm22-static-reports.s3-website-ap-southeast-2.amazonaws.com/opensha/DATA';
-//http://nzshm22-rupset-diags-poc.s3-website-ap-southeast-2.amazonaws.com';
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: 500,
+    maxWidth: 520,
     display: 'flex',
   },
   content: {
@@ -52,8 +48,6 @@ const view1Url = buildUrl(reportBaseUrl, {
 const RuptureSetDiags: React.FC = () => {
   const classes = useStyles();
 
-  // return <iframe src={reportUrl} width="1000" height="600" />;
-
   return (
     <Box>
       <Typography gutterBottom variant="h5" component="h5">
@@ -63,6 +57,13 @@ const RuptureSetDiags: React.FC = () => {
         fault_model: CFM_0_9_SANSTVZ_D90; min_sub_sects_per_parent: 2; min_sub_sections: 3; max_jump_distance: 15
         adaptive_min_distance: 6; thinning_factor: 0.0; scaling_relationship: TMG_CRU_2017
       </Typography>
+
+      <Card className={classes.root} variant="outlined">
+        <CardContent className={classes.content}>
+          <PreviewMFD width={380} height={300} bar_width={9} />
+        </CardContent>
+      </Card>
+
       <Card className={classes.root} variant="outlined">
         <CardContent className={classes.content}>
           <CardMedia className={classes.media} image={view0Url} />

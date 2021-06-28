@@ -3,13 +3,9 @@ import './App.css';
 import logo from './logo.svg';
 
 import { graphql } from 'babel-plugin-relay/macro';
-
 import { Environment, loadQuery, PreloadedQuery, RelayEnvironmentProvider, usePreloadedQuery } from 'react-relay/hooks';
-
 import RelayEnvironment from './RelayEnvironment';
-
 import { AppStrongMotionStationQuery } from './__generated__/AppStrongMotionStationQuery.graphql';
-
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Box,
@@ -26,9 +22,11 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import RuptureGenerationTask from './components/RuptureGenerationTask';
 import FileDetail from './components/FileDetail';
 import Search from './components/Search';
+import GeneralTask from './components/GeneralTask';
+
+import Preview from './components/Preview';
 import PreviewMFD from './components/PreviewMFD';
 import PreviewLineMFD from './components/PreviewLineMFD';
-import GeneralTask from './components/GeneralTask';
 import RuptureSetDiags from './components/RuptureSetDiags';
 import RuptureSetViews from './components/RuptureSetViews';
 import HazardMap from './components/HazardMap';
@@ -154,9 +152,9 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
                 <GeneralTask />
               </Route>
               <Route path="/preview/MFD">
-                <PreviewMFD />
+                <PreviewMFD width={800} height={600} bar_width={15} />
               </Route>
-              <Route path="/Preview/lineMFD">
+              <Route path="/preview/lineMFD">
                 <PreviewLineMFD />
               </Route>
               <Route path="/preview/diags">
@@ -167,6 +165,9 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
               </Route>
               <Route path="/preview/hazard">
                 <HazardMap />
+              </Route>
+              <Route path="/preview">
+                <Preview />
               </Route>
               <Route path="/">
                 <App preloadedQuery={preloadedQuery} />

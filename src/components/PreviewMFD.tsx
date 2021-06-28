@@ -1,16 +1,17 @@
 import * as d3 from 'd3';
 import React, { useRef, useEffect } from 'react';
 import { Typography } from '@material-ui/core';
-
 import { d0, onlyRate } from './PreviewMFD_data';
 
-const PreviewMFD: React.FC = () => {
+function PreviewMFD(props: { width: number; height: number; bar_width: number }): React.ReactElement {
   const ref = useRef<SVGSVGElement>(null);
   const data = onlyRate(d0); //[10, 40, 30, 20, 50, 10];
   // const data = d0; //[10, 40, 30, 20, 50, 10];
   const maxData = d3.max(data) || 0;
-  const width = 800;
-  const height = 600;
+
+  const width = props.width;
+  const height = props.height;
+  const bar_width = props.bar_width;
 
   console.log('DATA', data);
   useEffect(() => {
@@ -36,10 +37,10 @@ const PreviewMFD: React.FC = () => {
     selection
       .enter()
       .append('rect')
-      .attr('x', (d, i) => i * 15)
+      .attr('x', (d, i) => i * bar_width)
       // eslint-disable-next-line
       .attr('y', (d) => height)
-      .attr('width', 12)
+      .attr('width', bar_width - 1)
       .attr('height', 0)
       .attr('fill', 'orange')
       .transition()
@@ -58,11 +59,15 @@ const PreviewMFD: React.FC = () => {
       .remove();
 
     // Handmade legend
-    svg.append('circle').attr('cx', 450).attr('cy', 30).attr('r', 6).style('fill', 'orange');
-    svg.append('circle').attr('cx', 450).attr('cy', 60).attr('r', 6).style('fill', '#404080');
-    svg.append('text').attr('x', 470).attr('y', 36).text('variable A').style('font-size', '15px');
+    // prettier-ignore
+    svg.append('circle').attr('cx', width-150).attr('cy', 30).attr('r', 6).style('fill', 'orange');
+    // prettier-ignore
+    svg.append('circle').attr('cx', width-150).attr('cy', 60).attr('r', 6).style('fill', '#404080');
+    // prettier-ignore
+    svg.append('text').attr('x', width-130).attr('y', 36).text('variable A').style('font-size', '15px');
     svg.attr('alignment-baseline', 'middle');
-    svg.append('text').attr('x', 470).attr('y', 66).text('variable B').style('font-size', '15px');
+    // prettier-ignore
+    svg.append('text').attr('x', width-130).attr('y', 66).text('variable B').style('font-size', '15px');
     svg.attr('alignment-baseline', 'middle');
   };
 
@@ -77,6 +82,6 @@ const PreviewMFD: React.FC = () => {
       </div>
     </>
   );
-};
+}
 
 export default PreviewMFD;
