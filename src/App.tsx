@@ -29,6 +29,7 @@ import Search from './components/Search';
 import PreviewMFD from './components/PreviewMFD';
 import PreviewLineMFD from './components/PreviewLineMFD';
 import GeneralTask from './components/GeneralTask';
+import MenuBar from './components/MenuBar';
 
 const useStyles = makeStyles({
   root: {
@@ -136,6 +137,7 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
     <RelayEnvironmentProvider environment={env}>
       <React.Suspense fallback={<Loading />}>
         <BrowserRouter>
+          <MenuBar />
           <Container maxWidth="md" style={{ paddingTop: '40px', wordWrap: 'break-word' }}>
             <Switch>
               <Route path="/RuptureGenerationTask/:id">
