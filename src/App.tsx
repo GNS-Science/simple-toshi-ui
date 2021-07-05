@@ -3,13 +3,9 @@ import './App.css';
 import logo from './logo.svg';
 
 import { graphql } from 'babel-plugin-relay/macro';
-
 import { Environment, loadQuery, PreloadedQuery, RelayEnvironmentProvider, usePreloadedQuery } from 'react-relay/hooks';
-
 import RelayEnvironment from './RelayEnvironment';
-
 import { AppStrongMotionStationQuery } from './__generated__/AppStrongMotionStationQuery.graphql';
-
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Box,
@@ -26,10 +22,16 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import RuptureGenerationTask from './components/RuptureGenerationTask';
 import FileDetail from './components/FileDetail';
 import Search from './components/Search';
-import PreviewMFD from './components/PreviewMFD';
-import PreviewLineMFD from './components/PreviewLineMFD';
 import GeneralTask from './components/GeneralTask';
 import MenuBar from './components/MenuBar';
+
+/* preview views (with no test coverage...) */
+import Preview from './components/Preview';
+import PreviewMFD from './components/PreviewMFD';
+import PreviewLineMFD from './components/PreviewLineMFD';
+import RuptureSetDiags from './components/RuptureSetDiags';
+import RuptureSetViews from './components/RuptureSetViews';
+import HazardMap from './components/HazardMap';
 
 const useStyles = makeStyles({
   root: {
@@ -149,14 +151,26 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
               <Route path="/Search">
                 <Search />
               </Route>
-              <Route path="/PreviewMFD">
-                <PreviewMFD />
-              </Route>
-              <Route path="/PreviewLineMFD">
-                <PreviewLineMFD />
-              </Route>
               <Route path="/GeneralTask/:id">
                 <GeneralTask />
+              </Route>
+              <Route path="/Preview/MFD">
+                <PreviewMFD width={800} height={600} bar_width={15} />
+              </Route>
+              <Route path="/Preview/lineMFD">
+                <PreviewLineMFD />
+              </Route>
+              <Route path="/Preview/diags">
+                <RuptureSetDiags />
+              </Route>
+              <Route path="/Preview/views">
+                <RuptureSetViews />
+              </Route>
+              <Route path="/Preview/hazard">
+                <HazardMap />
+              </Route>
+              <Route path="/Preview">
+                <Preview />
               </Route>
               <Route path="/">
                 <App preloadedQuery={preloadedQuery} />
