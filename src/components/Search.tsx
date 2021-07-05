@@ -1,5 +1,17 @@
 import React from 'react';
-import { Box, InputBase, makeStyles, CircularProgress, Button } from '@material-ui/core';
+// prettier-ignore
+import {
+  Box, 
+  Button,
+  Card,
+  CardContent,
+  CircularProgress,
+  Container,
+  InputBase, 
+  makeStyles,
+  Typography,
+} from '@material-ui/core';
+
 import SearchIcon from '@material-ui/icons/Search';
 import { graphql } from 'babel-plugin-relay/macro';
 import { useQueryLoader } from 'react-relay/hooks';
@@ -47,6 +59,12 @@ const useStyles = makeStyles((theme) => ({
   },
   inputRoot: {
     width: '100%',
+  },
+  root: {
+    minWidth: 275,
+  },
+  pos: {
+    marginBottom: 3,
   },
 }));
 
@@ -131,6 +149,55 @@ const Search: React.FC = () => {
           </Box>
         )}
       </React.Suspense>
+      {!queryRef && (
+        <Container>
+          <Card className={classes.root}>
+            <CardContent>
+              <Typography variant="h6">Tips</Typography>
+
+              <Typography variant="body1">
+                Search uses the ElasticSearch&nbsp;
+                <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#simple-query-string-syntax">
+                  simple query string syntax
+                </a>
+                &nbsp;Here are a few examples...
+              </Typography>
+            </CardContent>
+          </Card>
+          <Card className={classes.root}>
+            <CardContent>
+              <Typography className={classes.pos} color="textSecondary" variant="body1">
+                `title:subduction` looks for `subduction` in the title field.
+              </Typography>
+              <Typography className={classes.pos} color="textSecondary" variant="body1">
+                `title:subduction+rupture` looks for `subduction` AND `rupture` in the title field.
+              </Typography>
+              <Typography className={classes.pos} color="textSecondary" variant="body1">
+                `arguments.k:completion_energy` looks for the key `completion_energy` in the arguments field.
+              </Typography>
+              <Typography className={classes.pos} color="textSecondary" variant="body1">
+                `meta.k:mfd_b_value` looks for the key `mfd_b_value` in the meta field.
+              </Typography>
+              <Typography className={classes.pos} color="textSecondary" variant="body1">
+                `file_name:InversionSolution-CFM03_tf0.0-rnd0-t60.zip` finds the file by name.
+              </Typography>
+            </CardContent>
+          </Card>
+          <Card className={classes.root}>
+            <CardContent>
+              <Typography className={classes.pos} component="p">
+                You don`t have to use fields, but it`ll help you get more specific results.
+              </Typography>
+              <Typography className={classes.pos} component="p">
+                The search will never return more that 10 results.
+              </Typography>
+              <Typography className={classes.pos} component="p">
+                The search is fuzzy so expect some inexact results, but the closest matches will be at top of the list.
+              </Typography>
+            </CardContent>
+          </Card>
+        </Container>
+      )}
     </>
   );
 };

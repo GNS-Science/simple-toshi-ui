@@ -23,7 +23,9 @@ import RuptureGenerationTask from './components/RuptureGenerationTask';
 import FileDetail from './components/FileDetail';
 import Search from './components/Search';
 import GeneralTask from './components/GeneralTask';
+import MenuBar from './components/MenuBar';
 
+/* preview views (with no test coverage...) */
 import Preview from './components/Preview';
 import PreviewMFD from './components/PreviewMFD';
 import PreviewLineMFD from './components/PreviewLineMFD';
@@ -137,6 +139,7 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
     <RelayEnvironmentProvider environment={env}>
       <React.Suspense fallback={<Loading />}>
         <BrowserRouter>
+          <MenuBar />
           <Container maxWidth="md" style={{ paddingTop: '40px', wordWrap: 'break-word' }}>
             <Switch>
               <Route path="/RuptureGenerationTask/:id">
@@ -151,22 +154,22 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
               <Route path="/GeneralTask/:id">
                 <GeneralTask />
               </Route>
-              <Route path="/preview/MFD">
+              <Route path="/Preview/MFD">
                 <PreviewMFD width={800} height={600} bar_width={15} />
               </Route>
-              <Route path="/preview/lineMFD">
+              <Route path="/Preview/lineMFD">
                 <PreviewLineMFD />
               </Route>
-              <Route path="/preview/diags">
+              <Route path="/Preview/diags">
                 <RuptureSetDiags />
               </Route>
-              <Route path="/preview/views">
+              <Route path="/Preview/views">
                 <RuptureSetViews />
               </Route>
-              <Route path="/preview/hazard">
+              <Route path="/Preview/hazard">
                 <HazardMap />
               </Route>
-              <Route path="/preview">
+              <Route path="/Preview">
                 <Preview />
               </Route>
               <Route path="/">
