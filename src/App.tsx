@@ -32,6 +32,7 @@ import PreviewLineMFD from './components/PreviewLineMFD';
 import RuptureSetDiags from './components/RuptureSetDiags';
 import RuptureSetViews from './components/RuptureSetViews';
 import HazardMap from './components/HazardMap';
+import Find from './components/Find';
 
 const useStyles = makeStyles({
   root: {
@@ -153,6 +154,9 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
               </Route>
               <Route path="/GeneralTask/:id">
                 <GeneralTask />
+              </Route>
+              <Route path="/Find/:id?">
+                <Find />
               </Route>
               <Route path="/Preview/MFD">
                 <PreviewMFD width={800} height={600} bar_width={15} />
