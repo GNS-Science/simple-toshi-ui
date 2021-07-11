@@ -136,7 +136,13 @@ const Find: React.FC = () => {
           <Card className={classes.root}>
             <CardContent>
               <Typography variant="h6">Tips</Typography>
-              <Typography variant="body1">Enter a Toshi ID e.g. RmlsZTo4NTkuMDM2Z2Rw</Typography>
+              <Typography variant="body1" color="secondary">
+                Enter a Toshi ID e.g. <strong>R2VuZXJhbFRhc2s6Mzk5NmpTZ1k=</strong>.
+              </Typography>
+              <Typography variant="body1" color="secondary">
+                Or use the <strong>/Find/{'{NodeID}'}</strong> URL e.g.&nbsp;
+                <strong>/Find/R2VuZXJhbFRhc2s6Mzk5NmpTZ1k=</strong>
+              </Typography>
             </CardContent>
           </Card>
         </Container>
