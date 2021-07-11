@@ -39,6 +39,9 @@ const MenuBar: React.FC = () => {
             <MenuItem component={Link} to="/Search" onClick={handleClose}>
               Search
             </MenuItem>
+            <MenuItem component={Link} to="/Find" onClick={handleClose}>
+              Find by ID
+            </MenuItem>
             <MenuItem component={Link} to="/Preview" onClick={handleClose}>
               Preview
             </MenuItem>
