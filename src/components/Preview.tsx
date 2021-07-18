@@ -77,20 +77,6 @@ function Preview(): React.ReactElement {
       <Card className={classes.root}>
         <CardContent>
           <Typography color="textPrimary" variant="h5" gutterBottom>
-            Inline report Rupture Set Diagnostics
-          </Typography>
-          <Typography className={classes.pos} component="p">
-            Take a static HTML open report and wrap it to make if more usable.
-            <Button size="small" href="/preview/diags">
-              go
-            </Button>
-          </Typography>
-        </CardContent>
-      </Card>
-
-      <Card className={classes.root}>
-        <CardContent>
-          <Typography color="textPrimary" variant="h5" gutterBottom>
             Mixed static and dynamic content
           </Typography>
           <Typography className={classes.pos} component="p">
