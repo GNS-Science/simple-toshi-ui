@@ -1,13 +1,33 @@
-import { Typography } from '@material-ui/core';
+import { Box, CircularProgress, makeStyles, Tab, Tabs, Theme, Typography } from '@material-ui/core';
 import { graphql } from 'babel-plugin-relay/macro';
 import React from 'react';
-import { useLazyLoadQuery } from 'react-relay';
-import { Link, useParams } from 'react-router-dom';
+import { useLazyLoadQuery, useQueryLoader } from 'react-relay';
+import { useHistory, useParams } from 'react-router-dom';
+import FileDetailTab, { fileDetailTabQuery } from './FileDetailTab';
 import KeyValueTable from './KeyValueTable';
+import RuptureSetDiags from './RuptureSetDiags';
 import { FileDetailQuery } from './__generated__/FileDetailQuery.graphql';
+import { FileDetailTabQuery } from './__generated__/FileDetailTabQuery.graphql';
+
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.paper,
+    display: 'flex',
+  },
+  tabPanel: {
+    width: '80%',
+    padding: theme.spacing(2),
+  },
+  tab: {
+    width: '20%',
+    borderRight: `1px solid ${theme.palette.divider}`,
+  },
+}));
 
 interface FileDetailParams {
   id: string;
+  tab: string;
 }
 
 const fileDetailQuery = graphql`
@@ -15,25 +35,9 @@ const fileDetailQuery = graphql`
     node(id: $id) {
       ... on File {
         id
-        file_name
-        file_size
-        file_url
-        md5_digest
         meta {
           k
           v
-        }
-        relations {
-          edges {
-            node {
-              role
-              thing {
-                ... on Node {
-                  id
-                }
-              }
-            }
-          }
         }
       }
     }
@@ -57,8 +61,17 @@ export const formatBytes = (bytes: number, decimals = 2): string => {
 };
 
 const FileDetail: React.FC = () => {
-  const { id } = useParams<FileDetailParams>();
+  const classes = useStyles();
+  const { id, tab } = useParams<FileDetailParams>();
   const data = useLazyLoadQuery<FileDetailQuery>(fileDetailQuery, { id });
+  const [queryRef, loadQuery] = useQueryLoader<FileDetailTabQuery>(fileDetailTabQuery);
+  const history = useHistory();
+
+  React.useEffect(() => {
+    if (tab === undefined || tab === 'FileDetail') {
+      loadQuery({ id });
+    }
+  }, [tab]);
 
   if (!data?.node) {
     return (
@@ -68,38 +81,40 @@ const FileDetail: React.FC = () => {
     );
   }
 
+  const metaKeys = data?.node?.meta?.map((kv) => kv?.k ?? '');
+  const hasRuptureSet = ['fault_model', 'max_jump_distance', 'scaling_relationship'].every((k) =>
+    metaKeys?.includes(k),
+  );
+
+  const renderTab = () => {
+    switch (tab) {
+      case 'RuptureSetDiagnostics':
+        return <Box className={classes.tabPanel}>{hasRuptureSet && <RuptureSetDiags fileId={id} />}</Box>;
+      default:
+        return (
+          <Box className={classes.tabPanel}>
+            <React.Suspense fallback={<CircularProgress />}>
+              {queryRef && <FileDetailTab queryRef={queryRef} />}
+            </React.Suspense>
+          </Box>
+        );
+    }
+  };
+
   return (
     <>
-      <Typography variant="h5" gutterBottom>
-        File Detail (id: {data?.node?.id})
-      </Typography>
-      <Typography>
-        <strong>File name:</strong> {data?.node?.file_name}
-      </Typography>
-      <Typography>
-        <strong>File size:</strong> {formatBytes(data?.node?.file_size ?? 0)}
-      </Typography>
-      <Typography>
-        <strong>MD5 digest:</strong> {data?.node?.md5_digest}
-      </Typography>
-      <Typography>
-        <strong>Written by: </strong>
-        {data?.node?.relations?.edges
-          ?.filter((e) => e?.node?.role === 'WRITE')
-          ?.map((e, i, { length }) => {
-            return (
-              <React.Fragment key={e?.node?.thing?.id}>
-                <Link to={`/RuptureGenerationTask/${e?.node?.thing?.id}`}>
-                  {Buffer.from(e?.node?.thing?.id ?? '', 'base64').toString()}
-                </Link>
-                {i + 1 !== length && <span>, </span>}
-              </React.Fragment>
-            );
-          })}
-      </Typography>
-      <Typography>
-        <a href={data?.node?.file_url ?? ''}>Download</a>
-      </Typography>
+      <Box className={classes.root}>
+        <Tabs
+          orientation="vertical"
+          value={tab ?? 'FileDetail'}
+          onChange={(e, val) => history.push(`/FileDetail/${id}/${val}`)}
+          className={classes.tab}
+        >
+          <Tab label="File Detail" id="fileDetailTab" value="FileDetail" />
+          {hasRuptureSet && <Tab label="Rupture Set Diagnostics" id="ruptureSetTab" value="RuptureSetDiagnostics" />}
+        </Tabs>
+        {renderTab()}
+      </Box>
 
       {data?.node?.meta && <KeyValueTable header="Meta" data={data?.node?.meta} />}
     </>

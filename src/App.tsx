@@ -29,7 +29,6 @@ import MenuBar from './components/MenuBar';
 import Preview from './components/Preview';
 import PreviewMFD from './components/PreviewMFD';
 import PreviewLineMFD from './components/PreviewLineMFD';
-import RuptureSetDiags from './components/RuptureSetDiags';
 import RuptureSetViews from './components/RuptureSetViews';
 import HazardMap from './components/HazardMap';
 import Find from './components/Find';
@@ -146,7 +145,7 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
               <Route path="/RuptureGenerationTask/:id">
                 <RuptureGenerationTask />
               </Route>
-              <Route path="/FileDetail/:id">
+              <Route path="/FileDetail/:id/:tab?">
                 <FileDetail />
               </Route>
               <Route path="/Search">
@@ -163,9 +162,6 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
               </Route>
               <Route path="/Preview/lineMFD">
                 <PreviewLineMFD />
-              </Route>
-              <Route path="/Preview/diags">
-                <RuptureSetDiags />
               </Route>
               <Route path="/Preview/views">
                 <RuptureSetViews />
