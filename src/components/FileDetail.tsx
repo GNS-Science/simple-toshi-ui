@@ -4,7 +4,7 @@ import React from 'react';
 import { useLazyLoadQuery, useQueryLoader } from 'react-relay';
 import { useHistory, useParams } from 'react-router-dom';
 import FileDetailTab, { fileDetailTabQuery } from './FileDetailTab';
-import KeyValueTable from './KeyValueTable';
+
 import RuptureSetDiags from './RuptureSetDiags';
 import { FileDetailQuery } from './__generated__/FileDetailQuery.graphql';
 import { FileDetailTabQuery } from './__generated__/FileDetailTabQuery.graphql';
@@ -85,11 +85,16 @@ const FileDetail: React.FC = () => {
   const hasRuptureSet = ['fault_model', 'max_jump_distance', 'scaling_relationship'].every((k) =>
     metaKeys?.includes(k),
   );
+  const metaAsString = data?.node?.meta?.map((kv) => ' ' + kv?.k + ': ' + kv?.v).toString() ?? '';
 
   const renderTab = () => {
     switch (tab) {
       case 'RuptureSetDiagnostics':
-        return <Box className={classes.tabPanel}>{hasRuptureSet && <RuptureSetDiags fileId={id} />}</Box>;
+        return (
+          <Box className={classes.tabPanel}>
+            {hasRuptureSet && <RuptureSetDiags fileId={id} metaAsString={metaAsString} />}
+          </Box>
+        );
       default:
         return (
           <Box className={classes.tabPanel}>
@@ -108,15 +113,14 @@ const FileDetail: React.FC = () => {
           orientation="vertical"
           value={tab ?? 'FileDetail'}
           onChange={(e, val) => history.push(`/FileDetail/${id}/${val}`)}
-          className={classes.tab}
         >
-          <Tab label="File Detail" id="fileDetailTab" value="FileDetail" />
-          {hasRuptureSet && <Tab label="Rupture Set Diagnostics" id="ruptureSetTab" value="RuptureSetDiagnostics" />}
+          <Tab label="File Detail" id="fileDetailTab" value="FileDetail" className={classes.tab} />
+          {hasRuptureSet && (
+            <Tab label="Diagnostics" id="ruptureSetTab" value="RuptureSetDiagnostics" className={classes.tab} />
+          )}
         </Tabs>
         {renderTab()}
       </Box>
-
-      {data?.node?.meta && <KeyValueTable header="Meta" data={data?.node?.meta} />}
     </>
   );
 };
