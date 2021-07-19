@@ -55,14 +55,10 @@ describe('FileDetail component', () => {
 
     const { findByText, queryByText } = setup(environment);
     expect(await findByText('Download')).toHaveAttribute('href', 'test_url');
-    expect(await findByText('RuptureGenerationTask:4')).toHaveAttribute(
-      'href',
-      '/RuptureGenerationTask/UnVwdHVyZUdlbmVyYXRpb25UYXNrOjQ=',
-    );
     expect(await findByText('testFile.zip')).toBeVisible();
     expect(await findByText('1000 Bytes')).toBeVisible();
     expect(await findByText('test_md5')).toBeVisible();
-    expect(queryByText('Rupture Set Diagnostics')).not.toBeInTheDocument();
+    expect(queryByText('Diagnostics')).not.toBeInTheDocument();
   });
 
   it('shows Rupture Set Diagnostics tab', async () => {
@@ -85,7 +81,7 @@ describe('FileDetail component', () => {
     environment.mock.queuePendingOperation(fileDetailTabQuery, { id: '1234' });
 
     const { findByText } = setup(environment);
-    expect(await findByText('Rupture Set Diagnostics')).toBeVisible();
+    expect(await findByText('Diagnostics')).toBeVisible();
   });
 
   it('displays not found when no matching id', async () => {
