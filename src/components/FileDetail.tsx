@@ -82,9 +82,7 @@ const FileDetail: React.FC = () => {
   }
 
   const metaKeys = data?.node?.meta?.map((kv) => kv?.k ?? '');
-  const hasRuptureSet = ['fault_model', 'max_jump_distance', 'scaling_relationship'].every((k) =>
-    metaKeys?.includes(k),
-  );
+  const hasRuptureSet = ['fault_model', 'scaling_relationship'].every((k) => metaKeys?.includes(k));
   const metaAsString = data?.node?.meta?.map((kv) => ' ' + kv?.k + ': ' + kv?.v).toString() ?? '';
 
   const renderTab = () => {
