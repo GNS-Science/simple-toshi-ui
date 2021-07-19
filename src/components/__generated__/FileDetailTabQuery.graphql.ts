@@ -3,33 +3,41 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-export type FileDetailQueryVariables = {
+export type FileDetailTabQueryVariables = {
     id: string;
 };
-export type FileDetailQueryResponse = {
+export type FileDetailTabQueryResponse = {
     readonly node: {
         readonly id?: string;
+        readonly file_name?: string | null;
+        readonly file_size?: number | null;
+        readonly file_url?: string | null;
+        readonly md5_digest?: string | null;
         readonly meta?: ReadonlyArray<{
             readonly k: string | null;
             readonly v: string | null;
         } | null> | null;
     } | null;
 };
-export type FileDetailQuery = {
-    readonly response: FileDetailQueryResponse;
-    readonly variables: FileDetailQueryVariables;
+export type FileDetailTabQuery = {
+    readonly response: FileDetailTabQueryResponse;
+    readonly variables: FileDetailTabQueryVariables;
 };
 
 
 
 /*
-query FileDetailQuery(
+query FileDetailTabQuery(
   $id: ID!
 ) {
   node(id: $id) {
     __typename
     ... on File {
       id
+      file_name
+      file_size
+      file_url
+      md5_digest
       meta {
         k
         v
@@ -65,6 +73,34 @@ v2 = {
 v3 = {
   "alias": null,
   "args": null,
+  "kind": "ScalarField",
+  "name": "file_name",
+  "storageKey": null
+},
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "file_size",
+  "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "file_url",
+  "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "md5_digest",
+  "storageKey": null
+},
+v7 = {
+  "alias": null,
+  "args": null,
   "concreteType": "KeyValuePair",
   "kind": "LinkedField",
   "name": "meta",
@@ -92,7 +128,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "FileDetailQuery",
+    "name": "FileDetailTabQuery",
     "selections": [
       {
         "alias": null,
@@ -106,7 +142,11 @@ return {
             "kind": "InlineFragment",
             "selections": [
               (v2/*: any*/),
-              (v3/*: any*/)
+              (v3/*: any*/),
+              (v4/*: any*/),
+              (v5/*: any*/),
+              (v6/*: any*/),
+              (v7/*: any*/)
             ],
             "type": "File",
             "abstractKey": null
@@ -122,7 +162,7 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "FileDetailQuery",
+    "name": "FileDetailTabQuery",
     "selections": [
       {
         "alias": null,
@@ -143,7 +183,11 @@ return {
           {
             "kind": "InlineFragment",
             "selections": [
-              (v3/*: any*/)
+              (v3/*: any*/),
+              (v4/*: any*/),
+              (v5/*: any*/),
+              (v6/*: any*/),
+              (v7/*: any*/)
             ],
             "type": "File",
             "abstractKey": null
@@ -154,14 +198,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "87d1c121fba7e0a45a0707cb303442b3",
+    "cacheID": "5a4c6613acd285af430a2cc84869c59b",
     "id": null,
     "metadata": {},
-    "name": "FileDetailQuery",
+    "name": "FileDetailTabQuery",
     "operationKind": "query",
-    "text": "query FileDetailQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on File {\n      id\n      meta {\n        k\n        v\n      }\n    }\n    id\n  }\n}\n"
+    "text": "query FileDetailTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on File {\n      id\n      file_name\n      file_size\n      file_url\n      md5_digest\n      meta {\n        k\n        v\n      }\n    }\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '52942424f61d7e0e8c9f88c282d95ab2';
+(node as any).hash = '9ce4bec27ce248e27419531f67bedcf6';
 export default node;

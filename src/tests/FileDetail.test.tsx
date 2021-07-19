@@ -5,6 +5,7 @@ import ReactRouter from 'react-router';
 import { RelayEnvironmentProvider } from 'react-relay/hooks';
 import { cleanup, render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
+import { fileDetailTabQuery } from '../components/FileDetailTab';
 
 const mockResolver = {
   File: () => ({
@@ -49,16 +50,38 @@ describe('FileDetail component', () => {
     jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ id: '1234' });
     const environment = createMockEnvironment();
     environment.mock.queueOperationResolver((operation) => MockPayloadGenerator.generate(operation, mockResolver));
+    environment.mock.queueOperationResolver((operation) => MockPayloadGenerator.generate(operation, mockResolver));
+    environment.mock.queuePendingOperation(fileDetailTabQuery, { id: '1234' });
 
-    const { findByText } = setup(environment);
+    const { findByText, queryByText } = setup(environment);
     expect(await findByText('Download')).toHaveAttribute('href', 'test_url');
-    expect(await findByText('RuptureGenerationTask:4')).toHaveAttribute(
-      'href',
-      '/RuptureGenerationTask/UnVwdHVyZUdlbmVyYXRpb25UYXNrOjQ=',
-    );
     expect(await findByText('testFile.zip')).toBeVisible();
     expect(await findByText('1000 Bytes')).toBeVisible();
     expect(await findByText('test_md5')).toBeVisible();
+    expect(queryByText('Diagnostics')).not.toBeInTheDocument();
+  });
+
+  it('shows Rupture Set Diagnostics tab', async () => {
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ id: '1234', tab: 'RuptureSetDiagnostics' });
+
+    const mockRuptureResolver = {
+      File: () => ({
+        meta: [
+          { k: 'fault_model', v: '' },
+          { k: 'max_jump_distance', v: '' },
+          { k: 'scaling_relationship', v: '' },
+        ],
+      }),
+    };
+
+    const environment = createMockEnvironment();
+    environment.mock.queueOperationResolver((operation) =>
+      MockPayloadGenerator.generate(operation, mockRuptureResolver),
+    );
+    environment.mock.queuePendingOperation(fileDetailTabQuery, { id: '1234' });
+
+    const { findByText } = setup(environment);
+    expect(await findByText('Diagnostics')).toBeVisible();
   });
 
   it('displays not found when no matching id', async () => {
