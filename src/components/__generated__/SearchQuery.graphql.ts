@@ -16,6 +16,8 @@ export type SearchQueryResponse = {
                 readonly node: {
                     readonly __typename: string;
                     readonly id?: string;
+                    readonly file_name?: string | null;
+                    readonly file_size?: number | null;
                     readonly created?: unknown | null;
                     readonly duration?: number | null;
                     readonly state?: EventState | null;
@@ -25,8 +27,6 @@ export type SearchQueryResponse = {
                     readonly children?: {
                         readonly total_count: number | null;
                     } | null;
-                    readonly file_name?: string | null;
-                    readonly file_size?: number | null;
                 } | null;
             } | null>;
         } | null;
@@ -55,7 +55,6 @@ query SearchQuery(
           }
           ... on RuptureGenerationTask {
             created
-            id
             duration
             state
             result
@@ -68,8 +67,9 @@ query SearchQuery(
               total_count
             }
           }
-          ... on File {
-            id
+          ... on FileInterface {
+            __isFileInterface: __typename
+            __typename
             file_name
             file_size
           }
@@ -99,17 +99,10 @@ v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "id",
-  "storageKey": null
-},
-v3 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
   "name": "created",
   "storageKey": null
 },
-v4 = [
+v3 = [
   {
     "alias": null,
     "args": [
@@ -159,7 +152,13 @@ v4 = [
                   {
                     "kind": "InlineFragment",
                     "selections": [
-                      (v2/*: any*/)
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "id",
+                        "storageKey": null
+                      }
                     ],
                     "type": "Node",
                     "abstractKey": "__isNode"
@@ -167,7 +166,6 @@ v4 = [
                   {
                     "kind": "InlineFragment",
                     "selections": [
-                      (v3/*: any*/),
                       (v2/*: any*/),
                       {
                         "alias": null,
@@ -211,7 +209,7 @@ v4 = [
                         "name": "title",
                         "storageKey": null
                       },
-                      (v3/*: any*/),
+                      (v2/*: any*/),
                       {
                         "alias": null,
                         "args": null,
@@ -231,7 +229,6 @@ v4 = [
                   {
                     "kind": "InlineFragment",
                     "selections": [
-                      (v2/*: any*/),
                       {
                         "alias": null,
                         "args": null,
@@ -247,8 +244,8 @@ v4 = [
                         "storageKey": null
                       }
                     ],
-                    "type": "File",
-                    "abstractKey": null
+                    "type": "FileInterface",
+                    "abstractKey": "__isFileInterface"
                   }
                 ],
                 "storageKey": null
@@ -269,7 +266,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "SearchQuery",
-    "selections": (v4/*: any*/),
+    "selections": (v3/*: any*/),
     "type": "QueryRoot",
     "abstractKey": null
   },
@@ -278,17 +275,17 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "SearchQuery",
-    "selections": (v4/*: any*/)
+    "selections": (v3/*: any*/)
   },
   "params": {
-    "cacheID": "967b075a4605a47c1b6e813686a16375",
+    "cacheID": "a184912cb1456400fcfabbda0a8af56f",
     "id": null,
     "metadata": {},
     "name": "SearchQuery",
     "operationKind": "query",
-    "text": "query SearchQuery(\n  $search: String!\n) {\n  search(search_term: $search) {\n    search_result {\n      total_count\n      edges {\n        node {\n          __typename\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n          ... on RuptureGenerationTask {\n            created\n            id\n            duration\n            state\n            result\n          }\n          ... on GeneralTask {\n            description\n            title\n            created\n            children {\n              total_count\n            }\n          }\n          ... on File {\n            id\n            file_name\n            file_size\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query SearchQuery(\n  $search: String!\n) {\n  search(search_term: $search) {\n    search_result {\n      total_count\n      edges {\n        node {\n          __typename\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n          ... on RuptureGenerationTask {\n            created\n            duration\n            state\n            result\n          }\n          ... on GeneralTask {\n            description\n            title\n            created\n            children {\n              total_count\n            }\n          }\n          ... on FileInterface {\n            __isFileInterface: __typename\n            __typename\n            file_name\n            file_size\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '0e4ddefedee8a767c0d1349d95b6c783';
+(node as any).hash = 'f3c1dbfe33ffacbc82cf81d31cce3478';
 export default node;

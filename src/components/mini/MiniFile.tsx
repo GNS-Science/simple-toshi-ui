@@ -6,6 +6,7 @@ import { formatBytes } from '../FileDetail';
 
 interface MiniFileProps {
   id?: string;
+  __typename?: string;
   file_size?: number | null;
   file_name?: string | null;
 }
@@ -17,12 +18,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MiniFile: React.FC<MiniFileProps> = ({ id, file_size, file_name }: MiniFileProps) => {
+const MiniFile: React.FC<MiniFileProps> = ({ id, __typename, file_size, file_name }: MiniFileProps) => {
   const classes = useStyles();
   return (
     <Card className={classes.root}>
       <Typography>
-        <strong>Type: </strong> File
+        <strong>Type: </strong> {__typename}
       </Typography>
       <Typography>
         <strong>File name:</strong> <TruncateText text={file_name ?? ''} />
@@ -31,7 +32,11 @@ const MiniFile: React.FC<MiniFileProps> = ({ id, file_size, file_name }: MiniFil
         <strong>File size:</strong> {formatBytes(file_size ?? 0)}
       </Typography>
       <Typography>
-        <Link to={`/FileDetail/${id}`}>[more]</Link>
+        {__typename == 'InversionSolution' ? (
+          <Link to={`/InversionSolution/${id}`}>[more]</Link>
+        ) : (
+          <Link to={`/FileDetail/${id}`}>[more]</Link>
+        )}
       </Typography>
     </Card>
   );
