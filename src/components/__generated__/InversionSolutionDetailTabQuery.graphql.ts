@@ -9,6 +9,7 @@ export type InversionSolutionDetailTabQueryVariables = {
 export type InversionSolutionDetailTabQueryResponse = {
     readonly node: {
         readonly id?: string;
+        readonly produced_by_id?: string | null;
         readonly file_name?: string | null;
         readonly file_size?: number | null;
         readonly file_url?: string | null;
@@ -38,6 +39,7 @@ query InversionSolutionDetailTabQuery(
     __typename
     ... on InversionSolution {
       id
+      produced_by_id
       file_name
       file_size
       file_url
@@ -82,31 +84,38 @@ v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "file_name",
+  "name": "produced_by_id",
   "storageKey": null
 },
 v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "file_size",
+  "name": "file_name",
   "storageKey": null
 },
 v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "file_url",
+  "name": "file_size",
   "storageKey": null
 },
 v6 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
+  "name": "file_url",
+  "storageKey": null
+},
+v7 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
   "name": "md5_digest",
   "storageKey": null
 },
-v7 = [
+v8 = [
   {
     "alias": null,
     "args": null,
@@ -122,24 +131,24 @@ v7 = [
     "storageKey": null
   }
 ],
-v8 = {
+v9 = {
   "alias": null,
   "args": null,
   "concreteType": "KeyValuePair",
   "kind": "LinkedField",
   "name": "meta",
   "plural": true,
-  "selections": (v7/*: any*/),
+  "selections": (v8/*: any*/),
   "storageKey": null
 },
-v9 = {
+v10 = {
   "alias": null,
   "args": null,
   "concreteType": "KeyValuePair",
   "kind": "LinkedField",
   "name": "metrics",
   "plural": true,
-  "selections": (v7/*: any*/),
+  "selections": (v8/*: any*/),
   "storageKey": null
 };
 return {
@@ -165,8 +174,9 @@ return {
               (v4/*: any*/),
               (v5/*: any*/),
               (v6/*: any*/),
-              (v8/*: any*/),
-              (v9/*: any*/)
+              (v7/*: any*/),
+              (v9/*: any*/),
+              (v10/*: any*/)
             ],
             "type": "InversionSolution",
             "abstractKey": null
@@ -207,8 +217,9 @@ return {
               (v4/*: any*/),
               (v5/*: any*/),
               (v6/*: any*/),
-              (v8/*: any*/),
-              (v9/*: any*/)
+              (v7/*: any*/),
+              (v9/*: any*/),
+              (v10/*: any*/)
             ],
             "type": "InversionSolution",
             "abstractKey": null
@@ -219,14 +230,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "6ffa208bc93af9541913e9134f803a6a",
+    "cacheID": "cab1f1eda6f3a8094964a8e4e7e491ad",
     "id": null,
     "metadata": {},
     "name": "InversionSolutionDetailTabQuery",
     "operationKind": "query",
-    "text": "query InversionSolutionDetailTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on InversionSolution {\n      id\n      file_name\n      file_size\n      file_url\n      md5_digest\n      meta {\n        k\n        v\n      }\n      metrics {\n        k\n        v\n      }\n    }\n    id\n  }\n}\n"
+    "text": "query InversionSolutionDetailTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on InversionSolution {\n      id\n      produced_by_id\n      file_name\n      file_size\n      file_url\n      md5_digest\n      meta {\n        k\n        v\n      }\n      metrics {\n        k\n        v\n      }\n    }\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '3b73b8a5362c944e999c5046fdcab7c5';
+(node as any).hash = '05b41605a76b3cc0ac4d214415897f83';
 export default node;
