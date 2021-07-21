@@ -81,7 +81,6 @@ export const searchQuery = graphql`
             }
             ... on RuptureGenerationTask {
               created
-              id
               duration
               state
               result
@@ -94,8 +93,7 @@ export const searchQuery = graphql`
                 total_count
               }
             }
-            ... on File {
-              id
+            ... on FileInterface {
               file_name
               file_size
             }

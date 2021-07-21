@@ -31,6 +31,7 @@ export interface FileTableProps {
     readonly node: {
       readonly role: FileRole;
       readonly file: {
+        readonly __typename: string;
         readonly id?: string | undefined;
         readonly file_name?: string | null | undefined;
         readonly file_url?: string | null | undefined;
@@ -65,7 +66,11 @@ const FileTable: React.FC<FileTableProps> = ({ data }: FileTableProps) => {
                 <a href={e?.node?.file?.file_url ?? ''}>Get file</a>
               </TableCell>
               <TableCell className={classes.tableCell}>
-                <Link to={`/FileDetail/${e?.node?.file?.id}`}>[more]</Link>
+                {e?.node?.file?.__typename == 'InversionSolution' ? (
+                  <Link to={`/InversionSolution/${e?.node?.file?.id}`}>[more]</Link>
+                ) : (
+                  <Link to={`/FileDetail/${e?.node?.file?.id}`}>[more]</Link>
+                )}
               </TableCell>
             </AlternatingRow>
           ))}

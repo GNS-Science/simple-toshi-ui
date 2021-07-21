@@ -30,8 +30,11 @@ const ruptureGenerationTaskQuery = graphql`
               id
               role
               file {
-                ... on File {
+                __typename
+                ... on Node {
                   id
+                }
+                ... on FileInterface {
                   file_name
                   file_url
                 }

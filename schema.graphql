@@ -64,6 +64,37 @@ type CreateGrandInversionTaskPayload {
   clientMutationId: String
 }
 
+input CreateInversionSolutionInput {
+  """The name of the file"""
+  file_name: String
+
+  """The base64-encoded md5 digest of the file"""
+  md5_digest: String
+
+  """The size of the file in bytes"""
+  file_size: Int
+
+  """additional file meta data, as a list of Key Value pairs."""
+  meta: [KeyValuePairInput]
+
+  """When the task record was created"""
+  created: DateTime
+  produced_by_id: ID
+  mfd_table_id: ID
+  hazard_table_id: ID
+
+  """result metrics from the solution, as a list of Key Value pairs."""
+  metrics: [KeyValuePairInput]
+  clientMutationId: String
+}
+
+"""Create an Inversion Solution file"""
+type CreateInversionSolutionPayload {
+  inversion_solution: InversionSolution
+  ok: Boolean
+  clientMutationId: String
+}
+
 input CreateRuptureGenerationTaskInput {
   result: EventResult!
   state: EventState!
@@ -135,6 +166,34 @@ type CreateStrongMotionStationPayload {
   clientMutationId: String
 }
 
+input CreateTableInput {
+  """a name for the table"""
+  name: String
+
+  """ID of the object this data relates to"""
+  object_id: ID
+
+  """When the task record was created"""
+  created: DateTime
+
+  """column headings"""
+  column_headers: [String]
+
+  """column types"""
+  column_types: [RowItemType]
+
+  """
+  The table rows. Each row is a list of strings that can be coerced according to column_types.
+  """
+  rows: [[String]]
+  clientMutationId: String
+}
+
+type CreateTablePayload {
+  table: Table
+  clientMutationId: String
+}
+
 type CreateTaskTaskRelation {
   ok: Boolean
   thing_relation: TaskTaskRelation
@@ -193,7 +252,7 @@ enum EventState {
 }
 
 """A data file"""
-type File implements Node {
+type File implements Node & FileInterface {
   """The ID of the object."""
   id: ID!
 
@@ -238,6 +297,30 @@ type FileEdge {
   cursor: String!
 }
 
+"""A File in the NSHM saga"""
+interface FileInterface {
+  """The name of the file"""
+  file_name: String
+
+  """The base64-encoded md5 digest of the file"""
+  md5_digest: String
+
+  """The size of the file in bytes"""
+  file_size: Int
+
+  """A pre-signed URL to download the file from s3"""
+  file_url: String
+
+  """A pre-signed URL to post the data to s3"""
+  post_url: String
+
+  """additional file meta data, as a list of Key Value pairs."""
+  meta: [KeyValuePair]
+
+  """things related to this data file"""
+  relations(before: String, after: String, first: Int, last: Int): FileRelationConnection
+}
+
 type FileRelation implements Node {
   """The ID of the object."""
   id: ID!
@@ -273,7 +356,7 @@ enum FileRole {
   UNDEFINED
 }
 
-union FileUnion = SmsFile | File
+union FileUnion = SmsFile | File | InversionSolution
 
 """
 A General Task capture metadata and related inputs/outputs for arbitrary tasks
@@ -472,6 +555,45 @@ type GutenbergRichterMFDOutput {
   mfd_num: Int
 }
 
+"""Represents an Inversion Solution file"""
+type InversionSolution implements Node & FileInterface {
+  """The ID of the object."""
+  id: ID!
+
+  """The name of the file"""
+  file_name: String
+
+  """The base64-encoded md5 digest of the file"""
+  md5_digest: String
+
+  """The size of the file in bytes"""
+  file_size: Int
+
+  """A pre-signed URL to download the file from s3"""
+  file_url: String
+
+  """A pre-signed URL to post the data to s3"""
+  post_url: String
+
+  """additional file meta data, as a list of Key Value pairs."""
+  meta: [KeyValuePair]
+
+  """things related to this data file"""
+  relations(before: String, after: String, first: Int, last: Int): FileRelationConnection
+
+  """When the task record was created"""
+  created: DateTime
+
+  """result metrics from the task, as a list of Key Value pairs."""
+  metrics: [KeyValuePair]
+  produced_by_id: ID
+  mfd_table_id: ID
+  hazard_table_id: ID
+  hazard_table: Table
+  mfd_table: Table
+  produced_by: RuptureGenerationTask
+}
+
 """Simple container for string-based KV pair data"""
 type KeyValuePair {
   """key"""
@@ -507,6 +629,10 @@ type MutationRoot {
   create_general_task(input: CreateGeneralTaskInput!): CreateGeneralTaskPayload
   create_task_relation(child_id: ID!, parent_id: ID!): CreateTaskTaskRelation
   create_grand_inversion_task(input: CreateGrandInversionTaskInput!): CreateGrandInversionTaskPayload
+  create_table(input: CreateTableInput!): CreateTablePayload
+
+  """Create an Inversion Solution file"""
+  create_inversion_solution(input: CreateInversionSolutionInput!): CreateInversionSolutionPayload
 }
 
 """An object with an ID"""
@@ -550,6 +676,14 @@ type QueryRoot {
 
   """The list of strong motion stations"""
   strong_motion_stations(before: String, after: String, first: Int, last: Int): StrongMotionStationConnection
+}
+
+"""Data type"""
+enum RowItemType {
+  integer
+  double
+  string
+  boolean
 }
 
 """An RuptureGenerationTask in the NSHM process"""
@@ -607,7 +741,7 @@ type Search {
   search_result(before: String, after: String, first: Int, last: Int): SearchResultConnection
 }
 
-union SearchResult = File | RuptureGenerationTask | StrongMotionStation | SmsFile | GeneralTask | GrandInversionTask
+union SearchResult = File | RuptureGenerationTask | StrongMotionStation | SmsFile | GeneralTask | GrandInversionTask | Table | InversionSolution
 
 type SearchResultConnection {
   """Pagination data for this connection."""
@@ -627,7 +761,7 @@ type SearchResultEdge {
   cursor: String!
 }
 
-type SmsFile implements Node {
+type SmsFile implements Node & FileInterface {
   """The ID of the object."""
   id: ID!
 
@@ -733,6 +867,32 @@ type StrongMotionStationEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+"""CSV-list structure for floats Distribution"""
+type Table implements Node {
+  """The ID of the object."""
+  id: ID!
+
+  """a name for the table"""
+  name: String
+
+  """ID of the object this data relates to"""
+  object_id: ID
+
+  """When the task record was created"""
+  created: DateTime
+
+  """column headings"""
+  column_headers: [String]
+
+  """column types"""
+  column_types: [RowItemType]
+
+  """
+  The table rows. Each row is a list of strings that can be coerced according to column_types.
+  """
+  rows: [[String]]
 }
 
 type TaskTaskRelation implements Node {

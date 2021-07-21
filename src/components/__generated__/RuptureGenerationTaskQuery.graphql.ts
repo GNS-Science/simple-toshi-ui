@@ -22,6 +22,7 @@ export type RuptureGenerationTaskQueryResponse = {
                     readonly id: string;
                     readonly role: FileRole;
                     readonly file: {
+                        readonly __typename: string;
                         readonly id?: string;
                         readonly file_name?: string | null;
                         readonly file_url?: string | null;
@@ -79,14 +80,14 @@ query RuptureGenerationTaskQuery(
             role
             file {
               __typename
-              ... on File {
-                id
-                file_name
-                file_url
-              }
               ... on Node {
                 __isNode: __typename
                 id
+              }
+              ... on FileInterface {
+                __isFileInterface: __typename
+                file_name
+                file_url
               }
             }
           }
@@ -173,32 +174,93 @@ v7 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "role",
+  "name": "__typename",
   "storageKey": null
 },
-v8 = {
-  "kind": "InlineFragment",
+v8 = [
+  (v2/*: any*/)
+],
+v9 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "FileRelationConnection",
+  "kind": "LinkedField",
+  "name": "files",
+  "plural": false,
   "selections": [
-    (v2/*: any*/),
     {
       "alias": null,
       "args": null,
-      "kind": "ScalarField",
-      "name": "file_name",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "file_url",
+      "concreteType": "FileRelationEdge",
+      "kind": "LinkedField",
+      "name": "edges",
+      "plural": true,
+      "selections": [
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": "FileRelation",
+          "kind": "LinkedField",
+          "name": "node",
+          "plural": false,
+          "selections": [
+            (v2/*: any*/),
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "role",
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": null,
+              "kind": "LinkedField",
+              "name": "file",
+              "plural": false,
+              "selections": [
+                (v7/*: any*/),
+                {
+                  "kind": "InlineFragment",
+                  "selections": (v8/*: any*/),
+                  "type": "Node",
+                  "abstractKey": "__isNode"
+                },
+                {
+                  "kind": "InlineFragment",
+                  "selections": [
+                    {
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "file_name",
+                      "storageKey": null
+                    },
+                    {
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "file_url",
+                      "storageKey": null
+                    }
+                  ],
+                  "type": "FileInterface",
+                  "abstractKey": "__isFileInterface"
+                }
+              ],
+              "storageKey": null
+            }
+          ],
+          "storageKey": null
+        }
+      ],
       "storageKey": null
     }
   ],
-  "type": "File",
-  "abstractKey": null
+  "storageKey": null
 },
-v9 = [
+v10 = [
   {
     "alias": null,
     "args": null,
@@ -214,24 +276,14 @@ v9 = [
     "storageKey": null
   }
 ],
-v10 = {
+v11 = {
   "alias": null,
   "args": null,
   "concreteType": "KeyValuePair",
   "kind": "LinkedField",
   "name": "arguments",
   "plural": true,
-  "selections": (v9/*: any*/),
-  "storageKey": null
-},
-v11 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "KeyValuePair",
-  "kind": "LinkedField",
-  "name": "environment",
-  "plural": true,
-  "selections": (v9/*: any*/),
+  "selections": (v10/*: any*/),
   "storageKey": null
 },
 v12 = {
@@ -239,14 +291,21 @@ v12 = {
   "args": null,
   "concreteType": "KeyValuePair",
   "kind": "LinkedField",
-  "name": "metrics",
+  "name": "environment",
   "plural": true,
-  "selections": (v9/*: any*/),
+  "selections": (v10/*: any*/),
   "storageKey": null
 },
-v13 = [
-  (v2/*: any*/)
-],
+v13 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "KeyValuePair",
+  "kind": "LinkedField",
+  "name": "metrics",
+  "plural": true,
+  "selections": (v10/*: any*/),
+  "storageKey": null
+},
 v14 = {
   "alias": null,
   "args": null,
@@ -254,14 +313,7 @@ v14 = {
   "kind": "LinkedField",
   "name": "parent",
   "plural": false,
-  "selections": (v13/*: any*/),
-  "storageKey": null
-},
-v15 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "__typename",
+  "selections": (v8/*: any*/),
   "storageKey": null
 };
 return {
@@ -287,56 +339,10 @@ return {
               (v4/*: any*/),
               (v5/*: any*/),
               (v6/*: any*/),
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "FileRelationConnection",
-                "kind": "LinkedField",
-                "name": "files",
-                "plural": false,
-                "selections": [
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "FileRelationEdge",
-                    "kind": "LinkedField",
-                    "name": "edges",
-                    "plural": true,
-                    "selections": [
-                      {
-                        "alias": null,
-                        "args": null,
-                        "concreteType": "FileRelation",
-                        "kind": "LinkedField",
-                        "name": "node",
-                        "plural": false,
-                        "selections": [
-                          (v2/*: any*/),
-                          (v7/*: any*/),
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": null,
-                            "kind": "LinkedField",
-                            "name": "file",
-                            "plural": false,
-                            "selections": [
-                              (v8/*: any*/)
-                            ],
-                            "storageKey": null
-                          }
-                        ],
-                        "storageKey": null
-                      }
-                    ],
-                    "storageKey": null
-                  }
-                ],
-                "storageKey": null
-              },
-              (v10/*: any*/),
+              (v9/*: any*/),
               (v11/*: any*/),
               (v12/*: any*/),
+              (v13/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -396,7 +402,7 @@ return {
         "name": "node",
         "plural": false,
         "selections": [
-          (v15/*: any*/),
+          (v7/*: any*/),
           (v2/*: any*/),
           {
             "kind": "InlineFragment",
@@ -405,63 +411,10 @@ return {
               (v4/*: any*/),
               (v5/*: any*/),
               (v6/*: any*/),
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "FileRelationConnection",
-                "kind": "LinkedField",
-                "name": "files",
-                "plural": false,
-                "selections": [
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "FileRelationEdge",
-                    "kind": "LinkedField",
-                    "name": "edges",
-                    "plural": true,
-                    "selections": [
-                      {
-                        "alias": null,
-                        "args": null,
-                        "concreteType": "FileRelation",
-                        "kind": "LinkedField",
-                        "name": "node",
-                        "plural": false,
-                        "selections": [
-                          (v2/*: any*/),
-                          (v7/*: any*/),
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": null,
-                            "kind": "LinkedField",
-                            "name": "file",
-                            "plural": false,
-                            "selections": [
-                              (v15/*: any*/),
-                              (v8/*: any*/),
-                              {
-                                "kind": "InlineFragment",
-                                "selections": (v13/*: any*/),
-                                "type": "Node",
-                                "abstractKey": "__isNode"
-                              }
-                            ],
-                            "storageKey": null
-                          }
-                        ],
-                        "storageKey": null
-                      }
-                    ],
-                    "storageKey": null
-                  }
-                ],
-                "storageKey": null
-              },
-              (v10/*: any*/),
+              (v9/*: any*/),
               (v11/*: any*/),
               (v12/*: any*/),
+              (v13/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -507,14 +460,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "8a3adfde02d9afcb2cab765ae59d64f5",
+    "cacheID": "b4e9519203524dfaddd1ee1fb5e6b626",
     "id": null,
     "metadata": {},
     "name": "RuptureGenerationTaskQuery",
     "operationKind": "query",
-    "text": "query RuptureGenerationTaskQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    id\n    ... on RuptureGenerationTask {\n      id\n      duration\n      created\n      result\n      state\n      files {\n        edges {\n          node {\n            id\n            role\n            file {\n              __typename\n              ... on File {\n                id\n                file_name\n                file_url\n              }\n              ... on Node {\n                __isNode: __typename\n                id\n              }\n            }\n          }\n        }\n      }\n      arguments {\n        k\n        v\n      }\n      environment {\n        k\n        v\n      }\n      metrics {\n        k\n        v\n      }\n      parents {\n        edges {\n          node {\n            parent {\n              id\n            }\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query RuptureGenerationTaskQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    id\n    ... on RuptureGenerationTask {\n      id\n      duration\n      created\n      result\n      state\n      files {\n        edges {\n          node {\n            id\n            role\n            file {\n              __typename\n              ... on Node {\n                __isNode: __typename\n                id\n              }\n              ... on FileInterface {\n                __isFileInterface: __typename\n                file_name\n                file_url\n              }\n            }\n          }\n        }\n      }\n      arguments {\n        k\n        v\n      }\n      environment {\n        k\n        v\n      }\n      metrics {\n        k\n        v\n      }\n      parents {\n        edges {\n          node {\n            parent {\n              id\n            }\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '55e3d7994fbf212a6a9a4f33206513ed';
+(node as any).hash = '6aa5d9689ad1591eb03d391435c059ed';
 export default node;
