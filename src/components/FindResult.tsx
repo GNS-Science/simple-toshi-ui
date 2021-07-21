@@ -24,6 +24,9 @@ const FindResult: React.FC<FindResultProps> = ({ queryRef }: FindResultProps) =>
         case 'File':
           history.push(`/FileDetail/${data?.node?.id}`);
           break;
+        case 'InversionSolution':
+          history.push(`/InversionSolution/${data?.node?.id}`);
+          break;
         default:
           break;
       }

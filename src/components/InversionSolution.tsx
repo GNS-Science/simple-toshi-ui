@@ -10,7 +10,6 @@ import InversionSolutionHazardTab from './InversionSolutionHazardTab';
 import RuptureSetDiags from './RuptureSetDiags';
 import { InversionSolutionQuery } from './__generated__/InversionSolutionQuery.graphql';
 import { InversionSolutionDetailTabQuery } from './__generated__/InversionSolutionDetailTabQuery.graphql';
-import { InversionSolutionHazardTabQuery } from './__generated__/InversionSolutionHazardTabQuery.graphql';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {

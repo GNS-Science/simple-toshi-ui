@@ -1,6 +1,7 @@
 import { Typography, Box, Card } from '@material-ui/core';
 import { graphql } from 'babel-plugin-relay/macro';
 import React from 'react';
+// eslint-disable-next-line
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { LatLngExpression } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -35,6 +36,7 @@ interface InversionSolutionHazardTabProps {
 }
 
 const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
+  // eslint-disable-next-line
   queryRef,
 }: InversionSolutionHazardTabProps) => {
   // const data = usePreloadedQuery<InversionSolutionHazardTabQuery>(inversionSolutionHazardTabQuery, queryRef);
