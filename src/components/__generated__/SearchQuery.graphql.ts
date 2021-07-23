@@ -69,7 +69,6 @@ query SearchQuery(
           }
           ... on FileInterface {
             __isFileInterface: __typename
-            __typename
             file_name
             file_size
           }
@@ -278,14 +277,14 @@ return {
     "selections": (v3/*: any*/)
   },
   "params": {
-    "cacheID": "a184912cb1456400fcfabbda0a8af56f",
+    "cacheID": "5e438e3e268612ee2121ed1c0ddfb68c",
     "id": null,
     "metadata": {},
     "name": "SearchQuery",
     "operationKind": "query",
-    "text": "query SearchQuery(\n  $search: String!\n) {\n  search(search_term: $search) {\n    search_result {\n      total_count\n      edges {\n        node {\n          __typename\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n          ... on RuptureGenerationTask {\n            created\n            duration\n            state\n            result\n          }\n          ... on GeneralTask {\n            description\n            title\n            created\n            children {\n              total_count\n            }\n          }\n          ... on FileInterface {\n            __isFileInterface: __typename\n            __typename\n            file_name\n            file_size\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query SearchQuery(\n  $search: String!\n) {\n  search(search_term: $search) {\n    search_result {\n      total_count\n      edges {\n        node {\n          __typename\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n          ... on RuptureGenerationTask {\n            created\n            duration\n            state\n            result\n          }\n          ... on GeneralTask {\n            description\n            title\n            created\n            children {\n              total_count\n            }\n          }\n          ... on FileInterface {\n            __isFileInterface: __typename\n            file_name\n            file_size\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'f3c1dbfe33ffacbc82cf81d31cce3478';
+(node as any).hash = 'd5069a93835591c3bdd132147bfbcded';
 export default node;
