@@ -1,11 +1,14 @@
-import * as d3 from 'd3';
 import { graphql } from 'babel-plugin-relay/macro';
-import React, { useRef, useEffect } from 'react';
-import { Typography } from '@material-ui/core';
+import React from 'react';
+import { Box, Typography } from '@material-ui/core';
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
 
 import { magRateData, IMagRate } from './PreviewMFD_data';
 import { InversionSolutionMfdTabQuery } from './__generated__/InversionSolutionMfdTabQuery.graphql';
+
+import { AnimatedAxis, AnimatedLineSeries, Tooltip, XYChart } from '@visx/xychart';
+import { scaleOrdinal } from '@visx/scale';
+import { LegendOrdinal } from '@visx/legend';
 
 export const inversionSolutionMfdTabQuery = graphql`
   query InversionSolutionMfdTabQuery($id: ID!) {
@@ -33,7 +36,9 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
   const data = usePreloadedQuery<InversionSolutionMfdTabQuery>(inversionSolutionMfdTabQuery, queryRef);
   const rows = data?.node?.mfd_table?.rows;
 
-  // console.log(data.node.mfd_table.column_headers);
+  if (!rows) {
+    return <></>;
+  }
 
   const series = [
     'trulyOffFaultMFD.all',
@@ -43,122 +48,14 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
     'solutionMFD_rateWeighted',
   ];
 
+  const colours = ['orange', 'steelblue', 'lightgray', 'black', 'red'];
+
   const seriesMfd = (series: string[], index: number): Array<IMagRate> => {
-    return magRateData(rows.filter((row) => row[1] == series[index]).map((r) => [parseFloat(r[2]), parseFloat(r[3])]));
-  };
-
-  const ref = useRef<SVGSVGElement>(null);
-  const seriesData = [0, 1, 2, 3, 4].map((idx) => seriesMfd(series, idx));
-
-  // console.log(seriesData);
-
-  const margin = { top: 20, right: 10, bottom: 20, left: 50 },
-    width = 800 - margin.left - margin.right,
-    height = 600 - margin.top - margin.bottom;
-
-  useEffect(() => {
-    d3.select(ref.current)
-      .attr('width', width + margin.left + margin.right)
-      .attr('height', height + margin.top + margin.bottom)
-      .style('border', '1px solid black')
-      .append('g')
-      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-  }, [height, margin.bottom, margin.left, margin.right, margin.top, width]);
-
-  useEffect(() => {
-    draw();
-  }, seriesData);
-
-  const draw = () => {
-    const svg = d3.select(ref.current);
-    // console.log('DATA', onFaultSupraSansData);
-
-    // X axis
-    // prettier-ignore
-    const x = d3.scaleLinear()
-      .domain([5.0, 9.0])
-      .range([margin.left, width]);
-    svg
-      .append('g')
-      .attr('transform', 'translate(0,' + height + ')')
-      .call(d3.axisBottom(x));
-
-    // Add Y axis
-    // prettier-ignore
-    const y = d3.scaleLog()
-      .domain([1e-7, 5])
-      .range([height, 0]);
-    svg
-      .append('g')
-      .attr('transform', 'translate(' + margin.left + ')')
-      .call(d3.axisLeft(y));
-
-    // Add the supra line
-    // prettier-ignore
-    svg.append<SVGPathElement>('path')
-      .datum(seriesData[0])
-      .attr('fill', 'none')
-      .attr('stroke', 'orange')
-      .attr('stroke-width', 2)
-      .attr('d', d3.line<IMagRate>()
-          .x((d) => x(d.mag))
-          .y((d) => y(d.rate)),
-      );
-
-    // Add line 2, subSeismo
-    // prettier-ignore
-    svg.append<SVGPathElement>('path')
-      .datum(seriesData[1])
-      .attr('fill', 'none')
-      .attr('stroke', 'steelblue')
-      .attr('stroke-width', 2)
-      .attr('d', d3.line<IMagRate>()
-          .x((d) => x(d.mag))
-          .y((d) => y(d.rate))
+    return magRateData(
+      rows
+        .filter((row: readonly string[]) => row[1] == series[index])
+        .map((r: readonly string[]) => [parseFloat(r[2]), parseFloat(r[3])]),
     );
-
-    // prettier-ignore
-    svg.append<SVGPathElement>('path')
-      .datum(seriesData[2])
-      .attr('fill', 'none')
-      .attr('stroke', 'lightgray')
-      .attr('stroke-width', 2)
-      .attr('d', d3.line<IMagRate>()
-          .x((d) => x(d.mag))
-          .y((d) => y(d.rate))
-    );
-
-    // prettier-ignore
-    svg.append<SVGPathElement>('path')
-      .datum(seriesData[3])
-      .attr('fill', 'none')
-      .attr('stroke', 'black')
-      .attr('stroke-width', 2)
-      .attr('d', d3.line<IMagRate>()
-          .x((d) => x(d.mag))
-          .y((d) => y(d.rate))
-    );
-
-    // prettier-ignore
-    svg.append<SVGPathElement>('path')
-      .datum(seriesData[4])
-      .attr('fill', 'none')
-      .attr('stroke', 'red')
-      .attr('stroke-width', 2)
-      .attr('d', d3.line<IMagRate>()
-          .x((d) => x(d.mag))
-          .y((d) => y(d.rate))
-    );
-
-    // Handmade legend
-    const w0 = width - 180,
-      w1 = width - 170;
-    svg.append('circle').attr('cx', w0).attr('cy', 30).attr('r', 6).style('fill', 'orange');
-    svg.append('circle').attr('cx', w0).attr('cy', 60).attr('r', 6).style('fill', 'steelblue');
-    svg.append('text').attr('x', w1).attr('y', 36).text(series[0]).style('font-size', '12px');
-    svg.attr('alignment-baseline', 'middle');
-    svg.append('text').attr('x', w1).attr('y', 66).text(series[1]).style('font-size', '12px');
-    svg.attr('alignment-baseline', 'middle');
   };
 
   return (
@@ -166,9 +63,55 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
       <Typography variant="h6" gutterBottom>
         Solution Target vs final Magnitude Frequency distribution
       </Typography>
-      <div className="chart">
-        <svg ref={ref}></svg>
-      </div>
+      <Box style={{ border: '1px solid', width: 'fit-content', position: 'relative' }}>
+        <XYChart
+          height={600}
+          width={800}
+          margin={{ bottom: 30, left: 50, right: 50, top: 10 }}
+          xScale={{ type: 'linear', domain: [5.0, 9.0], zero: false }}
+          yScale={{ type: 'log', domain: [1e-7, 5] }}
+        >
+          <AnimatedAxis orientation="bottom" />
+          <AnimatedAxis orientation="left" />
+          {series.map((e, idx) => {
+            return (
+              <AnimatedLineSeries
+                key={e}
+                dataKey={e}
+                data={seriesMfd(series, idx)}
+                xAccessor={(d: IMagRate) => d?.mag}
+                yAccessor={(d: IMagRate) => d?.rate}
+                stroke={colours[idx]}
+              />
+            );
+          })}
+          <Tooltip
+            snapTooltipToDatumX
+            snapTooltipToDatumY
+            showDatumGlyph
+            glyphStyle={{ fill: '#000' }}
+            renderTooltip={({ tooltipData }) => {
+              const datum = tooltipData.nearestDatum.datum as IMagRate;
+              return (
+                <>
+                  <strong>{tooltipData.nearestDatum.key}</strong>
+                  <Typography>mag: {datum.mag}</Typography>
+                  <Typography>rate: {datum.rate}</Typography>
+                </>
+              );
+            }}
+          />
+        </XYChart>
+        <LegendOrdinal
+          direction="column"
+          scale={scaleOrdinal({
+            domain: series,
+            range: colours,
+          })}
+          shape="line"
+          style={{ margin: '20px', position: 'absolute', top: 0, right: 0 }}
+        />
+      </Box>
     </>
   );
 };
