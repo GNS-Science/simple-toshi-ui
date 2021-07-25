@@ -24,6 +24,7 @@ import FileDetail from './components/FileDetail';
 import Search from './components/Search';
 import GeneralTask from './components/GeneralTask';
 import MenuBar from './components/MenuBar';
+import InversionSolution from './components/InversionSolution';
 
 /* preview views (with no test coverage...) */
 import Preview from './components/Preview';
@@ -147,6 +148,9 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
               </Route>
               <Route path="/FileDetail/:id/:tab?">
                 <FileDetail />
+              </Route>
+              <Route path="/InversionSolution/:id/:tab?">
+                <InversionSolution />
               </Route>
               <Route path="/Search">
                 <Search />
