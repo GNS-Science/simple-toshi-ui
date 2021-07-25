@@ -4,7 +4,10 @@ import { Box, Typography } from '@material-ui/core';
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
 
 import { magRateData, IMagRate } from './PreviewMFD_data';
-import { InversionSolutionMfdTabQuery } from './__generated__/InversionSolutionMfdTabQuery.graphql';
+import {
+  InversionSolutionMfdTabQuery,
+  InversionSolutionMfdTabQueryResponse,
+} from './__generated__/InversionSolutionMfdTabQuery.graphql';
 
 import { AnimatedAxis, AnimatedLineSeries, Tooltip, XYChart } from '@visx/xychart';
 import { scaleOrdinal } from '@visx/scale';
@@ -33,12 +36,17 @@ interface InversionSolutionMfdTabProps {
 const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
   queryRef,
 }: InversionSolutionMfdTabProps) => {
-  const data = usePreloadedQuery<InversionSolutionMfdTabQuery>(inversionSolutionMfdTabQuery, queryRef);
+  const data: InversionSolutionMfdTabQueryResponse = usePreloadedQuery<InversionSolutionMfdTabQuery>(
+    inversionSolutionMfdTabQuery,
+    queryRef,
+  );
   const rows = data?.node?.mfd_table?.rows;
 
   if (!rows) {
     return <></>;
   }
+
+  // const rowData = rows.
 
   const series = [
     'trulyOffFaultMFD.all',
@@ -53,8 +61,8 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
   const seriesMfd = (series: string[], index: number): Array<IMagRate> => {
     return magRateData(
       rows
-        .filter((row: readonly string[]) => row[1] == series[index])
-        .map((r: readonly string[]) => [parseFloat(r[2]), parseFloat(r[3])]),
+        .filter((row) => row && row[1] == series[index])
+        .map((r) => (r ? [parseFloat(r[2] ?? ''), parseFloat(r[3] ?? '')] : [])),
     );
   };
 
@@ -91,10 +99,10 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
             showDatumGlyph
             glyphStyle={{ fill: '#000' }}
             renderTooltip={({ tooltipData }) => {
-              const datum = tooltipData.nearestDatum.datum as IMagRate;
+              const datum = tooltipData?.nearestDatum?.datum as IMagRate;
               return (
                 <>
-                  <strong>{tooltipData.nearestDatum.key}</strong>
+                  <strong>{tooltipData?.nearestDatum?.key}</strong>
                   <Typography>mag: {datum.mag}</Typography>
                   <Typography>rate: {datum.rate}</Typography>
                 </>
