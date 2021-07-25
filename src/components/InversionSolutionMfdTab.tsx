@@ -23,6 +23,10 @@ export const inversionSolutionMfdTabQuery = graphql`
           column_headers
           rows
         }
+        meta {
+          k
+          v
+        }
       }
     }
   }
@@ -41,22 +45,36 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
     queryRef,
   );
   const rows = data?.node?.mfd_table?.rows;
+  const config_type = data?.node?.meta?.filter((kv) => kv?.k == 'config_type')[0]?.v;
+
+  // console.log(config_type == 'subduction');
 
   if (!rows) {
     return <></>;
   }
 
-  // const rowData = rows.
+  let series: string[] = [];
+  let colours: string[] = [];
+  let maxMagnitude = 10.0;
+  let minMagnitude = 0;
 
-  const series = [
-    'trulyOffFaultMFD.all',
-    'targetOnFaultSupraSeisMFD_SansTVZ',
-    'targetOnFaultSupraSeisMFD_TVZ',
-    'totalSubSeismoOnFaultMFD',
-    'solutionMFD_rateWeighted',
-  ];
-
-  const colours = ['orange', 'steelblue', 'lightgray', 'black', 'red'];
+  if (config_type == 'subduction') {
+    colours = ['steelblue', 'red'];
+    series = ['targetOnFaultSupraSeisMFD', 'solutionMFD_rateWeighted'];
+    maxMagnitude = 9.5;
+    minMagnitude = 6.5;
+  } else {
+    colours = ['orange', 'steelblue', 'lightgray', 'black', 'red'];
+    series = [
+      'trulyOffFaultMFD.all',
+      'targetOnFaultSupraSeisMFD_SansTVZ',
+      'targetOnFaultSupraSeisMFD_TVZ',
+      'totalSubSeismoOnFaultMFD',
+      'solutionMFD_rateWeighted',
+    ];
+    maxMagnitude = 9.0;
+    minMagnitude = 5.0;
+  }
 
   const seriesMfd = (series: string[], index: number): Array<IMagRate> => {
     return magRateData(
@@ -76,8 +94,8 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
           height={600}
           width={800}
           margin={{ bottom: 30, left: 50, right: 50, top: 10 }}
-          xScale={{ type: 'linear', domain: [5.0, 9.0], zero: false }}
-          yScale={{ type: 'log', domain: [1e-7, 5] }}
+          xScale={{ type: 'linear', domain: [minMagnitude, maxMagnitude], zero: false }}
+          yScale={{ type: 'log', domain: [1e-6, 1] }}
         >
           <AnimatedAxis orientation="bottom" />
           <AnimatedAxis orientation="left" />
