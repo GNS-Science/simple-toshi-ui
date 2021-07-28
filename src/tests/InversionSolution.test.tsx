@@ -8,7 +8,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { inversionSolutionDetailTabQuery } from '../components/InversionSolutionDetailTab';
 import { inversionSolutionMfdTabQuery } from '../components/InversionSolutionMfdTab';
 
-const mockResolver = {
+const mockMfdResolver = {
   InversionMfdSolution: () => ({
     mfd_table: {
       name: 'testTable',
@@ -23,11 +23,13 @@ const mockResolver = {
       },
     ],
   }),
+};
+const mockDetailResolver = {
   InversionDetailSolution: () => ({
-    id: '987654321',
-    produced_by_id: '123456789',
+    id: '1234',
+    produced_by_id: '6789',
     file_name: 'testFile.zip',
-    file_size: '1000',
+    file_size: '1000 Bytes',
     file_url: 'testing.test',
     md5_digest: 'md5Test',
     meta: {
@@ -57,8 +59,39 @@ describe('InversionSolution component', () => {
   afterEach(() => {
     cleanup();
   });
+  it('calls graphql query with url param', () => {
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ id: '1234' });
+    const environment = createMockEnvironment();
 
-  it('works', () => {
-    expect(1).toBeTruthy();
+    setup(environment);
+
+    const variables = environment.mock.getMostRecentOperation().request.variables;
+    expect(variables).toStrictEqual({ id: '1234' });
   });
+
+  it.todo('displays an InversionSolution detail using mock graphql payload with correct download link');
+  // , async () => {
+  // jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ id: '1234', tab: 'InversionSolutionDetailTab' });
+  // const environment = createMockEnvironment();
+  // environment.mock.queueOperationResolver((operation) =>
+  //   MockPayloadGenerator.generate(operation, mockDetailResolver),
+  // );
+  // environment.mock.queuePendingOperation(inversionSolutionDetailTabQuery, { id: '1234' });
+
+  // const { findByText } = setup(environment);
+  // // expect(await findByText('Download')).toHaveAttribute('href', 'testing.test');
+  // expect(await findByText('testFile.zip')).toBeVisible();
+  // expect(await findByText('1000 Bytes')).toBeVisible();
 });
+
+it.todo('displays an InversionSolutionMfdTab using mock graphql payload with table and correct data');
+// , async () => {
+// jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ id: '1234', tab: 'InversionSolutionMfdTab' });
+// const environment = createMockEnvironment();
+// environment.mock.queueOperationResolver((operation) => MockPayloadGenerator.generate(operation, mockMfdResolver));
+// environment.mock.queuePendingOperation(inversionSolutionMfdTabQuery, { id: '1234' });
+
+// const { findByText } = setup(environment);
+// expect(await findByText('testMetaKey')).toBeVisible();
+// });
+// });

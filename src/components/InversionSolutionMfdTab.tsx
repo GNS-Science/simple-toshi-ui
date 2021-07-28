@@ -75,9 +75,9 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
     maxMagnitude = 9.0;
     minMagnitude = 5.0;
   }
-  //Removes filename from inversion data
+  //Removes filename & file id from inversion data
   const cleanedMeta = data?.node?.meta?.filter((el) => {
-    return el?.k !== 'rupture_set';
+    return el?.k !== 'rupture_set' && el?.k !== 'rupture_set_file_id';
   });
   //Converting cleaned data to string
   const metaAsString = cleanedMeta?.map((kv) => ' ' + kv?.k + ': ' + kv?.v).toString() ?? '';
