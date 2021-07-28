@@ -44,9 +44,9 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
     inversionSolutionMfdTabQuery,
     queryRef,
   );
+
   const rows = data?.node?.mfd_table?.rows;
   const config_type = data?.node?.meta?.filter((kv) => kv?.k == 'config_type')[0]?.v;
-
   // console.log(config_type == 'subduction');
 
   if (!rows) {
@@ -75,7 +75,12 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
     maxMagnitude = 9.0;
     minMagnitude = 5.0;
   }
-
+  //Removes filename & file id from inversion data
+  const cleanedMeta = data?.node?.meta?.filter((el) => {
+    return el?.k !== 'rupture_set' && el?.k !== 'rupture_set_file_id';
+  });
+  //Converting cleaned data to string
+  const metaAsString = cleanedMeta?.map((kv) => ' ' + kv?.k + ': ' + kv?.v).toString() ?? '';
   const seriesMfd = (series: string[], index: number): Array<IMagRate> => {
     return magRateData(
       rows
@@ -89,6 +94,7 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
       <Typography variant="h6" gutterBottom>
         Solution Target vs final Magnitude Frequency distribution
       </Typography>
+      <Box style={{ width: '100%', color: '#646464', padding: '1rem' }}>{metaAsString}</Box>
       <Box style={{ border: '1px solid', width: 'fit-content', position: 'relative' }}>
         <XYChart
           height={600}
