@@ -1,6 +1,6 @@
 import { graphql } from 'babel-plugin-relay/macro';
 import React from 'react';
-import { Box, Typography } from '@material-ui/core';
+import { Box, Typography, makeStyles, Theme } from '@material-ui/core';
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
 
 import { magRateData, IMagRate } from './PreviewMFD_data';
@@ -31,6 +31,13 @@ export const inversionSolutionMfdTabQuery = graphql`
     }
   }
 `;
+const useStyles = makeStyles((theme: Theme) => ({
+  tabPanel: {
+    width: '100%',
+    padding: theme.spacing(2),
+    color: '#646464',
+  },
+}));
 
 interface InversionSolutionMfdTabProps {
   queryRef: PreloadedQuery<InversionSolutionMfdTabQuery, Record<string, unknown>>;
@@ -44,9 +51,10 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
     inversionSolutionMfdTabQuery,
     queryRef,
   );
+  console.log(data);
   const rows = data?.node?.mfd_table?.rows;
   const config_type = data?.node?.meta?.filter((kv) => kv?.k == 'config_type')[0]?.v;
-
+  const classes = useStyles();
   // console.log(config_type == 'subduction');
 
   if (!rows) {
@@ -75,7 +83,12 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
     maxMagnitude = 9.0;
     minMagnitude = 5.0;
   }
-
+  //Removes filename from inversion data
+  const cleanedMeta = data?.node?.meta?.filter((el) => {
+    return el?.k !== 'rupture_set';
+  });
+  //Converting cleaned data to string
+  const metaAsString = cleanedMeta?.map((kv) => ' ' + kv?.k + ': ' + kv?.v).toString() ?? '';
   const seriesMfd = (series: string[], index: number): Array<IMagRate> => {
     return magRateData(
       rows
@@ -89,6 +102,7 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
       <Typography variant="h6" gutterBottom>
         Solution Target vs final Magnitude Frequency distribution
       </Typography>
+      <Box className={classes.tabPanel}>{metaAsString}</Box>
       <Box style={{ border: '1px solid', width: 'fit-content', position: 'relative' }}>
         <XYChart
           height={600}
