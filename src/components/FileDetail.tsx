@@ -30,7 +30,7 @@ interface FileDetailParams {
   tab: string;
 }
 
-const fileDetailQuery = graphql`
+export const fileDetailQuery = graphql`
   query FileDetailQuery($id: ID!) {
     node(id: $id) {
       ... on File {

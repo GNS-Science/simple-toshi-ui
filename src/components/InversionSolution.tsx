@@ -7,10 +7,13 @@ import InversionSolutionDetailTab, { inversionSolutionDetailTabQuery } from './I
 import InversionSolutionMfdTab, { inversionSolutionMfdTabQuery } from './InversionSolutionMfdTab';
 import InversionSolutionHazardTab from './InversionSolutionHazardTab';
 
-import RuptureSetDiags from './RuptureSetDiags';
 import { InversionSolutionQuery } from './__generated__/InversionSolutionQuery.graphql';
 import { InversionSolutionDetailTabQuery } from './__generated__/InversionSolutionDetailTabQuery.graphql';
 import { InversionSolutionMfdTabQuery } from './__generated__/InversionSolutionMfdTabQuery.graphql';
+
+import RuptureSetDiags from './RuptureSetDiags';
+import { FileDetailQuery } from './__generated__/FileDetailQuery.graphql';
+import { fileDetailQuery } from './FileDetail';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -73,7 +76,9 @@ const InversionSolution: React.FC = () => {
   const data = useLazyLoadQuery<InversionSolutionQuery>(inversionSolutionQuery, { id });
   const [queryRef, loadQuery] = useQueryLoader<InversionSolutionDetailTabQuery>(inversionSolutionDetailTabQuery);
   const [queryRefMFD, loadQueryMFD] = useQueryLoader<InversionSolutionMfdTabQuery>(inversionSolutionMfdTabQuery);
-
+  const ruptureSetId = data?.node?.meta?.filter((kv) => kv?.k == 'rupture_set_file_id')[0]?.v;
+  const ruptSetData = useLazyLoadQuery<FileDetailQuery>(fileDetailQuery, { id: ruptureSetId || '' });
+  const metaAsString = ruptSetData?.node?.meta?.map((kv) => ' ' + kv?.k + ': ' + kv?.v).toString() ?? '';
   const history = useHistory();
 
   React.useEffect(() => {
@@ -93,8 +98,8 @@ const InversionSolution: React.FC = () => {
     );
   }
 
-  //const ruptureSetId = data?.node?.produced_by_id;
-  const ruptureSetId = data?.node?.meta?.filter((kv) => kv?.k == 'rupture_set_file_id')[0]?.v;
+  // //const ruptureSetId = data?.node?.produced_by_id;
+  // const ruptureSetId = data?.node?.meta?.filter((kv) => kv?.k == 'rupture_set_file_id')[0]?.v;
 
   const renderTab = () => {
     switch (tab) {
@@ -124,7 +129,7 @@ const InversionSolution: React.FC = () => {
       case 'RuptureSetDiagnosticsTab':
         return (
           <Box className={classes.tabPanel}>
-            {ruptureSetId && <RuptureSetDiags fileId={ruptureSetId} metaAsString={''} />}
+            {ruptureSetId && <RuptureSetDiags fileId={ruptureSetId} metaAsString={metaAsString} />}
           </Box>
         );
     }
