@@ -9,18 +9,18 @@ export type InversionSolutionHazardTabQueryVariables = {
 };
 export type InversionSolutionHazardTabQueryResponse = {
     readonly node: {
-        readonly id?: string;
+        readonly name?: string | null;
+        readonly column_headers?: ReadonlyArray<string | null> | null;
+        readonly column_types?: ReadonlyArray<RowItemType | null> | null;
+        readonly rows?: ReadonlyArray<ReadonlyArray<string | null> | null> | null;
         readonly meta?: ReadonlyArray<{
             readonly k: string | null;
             readonly v: string | null;
         } | null> | null;
-        readonly hazard_table?: {
-            readonly id: string;
-            readonly name: string | null;
-            readonly column_types: ReadonlyArray<RowItemType | null> | null;
-            readonly column_headers: ReadonlyArray<string | null> | null;
-            readonly rows: ReadonlyArray<ReadonlyArray<string | null> | null> | null;
-        } | null;
+        readonly dimensions?: ReadonlyArray<{
+            readonly k: string | null;
+            readonly v: ReadonlyArray<string | null> | null;
+        } | null> | null;
     } | null;
 };
 export type InversionSolutionHazardTabQuery = {
@@ -36,18 +36,18 @@ query InversionSolutionHazardTabQuery(
 ) {
   node(id: $id) {
     __typename
-    ... on InversionSolution {
-      id
+    ... on Table {
+      name
+      column_headers
+      column_types
+      rows
       meta {
         k
         v
       }
-      hazard_table {
-        id
-        name
-        column_types
-        column_headers
-        rows
+      dimensions {
+        k
+        v
       }
     }
     id
@@ -70,59 +70,30 @@ v1 = [
     "variableName": "id"
   }
 ],
-v2 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "id",
-  "storageKey": null
-},
+v2 = [
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "k",
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "v",
+    "storageKey": null
+  }
+],
 v3 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "KeyValuePair",
-  "kind": "LinkedField",
-  "name": "meta",
-  "plural": true,
+  "kind": "InlineFragment",
   "selections": [
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "k",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "v",
-      "storageKey": null
-    }
-  ],
-  "storageKey": null
-},
-v4 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "Table",
-  "kind": "LinkedField",
-  "name": "hazard_table",
-  "plural": false,
-  "selections": [
-    (v2/*: any*/),
     {
       "alias": null,
       "args": null,
       "kind": "ScalarField",
       "name": "name",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "column_types",
       "storageKey": null
     },
     {
@@ -136,11 +107,39 @@ v4 = {
       "alias": null,
       "args": null,
       "kind": "ScalarField",
+      "name": "column_types",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
       "name": "rows",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "KeyValuePair",
+      "kind": "LinkedField",
+      "name": "meta",
+      "plural": true,
+      "selections": (v2/*: any*/),
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "KeyValueListPair",
+      "kind": "LinkedField",
+      "name": "dimensions",
+      "plural": true,
+      "selections": (v2/*: any*/),
       "storageKey": null
     }
   ],
-  "storageKey": null
+  "type": "Table",
+  "abstractKey": null
 };
 return {
   "fragment": {
@@ -157,16 +156,7 @@ return {
         "name": "node",
         "plural": false,
         "selections": [
-          {
-            "kind": "InlineFragment",
-            "selections": [
-              (v2/*: any*/),
-              (v3/*: any*/),
-              (v4/*: any*/)
-            ],
-            "type": "InversionSolution",
-            "abstractKey": null
-          }
+          (v3/*: any*/)
         ],
         "storageKey": null
       }
@@ -195,30 +185,28 @@ return {
             "name": "__typename",
             "storageKey": null
           },
-          (v2/*: any*/),
           {
-            "kind": "InlineFragment",
-            "selections": [
-              (v3/*: any*/),
-              (v4/*: any*/)
-            ],
-            "type": "InversionSolution",
-            "abstractKey": null
-          }
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "id",
+            "storageKey": null
+          },
+          (v3/*: any*/)
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "ddae050558cff2a7819b3b200ed782b4",
+    "cacheID": "eaecb099875ec3d629f74a61ffc195ca",
     "id": null,
     "metadata": {},
     "name": "InversionSolutionHazardTabQuery",
     "operationKind": "query",
-    "text": "query InversionSolutionHazardTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on InversionSolution {\n      id\n      meta {\n        k\n        v\n      }\n      hazard_table {\n        id\n        name\n        column_types\n        column_headers\n        rows\n      }\n    }\n    id\n  }\n}\n"
+    "text": "query InversionSolutionHazardTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on Table {\n      name\n      column_headers\n      column_types\n      rows\n      meta {\n        k\n        v\n      }\n      dimensions {\n        k\n        v\n      }\n    }\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'b79828305e9bc323e76c4b116ff5cca8';
+(node as any).hash = '9d140255dbaa78b4d57baf5987bd8078';
 export default node;

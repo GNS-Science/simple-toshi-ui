@@ -5,11 +5,12 @@ import { useLazyLoadQuery, useQueryLoader } from 'react-relay';
 import { useHistory, useParams } from 'react-router-dom';
 import InversionSolutionDetailTab, { inversionSolutionDetailTabQuery } from './InversionSolutionDetailTab';
 import InversionSolutionMfdTab from './InversionSolutionMfdTab';
-import InversionSolutionHazardTab from './InversionSolutionHazardTab';
+import InversionSolutionHazardTab, { inversionSolutionHazardTabQuery } from './InversionSolutionHazardTab';
 
 import RuptureSetDiags from './RuptureSetDiags';
 import { InversionSolutionQuery } from './__generated__/InversionSolutionQuery.graphql';
 import { InversionSolutionDetailTabQuery } from './__generated__/InversionSolutionDetailTabQuery.graphql';
+import { InversionSolutionHazardTabQuery } from './__generated__/InversionSolutionHazardTabQuery.graphql';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -60,14 +61,26 @@ const InversionSolution: React.FC = () => {
   const { id, tab } = useParams<InversionSolutionParams>();
   const data = useLazyLoadQuery<InversionSolutionQuery>(inversionSolutionQuery, { id });
   const [queryRef, loadQuery] = useQueryLoader<InversionSolutionDetailTabQuery>(inversionSolutionDetailTabQuery);
+  const [queryRefHaz, loadQueryHaz] = useQueryLoader<InversionSolutionHazardTabQuery>(inversionSolutionHazardTabQuery);
 
   const history = useHistory();
 
   React.useEffect(() => {
-    if (tab === undefined || tab === 'InversionSolutionDetailTab') {
-      loadQuery({ id });
+    switch (tab) {
+      case 'InversionSolutionHazardTab': {
+        const haz_table = data?.node?.tables?.find((t) => t?.table_type === 'HAZARD_GRIDDED');
+        if (haz_table && haz_table.table_id) {
+          loadQueryHaz({ id: haz_table.table_id });
+        }
+        break;
+      }
+      case 'InversionSolutionDetailTab':
+      default: {
+        loadQuery({ id });
+        break;
+      }
     }
-  }, [tab]);
+  }, [tab, data]);
 
   if (!data?.node) {
     return (
@@ -93,7 +106,7 @@ const InversionSolution: React.FC = () => {
         return (
           // prettier-ignore
           <Box className={classes.tabPanel}>
-            {queryRef && <InversionSolutionDetailTab queryRef={queryRef} />}           
+            {queryRef && <InversionSolutionDetailTab queryRef={queryRef} />}
           </Box>
         );
       case 'InversionSolutionMfdTab':
@@ -108,7 +121,7 @@ const InversionSolution: React.FC = () => {
         return (
           <Box className={classes.tabPanel}>
             <React.Suspense fallback={<CircularProgress />}>
-              {queryRef && <InversionSolutionHazardTab queryRef={queryRef} />}
+              {queryRefHaz && <InversionSolutionHazardTab queryRef={queryRefHaz} />}
             </React.Suspense>
           </Box>
         );
@@ -139,13 +152,13 @@ const InversionSolution: React.FC = () => {
             className={classes.tab}
           />
           <Tab label="MFD plot" id="inversionSolutionMfdTab" value="InversionSolutionMfdTab" className={classes.tab} />
-          {/* <Tab
+          <Tab
             label="Hazard map"
             id="inversionSolutionHazardTab"
             value="InversionSolutionHazardTab"
             className={classes.tab}
           />
-          */}
+
           {ruptureSetId && (
             <Tab label="Rupture Diags" id="ruptureSetTab" value="RuptureSetDiagnosticsTab" className={classes.tab} />
           )}
