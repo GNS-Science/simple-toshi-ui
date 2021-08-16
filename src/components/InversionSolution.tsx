@@ -4,13 +4,12 @@ import React from 'react';
 import { useLazyLoadQuery, useQueryLoader } from 'react-relay';
 import { useHistory, useParams } from 'react-router-dom';
 import InversionSolutionDetailTab, { inversionSolutionDetailTabQuery } from './InversionSolutionDetailTab';
-import InversionSolutionMfdTab, { inversionSolutionMfdTabQuery } from './InversionSolutionMfdTab';
+import InversionSolutionMfdTab from './InversionSolutionMfdTab';
 import InversionSolutionHazardTab from './InversionSolutionHazardTab';
 
 import RuptureSetDiags from './RuptureSetDiags';
 import { InversionSolutionQuery } from './__generated__/InversionSolutionQuery.graphql';
 import { InversionSolutionDetailTabQuery } from './__generated__/InversionSolutionDetailTabQuery.graphql';
-import { InversionSolutionMfdTabQuery } from './__generated__/InversionSolutionMfdTabQuery.graphql';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -46,6 +45,11 @@ const inversionSolutionQuery = graphql`
           k
           v
         }
+        tables {
+          table_id
+          table_type
+          created
+        }
       }
     }
   }
@@ -72,16 +76,12 @@ const InversionSolution: React.FC = () => {
   const { id, tab } = useParams<InversionSolutionParams>();
   const data = useLazyLoadQuery<InversionSolutionQuery>(inversionSolutionQuery, { id });
   const [queryRef, loadQuery] = useQueryLoader<InversionSolutionDetailTabQuery>(inversionSolutionDetailTabQuery);
-  const [queryRefMFD, loadQueryMFD] = useQueryLoader<InversionSolutionMfdTabQuery>(inversionSolutionMfdTabQuery);
 
   const history = useHistory();
 
   React.useEffect(() => {
     if (tab === undefined || tab === 'InversionSolutionDetailTab') {
       loadQuery({ id });
-    }
-    if (tab === undefined || tab === 'InversionSolutionMfdTab') {
-      loadQueryMFD({ id });
     }
   }, [tab]);
 
@@ -95,6 +95,23 @@ const InversionSolution: React.FC = () => {
 
   //const ruptureSetId = data?.node?.produced_by_id;
   const ruptureSetId = data?.node?.meta?.filter((kv) => kv?.k == 'rupture_set_file_id')[0]?.v;
+  // const old_mfd_table_id = data?.node?.mfd_table_id;
+  // const new_mfd_table = data?.node?.tables?.filter((ltr) => ltr?.table_type == 'MFD_CURVES')[0];
+  // const new_mfd_table_id = new_mfd_table?.table_id;
+
+  const mfdTableId = (): string => {
+    if (data?.node?.mfd_table_id) return data?.node?.mfd_table_id;
+    const new_mfd_table = data?.node?.tables?.filter((ltr) => ltr?.table_type == 'MFD_CURVES')[0];
+    if (new_mfd_table) return new_mfd_table.table_id || '';
+    return '';
+  };
+
+  //Removes filename & file id from inversion data
+  const cleanedMeta = data?.node?.meta?.filter((el) => {
+    return el?.k !== 'rupture_set' && el?.k !== 'rupture_set_file_id';
+  });
+  //Converting cleaned data to string
+  const metaAsString = cleanedMeta?.map((kv) => ' ' + kv?.k + ': ' + kv?.v).toString() ?? '';
 
   const renderTab = () => {
     switch (tab) {
@@ -109,7 +126,7 @@ const InversionSolution: React.FC = () => {
         return (
           <Box className={classes.tabPanel}>
             <React.Suspense fallback={<CircularProgress />}>
-              {queryRefMFD && <InversionSolutionMfdTab queryRef={queryRefMFD} />}
+              {mfdTableId && <InversionSolutionMfdTab mfdTableId={mfdTableId()} metaAsString={metaAsString} />}
             </React.Suspense>
           </Box>
         );

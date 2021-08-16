@@ -3,6 +3,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+export type TableType = "GENERAL" | "HAZARD_GRIDDED" | "HAZARD_SITES" | "MFD_CURVES" | "%future added value";
 export type InversionSolutionQueryVariables = {
     id: string;
 };
@@ -16,6 +17,11 @@ export type InversionSolutionQueryResponse = {
         readonly meta?: ReadonlyArray<{
             readonly k: string | null;
             readonly v: string | null;
+        } | null> | null;
+        readonly tables?: ReadonlyArray<{
+            readonly table_id: string | null;
+            readonly table_type: TableType | null;
+            readonly created: unknown | null;
         } | null> | null;
     } | null;
 };
@@ -41,6 +47,11 @@ query InversionSolutionQuery(
       meta {
         k
         v
+      }
+      tables {
+        table_id
+        table_type
+        created
       }
     }
     id
@@ -122,6 +133,32 @@ v7 = {
     }
   ],
   "storageKey": null
+},
+v8 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "LabelledTableRelation",
+  "kind": "LinkedField",
+  "name": "tables",
+  "plural": true,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "table_id",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "table_type",
+      "storageKey": null
+    },
+    (v6/*: any*/)
+  ],
+  "storageKey": null
 };
 return {
   "fragment": {
@@ -146,7 +183,8 @@ return {
               (v4/*: any*/),
               (v5/*: any*/),
               (v6/*: any*/),
-              (v7/*: any*/)
+              (v7/*: any*/),
+              (v8/*: any*/)
             ],
             "type": "InversionSolution",
             "abstractKey": null
@@ -187,7 +225,8 @@ return {
               (v4/*: any*/),
               (v5/*: any*/),
               (v6/*: any*/),
-              (v7/*: any*/)
+              (v7/*: any*/),
+              (v8/*: any*/)
             ],
             "type": "InversionSolution",
             "abstractKey": null
@@ -198,14 +237,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "eeb8878451a6fbaab7ec3d42d6098c11",
+    "cacheID": "7225ec519ae92509857f2e84edade747",
     "id": null,
     "metadata": {},
     "name": "InversionSolutionQuery",
     "operationKind": "query",
-    "text": "query InversionSolutionQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on InversionSolution {\n      id\n      mfd_table_id\n      hazard_table_id\n      produced_by_id\n      created\n      meta {\n        k\n        v\n      }\n    }\n    id\n  }\n}\n"
+    "text": "query InversionSolutionQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on InversionSolution {\n      id\n      mfd_table_id\n      hazard_table_id\n      produced_by_id\n      created\n      meta {\n        k\n        v\n      }\n      tables {\n        table_id\n        table_type\n        created\n      }\n    }\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '4814efcac7898e294370363128de2130';
+(node as any).hash = '68c37e9c4c1dddd8e04e28b21955c0e4';
 export default node;

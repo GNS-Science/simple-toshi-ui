@@ -3,7 +3,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-export type EventResult = "FAILURE" | "SUCCESS" | "UNDEFINED" | "%future added value";
+export type EventResult = "FAILURE" | "PARTIAL" | "SUCCESS" | "UNDEFINED" | "%future added value";
 export type EventState = "DONE" | "SCHEDULED" | "STARTED" | "UNDEFINED" | "%future added value";
 export type GeneralTaskQueryVariables = {
     id: string;
