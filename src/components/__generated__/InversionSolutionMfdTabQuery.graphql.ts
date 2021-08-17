@@ -10,10 +10,6 @@ export type InversionSolutionMfdTabQueryVariables = {
 export type InversionSolutionMfdTabQueryResponse = {
     readonly node: {
         readonly id?: string;
-        readonly meta?: ReadonlyArray<{
-            readonly k: string | null;
-            readonly v: string | null;
-        } | null> | null;
         readonly name?: string | null;
         readonly column_types?: ReadonlyArray<RowItemType | null> | null;
         readonly column_headers?: ReadonlyArray<string | null> | null;
@@ -35,10 +31,6 @@ query InversionSolutionMfdTabQuery(
     __typename
     ... on Table {
       id
-      meta {
-        k
-        v
-      }
       name
       column_types
       column_headers
@@ -74,50 +66,25 @@ v2 = {
 v3 = {
   "alias": null,
   "args": null,
-  "concreteType": "KeyValuePair",
-  "kind": "LinkedField",
-  "name": "meta",
-  "plural": true,
-  "selections": [
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "k",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "v",
-      "storageKey": null
-    }
-  ],
+  "kind": "ScalarField",
+  "name": "name",
   "storageKey": null
 },
 v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "name",
+  "name": "column_types",
   "storageKey": null
 },
 v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "column_types",
-  "storageKey": null
-},
-v6 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
   "name": "column_headers",
   "storageKey": null
 },
-v7 = {
+v6 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -146,8 +113,7 @@ return {
               (v3/*: any*/),
               (v4/*: any*/),
               (v5/*: any*/),
-              (v6/*: any*/),
-              (v7/*: any*/)
+              (v6/*: any*/)
             ],
             "type": "Table",
             "abstractKey": null
@@ -187,8 +153,7 @@ return {
               (v3/*: any*/),
               (v4/*: any*/),
               (v5/*: any*/),
-              (v6/*: any*/),
-              (v7/*: any*/)
+              (v6/*: any*/)
             ],
             "type": "Table",
             "abstractKey": null
@@ -199,14 +164,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "a793c29bc3f8b92896371cdfcf65291b",
+    "cacheID": "bf56e48ddc929d8825f8b9bcd6b73adf",
     "id": null,
     "metadata": {},
     "name": "InversionSolutionMfdTabQuery",
     "operationKind": "query",
-    "text": "query InversionSolutionMfdTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on Table {\n      id\n      meta {\n        k\n        v\n      }\n      name\n      column_types\n      column_headers\n      rows\n    }\n    id\n  }\n}\n"
+    "text": "query InversionSolutionMfdTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on Table {\n      id\n      name\n      column_types\n      column_headers\n      rows\n    }\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'e90a4b3b6e86e4351c6c329acd51a65e';
+(node as any).hash = '31da9e62de8367bb09ec9e77b8821c4b';
 export default node;

@@ -15,10 +15,6 @@ export const inversionSolutionMfdTabQuery = graphql`
     node(id: $id) {
       ... on Table {
         id
-        meta {
-          k
-          v
-        }
         name
         column_types
         column_headers
@@ -30,19 +26,31 @@ export const inversionSolutionMfdTabQuery = graphql`
 
 interface InversionSolutionMfdTabProps {
   mfdTableId: string;
-  metaAsString: string;
+  meta:
+    | readonly ({
+        readonly k: string | null;
+        readonly v: string | null;
+      } | null)[]
+    | null
+    | undefined;
 }
 
 const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
   mfdTableId,
-  metaAsString,
+  meta,
 }: InversionSolutionMfdTabProps) => {
   const data = useLazyLoadQuery<InversionSolutionMfdTabQuery>(inversionSolutionMfdTabQuery, { id: mfdTableId });
   // console.log('data', data);
 
   const rows = data?.node?.rows;
-  const config_type = data?.node?.meta?.filter((kv) => kv?.k == 'config_type')[0]?.v;
-  // console.log(config_type == 'subduction');
+  const config_type = meta?.filter((kv) => kv?.k == 'config_type')[0]?.v;
+
+  //Removes filename & file id from inversion meta data list
+  const cleanedMeta = meta?.filter((el) => {
+    return el?.k !== 'rupture_set' && el?.k !== 'rupture_set_file_id';
+  });
+  //Converting cleaned data to string
+  const metaAsString = cleanedMeta?.map((kv) => ' ' + kv?.k + ': ' + kv?.v).toString() ?? '';
 
   if (!rows) {
     return <></>;

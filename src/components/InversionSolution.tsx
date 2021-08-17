@@ -55,22 +55,6 @@ const inversionSolutionQuery = graphql`
   }
 `;
 
-// /**
-//  * Formats bytes to human readable string. Adapted from:
-//  * https://stackoverflow.com/questions/15900485/correct-way-to-convert-size-in-bytes-to-kb-mb-gb-in-javascript/
-//  */
-// export const formatBytes = (bytes: number, decimals = 2): string => {
-//   if (bytes === 0) return '0 Bytes';
-
-//   const k = 1024;
-//   const dm = decimals < 0 ? 0 : decimals;
-//   const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-
-//   const i = Math.floor(Math.log(bytes) / Math.log(k));
-
-//   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-// };
-
 const InversionSolution: React.FC = () => {
   const classes = useStyles();
   const { id, tab } = useParams<InversionSolutionParams>();
@@ -95,9 +79,6 @@ const InversionSolution: React.FC = () => {
 
   //const ruptureSetId = data?.node?.produced_by_id;
   const ruptureSetId = data?.node?.meta?.filter((kv) => kv?.k == 'rupture_set_file_id')[0]?.v;
-  // const old_mfd_table_id = data?.node?.mfd_table_id;
-  // const new_mfd_table = data?.node?.tables?.filter((ltr) => ltr?.table_type == 'MFD_CURVES')[0];
-  // const new_mfd_table_id = new_mfd_table?.table_id;
 
   const mfdTableId = (): string => {
     if (data?.node?.mfd_table_id) return data?.node?.mfd_table_id;
@@ -105,13 +86,6 @@ const InversionSolution: React.FC = () => {
     if (new_mfd_table) return new_mfd_table.table_id || '';
     return '';
   };
-
-  //Removes filename & file id from inversion data
-  const cleanedMeta = data?.node?.meta?.filter((el) => {
-    return el?.k !== 'rupture_set' && el?.k !== 'rupture_set_file_id';
-  });
-  //Converting cleaned data to string
-  const metaAsString = cleanedMeta?.map((kv) => ' ' + kv?.k + ': ' + kv?.v).toString() ?? '';
 
   const renderTab = () => {
     switch (tab) {
@@ -126,7 +100,7 @@ const InversionSolution: React.FC = () => {
         return (
           <Box className={classes.tabPanel}>
             <React.Suspense fallback={<CircularProgress />}>
-              {mfdTableId && <InversionSolutionMfdTab mfdTableId={mfdTableId()} metaAsString={metaAsString} />}
+              {mfdTableId && <InversionSolutionMfdTab mfdTableId={mfdTableId()} meta={data?.node?.meta} />}
             </React.Suspense>
           </Box>
         );
