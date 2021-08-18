@@ -5,7 +5,7 @@ import React from 'react';
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { LatLngExpression } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { MapContainer, TileLayer } from 'react-leaflet';
+import { Map, TileLayer } from 'react-leaflet';
 // import { formatBytes } from './FileDetail';
 import { InversionSolutionHazardTabQuery } from './__generated__/InversionSolutionHazardTabQuery.graphql';
 // import KeyValueTable from './KeyValueTable';
@@ -57,14 +57,14 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
             <strong>Hazard:</strong>
             {/*{data?.node?.hazard_table?.name}*/}
           </Typography>
-          <MapContainer center={nz_centre} zoom={zoom} scrollWheelZoom={false} style={{ height: '700px' }}>
+          <Map center={nz_centre} zoom={zoom} scrollWheelZoom={false} style={{ height: '700px' }}>
             <TileLayer attribution={provider_attibution} url={provider_url} />
             {/*<Marker position={position}>
               <Popup>
                 A pretty CSS3 popup. <br /> Easily customizable.
               </Popup>
             </Marker>*/}
-          </MapContainer>
+          </Map>
         </Card>
       </Box>
     </>

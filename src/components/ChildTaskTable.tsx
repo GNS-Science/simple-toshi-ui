@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles, Paper, Table, TableBody, TableCell, TableHead, TableRow, withStyles } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import { EventResult, EventState } from './__generated__/GeneralTaskQuery.graphql';
+import { EventResult, EventState } from './__generated__/GeneralTaskChildrenTabQuery.graphql';
 import { formatDuration, intervalToDuration, secondsToMilliseconds, format } from 'date-fns';
 
 const useStyles = makeStyles((theme) => ({
