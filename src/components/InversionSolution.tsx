@@ -81,7 +81,7 @@ const InversionSolution: React.FC = () => {
   }
 
   // //const ruptureSetId = data?.node?.produced_by_id;
-  // const ruptureSetId = data?.node?.meta?.filter((kv) => kv?.k == 'rupture_set_file_id')[0]?.v;
+  const ruptureSetId = data?.node?.meta?.filter((kv) => kv?.k == 'rupture_set_file_id')[0]?.v;
 
   const mfdTableId = (): string => {
     if (data?.node?.mfd_table_id) return data?.node?.mfd_table_id;
