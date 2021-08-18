@@ -14,6 +14,7 @@ export type GeneralTaskQueryResponse = {
         readonly id?: string;
         readonly title?: string | null;
         readonly description?: string | null;
+        readonly notes?: string | null;
         readonly created?: unknown | null;
         readonly updated?: unknown | null;
         readonly agent_name?: string | null;
@@ -21,6 +22,11 @@ export type GeneralTaskQueryResponse = {
         readonly subtask_type?: TaskSubType | null;
         readonly subtask_count?: number | null;
         readonly subtask_result?: EventResult | null;
+        readonly argument_lists?: ReadonlyArray<{
+            readonly k: string | null;
+            readonly v: ReadonlyArray<string | null> | null;
+        } | null> | null;
+        readonly swept_arguments?: ReadonlyArray<string | null> | null;
         readonly children?: {
             readonly total_count: number | null;
         } | null;
@@ -43,6 +49,7 @@ query GeneralTaskQuery(
       id
       title
       description
+      notes
       created
       updated
       agent_name
@@ -50,6 +57,11 @@ query GeneralTaskQuery(
       subtask_type
       subtask_count
       subtask_result
+      argument_lists {
+        k
+        v
+      }
+      swept_arguments
       children {
         total_count
       }
@@ -99,52 +111,91 @@ v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "created",
+  "name": "notes",
   "storageKey": null
 },
 v6 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "updated",
+  "name": "created",
   "storageKey": null
 },
 v7 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "agent_name",
+  "name": "updated",
   "storageKey": null
 },
 v8 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "model_type",
+  "name": "agent_name",
   "storageKey": null
 },
 v9 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "subtask_type",
+  "name": "model_type",
   "storageKey": null
 },
 v10 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "subtask_count",
+  "name": "subtask_type",
   "storageKey": null
 },
 v11 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "subtask_result",
+  "name": "subtask_count",
   "storageKey": null
 },
 v12 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "subtask_result",
+  "storageKey": null
+},
+v13 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "KeyValueListPair",
+  "kind": "LinkedField",
+  "name": "argument_lists",
+  "plural": true,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "k",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "v",
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+},
+v14 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "swept_arguments",
+  "storageKey": null
+},
+v15 = {
   "alias": null,
   "args": null,
   "concreteType": "TaskTaskRelationConnection",
@@ -190,7 +241,10 @@ return {
               (v9/*: any*/),
               (v10/*: any*/),
               (v11/*: any*/),
-              (v12/*: any*/)
+              (v12/*: any*/),
+              (v13/*: any*/),
+              (v14/*: any*/),
+              (v15/*: any*/)
             ],
             "type": "GeneralTask",
             "abstractKey": null
@@ -236,7 +290,10 @@ return {
               (v9/*: any*/),
               (v10/*: any*/),
               (v11/*: any*/),
-              (v12/*: any*/)
+              (v12/*: any*/),
+              (v13/*: any*/),
+              (v14/*: any*/),
+              (v15/*: any*/)
             ],
             "type": "GeneralTask",
             "abstractKey": null
@@ -247,14 +304,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "6cb9325e35746f54e3cd28d26772f115",
+    "cacheID": "b9de43bb26d303af516c7ec290ad0851",
     "id": null,
     "metadata": {},
     "name": "GeneralTaskQuery",
     "operationKind": "query",
-    "text": "query GeneralTaskQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on GeneralTask {\n      id\n      title\n      description\n      created\n      updated\n      agent_name\n      model_type\n      subtask_type\n      subtask_count\n      subtask_result\n      children {\n        total_count\n      }\n    }\n    id\n  }\n}\n"
+    "text": "query GeneralTaskQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on GeneralTask {\n      id\n      title\n      description\n      notes\n      created\n      updated\n      agent_name\n      model_type\n      subtask_type\n      subtask_count\n      subtask_result\n      argument_lists {\n        k\n        v\n      }\n      swept_arguments\n      children {\n        total_count\n      }\n    }\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '581179a7a2f1fd14821d445342e5703e';
+(node as any).hash = '5ef65933b62aa23529ad072d2a99cb47';
 export default node;
