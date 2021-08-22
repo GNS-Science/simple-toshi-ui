@@ -33,6 +33,49 @@ interface InversionSolutionHazardTabProps {
   queryRef: PreloadedQuery<InversionSolutionHazardTabQuery, Record<string, unknown>>;
 }
 
+/**
+ * Computes the radius based on zoom level
+ * minZoom and maxZoom determines the range at which the radius should vary.
+ * The radius is computed with a linear mapping between zoom range and radius.
+ * Example:
+ * minZoom = 6, maxZoom = 10
+ * minRadius = 17, maxRadius = 30
+ * At zoom level 6, the radius of each point is 17px.
+ * At zoom level 10, the radius of each point is 30px.
+ * Where the zoom level is less than 6, the absoluteMinRadius is used.
+ */
+const getRadius = (
+  zoom: number,
+  minZoom: number,
+  maxZoom: number,
+  minRadius: number,
+  maxRadius: number,
+  absoluteMinRadius: number,
+) => {
+  const zoomRange = maxZoom - minZoom;
+  return Math.max(absoluteMinRadius, ((zoom - minZoom) * maxRadius) / zoomRange + minRadius);
+};
+
+/**
+ * Computes the maximum intensity based on zoom level
+ * At a low zoom level (zoomed out), points combine additively which results in a higher intensity of colour.
+ * We want to lower the maximum intensity when you zoom in,
+ * so that the "heat" of the map retains its intensity when you zoom in.
+ * We do this by increasing the intensity by a step size as you zoom in,
+ * until the maxZoom is reached.
+ * The maximum intensity will always be equal or greater than absoluteMinIntensity,
+ * which should be based on intensity of a single point.
+ */
+const getMaxIntensity = (
+  zoom: number,
+  maxZoom: number,
+  minIntensity: number,
+  absoluteMinIntensity: number,
+  stepSize: number,
+) => {
+  return Math.max(absoluteMinIntensity, minIntensity + stepSize * (maxZoom - zoom));
+};
+
 const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
   queryRef,
 }: InversionSolutionHazardTabProps) => {
@@ -40,6 +83,9 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
   const iml_period_dim = data?.node?.dimensions?.find((f) => f?.k === 'iml_periods');
   const [prob, setProb] = React.useState<string>('0.02');
   const [dim, setDim] = React.useState<string>(iml_period_dim?.v ? iml_period_dim?.v[1] ?? '' : '');
+  const [zoom, setZoom] = React.useState<number>(5);
+  const radius = getRadius(zoom, 6, 10, 17, 30, 13);
+  const max = getMaxIntensity(zoom, 10, 0.5, 1.6, 1.6);
   const rows = data?.node?.rows ?? [];
   const lon_idx = data?.node?.column_headers?.findIndex((f) => f === 'lon');
   const lat_idx = data?.node?.column_headers?.findIndex((f) => f === 'lat');
@@ -49,7 +95,7 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
 
   // Default coordinates set to Masterton station
   const nz_centre: LatLngExpression = [-40.946, 174.167];
-  const zoom = 5;
+  const defaultZoom = 5;
 
   const provider_url = 'https://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}';
   const provider_attibution =
@@ -96,10 +142,21 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
           {data?.node?.name}
         </Typography>
         {lat_idx && lon_idx && int_idx && (
-          <Map center={nz_centre} zoom={zoom} scrollWheelZoom={false} style={{ height: '700px' }}>
+          <Map
+            center={nz_centre}
+            zoom={defaultZoom}
+            scrollWheelZoom={false}
+            style={{ height: '700px' }}
+            onzoom={(e) => {
+              setZoom(e.target.getZoom());
+            }}
+          >
             <HeatmapLayer
               fitBoundsOnLoad
-              fitBoundsOnUpdate
+              radius={radius}
+              max={max}
+              maxZoom={9}
+              blur={20}
               points={filteredRows}
               longitudeExtractor={(m: string) => m[lon_idx]}
               latitudeExtractor={(m: string) => m[lat_idx]}
