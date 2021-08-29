@@ -3,6 +3,19 @@ schema {
   mutation: MutationRoot
 }
 
+input AppendInversionSolutionTablesInput {
+  id: ID
+  tables: [LabelledTableRelationInput]!
+  clientMutationId: String
+}
+
+"""Append LabelledTableRelationTable to an existing Inversion Solution"""
+type AppendInversionSolutionTablesPayload {
+  inversion_solution: InversionSolution
+  ok: Boolean
+  clientMutationId: String
+}
+
 union ChildTaskUnion = GeneralTask | RuptureGenerationTask
 
 type CreateFile {
@@ -16,11 +29,17 @@ type CreateFileRelation {
 }
 
 input CreateGeneralTaskInput {
+  """notes about the task, potentially Markdown"""
+  notes: String
+
+  """count of subtasks"""
+  subtask_count: Int
+  subtask_type: TaskSubType
+  model_type: ModelType
+  subtask_result: EventResult
+
   """When the taskrecord was created"""
   created: DateTime
-
-  """When task was updated"""
-  updated: DateTime
 
   """The name of the person or process responsible for the task"""
   agent_name: String
@@ -30,6 +49,12 @@ input CreateGeneralTaskInput {
 
   """Some description of the task, potentially Markdown"""
   description: String
+
+  """subtask arguments, as a list of Key Value List pairs."""
+  argument_lists: [KeyValueListPairInput]
+
+  """arbitrary metadata for the task, as a list of Key Value pairs."""
+  meta: [KeyValuePairInput]
   clientMutationId: String
 }
 
@@ -79,9 +104,14 @@ input CreateInversionSolutionInput {
 
   """When the task record was created"""
   created: DateTime
+
+  """deprecated"""
   produced_by_id: ID
+
+  """deprecated"""
   mfd_table_id: ID
   hazard_table_id: ID
+  tables: [LabelledTableRelationInput]
 
   """result metrics from the solution, as a list of Key Value pairs."""
   metrics: [KeyValuePairInput]
@@ -186,6 +216,13 @@ input CreateTableInput {
   The table rows. Each row is a list of strings that can be coerced according to column_types.
   """
   rows: [[String]]
+
+  """additional meta data, as a list of Key Value pairs."""
+  meta: [KeyValuePairInput]
+  table_type: TableType!
+
+  """table dimensions, as a list of Key Value List pairs."""
+  dimensions: [KeyValueListPairInput]
   clientMutationId: String
 }
 
@@ -240,6 +277,7 @@ type EnergyChangeCompletionCriteriaOutput {
 
 enum EventResult {
   FAILURE
+  PARTIAL
   SUCCESS
   UNDEFINED
 }
@@ -383,6 +421,24 @@ type GeneralTask implements Node & Thing {
 
   """Some description of the task, potentially Markdown"""
   description: String
+
+  """subtask arguments, as a list of Key Value List pairs."""
+  argument_lists: [KeyValueListPair]
+
+  """list of keys for items having >1 value in argument_lists"""
+  swept_arguments: [String]
+
+  """arbitrary metadata for the task, as a list of Key Value pairs."""
+  meta: [KeyValuePair]
+
+  """notes about the task, potentially Markdown"""
+  notes: String
+
+  """count of subtasks"""
+  subtask_count: Int
+  subtask_type: TaskSubType
+  model_type: ModelType
+  subtask_result: EventResult
 
   """sub-tasks of this task"""
   children(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
@@ -586,12 +642,39 @@ type InversionSolution implements Node & FileInterface {
 
   """result metrics from the task, as a list of Key Value pairs."""
   metrics: [KeyValuePair]
+
+  """deprecated"""
   produced_by_id: ID
+
+  """deprecated"""
   mfd_table_id: ID
   hazard_table_id: ID
+  tables: [LabelledTableRelation]
+
+  """deprecated"""
   hazard_table: Table
+
+  """deprecated"""
   mfd_table: Table
   produced_by: RuptureGenerationTask
+}
+
+"""Simple container for KVL lists of strings"""
+type KeyValueListPair {
+  """key"""
+  k: String
+
+  """list of values"""
+  v: [String]
+}
+
+"""Simple container for KVL lists of strings"""
+input KeyValueListPairInput {
+  """key"""
+  k: String
+
+  """list of values"""
+  v: [String]
 }
 
 """Simple container for string-based KV pair data"""
@@ -612,6 +695,60 @@ input KeyValuePairInput {
   v: String
 }
 
+"""
+a unique, labelled table relationship.
+
+This is intended to be used as an internal structure within an InversionSolution (or similar).
+It must be stored internally in the parent object, so does not implement the
+node interface. New instances must be mutated via the
+parent class.
+"""
+type LabelledTableRelation {
+  """an internal unique UUID to support mutations."""
+  identity: String
+
+  """When the task record was created."""
+  created: DateTime
+
+  """the object responsible for creating this relationship."""
+  produced_by_id: ID
+
+  """Label used to differentiate this relationsip for humans."""
+  label: String
+
+  """the ID of the table"""
+  table_id: ID
+  table: Table
+
+  """table type"""
+  table_type: TableType
+
+  """table dimensions, as a list of Key Value List pairs."""
+  dimensions: [KeyValueListPair]
+}
+
+input LabelledTableRelationInput {
+  """the object responsible for creating this relationship."""
+  produced_by_id: ID
+
+  """Label used to differentiate this relationsip for humans."""
+  label: String
+
+  """the ID of the table"""
+  table_id: ID
+
+  """table type"""
+  table_type: TableType
+
+  """table dimensions, as a list of Key Value List pairs."""
+  dimensions: [KeyValueListPairInput]
+}
+
+enum ModelType {
+  CRUSTAL
+  SUBDUCTION
+}
+
 type MutationRoot {
   create_rupture_generation_task(input: CreateRuptureGenerationTaskInput!): CreateRuptureGenerationTaskPayload
   update_rupture_generation_task(input: UpdateRuptureGenerationTaskInput!): UpdateRuptureGenerationTaskPayload
@@ -627,12 +764,16 @@ type MutationRoot {
   create_strong_motion_station(input: CreateStrongMotionStationInput!): CreateStrongMotionStationPayload
   create_sms_file(file_name: String, file_size: Int, file_type: SmsFileType!, md5_digest: String = "The base64-encoded md5 digest of the file"): CreateSmsFile
   create_general_task(input: CreateGeneralTaskInput!): CreateGeneralTaskPayload
+  update_general_task(input: UpdateGeneralTaskInput!): UpdateGeneralTaskPayload
   create_task_relation(child_id: ID!, parent_id: ID!): CreateTaskTaskRelation
   create_grand_inversion_task(input: CreateGrandInversionTaskInput!): CreateGrandInversionTaskPayload
   create_table(input: CreateTableInput!): CreateTablePayload
 
   """Create an Inversion Solution file"""
   create_inversion_solution(input: CreateInversionSolutionInput!): CreateInversionSolutionPayload
+
+  """Append LabelledTableRelationTable to an existing Inversion Solution"""
+  append_inversion_solution_tables(input: AppendInversionSolutionTablesInput!): AppendInversionSolutionTablesPayload
 }
 
 """An object with an ID"""
@@ -699,7 +840,7 @@ type RuptureGenerationTask implements Node & Thing {
   result: EventResult
   state: EventState
 
-  """the final duraton of the event in seconds"""
+  """the final duration of the event in seconds"""
   duration: Float
 
   """parent task(s) of this task"""
@@ -893,6 +1034,29 @@ type Table implements Node {
   The table rows. Each row is a list of strings that can be coerced according to column_types.
   """
   rows: [[String]]
+
+  """additional meta data, as a list of Key Value pairs."""
+  meta: [KeyValuePair]
+
+  """table type"""
+  table_type: TableType
+
+  """table dimensions, as a list of Key Value List pairs."""
+  dimensions: [KeyValueListPair]
+}
+
+"""Data type"""
+enum TableType {
+  HAZARD_GRIDDED
+  HAZARD_SITES
+  MFD_CURVES
+  GENERAL
+}
+
+enum TaskSubType {
+  RUPTURE_SETS
+  INVERSIONS
+  HAZARD
 }
 
 type TaskTaskRelation implements Node {
@@ -939,6 +1103,46 @@ input TimeCompletionCriteriaInput {
 type TimeCompletionCriteriaOutput {
   """the number of minutes to run (maximum)"""
   minutes: Int
+}
+
+input UpdateGeneralTaskInput {
+  """When the task record was created"""
+  created: DateTime
+
+  """When the task record was last updated"""
+  updated: DateTime
+
+  """The name of the person or process responsible for the task"""
+  agent_name: String
+
+  """A title always helps"""
+  title: String
+
+  """Some description of the task, potentially Markdown"""
+  description: String
+
+  """notes about the task, potentially Markdown"""
+  notes: String
+
+  """count of subtasks"""
+  subtask_count: Int
+  subtask_type: TaskSubType
+  model_type: ModelType
+  subtask_result: EventResult
+  task_id: ID!
+
+  """subtask arguments, as a list of Key Value List pairs."""
+  argument_lists: [KeyValueListPairInput]
+
+  """arbitrary metadata for the task, as a list of Key Value pairs."""
+  meta: [KeyValuePairInput]
+  clientMutationId: String
+}
+
+type UpdateGeneralTaskPayload {
+  general_task: GeneralTask
+  ok: Boolean
+  clientMutationId: String
 }
 
 input UpdateRuptureGenerationTaskInput {

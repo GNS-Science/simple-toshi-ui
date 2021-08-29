@@ -1,13 +1,10 @@
 import { graphql } from 'babel-plugin-relay/macro';
 import React from 'react';
 import { Box, Typography } from '@material-ui/core';
-import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
+import { useLazyLoadQuery } from 'react-relay';
 
 import { magRateData, IMagRate } from './PreviewMFD_data';
-import {
-  InversionSolutionMfdTabQuery,
-  InversionSolutionMfdTabQueryResponse,
-} from './__generated__/InversionSolutionMfdTabQuery.graphql';
+import { InversionSolutionMfdTabQuery } from './__generated__/InversionSolutionMfdTabQuery.graphql';
 
 import { AnimatedAxis, AnimatedLineSeries, Tooltip, XYChart } from '@visx/xychart';
 import { scaleOrdinal } from '@visx/scale';
@@ -16,38 +13,44 @@ import { LegendOrdinal } from '@visx/legend';
 export const inversionSolutionMfdTabQuery = graphql`
   query InversionSolutionMfdTabQuery($id: ID!) {
     node(id: $id) {
-      ... on InversionSolution {
-        mfd_table {
-          name
-          column_types
-          column_headers
-          rows
-        }
-        meta {
-          k
-          v
-        }
+      ... on Table {
+        id
+        name
+        column_types
+        column_headers
+        rows
       }
     }
   }
 `;
 
 interface InversionSolutionMfdTabProps {
-  queryRef: PreloadedQuery<InversionSolutionMfdTabQuery, Record<string, unknown>>;
+  mfdTableId: string;
+  meta:
+    | readonly ({
+        readonly k: string | null;
+        readonly v: string | null;
+      } | null)[]
+    | null
+    | undefined;
 }
 
-// function InversionSolutionMfdTab(): React.ReactElement {
 const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
-  queryRef,
+  mfdTableId,
+  meta,
 }: InversionSolutionMfdTabProps) => {
-  const data: InversionSolutionMfdTabQueryResponse = usePreloadedQuery<InversionSolutionMfdTabQuery>(
-    inversionSolutionMfdTabQuery,
-    queryRef,
-  );
+  const data = useLazyLoadQuery<InversionSolutionMfdTabQuery>(inversionSolutionMfdTabQuery, { id: mfdTableId });
+  // console.log('data', data);
 
-  const rows = data?.node?.mfd_table?.rows;
-  const config_type = data?.node?.meta?.filter((kv) => kv?.k == 'config_type')[0]?.v;
-  // console.log(config_type == 'subduction');
+  const rows = data?.node?.rows;
+  const config_type = meta?.filter((kv) => kv?.k == 'config_type')[0]?.v;
+
+  //Removes filename & file id from inversion meta data list
+  const cleanedMeta = meta?.filter((el) => {
+    return el?.k !== 'rupture_set' && el?.k !== 'rupture_set_file_id';
+  });
+  //Converting cleaned data to string
+  const metaAsString = cleanedMeta?.map((kv) => ' ' + kv?.k + ': ' + kv?.v).toString() ?? '';
 
   if (!rows) {
     return <></>;
@@ -75,12 +78,7 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
     maxMagnitude = 9.0;
     minMagnitude = 5.0;
   }
-  //Removes filename & file id from inversion data
-  const cleanedMeta = data?.node?.meta?.filter((el) => {
-    return el?.k !== 'rupture_set' && el?.k !== 'rupture_set_file_id';
-  });
-  //Converting cleaned data to string
-  const metaAsString = cleanedMeta?.map((kv) => ' ' + kv?.k + ': ' + kv?.v).toString() ?? '';
+
   const seriesMfd = (series: string[], index: number): Array<IMagRate> => {
     return magRateData(
       rows

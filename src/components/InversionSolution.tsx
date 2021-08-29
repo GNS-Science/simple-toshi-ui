@@ -4,13 +4,12 @@ import React from 'react';
 import { useLazyLoadQuery, useQueryLoader } from 'react-relay';
 import { useHistory, useParams } from 'react-router-dom';
 import InversionSolutionDetailTab, { inversionSolutionDetailTabQuery } from './InversionSolutionDetailTab';
-import InversionSolutionMfdTab, { inversionSolutionMfdTabQuery } from './InversionSolutionMfdTab';
+import InversionSolutionMfdTab from './InversionSolutionMfdTab';
 import InversionSolutionHazardTab from './InversionSolutionHazardTab';
 
 import RuptureSetDiags from './RuptureSetDiags';
 import { InversionSolutionQuery } from './__generated__/InversionSolutionQuery.graphql';
 import { InversionSolutionDetailTabQuery } from './__generated__/InversionSolutionDetailTabQuery.graphql';
-import { InversionSolutionMfdTabQuery } from './__generated__/InversionSolutionMfdTabQuery.graphql';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -46,42 +45,27 @@ const inversionSolutionQuery = graphql`
           k
           v
         }
+        tables {
+          table_id
+          table_type
+          created
+        }
       }
     }
   }
 `;
-
-// /**
-//  * Formats bytes to human readable string. Adapted from:
-//  * https://stackoverflow.com/questions/15900485/correct-way-to-convert-size-in-bytes-to-kb-mb-gb-in-javascript/
-//  */
-// export const formatBytes = (bytes: number, decimals = 2): string => {
-//   if (bytes === 0) return '0 Bytes';
-
-//   const k = 1024;
-//   const dm = decimals < 0 ? 0 : decimals;
-//   const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-
-//   const i = Math.floor(Math.log(bytes) / Math.log(k));
-
-//   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-// };
 
 const InversionSolution: React.FC = () => {
   const classes = useStyles();
   const { id, tab } = useParams<InversionSolutionParams>();
   const data = useLazyLoadQuery<InversionSolutionQuery>(inversionSolutionQuery, { id });
   const [queryRef, loadQuery] = useQueryLoader<InversionSolutionDetailTabQuery>(inversionSolutionDetailTabQuery);
-  const [queryRefMFD, loadQueryMFD] = useQueryLoader<InversionSolutionMfdTabQuery>(inversionSolutionMfdTabQuery);
 
   const history = useHistory();
 
   React.useEffect(() => {
     if (tab === undefined || tab === 'InversionSolutionDetailTab') {
       loadQuery({ id });
-    }
-    if (tab === undefined || tab === 'InversionSolutionMfdTab') {
-      loadQueryMFD({ id });
     }
   }, [tab]);
 
@@ -96,6 +80,13 @@ const InversionSolution: React.FC = () => {
   //const ruptureSetId = data?.node?.produced_by_id;
   const ruptureSetId = data?.node?.meta?.filter((kv) => kv?.k == 'rupture_set_file_id')[0]?.v;
 
+  const mfdTableId = (): string => {
+    if (data?.node?.mfd_table_id) return data?.node?.mfd_table_id;
+    const new_mfd_table = data?.node?.tables?.filter((ltr) => ltr?.table_type == 'MFD_CURVES')[0];
+    if (new_mfd_table) return new_mfd_table.table_id || '';
+    return '';
+  };
+
   const renderTab = () => {
     switch (tab) {
       default:
@@ -109,7 +100,7 @@ const InversionSolution: React.FC = () => {
         return (
           <Box className={classes.tabPanel}>
             <React.Suspense fallback={<CircularProgress />}>
-              {queryRefMFD && <InversionSolutionMfdTab queryRef={queryRefMFD} />}
+              {mfdTableId && <InversionSolutionMfdTab mfdTableId={mfdTableId()} meta={data?.node?.meta} />}
             </React.Suspense>
           </Box>
         );

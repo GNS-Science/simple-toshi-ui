@@ -3,8 +3,9 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-export type EventResult = "FAILURE" | "SUCCESS" | "UNDEFINED" | "%future added value";
-export type EventState = "DONE" | "SCHEDULED" | "STARTED" | "UNDEFINED" | "%future added value";
+export type EventResult = "FAILURE" | "PARTIAL" | "SUCCESS" | "UNDEFINED" | "%future added value";
+export type ModelType = "CRUSTAL" | "SUBDUCTION" | "%future added value";
+export type TaskSubType = "HAZARD" | "INVERSIONS" | "RUPTURE_SETS" | "%future added value";
 export type GeneralTaskQueryVariables = {
     id: string;
 };
@@ -13,27 +14,21 @@ export type GeneralTaskQueryResponse = {
         readonly id?: string;
         readonly title?: string | null;
         readonly description?: string | null;
+        readonly notes?: string | null;
         readonly created?: unknown | null;
         readonly updated?: unknown | null;
         readonly agent_name?: string | null;
+        readonly model_type?: ModelType | null;
+        readonly subtask_type?: TaskSubType | null;
+        readonly subtask_count?: number | null;
+        readonly subtask_result?: EventResult | null;
+        readonly argument_lists?: ReadonlyArray<{
+            readonly k: string | null;
+            readonly v: ReadonlyArray<string | null> | null;
+        } | null> | null;
+        readonly swept_arguments?: ReadonlyArray<string | null> | null;
         readonly children?: {
             readonly total_count: number | null;
-            readonly edges: ReadonlyArray<{
-                readonly node: {
-                    readonly child: {
-                        readonly __typename: "RuptureGenerationTask";
-                        readonly id: string;
-                        readonly created: unknown | null;
-                        readonly duration: number | null;
-                        readonly state: EventState | null;
-                        readonly result: EventResult | null;
-                    } | {
-                        /*This will never be '%other', but we need some
-                        value in case none of the concrete values match.*/
-                        readonly __typename: "%other";
-                    };
-                } | null;
-            } | null>;
         } | null;
     } | null;
 };
@@ -54,31 +49,21 @@ query GeneralTaskQuery(
       id
       title
       description
+      notes
       created
       updated
       agent_name
+      model_type
+      subtask_type
+      subtask_count
+      subtask_result
+      argument_lists {
+        k
+        v
+      }
+      swept_arguments
       children {
         total_count
-        edges {
-          node {
-            child {
-              __typename
-              ... on RuptureGenerationTask {
-                __typename
-                id
-                created
-                duration
-                state
-                result
-              }
-              ... on Node {
-                __isNode: __typename
-                id
-              }
-            }
-            id
-          }
-        }
       }
     }
     id
@@ -126,56 +111,106 @@ v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "created",
+  "name": "notes",
   "storageKey": null
 },
 v6 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "updated",
+  "name": "created",
   "storageKey": null
 },
 v7 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "agent_name",
+  "name": "updated",
   "storageKey": null
 },
 v8 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "total_count",
+  "name": "agent_name",
   "storageKey": null
 },
 v9 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "__typename",
+  "name": "model_type",
   "storageKey": null
 },
 v10 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "duration",
+  "name": "subtask_type",
   "storageKey": null
 },
 v11 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "state",
+  "name": "subtask_count",
   "storageKey": null
 },
 v12 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "result",
+  "name": "subtask_result",
+  "storageKey": null
+},
+v13 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "KeyValueListPair",
+  "kind": "LinkedField",
+  "name": "argument_lists",
+  "plural": true,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "k",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "v",
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+},
+v14 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "swept_arguments",
+  "storageKey": null
+},
+v15 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "TaskTaskRelationConnection",
+  "kind": "LinkedField",
+  "name": "children",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "total_count",
+      "storageKey": null
+    }
+  ],
   "storageKey": null
 };
 return {
@@ -202,64 +237,14 @@ return {
               (v5/*: any*/),
               (v6/*: any*/),
               (v7/*: any*/),
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "TaskTaskRelationConnection",
-                "kind": "LinkedField",
-                "name": "children",
-                "plural": false,
-                "selections": [
-                  (v8/*: any*/),
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "TaskTaskRelationEdge",
-                    "kind": "LinkedField",
-                    "name": "edges",
-                    "plural": true,
-                    "selections": [
-                      {
-                        "alias": null,
-                        "args": null,
-                        "concreteType": "TaskTaskRelation",
-                        "kind": "LinkedField",
-                        "name": "node",
-                        "plural": false,
-                        "selections": [
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": null,
-                            "kind": "LinkedField",
-                            "name": "child",
-                            "plural": false,
-                            "selections": [
-                              {
-                                "kind": "InlineFragment",
-                                "selections": [
-                                  (v9/*: any*/),
-                                  (v2/*: any*/),
-                                  (v5/*: any*/),
-                                  (v10/*: any*/),
-                                  (v11/*: any*/),
-                                  (v12/*: any*/)
-                                ],
-                                "type": "RuptureGenerationTask",
-                                "abstractKey": null
-                              }
-                            ],
-                            "storageKey": null
-                          }
-                        ],
-                        "storageKey": null
-                      }
-                    ],
-                    "storageKey": null
-                  }
-                ],
-                "storageKey": null
-              }
+              (v8/*: any*/),
+              (v9/*: any*/),
+              (v10/*: any*/),
+              (v11/*: any*/),
+              (v12/*: any*/),
+              (v13/*: any*/),
+              (v14/*: any*/),
+              (v15/*: any*/)
             ],
             "type": "GeneralTask",
             "abstractKey": null
@@ -285,7 +270,13 @@ return {
         "name": "node",
         "plural": false,
         "selections": [
-          (v9/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "__typename",
+            "storageKey": null
+          },
           (v2/*: any*/),
           {
             "kind": "InlineFragment",
@@ -295,73 +286,14 @@ return {
               (v5/*: any*/),
               (v6/*: any*/),
               (v7/*: any*/),
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "TaskTaskRelationConnection",
-                "kind": "LinkedField",
-                "name": "children",
-                "plural": false,
-                "selections": [
-                  (v8/*: any*/),
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "TaskTaskRelationEdge",
-                    "kind": "LinkedField",
-                    "name": "edges",
-                    "plural": true,
-                    "selections": [
-                      {
-                        "alias": null,
-                        "args": null,
-                        "concreteType": "TaskTaskRelation",
-                        "kind": "LinkedField",
-                        "name": "node",
-                        "plural": false,
-                        "selections": [
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": null,
-                            "kind": "LinkedField",
-                            "name": "child",
-                            "plural": false,
-                            "selections": [
-                              (v9/*: any*/),
-                              {
-                                "kind": "InlineFragment",
-                                "selections": [
-                                  (v2/*: any*/),
-                                  (v5/*: any*/),
-                                  (v10/*: any*/),
-                                  (v11/*: any*/),
-                                  (v12/*: any*/)
-                                ],
-                                "type": "RuptureGenerationTask",
-                                "abstractKey": null
-                              },
-                              {
-                                "kind": "InlineFragment",
-                                "selections": [
-                                  (v2/*: any*/)
-                                ],
-                                "type": "Node",
-                                "abstractKey": "__isNode"
-                              }
-                            ],
-                            "storageKey": null
-                          },
-                          (v2/*: any*/)
-                        ],
-                        "storageKey": null
-                      }
-                    ],
-                    "storageKey": null
-                  }
-                ],
-                "storageKey": null
-              }
+              (v8/*: any*/),
+              (v9/*: any*/),
+              (v10/*: any*/),
+              (v11/*: any*/),
+              (v12/*: any*/),
+              (v13/*: any*/),
+              (v14/*: any*/),
+              (v15/*: any*/)
             ],
             "type": "GeneralTask",
             "abstractKey": null
@@ -372,14 +304,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "6ec29113cc306b1383c9d4f3ce8fe475",
+    "cacheID": "b9de43bb26d303af516c7ec290ad0851",
     "id": null,
     "metadata": {},
     "name": "GeneralTaskQuery",
     "operationKind": "query",
-    "text": "query GeneralTaskQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on GeneralTask {\n      id\n      title\n      description\n      created\n      updated\n      agent_name\n      children {\n        total_count\n        edges {\n          node {\n            child {\n              __typename\n              ... on RuptureGenerationTask {\n                __typename\n                id\n                created\n                duration\n                state\n                result\n              }\n              ... on Node {\n                __isNode: __typename\n                id\n              }\n            }\n            id\n          }\n        }\n      }\n    }\n    id\n  }\n}\n"
+    "text": "query GeneralTaskQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on GeneralTask {\n      id\n      title\n      description\n      notes\n      created\n      updated\n      agent_name\n      model_type\n      subtask_type\n      subtask_count\n      subtask_result\n      argument_lists {\n        k\n        v\n      }\n      swept_arguments\n      children {\n        total_count\n      }\n    }\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '3debc91b72c521df27a0925eeb95d99c';
+(node as any).hash = '5ef65933b62aa23529ad072d2a99cb47';
 export default node;
