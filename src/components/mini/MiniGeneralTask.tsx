@@ -42,31 +42,31 @@ const MiniGeneralTask: React.FC<MiniGeneralTaskProps> = ({
         <strong>Type: </strong> General Task
       </Typography>
       <Typography>
-        <strong>Title:</strong> {title}
+        <strong>Title: </strong> {title}
       </Typography>
       <Typography>
-        <strong>Description:</strong> {description}
+        <strong>Description: </strong> {description}
       </Typography>
       <Typography>
-        <strong>Notes</strong> {notes}
+        <strong>Notes: </strong> {notes}
       </Typography>
       <Typography>
-        <strong>Created:</strong> {formattedDate}
+        <strong>Created: </strong> {formattedDate}
       </Typography>
       <Typography>
-        <strong>Total count:</strong> {total_count}
+        <strong>Total count: </strong> {total_count}
       </Typography>
       <Typography>
-        <strong>Model Type:</strong> {model_type}
+        <strong>Model Type: </strong> {model_type}
       </Typography>
       <Typography>
-        <strong>Subtask Type</strong> {subtask_type}
+        <strong>Subtask Type: </strong> {subtask_type}
       </Typography>
       <Typography>
-        <strong>Subtask Result</strong> {subtask_result}
+        <strong>Subtask Result: </strong> {subtask_result}
       </Typography>
       <Typography>
-        <strong>Subtask Count</strong> {subtask_count}
+        <strong>Subtask Count: </strong> {subtask_count}
       </Typography>
       <Typography>
         <Link to={`/GeneralTask/${id}`}>[more]</Link>
