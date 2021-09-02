@@ -19,9 +19,18 @@ export interface InfoTableProps {
   duration?: number | null;
   result?: string | null;
   state?: string | null;
+  task_type?: string | null;
+  model_type?: string | null;
 }
 
-const InfoTable: React.FC<InfoTableProps> = ({ created, duration, result, state }: InfoTableProps) => {
+const InfoTable: React.FC<InfoTableProps> = ({
+  created,
+  duration,
+  result,
+  state,
+  task_type,
+  model_type,
+}: InfoTableProps) => {
   const classes = useStyles();
   const durationInterval = duration
     ? formatDuration(
@@ -34,7 +43,7 @@ const InfoTable: React.FC<InfoTableProps> = ({ created, duration, result, state 
 
   const formattedDate = created ? format(new Date(created), 'PPPppp') : '';
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={0} wrap={'nowrap'}>
       <Grid item xs={6}>
         <List dense>
           <ListItem>
@@ -45,7 +54,7 @@ const InfoTable: React.FC<InfoTableProps> = ({ created, duration, result, state 
           </ListItem>
         </List>
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={4}>
         <List dense>
           <ListItem>
             <ListItemText
@@ -63,6 +72,18 @@ const InfoTable: React.FC<InfoTableProps> = ({ created, duration, result, state 
           </ListItem>
         </List>
       </Grid>
+      {(task_type !== undefined || model_type !== undefined) && (
+        <Grid item xs={4}>
+          <List dense>
+            <ListItem>
+              <ListItemText primary="Task Type" secondary={task_type} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Model Type" secondary={model_type} />
+            </ListItem>
+          </List>
+        </Grid>
+      )}
     </Grid>
   );
 };
