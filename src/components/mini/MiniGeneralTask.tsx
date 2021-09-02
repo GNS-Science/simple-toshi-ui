@@ -69,9 +69,6 @@ const MiniGeneralTask: React.FC<MiniGeneralTaskProps> = ({
         <strong>Subtask Count</strong> {subtask_count}
       </Typography>
       <Typography>
-        <strong>Total count:</strong> {total_count}
-      </Typography>
-      <Typography>
         <Link to={`/GeneralTask/${id}`}>[more]</Link>
       </Typography>
     </Card>
