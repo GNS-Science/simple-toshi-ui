@@ -54,6 +54,38 @@ describe('Search component', () => {
     expect(await findByText('[more]')).toHaveAttribute('href', '/FileDetail/file-id');
   });
 
+  it('displays a MiniAutomationTask', async () => {
+    const environment = createMockEnvironment();
+
+    const mockResolver = {
+      Search: () => ({
+        search_result: {
+          edges: [
+            {
+              node: {
+                __typename: 'AutomationTask',
+                id: 'automationTask-id',
+                duration: 60,
+                created: '2021-06-10T10:36:05.560362+00:00',
+              },
+            },
+          ],
+        },
+      }),
+    };
+
+    environment.mock.queueOperationResolver((operation) => MockPayloadGenerator.generate(operation, mockResolver));
+    environment.mock.queuePendingOperation(searchQuery, { search: 'test' });
+
+    const { findByText, findByDisplayValue } = setup(environment);
+    const searchInput = await findByDisplayValue('');
+    const searchButton = await findByText('Search');
+    userEvent.type(searchInput, 'test');
+    userEvent.click(searchButton);
+    expect(await findByText('Automation Task'));
+    expect(await findByText('[more]')).toHaveAttribute('href', '/AutomationTask/automationTask-id');
+  });
+
   it('displays a MiniRuptureGenerationTask', async () => {
     const environment = createMockEnvironment();
 
