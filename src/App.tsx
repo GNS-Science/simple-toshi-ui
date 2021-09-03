@@ -33,6 +33,7 @@ import PreviewLineMFD from './components/PreviewLineMFD';
 import RuptureSetViews from './components/RuptureSetViews';
 import HazardMap from './components/HazardMap';
 import Find from './components/Find';
+import AutomationTask from './components/AutomationTask';
 
 const useStyles = makeStyles({
   root: {
@@ -157,6 +158,9 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
               </Route>
               <Route path="/GeneralTask/:id">
                 <GeneralTask />
+              </Route>
+              <Route path="/AutomationTask/:id">
+                <AutomationTask />
               </Route>
               <Route path="/Find/:id?">
                 <Find />

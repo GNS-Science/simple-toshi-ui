@@ -16,7 +16,112 @@ type AppendInversionSolutionTablesPayload {
   clientMutationId: String
 }
 
-union ChildTaskUnion = GeneralTask | RuptureGenerationTask
+"""An AutomationTask in the NSHM process"""
+type AutomationTask implements Node & Thing & AutomationTaskInterface {
+  """The ID of the object."""
+  id: ID!
+
+  """The time the event was created"""
+  created: DateTime
+
+  """Files associated with this object."""
+  files(before: String, after: String, first: Int, last: Int): FileRelationConnection
+  result: EventResult
+  state: EventState
+
+  """the final duration of the event in seconds"""
+  duration: Float
+
+  """parent task(s) of this task"""
+  parents(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
+
+  """
+  input arguments for the rupture generation task, as a list of Key Value pairs.
+  """
+  arguments: [KeyValuePair]
+
+  """execution environment details, as a list of Key Value pairs."""
+  environment: [KeyValuePair]
+
+  """result metrics from the task, as a list of Key Value pairs."""
+  metrics: [KeyValuePair]
+  model_type: ModelType
+  task_type: TaskSubType
+}
+
+input AutomationTaskInput {
+  result: EventResult!
+  state: EventState!
+
+  """The time the task was created"""
+  created: DateTime!
+
+  """The final duraton of the task in seconds"""
+  duration: Float
+
+  """
+  input arguments for the rupture generation task, as a list of Key Value pairs.
+  """
+  arguments: [KeyValuePairInput]
+
+  """execution environment details, as a list of Key Value pairs."""
+  environment: [KeyValuePairInput]
+
+  """result metrics from the task, as a list of Key Value pairs."""
+  metrics: [KeyValuePairInput]
+}
+
+"""An AutomationTask in the NSHM process"""
+interface AutomationTaskInterface {
+  result: EventResult
+  state: EventState
+
+  """The time the event was created"""
+  created: DateTime
+
+  """the final duration of the event in seconds"""
+  duration: Float
+
+  """parent task(s) of this task"""
+  parents(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
+
+  """
+  input arguments for the rupture generation task, as a list of Key Value pairs.
+  """
+  arguments: [KeyValuePair]
+
+  """execution environment details, as a list of Key Value pairs."""
+  environment: [KeyValuePair]
+
+  """result metrics from the task, as a list of Key Value pairs."""
+  metrics: [KeyValuePair]
+}
+
+input AutomationTaskUpdateInput {
+  task_id: ID!
+  result: EventResult
+  state: EventState
+
+  """The final duraton of the task in seconds"""
+  duration: Float
+
+  """
+  input arguments for the rupture generation task, as a list of Key Value pairs.
+  """
+  arguments: [KeyValuePairInput]
+
+  """execution environment details, as a list of Key Value pairs."""
+  environment: [KeyValuePairInput]
+
+  """result metrics from the task, as a list of Key Value pairs."""
+  metrics: [KeyValuePairInput]
+}
+
+union ChildTaskUnion = GeneralTask | RuptureGenerationTask | AutomationTask
+
+type CreateAutomationTask {
+  task_result: AutomationTask
+}
 
 type CreateFile {
   ok: Boolean
@@ -63,32 +168,6 @@ type CreateGeneralTaskPayload {
   clientMutationId: String
 }
 
-input CreateGrandInversionTaskInput {
-  result: EventResult!
-  state: EventState!
-
-  """The time the task was created"""
-  created: DateTime
-
-  """The final duraton of the task in seconds"""
-  duration: Float
-
-  """The input arguments for the Rupture generator"""
-  arguments: GrandInversionArgsInput
-
-  """The metrics from rupture generation"""
-  metrics: GrandInversionMetricsInput
-
-  """The git references for the software"""
-  git_refs: GitReferencesInput
-  clientMutationId: String
-}
-
-type CreateGrandInversionTaskPayload {
-  task_result: GrandInversionTask
-  clientMutationId: String
-}
-
 input CreateInversionSolutionInput {
   """The name of the file"""
   file_name: String
@@ -125,32 +204,8 @@ type CreateInversionSolutionPayload {
   clientMutationId: String
 }
 
-input CreateRuptureGenerationTaskInput {
-  result: EventResult!
-  state: EventState!
-
-  """The time the task was created"""
-  created: DateTime!
-
-  """The final duraton of the task in seconds"""
-  duration: Float
-
-  """
-  input arguments for the rupture generation task, as a list of Key Value pairs.
-  """
-  arguments: [KeyValuePairInput]
-
-  """execution environment details, as a list of Key Value pairs."""
-  environment: [KeyValuePairInput]
-
-  """result metrics from the task, as a list of Key Value pairs."""
-  metrics: [KeyValuePairInput]
-  clientMutationId: String
-}
-
-type CreateRuptureGenerationTaskPayload {
+type CreateRuptureGenerationTask {
   task_result: RuptureGenerationTask
-  clientMutationId: String
 }
 
 type CreateSmsFile {
@@ -242,38 +297,6 @@ value as specified by
 [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
 """
 scalar DateTime
-
-"""Arguments passed into the opensha Grand Inversion task"""
-input EnergyChangeCompletionCriteriaInput {
-  """
-  The minimum absolute delta (previousE - e ) to signifiy completion. Set to 0 to ignore.
-  """
-  energy_delta: Float
-
-  """
-  The minimum percentage delta (e as percentage of previousE) to signifiy completion. Set to 0 to ignore.
-  """
-  energy_percent_delta: Float
-
-  """How many minutes to look back for the previousE value"""
-  look_back_mins: Float
-}
-
-"""Arguments passed into the opensha Grand Inversion task"""
-type EnergyChangeCompletionCriteriaOutput {
-  """
-  The minimum absolute delta (previousE - e ) to signifiy completion. Set to 0 to ignore.
-  """
-  energy_delta: Float
-
-  """
-  The minimum percentage delta (e as percentage of previousE) to signifiy completion. Set to 0 to ignore.
-  """
-  energy_percent_delta: Float
-
-  """How many minutes to look back for the previousE value"""
-  look_back_mins: Float
-}
 
 enum EventResult {
   FAILURE
@@ -447,170 +470,6 @@ type GeneralTask implements Node & Thing {
   parents(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
 }
 
-"""Arguments passed into the opensha Rupture Generator"""
-input GitReferencesInput {
-  """git ref for opensha-ucerf3"""
-  opensha_ucerf3: String
-
-  """git ref for opensha-commons"""
-  opensha_commons: String
-
-  """git ref for opensha-core"""
-  opensha_core: String
-
-  """git ref for nshm-nz-opensha"""
-  nshm_nz_opensha: String
-}
-
-"""Arguments passed into the opensha Rupture Generator"""
-type GitReferencesOutput {
-  """git ref for opensha-ucerf3"""
-  opensha_ucerf3: String
-
-  """git ref for opensha-commons"""
-  opensha_commons: String
-
-  """git ref for opensha-core"""
-  opensha_core: String
-
-  """git ref for nshm-nz-opensha"""
-  nshm_nz_opensha: String
-}
-
-"""Arguments passed into the opensha Grand Inversion task"""
-input GrandInversionArgsInput {
-  """interval in seconds between annealing thread syncs"""
-  sync_interval: Int
-  gutenberg_richter_mfd: GutenbergRichterMFDInput
-  energy_completion_criteria: EnergyChangeCompletionCriteriaInput
-  time_completion_criteria: TimeCompletionCriteriaInput
-  constraints: [GrandInversionConstraintInput]
-}
-
-"""Arguments passed into the opensha Grand Inversion task"""
-type GrandInversionArgsOutput {
-  """interval in seconds between annealing thread syncs"""
-  sync_interval: Int
-  gutenberg_richter_mfd: GutenbergRichterMFDOutput
-  energy_completion_criteria: EnergyChangeCompletionCriteriaOutput
-  time_completion_criteria: TimeCompletionCriteriaOutput
-  constraints: [GrandInversionConstraintOutput]
-}
-
-"""Arguments passed into the opensha Grand Inversion task"""
-input GrandInversionConstraintInput {
-  constraint_type: GrandInversionConstraintType
-
-  """Weighting for this constraint"""
-  constraint_weight: Int
-}
-
-"""Arguments passed into the opensha Grand Inversion task"""
-type GrandInversionConstraintOutput {
-  constraint_type: GrandInversionConstraintType
-
-  """Weighting for this constraint"""
-  constraint_weight: Int
-}
-
-"""supported contraints"""
-enum GrandInversionConstraintType {
-  MFD_Inequality
-  MFD_Equality
-  Slip_Rate
-}
-
-"""The metrics returned from the opensha Rupture Generator"""
-input GrandInversionMetricsInput {
-  """Final inversion energy total."""
-  total_energy: Float
-
-  """Count of fault subsections."""
-  subsection_count: Int
-}
-
-"""The metrics returned from the opensha Rupture Generator"""
-type GrandInversionMetricsOutput {
-  """Final inversion energy total."""
-  total_energy: Float
-
-  """Count of fault subsections."""
-  subsection_count: Int
-}
-
-"""An GrandInversionTask in the NSHM process"""
-type GrandInversionTask implements Node & Thing {
-  """The ID of the object."""
-  id: ID!
-
-  """The time the event was created"""
-  created: DateTime
-
-  """Files associated with this object."""
-  files(before: String, after: String, first: Int, last: Int): FileRelationConnection
-  result: EventResult
-  state: EventState
-
-  """the final duraton of the event in seconds"""
-  duration: Float
-
-  """parent task(s) of this task"""
-  parents(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
-  arguments: GrandInversionArgsOutput
-  metrics: GrandInversionMetricsOutput
-  git_refs: GitReferencesOutput
-}
-
-input GutenbergRichterMFDInput {
-  """
-  The expected number of M>=5's ruptures per year. TODO: OK? ref David Rhodes/Chris Roland? [KKS, CBC]
-  """
-  total_rate_m5: Float
-
-  """G-R b-value"""
-  b_value: Float
-
-  """Minimum magnitude 5.05d"""
-  mfd_min: Float
-
-  """Maximum magnitude 8.85d"""
-  mfd_max: Float
-
-  """
-  magnitude to switch from MFD equality to MFD inequality. TODO: how to validate
-  this number for NZ? (ref Morgan Page in USGS/UCERF3) [KKS, CBC]
-  """
-  mfd_transition_mag: Float
-
-  """Number of MFD buckets?"""
-  mfd_num: Int
-}
-
-type GutenbergRichterMFDOutput {
-  """
-  The expected number of M>=5's ruptures per year. TODO: OK? ref David Rhodes/Chris Roland? [KKS, CBC]
-  """
-  total_rate_m5: Float
-
-  """G-R b-value"""
-  b_value: Float
-
-  """Minimum magnitude 5.05d"""
-  mfd_min: Float
-
-  """Maximum magnitude 8.85d"""
-  mfd_max: Float
-
-  """
-  magnitude to switch from MFD equality to MFD inequality. TODO: how to validate
-  this number for NZ? (ref Morgan Page in USGS/UCERF3) [KKS, CBC]
-  """
-  mfd_transition_mag: Float
-
-  """Number of MFD buckets?"""
-  mfd_num: Int
-}
-
 """Represents an Inversion Solution file"""
 type InversionSolution implements Node & FileInterface {
   """The ID of the object."""
@@ -750,8 +609,9 @@ enum ModelType {
 }
 
 type MutationRoot {
-  create_rupture_generation_task(input: CreateRuptureGenerationTaskInput!): CreateRuptureGenerationTaskPayload
-  update_rupture_generation_task(input: UpdateRuptureGenerationTaskInput!): UpdateRuptureGenerationTaskPayload
+  """Append LabelledTableRelationTable to an existing Inversion Solution"""
+  append_inversion_solution_tables(input: AppendInversionSolutionTablesInput!): AppendInversionSolutionTablesPayload
+  create_automation_task(input: NewAutomationTaskInput!): CreateAutomationTask
   create_file(
     file_name: String
     file_size: Int
@@ -761,19 +621,42 @@ type MutationRoot {
     meta: [KeyValuePairInput]
   ): CreateFile
   create_file_relation(file_id: ID!, role: FileRole!, thing_id: ID!): CreateFileRelation
-  create_strong_motion_station(input: CreateStrongMotionStationInput!): CreateStrongMotionStationPayload
-  create_sms_file(file_name: String, file_size: Int, file_type: SmsFileType!, md5_digest: String = "The base64-encoded md5 digest of the file"): CreateSmsFile
   create_general_task(input: CreateGeneralTaskInput!): CreateGeneralTaskPayload
-  update_general_task(input: UpdateGeneralTaskInput!): UpdateGeneralTaskPayload
-  create_task_relation(child_id: ID!, parent_id: ID!): CreateTaskTaskRelation
-  create_grand_inversion_task(input: CreateGrandInversionTaskInput!): CreateGrandInversionTaskPayload
-  create_table(input: CreateTableInput!): CreateTablePayload
 
   """Create an Inversion Solution file"""
   create_inversion_solution(input: CreateInversionSolutionInput!): CreateInversionSolutionPayload
+  create_rupture_generation_task(input: AutomationTaskInput!): CreateRuptureGenerationTask
+  create_sms_file(file_name: String, file_size: Int, file_type: SmsFileType!, md5_digest: String = "The base64-encoded md5 digest of the file"): CreateSmsFile
+  create_strong_motion_station(input: CreateStrongMotionStationInput!): CreateStrongMotionStationPayload
+  create_table(input: CreateTableInput!): CreateTablePayload
+  create_task_relation(child_id: ID!, parent_id: ID!): CreateTaskTaskRelation
+  update_automation_task(input: AutomationTaskUpdateInput!): UpdateAutomationTask
+  update_general_task(input: UpdateGeneralTaskInput!): UpdateGeneralTaskPayload
+  update_rupture_generation_task(input: AutomationTaskUpdateInput!): UpdateRuptureGenerationTask
+}
 
-  """Append LabelledTableRelationTable to an existing Inversion Solution"""
-  append_inversion_solution_tables(input: AppendInversionSolutionTablesInput!): AppendInversionSolutionTablesPayload
+input NewAutomationTaskInput {
+  result: EventResult!
+  state: EventState!
+
+  """The time the task was created"""
+  created: DateTime!
+
+  """The final duraton of the task in seconds"""
+  duration: Float
+
+  """
+  input arguments for the rupture generation task, as a list of Key Value pairs.
+  """
+  arguments: [KeyValuePairInput]
+
+  """execution environment details, as a list of Key Value pairs."""
+  environment: [KeyValuePairInput]
+
+  """result metrics from the task, as a list of Key Value pairs."""
+  metrics: [KeyValuePairInput]
+  model_type: ModelType
+  task_type: TaskSubType!
 }
 
 """An object with an ID"""
@@ -828,7 +711,7 @@ enum RowItemType {
 }
 
 """An RuptureGenerationTask in the NSHM process"""
-type RuptureGenerationTask implements Node & Thing {
+type RuptureGenerationTask implements Node & Thing & AutomationTaskInterface {
   """The ID of the object."""
   id: ID!
 
@@ -882,7 +765,7 @@ type Search {
   search_result(before: String, after: String, first: Int, last: Int): SearchResultConnection
 }
 
-union SearchResult = File | RuptureGenerationTask | StrongMotionStation | SmsFile | GeneralTask | GrandInversionTask | Table | InversionSolution
+union SearchResult = File | RuptureGenerationTask | StrongMotionStation | SmsFile | GeneralTask | Table | InversionSolution | AutomationTask
 
 type SearchResultConnection {
   """Pagination data for this connection."""
@@ -1054,9 +937,10 @@ enum TableType {
 }
 
 enum TaskSubType {
-  RUPTURE_SETS
-  INVERSIONS
+  RUPTURE_SET
+  INVERSION
   HAZARD
+  REPORT
 }
 
 type TaskTaskRelation implements Node {
@@ -1095,14 +979,8 @@ interface Thing {
   files(before: String, after: String, first: Int, last: Int): FileRelationConnection
 }
 
-input TimeCompletionCriteriaInput {
-  """the number of minutes to run (maximum)"""
-  minutes: Int
-}
-
-type TimeCompletionCriteriaOutput {
-  """the number of minutes to run (maximum)"""
-  minutes: Int
+type UpdateAutomationTask {
+  task_result: AutomationTask
 }
 
 input UpdateGeneralTaskInput {
@@ -1145,32 +1023,7 @@ type UpdateGeneralTaskPayload {
   clientMutationId: String
 }
 
-input UpdateRuptureGenerationTaskInput {
-  task_id: ID!
-  result: EventResult
-  state: EventState
-
-  """The time the task was created"""
-  created: DateTime
-
-  """The final duraton of the task in seconds"""
-  duration: Float
-
-  """
-  input arguments for the rupture generation task, as a list of Key Value pairs.
-  """
-  arguments: [KeyValuePairInput]
-
-  """execution environment details, as a list of Key Value pairs."""
-  environment: [KeyValuePairInput]
-
-  """result metrics from the task, as a list of Key Value pairs."""
-  metrics: [KeyValuePairInput]
-  clientMutationId: String
-}
-
-type UpdateRuptureGenerationTaskPayload {
+type UpdateRuptureGenerationTask {
   task_result: RuptureGenerationTask
-  clientMutationId: String
 }
 
