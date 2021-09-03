@@ -1,7 +1,8 @@
 import React from 'react';
-import { Card, makeStyles, Typography } from '@material-ui/core';
+import { Card, Grid, List, ListItem, makeStyles, Tooltip, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
+import ReactMarkdown from 'react-markdown';
 
 interface MiniGeneralTaskProps {
   id?: string;
@@ -39,35 +40,62 @@ const MiniGeneralTask: React.FC<MiniGeneralTaskProps> = ({
   return (
     <Card className={classes.root}>
       <Typography>
-        <strong>Type: </strong> General Task
+        <strong>Type: General Task</strong>
       </Typography>
       <Typography>
         <strong>Title: </strong> {title}
       </Typography>
       <Typography>
-        <strong>Description: </strong> {description}
-      </Typography>
-      <Typography>
-        <strong>Notes: </strong> {notes}
-      </Typography>
-      <Typography>
         <strong>Created: </strong> {formattedDate}
       </Typography>
-      <Typography>
-        <strong>Total count: </strong> {total_count}
-      </Typography>
-      <Typography>
-        <strong>Model Type: </strong> {model_type}
-      </Typography>
-      <Typography>
-        <strong>Subtask Type: </strong> {subtask_type}
-      </Typography>
-      <Typography>
-        <strong>Subtask Result: </strong> {subtask_result}
-      </Typography>
-      <Typography>
-        <strong>Subtask Count: </strong> {subtask_count}
-      </Typography>
+      <Grid container spacing={3}>
+        <Grid item xs={5}>
+          <List dense>
+            <ListItem disableGutters={true}>
+              <Typography>
+                <strong>Subtask Type: </strong> {subtask_type}
+              </Typography>
+            </ListItem>
+            <ListItem disableGutters={true}>
+              <Typography>
+                <strong>Count: </strong>
+                <Tooltip title="totle count">
+                  <span>{total_count ?? 0}</span>
+                </Tooltip>
+                <Tooltip title="subtask count">
+                  <span>/{subtask_count}</span>
+                </Tooltip>
+              </Typography>
+            </ListItem>
+          </List>
+        </Grid>
+        <Grid item xs={6}>
+          <List dense>
+            <ListItem disableGutters={true}>
+              <Typography>
+                <strong>Model Type: </strong> {model_type}
+              </Typography>
+            </ListItem>
+            <ListItem disableGutters={true}>
+              <Typography>
+                <strong>Subtask Result: </strong> {subtask_result}
+              </Typography>
+            </ListItem>
+          </List>
+        </Grid>
+      </Grid>
+      {description && (
+        <Typography>
+          <strong>Description: </strong>
+          <ReactMarkdown>{description}</ReactMarkdown>
+        </Typography>
+      )}
+      {notes && (
+        <Typography>
+          <strong>Notes: </strong>
+          <ReactMarkdown>{notes}</ReactMarkdown>
+        </Typography>
+      )}
       <Typography>
         <Link to={`/GeneralTask/${id}`}>[more]</Link>
       </Typography>
