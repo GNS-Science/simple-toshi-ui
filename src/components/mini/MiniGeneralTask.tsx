@@ -85,16 +85,20 @@ const MiniGeneralTask: React.FC<MiniGeneralTaskProps> = ({
         </Grid>
       </Grid>
       {description && (
-        <Typography>
-          <strong>Description: </strong>
+        <>
+          <Typography>
+            <strong>Description: </strong>
+          </Typography>
           <ReactMarkdown>{description}</ReactMarkdown>
-        </Typography>
+        </>
       )}
       {notes && (
-        <Typography>
-          <strong>Notes: </strong>
+        <>
+          <Typography>
+            <strong>Notes: </strong>
+          </Typography>
           <ReactMarkdown>{notes}</ReactMarkdown>
-        </Typography>
+        </>
       )}
       <Typography>
         <Link to={`/GeneralTask/${id}`}>[more]</Link>
