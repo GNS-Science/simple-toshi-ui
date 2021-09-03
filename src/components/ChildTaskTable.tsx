@@ -46,6 +46,14 @@ export interface ChildTaskTableProps {
         readonly result: EventResult | null;
       }
     | {
+        readonly __typename: 'AutomationTask';
+        readonly id: string;
+        readonly created: unknown | null;
+        readonly duration: number | null;
+        readonly state: EventState | null;
+        readonly result: EventResult | null;
+      }
+    | {
         readonly __typename: '%other';
       }
     | undefined
@@ -104,6 +112,33 @@ const ChildTaskTable: React.FC<ChildTaskTableProps> = ({ data }: ChildTaskTableP
                     </TableCell>
                     <TableCell className={classes.tableCell}>
                       <Link to={`/RuptureGenerationTask/${e?.id}`}>[more]</Link>
+                    </TableCell>
+                  </AlternatingRow>
+                );
+              } else if (e?.__typename === 'AutomationTask') {
+                return (
+                  <AlternatingRow key={e?.id}>
+                    <TableCell className={classes.tableCell}>
+                      {e?.created ? format(new Date(e?.created as string), 'PPPppp') : ''}
+                    </TableCell>
+                    <TableCell className={classes.tableCell}>
+                      {e?.duration
+                        ? formatDuration(
+                            intervalToDuration({
+                              start: 0,
+                              end: secondsToMilliseconds(e?.duration),
+                            }),
+                          )
+                        : '-'}
+                    </TableCell>
+                    <TableCell className={classes.tableCell}>
+                      <span className={e?.state === 'DONE' ? classes.success : classes.warning}> {e?.state}</span>
+                    </TableCell>
+                    <TableCell className={classes.tableCell}>
+                      <span className={e?.result === 'SUCCESS' ? classes.success : classes.failure}> {e?.result}</span>
+                    </TableCell>
+                    <TableCell className={classes.tableCell}>
+                      <Link to={`/AutomationTask/${e?.id}`}>[more]</Link>
                     </TableCell>
                   </AlternatingRow>
                 );
