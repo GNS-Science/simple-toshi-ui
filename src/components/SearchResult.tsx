@@ -51,7 +51,12 @@ const SearchResult: React.FC<SearchResultProps> = ({ queryRef }: SearchResultPro
                   created={edge?.node?.created ? (edge?.node?.created as string) : undefined}
                   title={edge?.node?.title}
                   description={edge?.node?.description}
+                  notes={edge?.node?.notes}
                   total_count={edge?.node?.children?.total_count}
+                  model_type={edge?.node?.model_type}
+                  subtask_type={edge?.node?.subtask_type}
+                  subtask_result={edge?.node?.subtask_result}
+                  subtask_count={edge?.node?.subtask_count}
                 />
               );
             }

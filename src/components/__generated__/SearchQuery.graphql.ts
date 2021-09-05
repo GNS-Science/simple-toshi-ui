@@ -5,6 +5,8 @@
 import { ConcreteRequest } from "relay-runtime";
 export type EventResult = "FAILURE" | "PARTIAL" | "SUCCESS" | "UNDEFINED" | "%future added value";
 export type EventState = "DONE" | "SCHEDULED" | "STARTED" | "UNDEFINED" | "%future added value";
+export type ModelType = "CRUSTAL" | "SUBDUCTION" | "%future added value";
+export type TaskSubType = "HAZARD" | "INVERSIONS" | "RUPTURE_SETS" | "%future added value";
 export type SearchQueryVariables = {
     search: string;
 };
@@ -23,7 +25,12 @@ export type SearchQueryResponse = {
                     readonly state?: EventState | null;
                     readonly result?: EventResult | null;
                     readonly description?: string | null;
+                    readonly notes?: string | null;
                     readonly title?: string | null;
+                    readonly model_type?: ModelType | null;
+                    readonly subtask_type?: TaskSubType | null;
+                    readonly subtask_count?: number | null;
+                    readonly subtask_result?: EventResult | null;
                     readonly children?: {
                         readonly total_count: number | null;
                     } | null;
@@ -61,8 +68,13 @@ query SearchQuery(
           }
           ... on GeneralTask {
             description
+            notes
             title
             created
+            model_type
+            subtask_type
+            subtask_count
+            subtask_result
             children {
               total_count
             }
@@ -205,10 +217,45 @@ v3 = [
                         "alias": null,
                         "args": null,
                         "kind": "ScalarField",
+                        "name": "notes",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
                         "name": "title",
                         "storageKey": null
                       },
                       (v2/*: any*/),
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "model_type",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "subtask_type",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "subtask_count",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "subtask_result",
+                        "storageKey": null
+                      },
                       {
                         "alias": null,
                         "args": null,
@@ -277,14 +324,14 @@ return {
     "selections": (v3/*: any*/)
   },
   "params": {
-    "cacheID": "5e438e3e268612ee2121ed1c0ddfb68c",
+    "cacheID": "c1b3537b7dddf1e9dc83003bfc5112fe",
     "id": null,
     "metadata": {},
     "name": "SearchQuery",
     "operationKind": "query",
-    "text": "query SearchQuery(\n  $search: String!\n) {\n  search(search_term: $search) {\n    search_result {\n      total_count\n      edges {\n        node {\n          __typename\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n          ... on RuptureGenerationTask {\n            created\n            duration\n            state\n            result\n          }\n          ... on GeneralTask {\n            description\n            title\n            created\n            children {\n              total_count\n            }\n          }\n          ... on FileInterface {\n            __isFileInterface: __typename\n            file_name\n            file_size\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query SearchQuery(\n  $search: String!\n) {\n  search(search_term: $search) {\n    search_result {\n      total_count\n      edges {\n        node {\n          __typename\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n          ... on RuptureGenerationTask {\n            created\n            duration\n            state\n            result\n          }\n          ... on GeneralTask {\n            description\n            notes\n            title\n            created\n            model_type\n            subtask_type\n            subtask_count\n            subtask_result\n            children {\n              total_count\n            }\n          }\n          ... on FileInterface {\n            __isFileInterface: __typename\n            file_name\n            file_size\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'd5069a93835591c3bdd132147bfbcded';
+(node as any).hash = 'd85db787686c9d78e641106419014811';
 export default node;
