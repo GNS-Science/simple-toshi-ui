@@ -6,11 +6,11 @@ import { searchQuery } from './Search';
 import MiniFile from './mini/MiniFile';
 import MiniRuptureGenerationTask from './mini/MiniRuptureGenerationTask';
 import MiniGeneralTask from './mini/MiniGeneralTask';
+import MiniAutomationTask from './mini/MiniAutomationTask';
 
 interface SearchResultProps {
   queryRef: PreloadedQuery<SearchQuery, Record<string, unknown>>;
 }
-
 const SearchResult: React.FC<SearchResultProps> = ({ queryRef }: SearchResultProps) => {
   const data = usePreloadedQuery<SearchQuery>(searchQuery, queryRef);
   return (
@@ -41,6 +41,22 @@ const SearchResult: React.FC<SearchResultProps> = ({ queryRef }: SearchResultPro
                   state={edge?.node?.state}
                   result={edge?.node?.result}
                 />
+              );
+            }
+            case 'AutomationTask': {
+              return (
+                <>
+                  <MiniAutomationTask
+                    key={edge?.node?.id}
+                    id={edge?.node?.id}
+                    created={edge?.node?.created ? (edge?.node?.created as string) : undefined}
+                    state={edge?.node?.state}
+                    result={edge?.node?.result}
+                    task_type={edge?.node?.task_type}
+                    model_type={edge?.node?.model_type}
+                  />
+                  <p>hello</p>
+                </>
               );
             }
             case 'GeneralTask': {

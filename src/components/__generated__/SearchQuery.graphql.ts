@@ -6,7 +6,7 @@ import { ConcreteRequest } from "relay-runtime";
 export type EventResult = "FAILURE" | "PARTIAL" | "SUCCESS" | "UNDEFINED" | "%future added value";
 export type EventState = "DONE" | "SCHEDULED" | "STARTED" | "UNDEFINED" | "%future added value";
 export type ModelType = "CRUSTAL" | "SUBDUCTION" | "%future added value";
-export type TaskSubType = "HAZARD" | "INVERSIONS" | "RUPTURE_SETS" | "%future added value";
+export type TaskSubType = "HAZARD" | "INVERSION" | "REPORT" | "RUPTURE_SET" | "%future added value";
 export type SearchQueryVariables = {
     search: string;
 };
@@ -24,10 +24,11 @@ export type SearchQueryResponse = {
                     readonly duration?: number | null;
                     readonly state?: EventState | null;
                     readonly result?: EventResult | null;
+                    readonly task_type?: TaskSubType | null;
+                    readonly model_type?: ModelType | null;
                     readonly description?: string | null;
                     readonly notes?: string | null;
                     readonly title?: string | null;
-                    readonly model_type?: ModelType | null;
                     readonly subtask_type?: TaskSubType | null;
                     readonly subtask_count?: number | null;
                     readonly subtask_result?: EventResult | null;
@@ -59,6 +60,14 @@ query SearchQuery(
           ... on Node {
             __isNode: __typename
             id
+          }
+          ... on AutomationTask {
+            created
+            duration
+            state
+            result
+            task_type
+            model_type
           }
           ... on RuptureGenerationTask {
             created
@@ -113,7 +122,35 @@ v2 = {
   "name": "created",
   "storageKey": null
 },
-v3 = [
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "duration",
+  "storageKey": null
+},
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "state",
+  "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "result",
+  "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "model_type",
+  "storageKey": null
+},
+v7 = [
   {
     "alias": null,
     "args": [
@@ -178,27 +215,28 @@ v3 = [
                     "kind": "InlineFragment",
                     "selections": [
                       (v2/*: any*/),
+                      (v3/*: any*/),
+                      (v4/*: any*/),
+                      (v5/*: any*/),
                       {
                         "alias": null,
                         "args": null,
                         "kind": "ScalarField",
-                        "name": "duration",
+                        "name": "task_type",
                         "storageKey": null
                       },
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "state",
-                        "storageKey": null
-                      },
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "result",
-                        "storageKey": null
-                      }
+                      (v6/*: any*/)
+                    ],
+                    "type": "AutomationTask",
+                    "abstractKey": null
+                  },
+                  {
+                    "kind": "InlineFragment",
+                    "selections": [
+                      (v2/*: any*/),
+                      (v3/*: any*/),
+                      (v4/*: any*/),
+                      (v5/*: any*/)
                     ],
                     "type": "RuptureGenerationTask",
                     "abstractKey": null
@@ -228,13 +266,7 @@ v3 = [
                         "storageKey": null
                       },
                       (v2/*: any*/),
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "model_type",
-                        "storageKey": null
-                      },
+                      (v6/*: any*/),
                       {
                         "alias": null,
                         "args": null,
@@ -312,7 +344,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "SearchQuery",
-    "selections": (v3/*: any*/),
+    "selections": (v7/*: any*/),
     "type": "QueryRoot",
     "abstractKey": null
   },
@@ -321,17 +353,17 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "SearchQuery",
-    "selections": (v3/*: any*/)
+    "selections": (v7/*: any*/)
   },
   "params": {
-    "cacheID": "c1b3537b7dddf1e9dc83003bfc5112fe",
+    "cacheID": "b46ae4eb7f56f1293fc7c9a619e5e483",
     "id": null,
     "metadata": {},
     "name": "SearchQuery",
     "operationKind": "query",
-    "text": "query SearchQuery(\n  $search: String!\n) {\n  search(search_term: $search) {\n    search_result {\n      total_count\n      edges {\n        node {\n          __typename\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n          ... on RuptureGenerationTask {\n            created\n            duration\n            state\n            result\n          }\n          ... on GeneralTask {\n            description\n            notes\n            title\n            created\n            model_type\n            subtask_type\n            subtask_count\n            subtask_result\n            children {\n              total_count\n            }\n          }\n          ... on FileInterface {\n            __isFileInterface: __typename\n            file_name\n            file_size\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query SearchQuery(\n  $search: String!\n) {\n  search(search_term: $search) {\n    search_result {\n      total_count\n      edges {\n        node {\n          __typename\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n          ... on AutomationTask {\n            created\n            duration\n            state\n            result\n            task_type\n            model_type\n          }\n          ... on RuptureGenerationTask {\n            created\n            duration\n            state\n            result\n          }\n          ... on GeneralTask {\n            description\n            notes\n            title\n            created\n            model_type\n            subtask_type\n            subtask_count\n            subtask_result\n            children {\n              total_count\n            }\n          }\n          ... on FileInterface {\n            __isFileInterface: __typename\n            file_name\n            file_size\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'd85db787686c9d78e641106419014811';
+(node as any).hash = 'b44ed9aca798ff28016ddbcc1ed433dc';
 export default node;

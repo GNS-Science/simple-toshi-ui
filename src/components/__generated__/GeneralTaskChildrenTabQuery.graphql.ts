@@ -15,6 +15,13 @@ export type GeneralTaskChildrenTabQueryResponse = {
             readonly edges: ReadonlyArray<{
                 readonly node: {
                     readonly child: {
+                        readonly __typename: "AutomationTask";
+                        readonly id: string;
+                        readonly created: unknown | null;
+                        readonly duration: number | null;
+                        readonly state: EventState | null;
+                        readonly result: EventResult | null;
+                    } | {
                         readonly __typename: "RuptureGenerationTask";
                         readonly id: string;
                         readonly created: unknown | null;
@@ -51,6 +58,14 @@ query GeneralTaskChildrenTabQuery(
           node {
             child {
               __typename
+              ... on AutomationTask {
+                __typename
+                id
+                created
+                duration
+                state
+                result
+              }
               ... on RuptureGenerationTask {
                 __typename
                 id
@@ -130,7 +145,22 @@ v7 = {
   "kind": "ScalarField",
   "name": "result",
   "storageKey": null
-};
+},
+v8 = [
+  (v3/*: any*/),
+  (v2/*: any*/),
+  (v4/*: any*/),
+  (v5/*: any*/),
+  (v6/*: any*/),
+  (v7/*: any*/)
+],
+v9 = [
+  (v2/*: any*/),
+  (v4/*: any*/),
+  (v5/*: any*/),
+  (v6/*: any*/),
+  (v7/*: any*/)
+];
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
@@ -184,14 +214,13 @@ return {
                             "selections": [
                               {
                                 "kind": "InlineFragment",
-                                "selections": [
-                                  (v3/*: any*/),
-                                  (v2/*: any*/),
-                                  (v4/*: any*/),
-                                  (v5/*: any*/),
-                                  (v6/*: any*/),
-                                  (v7/*: any*/)
-                                ],
+                                "selections": (v8/*: any*/),
+                                "type": "AutomationTask",
+                                "abstractKey": null
+                              },
+                              {
+                                "kind": "InlineFragment",
+                                "selections": (v8/*: any*/),
                                 "type": "RuptureGenerationTask",
                                 "abstractKey": null
                               }
@@ -272,13 +301,13 @@ return {
                               (v3/*: any*/),
                               {
                                 "kind": "InlineFragment",
-                                "selections": [
-                                  (v2/*: any*/),
-                                  (v4/*: any*/),
-                                  (v5/*: any*/),
-                                  (v6/*: any*/),
-                                  (v7/*: any*/)
-                                ],
+                                "selections": (v9/*: any*/),
+                                "type": "AutomationTask",
+                                "abstractKey": null
+                              },
+                              {
+                                "kind": "InlineFragment",
+                                "selections": (v9/*: any*/),
                                 "type": "RuptureGenerationTask",
                                 "abstractKey": null
                               },
@@ -313,14 +342,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "0e6dfe07f8ad2ee0b97b7bc455973e29",
+    "cacheID": "ab25639bac248fe803d34038dee959ab",
     "id": null,
     "metadata": {},
     "name": "GeneralTaskChildrenTabQuery",
     "operationKind": "query",
-    "text": "query GeneralTaskChildrenTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on GeneralTask {\n      id\n      children {\n        edges {\n          node {\n            child {\n              __typename\n              ... on RuptureGenerationTask {\n                __typename\n                id\n                created\n                duration\n                state\n                result\n              }\n              ... on Node {\n                __isNode: __typename\n                id\n              }\n            }\n            id\n          }\n        }\n      }\n    }\n    id\n  }\n}\n"
+    "text": "query GeneralTaskChildrenTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on GeneralTask {\n      id\n      children {\n        edges {\n          node {\n            child {\n              __typename\n              ... on AutomationTask {\n                __typename\n                id\n                created\n                duration\n                state\n                result\n              }\n              ... on RuptureGenerationTask {\n                __typename\n                id\n                created\n                duration\n                state\n                result\n              }\n              ... on Node {\n                __isNode: __typename\n                id\n              }\n            }\n            id\n          }\n        }\n      }\n    }\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'b049f7a21baf38243457726661a9a8d9';
+(node as any).hash = '2381dada481e87e81a8971a0678f3b3a';
 export default node;
