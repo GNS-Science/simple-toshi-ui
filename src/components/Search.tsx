@@ -79,6 +79,14 @@ export const searchQuery = graphql`
             ... on Node {
               id
             }
+            ... on AutomationTask {
+              created
+              duration
+              state
+              result
+              task_type
+              model_type
+            }
             ... on RuptureGenerationTask {
               created
               duration
@@ -87,8 +95,13 @@ export const searchQuery = graphql`
             }
             ... on GeneralTask {
               description
+              notes
               title
               created
+              model_type
+              subtask_type
+              subtask_count
+              subtask_result
               children {
                 total_count
               }

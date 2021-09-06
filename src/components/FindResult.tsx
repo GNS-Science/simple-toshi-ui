@@ -18,6 +18,9 @@ const FindResult: React.FC<FindResultProps> = ({ queryRef }: FindResultProps) =>
       const nodeType = data?.node?.__typename;
       switch (nodeType) {
         case 'GeneralTask':
+        case 'AutomationTask':
+          history.push(`/${nodeType}/${data?.node?.id}`);
+          break;
         case 'RuptureGenerationTask':
           history.push(`/${nodeType}/${data?.node?.id}`);
           break;

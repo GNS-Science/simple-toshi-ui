@@ -38,7 +38,8 @@ const InversionSolutionDetailTab: React.FC<InversionSolutionDetailTabProps> = ({
   queryRef,
 }: InversionSolutionDetailTabProps) => {
   const data = usePreloadedQuery<InversionSolutionDetailTabQuery>(inversionSolutionDetailTabQuery, queryRef);
-
+  const producedByIdString = Buffer.from(data?.node?.produced_by_id ?? '', 'base64').toString();
+  const producedByType = producedByIdString.slice(0, producedByIdString.indexOf(':'));
   return (
     <>
       <Typography>
@@ -46,7 +47,7 @@ const InversionSolutionDetailTab: React.FC<InversionSolutionDetailTabProps> = ({
       </Typography>
       <Typography>
         <strong>Produced by:</strong>{' '}
-        <Link to={`/RuptureGenerationTask/${data?.node?.produced_by_id}`}>
+        <Link to={`/${producedByType}/${data?.node?.produced_by_id}`}>
           {Buffer.from(data?.node?.produced_by_id ?? '', 'base64').toString()}
         </Link>
       </Typography>
