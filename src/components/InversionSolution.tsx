@@ -156,4 +156,4 @@ const InversionSolution: React.FC = () => {
   );
 };
 
-export default InversionSolution;
+export { InversionSolution, inversionSolutionQuery };

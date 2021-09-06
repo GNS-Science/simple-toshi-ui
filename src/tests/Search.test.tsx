@@ -145,6 +145,6 @@ describe('Search component', () => {
     const searchButton = await findByText('Search');
     userEvent.type(searchInput, 'test');
     userEvent.click(searchButton);
-    expect(await findByText('General Task'));
+    expect(await findByText('General Task')).toBeInTheDocument();
   });
 });
