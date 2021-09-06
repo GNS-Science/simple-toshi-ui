@@ -44,7 +44,6 @@ const SearchResult: React.FC<SearchResultProps> = ({ queryRef }: SearchResultPro
               );
             }
             case 'AutomationTask': {
-              console.log('hello');
               return (
                 <>
                   <MiniAutomationTask
