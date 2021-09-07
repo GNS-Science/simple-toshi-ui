@@ -1,15 +1,14 @@
 import { Box, CircularProgress, makeStyles, Tab, Tabs, Theme, Typography } from '@material-ui/core';
 import { graphql } from 'babel-plugin-relay/macro';
 import React from 'react';
-import { useLazyLoadQuery, useQueryLoader } from 'react-relay';
+import { useLazyLoadQuery } from 'react-relay';
 import { useHistory, useParams } from 'react-router-dom';
-import InversionSolutionDetailTab, { inversionSolutionDetailTabQuery } from './InversionSolutionDetailTab';
+import InversionSolutionDetailTab from './InversionSolutionDetailTab';
 import InversionSolutionMfdTab from './InversionSolutionMfdTab';
 import InversionSolutionHazardTab from './InversionSolutionHazardTab';
 
 import RuptureSetDiags from './RuptureSetDiags';
 import { InversionSolutionQuery } from './__generated__/InversionSolutionQuery.graphql';
-import { InversionSolutionDetailTabQuery } from './__generated__/InversionSolutionDetailTabQuery.graphql';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -32,11 +31,15 @@ interface InversionSolutionParams {
   tab: string;
 }
 
-const inversionSolutionQuery = graphql`
+export const inversionSolutionQuery = graphql`
   query InversionSolutionQuery($id: ID!) {
     node(id: $id) {
       ... on InversionSolution {
         id
+        file_name
+        file_size
+        file_url
+        md5_digest
         mfd_table_id
         hazard_table_id
         produced_by_id
@@ -50,6 +53,10 @@ const inversionSolutionQuery = graphql`
           table_type
           created
         }
+        metrics {
+          k
+          v
+        }
       }
     }
   }
@@ -59,15 +66,8 @@ const InversionSolution: React.FC = () => {
   const classes = useStyles();
   const { id, tab } = useParams<InversionSolutionParams>();
   const data = useLazyLoadQuery<InversionSolutionQuery>(inversionSolutionQuery, { id });
-  const [queryRef, loadQuery] = useQueryLoader<InversionSolutionDetailTabQuery>(inversionSolutionDetailTabQuery);
 
   const history = useHistory();
-
-  React.useEffect(() => {
-    if (tab === undefined || tab === 'InversionSolutionDetailTab') {
-      loadQuery({ id });
-    }
-  }, [tab]);
 
   if (!data?.node) {
     return (
@@ -93,7 +93,16 @@ const InversionSolution: React.FC = () => {
         return (
           // prettier-ignore
           <Box className={classes.tabPanel}>
-            {queryRef && <InversionSolutionDetailTab queryRef={queryRef} />}           
+            <InversionSolutionDetailTab
+              id={data?.node?.id}
+              produced_by_id={data?.node?.produced_by_id}
+              file_name={data?.node?.file_name}
+              file_size={data?.node?.file_size}
+              file_url={data?.node?.file_url}
+              md5_digest={data?.node?.md5_digest}
+              meta={data?.node?.meta}
+              metrics={data?.node?.metrics}
+           /> 
           </Box>
         );
       case 'InversionSolutionMfdTab':
@@ -108,7 +117,7 @@ const InversionSolution: React.FC = () => {
         return (
           <Box className={classes.tabPanel}>
             <React.Suspense fallback={<CircularProgress />}>
-              {queryRef && <InversionSolutionHazardTab queryRef={queryRef} />}
+              <InversionSolutionHazardTab />
             </React.Suspense>
           </Box>
         );
@@ -156,4 +165,4 @@ const InversionSolution: React.FC = () => {
   );
 };
 
-export { InversionSolution, inversionSolutionQuery };
+export default InversionSolution;

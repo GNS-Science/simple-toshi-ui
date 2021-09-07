@@ -31,14 +31,11 @@ export const inversionSolutionHazardTabQuery = graphql`
   }
 `;
 
-interface InversionSolutionHazardTabProps {
-  queryRef: PreloadedQuery<InversionSolutionHazardTabQuery, Record<string, unknown>>;
-}
+// interface InversionSolutionHazardTabProps {
+//   queryRef?: PreloadedQuery<InversionSolutionHazardTabQuery, Record<string, unknown>>;
+// }
 
-const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
-  // eslint-disable-next-line
-  queryRef,
-}: InversionSolutionHazardTabProps) => {
+const InversionSolutionHazardTab: React.FC = () => {
   // const data = usePreloadedQuery<InversionSolutionHazardTabQuery>(inversionSolutionHazardTabQuery, queryRef);
 
   // Default coordinates set to Masterton station

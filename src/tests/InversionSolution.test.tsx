@@ -1,13 +1,36 @@
 import React, { Suspense } from 'react';
 import { createMockEnvironment, MockPayloadGenerator, RelayMockEnvironment } from 'relay-test-utils';
-import { InversionSolution, inversionSolutionQuery } from '../components/InversionSolution';
+import InversionSolution from '../components/InversionSolution';
 import ReactRouter from 'react-router';
 import { RelayEnvironmentProvider } from 'react-relay/hooks';
 import { cleanup, render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { inversionSolutionDetailTabQuery } from '../components/InversionSolutionDetailTab';
-import { inversionSolutionMfdTabQuery } from '../components/InversionSolutionMfdTab';
 
+const mockResolver = {
+  InversionSolution: () => ({
+    id: '1234',
+    file_name: 'mock name',
+    file_size: 12,
+    file_url: 'mock file url',
+    md5_digest: 3,
+    mfd_table_id: 'mockMfdTableId',
+    hazard_table_id: 'mock hazard table id',
+    produced_by_id: 'QXV0b21hdGlvblRhc2s6OTk2Q1NoOVg=',
+    created: '2021-05-19T07:04:42.283510+00:00',
+    meta: [
+      {
+        k: 'testK',
+        v: 'testV',
+      },
+    ],
+    metrics: [
+      {
+        k: 'testK',
+        v: 'testV',
+      },
+    ],
+  }),
+};
 const mockMfdResolver = {
   InversionMfdSolution: () => ({
     mfd_table: {
@@ -22,24 +45,6 @@ const mockMfdResolver = {
         v: 'testV',
       },
     ],
-  }),
-};
-const mockDetailResolver = {
-  InversionDetailSolution: () => ({
-    id: '1234',
-    produced_by_id: 'QXV0b21hdGlvblRhc2s6OTk2Q1NoOVg=',
-    file_name: 'testFile.zip',
-    file_size: '1000 Bytes',
-    file_url: 'testing.test',
-    md5_digest: 'md5Test',
-    meta: {
-      k: 'testMetaKey',
-      v: 'testMetaValue',
-    },
-    metrics: {
-      k: 'testMetricsKey',
-      v: 'testMetricsValue',
-    },
   }),
 };
 
@@ -73,39 +78,23 @@ describe('InversionSolution component', () => {
     jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ id: '1234' });
     const environment = createMockEnvironment();
     environment.mock.queueOperationResolver((operation) => {
-      return MockPayloadGenerator.generate(operation, {
-        Response() {
-          return mockDetailResolver;
-        },
-      });
+      return MockPayloadGenerator.generate(operation, mockResolver);
     });
-    environment.mock.queuePendingOperation(inversionSolutionQuery, {});
     const { findByText } = setup(environment);
-
-    expect(await findByText('Detail')).toBeInTheDocument();
     expect(await findByText('MFD plot')).toBeInTheDocument();
+    expect(await findByText('Detail')).toBeInTheDocument();
+    expect(await findByText('mock name')).toBeInTheDocument();
+    expect(await findByText('12 Bytes')).toBeInTheDocument();
+    expect(await findByText(3)).toBeInTheDocument();
+    expect(await findByText('Download')).toHaveAttribute('href', 'mock file url');
+    expect(await findByText('Meta')).toBeInTheDocument();
+    expect(await findByText('Metrics')).toBeInTheDocument();
+    expect(await findByText('AutomationTask:996CSh9X')).toBeInTheDocument();
+    expect(await findByText('AutomationTask:996CSh9X')).toHaveAttribute(
+      'href',
+      '/AutomationTask/QXV0b21hdGlvblRhc2s6OTk2Q1NoOVg=',
+    );
   });
 
-  // , async () => {
-  // jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ id: '1234', tab: 'InversionSolutionDetailTab' });
-  // const environment = createMockEnvironment();
-  // environment.mock.queueOperationResolver((operation) =>
-  //   MockPayloadGenerator.generate(operation, mockDetailResolver),
-  // );
-  // environment.mock.queuePendingOperation(inversionSolutionDetailTabQuery, { id: '1234' });
-
-  // const { findByText } = setup(environment);
+  it.todo('displays an InversionSolutionMfdTab using mock graphql payload with table and correct data');
 });
-
-it.todo('displays an InversionSolutionMfdTab using mock graphql payload with table and correct data');
-
-// , async () => {
-// jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ id: '1234', tab: 'InversionSolutionMfdTab' });
-// const environment = createMockEnvironment();
-// environment.mock.queueOperationResolver((operation) => MockPayloadGenerator.generate(operation, mockMfdResolver));
-// environment.mock.queuePendingOperation(inversionSolutionMfdTabQuery, { id: '1234' });
-
-// const { findByText } = setup(environment);
-// expect(await findByText('testMetaKey')).toBeVisible();
-// });
-// });
