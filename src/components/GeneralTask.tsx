@@ -150,7 +150,7 @@ const GeneralTask: React.FC = () => {
         </AccordionSummary>
         <AccordionDetails>
           <React.Suspense fallback={<CircularProgress />}>
-            <GeneralTaskChildrenTab id={id} />
+            <GeneralTaskChildrenTab sweepArgs={sweepsList(argumentLists, sweptArguments)} id={id} />
           </React.Suspense>
         </AccordionDetails>
       </Accordion>
