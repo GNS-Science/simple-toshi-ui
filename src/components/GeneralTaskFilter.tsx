@@ -1,5 +1,5 @@
 import { FormControl, Input, InputLabel, makeStyles, MenuItem, Select } from '@material-ui/core';
-import React from 'react';
+import React, { useState } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -21,38 +21,43 @@ const MenuProps = {
 };
 
 interface GeneralTaskFilterProps {
-  readonly data?: readonly ({
+  argument: {
     readonly k: string | null;
     readonly v: readonly (string | null)[] | null;
-  } | null)[];
+  } | null;
   onChange: (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => void;
 }
 
-const GeneralTaskFilter: React.FC<GeneralTaskFilterProps> = ({ data, onChange }: GeneralTaskFilterProps) => {
+const GeneralTaskFilter: React.FC<GeneralTaskFilterProps> = ({ argument, onChange }: GeneralTaskFilterProps) => {
+  const [seletedItems, setSelectedItems] = useState<string[]>([]);
   const classes = useStyles();
+
+  const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
+    onChange(event);
+    setSelectedItems(event.target.value as string[]);
+  };
 
   return (
     <div>
-      {data?.map((kv) => (
-        <FormControl key={`${kv?.k}-container`} className={classes.formControl}>
-          <InputLabel id={`${kv?.k}-label)`}>{kv?.k}</InputLabel>
-          <Select
-            labelId={`${kv?.k}-label`}
-            id={`${kv?.k}`}
-            name={`${kv?.k}`}
-            value={''}
-            onChange={onChange}
-            input={<Input />}
-            MenuProps={MenuProps}
-          >
-            {kv?.v?.map((value) => (
-              <MenuItem key={value} value={`${value}`}>
-                {value}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      ))}
+      <FormControl key={`${argument?.k}-container`} className={classes.formControl}>
+        <InputLabel id={`${argument?.k}-label)`}>{argument?.k}</InputLabel>
+        <Select
+          labelId={`${argument?.k}-label`}
+          id={`${argument?.k}`}
+          name={`${argument?.k}`}
+          value={seletedItems}
+          multiple
+          onChange={handleChange}
+          input={<Input />}
+          MenuProps={MenuProps}
+        >
+          {argument?.v?.map((value) => (
+            <MenuItem key={value} value={`${value}`}>
+              {value}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
     </div>
   );
 };

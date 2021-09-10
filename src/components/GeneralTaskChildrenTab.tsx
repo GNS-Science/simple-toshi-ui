@@ -16,28 +16,37 @@ interface FilteredArguments {
 }
 
 export interface FilteredChildren {
-  data?: (
-    | {
-        readonly __typename: 'RuptureGenerationTask';
-        readonly id: string;
-        readonly created: unknown | null;
-        readonly duration: number | null;
-        readonly state: EventState | null;
-        readonly result: EventResult | null;
-      }
-    | {
-        readonly __typename: 'AutomationTask';
-        readonly id: string;
-        readonly created: unknown | null;
-        readonly duration: number | null;
-        readonly state: EventState | null;
-        readonly result: EventResult | null;
-      }
-    | {
-        readonly __typename: '%other';
-      }
-    | undefined
-  )[];
+  data?:
+    | (
+        | {
+            readonly __typename: 'RuptureGenerationTask';
+            readonly id: string;
+            readonly created: unknown | null;
+            readonly duration: number | null;
+            readonly state: EventState | null;
+            readonly result: EventResult | null;
+            readonly arguments: ReadonlyArray<{
+              readonly k: string | null;
+              readonly v: string | null;
+            } | null> | null;
+          }
+        | {
+            readonly __typename: 'AutomationTask';
+            readonly id: string;
+            readonly created: unknown | null;
+            readonly duration: number | null;
+            readonly state: EventState | null;
+            readonly result: EventResult | null;
+            readonly arguments: ReadonlyArray<{
+              readonly k: string | null;
+              readonly v: string | null;
+            } | null> | null;
+          }
+        | {
+            readonly __typename: '%other';
+          }
+        | undefined
+      )[];
 }
 
 const generalTaskChildrenTabQuery = graphql`
@@ -97,40 +106,40 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const [filteredArguments, setFilteredArguments] = useState<FilteredArguments>({ data: [] });
   const [filteredChildren, setFilteredChildren] = useState<FilteredChildren>({ data: [] });
   const data = useLazyLoadQuery<GeneralTaskChildrenTabQuery>(generalTaskChildrenTabQuery, { id });
-  console.log(data);
+  const childTasks = data?.node?.children?.edges?.map((e) => e?.node?.child);
 
-  // useEffect(() => {
-  //   const currentFilteredChildren = filteredChildren;
-  //   const filtered = childTasks?.filter((child) => {
-  //     child?.arguments?.map((argument) => {
-  //       return filteredArguments.data.some((sweepArgument) => {
-  //         return sweepArgument.k === argument.k && sweepArgument.v.some((v) => v === argument.v);
-  //       });
-  //     });
-  //   });
-  //   currentFilteredChildren.data = filtered;
-  //   setFilteredChildren(currentFilteredChildren);
-  // }, [filteredArguments]);
+  useEffect(() => {
+    console.log('fileredCildren array', filteredChildren);
+    console.log('filtered arguments', filteredArguments);
+    const filtered = childTasks?.filter((child) => {
+      if (child?.__typename === 'AutomationTask' || child?.__typename === 'RuptureGenerationTask') {
+        return filteredArguments.data?.every((sweepArgument) => {
+          return child?.arguments?.some((argument) => {
+            return sweepArgument.k.includes(argument?.k as string) && sweepArgument.v.includes(argument?.v as string);
+          });
+        });
+      }
+    });
+    const currentFilteredChildren = { data: filtered };
+    setFilteredChildren(currentFilteredChildren);
+  }, [filteredArguments]);
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
-    console.log(filteredArguments);
-    const currentFilteredArguments: FilteredArguments = filteredArguments;
-    const itemIndex = currentFilteredArguments.data.findIndex((item) => item.k === event.target.name);
+    const currentFilteredArguments = [...filteredArguments.data];
+    const itemIndex = currentFilteredArguments.findIndex((item) => item.k === event.target.name);
 
     if (itemIndex !== -1) {
-      if (currentFilteredArguments.data[itemIndex].v.some((value) => value === event.target.value)) {
-        currentFilteredArguments.data[itemIndex].v.push(event.target.value as string);
-      } else {
-        return;
-      }
+      currentFilteredArguments[itemIndex].v = event.target.value as string[];
     } else {
-      currentFilteredArguments.data.push({
+      currentFilteredArguments.push({
         k: event.target.name as string,
-        v: [event.target.value as string],
+        v: event.target.value as string[],
       });
     }
-
-    setFilteredArguments(currentFilteredArguments);
+    const newFilteredArguments = {
+      data: currentFilteredArguments,
+    };
+    setFilteredArguments(newFilteredArguments);
   };
 
   if (!data?.node) {
@@ -141,11 +150,11 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     );
   }
 
-  const childTasks = data?.node?.children?.edges?.map((e) => e?.node?.child);
-
   return (
     <div>
-      <GeneralTaskFilter data={sweepArgs} onChange={handleChange} />
+      {sweepArgs?.map((argument) => (
+        <GeneralTaskFilter key={`${argument?.k}-filter`} argument={argument} onChange={handleChange} />
+      ))}
       {!!filteredChildren.data?.length ? (
         <ChildTaskTable data={filteredChildren.data} />
       ) : (
