@@ -34,6 +34,7 @@ import RuptureSetViews from './components/RuptureSetViews';
 import HazardMap from './components/HazardMap';
 import Find from './components/Find';
 import AutomationTask from './components/AutomationTask';
+import NewWindowControl from './components/NewWindowControl';
 
 const useStyles = makeStyles({
   root: {
@@ -179,6 +180,9 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
               </Route>
               <Route path="/Preview">
                 <Preview />
+              </Route>
+              <Route path="/NWC">
+                <NewWindowControl />
               </Route>
               <Route path="/">
                 <App preloadedQuery={preloadedQuery} />
