@@ -49,6 +49,81 @@ export interface FilteredChildren {
       )[];
 }
 
+interface GeneralTaskChildrenTabProps {
+  id: string;
+  readonly sweepArgs?: readonly ({
+    readonly k: string | null;
+    readonly v: readonly (string | null)[] | null;
+  } | null)[];
+}
+
+const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
+  id,
+  sweepArgs,
+}: GeneralTaskChildrenTabProps) => {
+  const [filteredArguments, setFilteredArguments] = useState<FilteredArguments>({ data: [] });
+  const [filteredChildren, setFilteredChildren] = useState<FilteredChildren>({ data: [] });
+  const data = useLazyLoadQuery<GeneralTaskChildrenTabQuery>(generalTaskChildrenTabQuery, { id });
+  const childTasks = data?.node?.children?.edges?.map((e) => e?.node?.child);
+
+  const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
+    const currentFilteredArguments = [...filteredArguments.data];
+    const itemIndex = currentFilteredArguments.findIndex((item) => item.k === event.target.name);
+
+    itemIndex !== -1
+      ? (currentFilteredArguments[itemIndex].v = event.target.value as string[])
+      : currentFilteredArguments.push({
+          k: event.target.name as string,
+          v: event.target.value as string[],
+        });
+
+    const newFilteredArguments = {
+      data: currentFilteredArguments,
+    };
+
+    setFilteredArguments(newFilteredArguments);
+  };
+
+  useEffect(() => {
+    const filtered = childTasks?.filter((child) => {
+      if (child?.__typename === 'AutomationTask' || child?.__typename === 'RuptureGenerationTask') {
+        return filteredArguments.data?.every((sweepArgument) => {
+          return child?.arguments?.some((argument) => {
+            return sweepArgument.k.includes(argument?.k as string) && sweepArgument.v.includes(argument?.v as string);
+          });
+        });
+      }
+    });
+    const newFilteredChildren = { data: filtered };
+    setFilteredChildren(newFilteredChildren);
+  }, [filteredArguments]);
+
+  if (!data?.node) {
+    return (
+      <Typography variant="h5" gutterBottom>
+        General Task: Id Not Found
+      </Typography>
+    );
+  }
+
+  return (
+    <div>
+      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+        {sweepArgs?.map((argument) => (
+          <GeneralTaskFilter key={`${argument?.k}-filter`} argument={argument} onChange={handleChange} />
+        ))}
+      </div>
+      {!!filteredChildren.data?.length ? (
+        <ChildTaskTable data={filteredChildren.data} />
+      ) : (
+        data?.node?.children?.edges?.length && <ChildTaskTable data={childTasks} />
+      )}
+    </div>
+  );
+};
+
+export default GeneralTaskChildrenTab;
+
 const generalTaskChildrenTabQuery = graphql`
   query GeneralTaskChildrenTabQuery($id: ID!) {
     node(id: $id) {
@@ -90,78 +165,3 @@ const generalTaskChildrenTabQuery = graphql`
     }
   }
 `;
-
-interface GeneralTaskChildrenTabProps {
-  id: string;
-  readonly sweepArgs?: readonly ({
-    readonly k: string | null;
-    readonly v: readonly (string | null)[] | null;
-  } | null)[];
-}
-
-const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
-  id,
-  sweepArgs,
-}: GeneralTaskChildrenTabProps) => {
-  const [filteredArguments, setFilteredArguments] = useState<FilteredArguments>({ data: [] });
-  const [filteredChildren, setFilteredChildren] = useState<FilteredChildren>({ data: [] });
-  const data = useLazyLoadQuery<GeneralTaskChildrenTabQuery>(generalTaskChildrenTabQuery, { id });
-  const childTasks = data?.node?.children?.edges?.map((e) => e?.node?.child);
-
-  useEffect(() => {
-    console.log('fileredCildren array', filteredChildren);
-    console.log('filtered arguments', filteredArguments);
-    const filtered = childTasks?.filter((child) => {
-      if (child?.__typename === 'AutomationTask' || child?.__typename === 'RuptureGenerationTask') {
-        return filteredArguments.data?.every((sweepArgument) => {
-          return child?.arguments?.some((argument) => {
-            return sweepArgument.k.includes(argument?.k as string) && sweepArgument.v.includes(argument?.v as string);
-          });
-        });
-      }
-    });
-    const currentFilteredChildren = { data: filtered };
-    setFilteredChildren(currentFilteredChildren);
-  }, [filteredArguments]);
-
-  const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
-    const currentFilteredArguments = [...filteredArguments.data];
-    const itemIndex = currentFilteredArguments.findIndex((item) => item.k === event.target.name);
-
-    if (itemIndex !== -1) {
-      currentFilteredArguments[itemIndex].v = event.target.value as string[];
-    } else {
-      currentFilteredArguments.push({
-        k: event.target.name as string,
-        v: event.target.value as string[],
-      });
-    }
-    const newFilteredArguments = {
-      data: currentFilteredArguments,
-    };
-    setFilteredArguments(newFilteredArguments);
-  };
-
-  if (!data?.node) {
-    return (
-      <Typography variant="h5" gutterBottom>
-        General Task: Id Not Found
-      </Typography>
-    );
-  }
-
-  return (
-    <div>
-      {sweepArgs?.map((argument) => (
-        <GeneralTaskFilter key={`${argument?.k}-filter`} argument={argument} onChange={handleChange} />
-      ))}
-      {!!filteredChildren.data?.length ? (
-        <ChildTaskTable data={filteredChildren.data} />
-      ) : (
-        data?.node?.children?.edges?.length && <ChildTaskTable data={childTasks} />
-      )}
-    </div>
-  );
-};
-
-export default GeneralTaskChildrenTab;
