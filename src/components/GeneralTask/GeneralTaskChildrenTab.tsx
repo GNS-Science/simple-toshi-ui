@@ -6,7 +6,7 @@ import ChildTaskTable from './ChildTaskTable';
 
 import { EventResult, EventState } from './__generated__/GeneralTaskChildrenTabQuery.graphql';
 import { GeneralTaskChildrenTabQuery } from './__generated__/GeneralTaskChildrenTabQuery.graphql';
-import GeneralTaskFilter from './GeneralTaskFilter';
+import GeneralTaskFilterContainer from './GeneralTaskFilterContainer';
 
 interface FilteredArguments {
   data: {
@@ -108,11 +108,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
 
   return (
     <div>
-      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        {sweepArgs?.map((argument) => (
-          <GeneralTaskFilter key={`${argument?.k}-filter`} argument={argument} onChange={handleChange} />
-        ))}
-      </div>
+      <GeneralTaskFilterContainer sweepArgs={sweepArgs} onChange={handleChange} />
       {!!filteredChildren.data?.length ? (
         <ChildTaskTable data={filteredChildren.data} />
       ) : (
