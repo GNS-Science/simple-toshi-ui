@@ -34,7 +34,7 @@ import RuptureSetViews from './components/RuptureSetViews';
 import HazardMap from './components/HazardMap';
 import Find from './components/Find';
 import AutomationTask from './components/AutomationTask';
-import DemoWindowControl from './components/DemoWindowControl';
+import DemoWindowControl from './components/GeneralTask/DemoWindowControl';
 
 const useStyles = makeStyles({
   root: {
@@ -177,9 +177,6 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
               </Route>
               <Route path="/Preview/hazard">
                 <HazardMap />
-              </Route>
-              <Route path="/Preview/DR">
-                <DemoWindowControl />
               </Route>
               <Route path="/Preview">
                 <Preview />

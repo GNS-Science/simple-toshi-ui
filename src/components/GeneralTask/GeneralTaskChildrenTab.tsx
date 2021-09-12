@@ -15,6 +15,11 @@ interface FilteredArguments {
   }[];
 }
 
+export type SweepArguments = readonly ({
+  readonly k: string | null;
+  readonly v: readonly (string | null)[] | null;
+} | null)[];
+
 export interface FilteredChildren {
   data?:
     | (
@@ -51,10 +56,7 @@ export interface FilteredChildren {
 
 interface GeneralTaskChildrenTabProps {
   id: string;
-  readonly sweepArgs?: readonly ({
-    readonly k: string | null;
-    readonly v: readonly (string | null)[] | null;
-  } | null)[];
+  readonly sweepArgs?: SweepArguments;
 }
 
 const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
@@ -108,7 +110,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
 
   return (
     <div>
-      <GeneralTaskFilterContainer sweepArgs={sweepArgs} onChange={handleChange} />
+      <GeneralTaskFilterContainer sweepArgs={sweepArgs} onChange={handleChange} filteredChildren={filteredChildren} />
       {!!filteredChildren.data?.length ? (
         <ChildTaskTable data={filteredChildren.data} />
       ) : (
