@@ -34,7 +34,6 @@ import RuptureSetViews from './components/RuptureSetViews';
 import HazardMap from './components/HazardMap';
 import Find from './components/Find';
 import AutomationTask from './components/AutomationTask';
-import DemoWindowControl from './components/GeneralTask/DemoWindowControl';
 
 const useStyles = makeStyles({
   root: {

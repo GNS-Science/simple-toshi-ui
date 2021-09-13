@@ -25,12 +25,13 @@ const DemoWindowControl: React.FC<DemoWindowControlProps> = ({ queryRef }: DemoW
   const data = usePreloadedQuery<GeneralTaskFilterContainerQuery>(generalTaskFilterContainerQuery, queryRef);
   const subtasks = data?.nodes?.result?.edges.map((subtask) => subtask?.node);
   const subtaskIds: string[] = [];
+
   subtasks?.map((subtask) => {
-    if (subtask?.__typename === 'AutomationTask' && subtask?.inversion_solution) {
+    subtask?.__typename === 'AutomationTask' &&
+      subtask?.inversion_solution &&
       subtaskIds.push(subtask?.inversion_solution?.id);
-    }
   });
-  console.log(subtaskIds);
+
   return (
     <>
       <Button onClick={() => setOpen((v) => !v)}>{open ? 'Close reports' : 'Open reports'}</Button>

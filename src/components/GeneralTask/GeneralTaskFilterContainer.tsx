@@ -1,5 +1,5 @@
 import { graphql } from 'babel-plugin-relay/macro';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import GeneralTaskFilter from './GeneralTaskFilter';
 import { SweepArguments, FilteredChildren } from './GeneralTaskChildrenTab';
 import { GeneralTaskFilterContainerQuery } from './__generated__/GeneralTaskFilterContainerQuery.graphql';
@@ -18,22 +18,20 @@ const GeneralTaskFilterContainer: React.FC<GeneralTaskFilterContainerProps> = ({
   filteredChildren,
 }: GeneralTaskFilterContainerProps) => {
   const [queryRef, loadQuery] = useQueryLoader<GeneralTaskFilterContainerQuery>(generalTaskFilterContainerQuery);
-  console.log(filteredChildren?.data?.length);
+
   useEffect(() => {
     const filteredChildrenData = filteredChildren?.data ?? [];
     if (filteredChildrenData.length <= 8) {
       const filteredChildrenIds: string[] = [];
       filteredChildrenData.map((child) => {
-        if (
-          (child?.__typename === 'AutomationTask' || child?.__typename === 'RuptureGenerationTask') &&
-          child.id !== undefined
-        )
+        (child?.__typename === 'AutomationTask' || child?.__typename === 'RuptureGenerationTask') &&
+          child.id !== undefined &&
           filteredChildrenIds.push(child?.id);
       });
-      console.log('loading query');
       loadQuery({ id: filteredChildrenIds });
     }
   }, [filteredChildren]);
+
   return (
     <>
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>

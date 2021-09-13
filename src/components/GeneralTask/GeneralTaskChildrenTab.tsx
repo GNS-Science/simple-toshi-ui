@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { graphql } from 'babel-plugin-relay/macro';
 import { useLazyLoadQuery } from 'react-relay/hooks';
-import { Typography } from '@material-ui/core';
+import { Typography, CircularProgress } from '@material-ui/core';
 import ChildTaskTable from './ChildTaskTable';
 
 import { EventResult, EventState } from './__generated__/GeneralTaskChildrenTabQuery.graphql';
@@ -110,12 +110,16 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
 
   return (
     <div>
-      <GeneralTaskFilterContainer sweepArgs={sweepArgs} onChange={handleChange} filteredChildren={filteredChildren} />
-      {!!filteredChildren.data?.length ? (
-        <ChildTaskTable data={filteredChildren.data} />
-      ) : (
-        data?.node?.children?.edges?.length && <ChildTaskTable data={childTasks} />
-      )}
+      <React.Suspense fallback={<CircularProgress />}>
+        <GeneralTaskFilterContainer sweepArgs={sweepArgs} onChange={handleChange} filteredChildren={filteredChildren} />
+      </React.Suspense>
+      <React.Suspense fallback={<CircularProgress />}>
+        {!!filteredChildren.data?.length ? (
+          <ChildTaskTable data={filteredChildren.data} />
+        ) : (
+          data?.node?.children?.edges?.length && <ChildTaskTable data={childTasks} />
+        )}
+      </React.Suspense>
     </div>
   );
 };
