@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import { RuptureGenerationTaskQuery } from './__generated__/RuptureGenerationTaskQuery.graphql';
 import { useLazyLoadQuery } from 'react-relay/hooks';
 import { Typography } from '@material-ui/core';
-import KeyValueTable from './KeyValueTable';
+import KeyValueTable from './common/KeyValueTable';
 import InfoTable from './InfoTable';
 import FileTable from './FileTable';
 

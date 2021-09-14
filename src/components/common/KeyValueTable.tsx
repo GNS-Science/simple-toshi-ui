@@ -1,5 +1,6 @@
 import React from 'react';
 import { makeStyles, Paper, Table, TableBody, TableCell, TableHead, TableRow, withStyles } from '@material-ui/core';
+import { ArgumentKeyValuePair } from '../../interfaces/common';
 
 const useStyles = makeStyles({
   root: {
@@ -25,10 +26,7 @@ const AlternatingRow = withStyles((theme) => ({
 
 export interface KeyValueTableProps {
   header: string;
-  readonly data?: ReadonlyArray<{
-    readonly k: string | null;
-    readonly v: string | null;
-  } | null> | null;
+  readonly data?: ReadonlyArray<ArgumentKeyValuePair | null> | null;
 }
 
 const KeyValueTable: React.FC<KeyValueTableProps> = ({ header, data }: KeyValueTableProps) => {

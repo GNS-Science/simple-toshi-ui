@@ -4,7 +4,7 @@ import React from 'react';
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { formatBytes } from './FileDetail';
 import { FileDetailTabQuery } from './__generated__/FileDetailTabQuery.graphql';
-import KeyValueTable from './KeyValueTable';
+import KeyValueTable from './common/KeyValueTable';
 
 export const fileDetailTabQuery = graphql`
   query FileDetailTabQuery($id: ID!) {
