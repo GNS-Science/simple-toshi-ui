@@ -7,6 +7,8 @@ import { Typography, CircularProgress, makeStyles, Theme, Tabs, Tab, Box } from 
 import { GeneralTaskQuery } from './__generated__/GeneralTaskQuery.graphql';
 import GeneralTaskChildrenTab from './GeneralTaskChildrenTab';
 import GeneralTaskDetailTab from './GeneralTaskDetailTab';
+import { GeneralTaskKeyValueListPairs } from '../interfaces/generaltask';
+import TabPanel from '../common/TabPanel';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -23,21 +25,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderRight: `1px solid ${theme.palette.divider}`,
   },
 }));
+
 interface GeneralTaskParams {
   id: string;
-}
-
-interface KeyValueListPair {
-  readonly k: string | null;
-  readonly v: readonly (string | null)[] | null;
-}
-
-type KeyValueListPairs = readonly (KeyValueListPair | null)[];
-
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  tab: number;
 }
 
 const GeneralTask: React.FC = () => {
@@ -51,21 +41,6 @@ const GeneralTask: React.FC = () => {
     setTab(newValue);
   };
 
-  const TabPanel = (props: TabPanelProps) => {
-    const { children, tab, index } = props;
-    return (
-      <div
-        className={classes.tabPanel}
-        role="tabpanel"
-        hidden={tab !== index}
-        id={`vertical-tabpanel-${index}`}
-        aria-labelledby={`vertical-tab-${index}`}
-      >
-        {tab === index && <Box p={3}>{children}</Box>}
-      </div>
-    );
-  };
-
   if (!data?.node) {
     return (
       <Typography variant="h5" gutterBottom>
@@ -77,13 +52,16 @@ const GeneralTask: React.FC = () => {
   const sweptArguments = data?.node?.swept_arguments ?? [''];
   const argumentLists = data?.node?.argument_lists ?? [];
 
-  const sweepsList = (arg_lists: KeyValueListPairs, sweeps: readonly (string | null)[]) => {
+  const sweepsList = (arg_lists: GeneralTaskKeyValueListPairs, sweeps: readonly (string | null)[]) => {
     if (arg_lists) return arg_lists.filter((el) => sweeps.includes(el ? el.k : ''));
     return [];
   };
 
   return (
     <>
+      <Typography variant="h5" gutterBottom>
+        General Task: {data?.node?.title}
+      </Typography>
       <Box className={classes.root}>
         <Tabs orientation="vertical" value={tab} onChange={handleTabChange}>
           <Tab label="Details" id="vertical-tab-0" aria-controls="vertical-tabpannel-0" className={classes.tab} />

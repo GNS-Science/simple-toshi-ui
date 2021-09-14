@@ -1,10 +1,10 @@
 import { graphql } from 'babel-plugin-relay/macro';
 import React, { useEffect } from 'react';
 import GeneralTaskFilter from './GeneralTaskFilter';
-import { SweepArguments, FilteredChildren } from './GeneralTaskChildrenTab';
 import { GeneralTaskFilterContainerQuery } from './__generated__/GeneralTaskFilterContainerQuery.graphql';
 import { useQueryLoader } from 'react-relay';
 import DemoWindowControl from './DemoWindowControl';
+import { FilteredChildren, SweepArguments } from '../interfaces/generaltask';
 
 interface GeneralTaskFilterContainerProps {
   readonly sweepArgs?: SweepArguments;

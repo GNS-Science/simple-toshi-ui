@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import KeyValueListTable from './KeyValueListTable';
 import { GeneralTaskQueryResponse } from './__generated__/GeneralTaskQuery.graphql';
-import { SweepArguments } from './GeneralTaskChildrenTab';
+import { SweepArguments } from '../interfaces/generaltask';
 
 interface GeneralTaskDetailTabProps {
   data: GeneralTaskQueryResponse;
@@ -16,10 +16,6 @@ const GeneralTaskDetailTab: React.FC<GeneralTaskDetailTabProps> = ({ data, sweep
   const updatedDate = data?.node?.updated ? format(new Date(data?.node?.updated as string), 'PPPppp') : '';
   return (
     <>
-      <Typography variant="h5" gutterBottom>
-        General Task: {data?.node?.title}
-      </Typography>
-
       <Typography>
         <strong>Model type:</strong> {data?.node?.model_type}
       </Typography>

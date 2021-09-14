@@ -22,7 +22,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import RuptureGenerationTask from './components/RuptureGenerationTask';
 import FileDetail from './components/FileDetail';
 import Search from './components/Search';
-import GeneralTask from './components/GeneralTask/GeneralTask';
+import GeneralTask from './components/generalTask/GeneralTask';
 import MenuBar from './components/MenuBar';
 import InversionSolution from './components/InversionSolution';
 

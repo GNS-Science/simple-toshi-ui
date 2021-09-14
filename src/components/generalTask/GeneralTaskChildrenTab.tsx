@@ -4,55 +4,14 @@ import { useLazyLoadQuery } from 'react-relay/hooks';
 import { Typography, CircularProgress } from '@material-ui/core';
 import ChildTaskTable from './ChildTaskTable';
 
-import { EventResult, EventState } from './__generated__/GeneralTaskChildrenTabQuery.graphql';
 import { GeneralTaskChildrenTabQuery } from './__generated__/GeneralTaskChildrenTabQuery.graphql';
 import GeneralTaskFilterContainer from './GeneralTaskFilterContainer';
-
-interface FilteredArguments {
-  data: {
-    k: string;
-    v: string[];
-  }[];
-}
+import { FilteredArguments, FilteredChildren } from '../interfaces/generaltask';
 
 export type SweepArguments = readonly ({
   readonly k: string | null;
   readonly v: readonly (string | null)[] | null;
 } | null)[];
-
-export interface FilteredChildren {
-  data?:
-    | (
-        | {
-            readonly __typename: 'RuptureGenerationTask';
-            readonly id: string;
-            readonly created: unknown | null;
-            readonly duration: number | null;
-            readonly state: EventState | null;
-            readonly result: EventResult | null;
-            readonly arguments: ReadonlyArray<{
-              readonly k: string | null;
-              readonly v: string | null;
-            } | null> | null;
-          }
-        | {
-            readonly __typename: 'AutomationTask';
-            readonly id: string;
-            readonly created: unknown | null;
-            readonly duration: number | null;
-            readonly state: EventState | null;
-            readonly result: EventResult | null;
-            readonly arguments: ReadonlyArray<{
-              readonly k: string | null;
-              readonly v: string | null;
-            } | null> | null;
-          }
-        | {
-            readonly __typename: '%other';
-          }
-        | undefined
-      )[];
-}
 
 interface GeneralTaskChildrenTabProps {
   id: string;

@@ -1,5 +1,6 @@
 import { FormControl, Input, InputLabel, makeStyles, MenuItem, Select } from '@material-ui/core';
 import React, { useState } from 'react';
+import { SweepArgument } from '../interfaces/generaltask';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -21,10 +22,7 @@ const MenuProps = {
 };
 
 interface GeneralTaskFilterProps {
-  argument: {
-    readonly k: string | null;
-    readonly v: readonly (string | null)[] | null;
-  } | null;
+  argument: SweepArgument;
   onChange: (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => void;
 }
 
