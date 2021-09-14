@@ -26,17 +26,19 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     const currentFilteredArguments = [...filteredArguments.data];
     const itemIndex = currentFilteredArguments.findIndex((item) => item.k === event.target.name);
 
-    itemIndex !== -1
-      ? (currentFilteredArguments[itemIndex].v = event.target.value as string[])
-      : currentFilteredArguments.push({
-          k: event.target.name as string,
-          v: event.target.value as string[],
-        });
+    if (itemIndex !== -1) {
+      currentFilteredArguments[itemIndex].v = event.target.value as string[];
+      currentFilteredArguments[itemIndex].v.length === 0 && currentFilteredArguments.splice(itemIndex, 1);
+    } else {
+      currentFilteredArguments.push({
+        k: event.target.name as string,
+        v: event.target.value as string[],
+      });
+    }
 
     const newFilteredArguments = {
       data: currentFilteredArguments,
     };
-
     setFilteredArguments(newFilteredArguments);
   };
 
