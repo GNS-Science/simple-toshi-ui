@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles, Paper, Table, TableBody, TableCell, TableHead, TableRow, withStyles } from '@material-ui/core';
-import { GeneralTaskKeyValueListPairs } from '../interfaces/generaltask';
+import { GeneralTaskKeyValueListPairs } from '../../interfaces/generaltask';
 
 const useStyles = makeStyles({
   root: {

@@ -1,6 +1,6 @@
 import { FormControl, Input, InputLabel, makeStyles, MenuItem, Select } from '@material-ui/core';
 import React, { useState } from 'react';
-import { SweepArgument } from '../interfaces/generaltask';
+import { SweepArgument } from '../../interfaces/generaltask';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {

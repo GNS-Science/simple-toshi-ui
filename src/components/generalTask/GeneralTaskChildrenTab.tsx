@@ -6,12 +6,7 @@ import ChildTaskTable from './ChildTaskTable';
 
 import { GeneralTaskChildrenTabQuery } from './__generated__/GeneralTaskChildrenTabQuery.graphql';
 import GeneralTaskFilterContainer from './GeneralTaskFilterContainer';
-import { FilteredArguments, FilteredChildren } from '../interfaces/generaltask';
-
-export type SweepArguments = readonly ({
-  readonly k: string | null;
-  readonly v: readonly (string | null)[] | null;
-} | null)[];
+import { FilteredArguments, FilteredChildren, SweepArguments } from '../../interfaces/generaltask';
 
 interface GeneralTaskChildrenTabProps {
   id: string;

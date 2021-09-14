@@ -7,7 +7,7 @@ import { Typography, CircularProgress, makeStyles, Theme, Tabs, Tab, Box } from 
 import { GeneralTaskQuery } from './__generated__/GeneralTaskQuery.graphql';
 import GeneralTaskChildrenTab from './GeneralTaskChildrenTab';
 import GeneralTaskDetailTab from './GeneralTaskDetailTab';
-import { GeneralTaskKeyValueListPairs } from '../interfaces/generaltask';
+import { GeneralTaskKeyValueListPairs } from '../../interfaces/generaltask';
 import TabPanel from '../common/TabPanel';
 
 const useStyles = makeStyles((theme: Theme) => ({

@@ -1,4 +1,4 @@
-import { EventResult, EventState } from '../generalTask/__generated__/GeneralTaskChildrenTabQuery.graphql';
+import { EventResult, EventState } from '../components/generalTask/__generated__/GeneralTaskChildrenTabQuery.graphql';
 
 export type GeneralTaskKeyValueListPairs = readonly ({
   readonly k: string | null;
@@ -56,4 +56,17 @@ export interface FilteredArguments {
     k: string;
     v: string[];
   }[];
+}
+
+export enum ViewTypeEnum {
+  Report,
+  Image,
+}
+
+export interface SolutionDiagnosticsOption {
+  viewType: ViewTypeEnum;
+  displayName: string;
+  finalPath: string; // either a hash location, or a filepath/name# must be unique
+  imgWdth: number | undefined;
+  imgHght: number | undefined;
 }
