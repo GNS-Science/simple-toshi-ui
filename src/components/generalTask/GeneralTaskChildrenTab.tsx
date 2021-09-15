@@ -17,6 +17,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   id,
   sweepArgs,
 }: GeneralTaskChildrenTabProps) => {
+  const [showList, setShowList] = useState(true);
   const [filteredArguments, setFilteredArguments] = useState<FilteredArguments>({ data: [] });
   const [filteredChildren, setFilteredChildren] = useState<FilteredChildren>({ data: [] });
   const data = useLazyLoadQuery<GeneralTaskChildrenTabQuery>(generalTaskChildrenTabQuery, { id });
@@ -67,13 +68,22 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   return (
     <div>
       <React.Suspense fallback={<CircularProgress />}>
-        <GeneralTaskFilterContainer sweepArgs={sweepArgs} onChange={handleChange} filteredChildren={filteredChildren} />
+        <GeneralTaskFilterContainer
+          sweepArgs={sweepArgs}
+          setShowList={setShowList}
+          onChange={handleChange}
+          filteredChildren={filteredChildren}
+        />
       </React.Suspense>
       <React.Suspense fallback={<CircularProgress />}>
-        {!!filteredChildren.data?.length ? (
-          <ChildTaskTable data={filteredChildren.data} />
-        ) : (
-          data?.node?.children?.edges?.length && <ChildTaskTable data={childTasks} />
+        {showList && (
+          <div>
+            {!!filteredChildren.data?.length ? (
+              <ChildTaskTable data={filteredChildren.data} />
+            ) : (
+              data?.node?.children?.edges?.length && <ChildTaskTable data={childTasks} />
+            )}
+          </div>
         )}
       </React.Suspense>
     </div>

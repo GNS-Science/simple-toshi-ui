@@ -1,24 +1,28 @@
 import { graphql } from 'babel-plugin-relay/macro';
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import GeneralTaskFilter from './GeneralTaskFilter';
 import { GeneralTaskFilterContainerQuery } from './__generated__/GeneralTaskFilterContainerQuery.graphql';
 import { useQueryLoader } from 'react-relay';
 import { FilteredChildren, SweepArguments } from '../../interfaces/generaltask';
 import DiagnosticReportControls from './DiagnosticReportControls';
 import DiagnosticReportWindowContainer from './DiagnosticReportWindowContainer';
+import { Button } from '@material-ui/core';
 
 interface GeneralTaskFilterContainerProps {
   readonly sweepArgs?: SweepArguments;
+  setShowList: Dispatch<SetStateAction<boolean>>;
   onChange: (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => void;
   filteredChildren?: FilteredChildren;
 }
 
 const GeneralTaskFilterContainer: React.FC<GeneralTaskFilterContainerProps> = ({
   sweepArgs,
+  setShowList,
   onChange,
   filteredChildren,
 }: GeneralTaskFilterContainerProps) => {
   const [queryRef, loadQuery] = useQueryLoader<GeneralTaskFilterContainerQuery>(generalTaskFilterContainerQuery);
+  const [showFilters, setShowFilters] = useState(false);
   const [open, setOpen] = useState(false);
   const [finalPath, setFinalPath] = useState<string>('');
 
@@ -36,20 +40,25 @@ const GeneralTaskFilterContainer: React.FC<GeneralTaskFilterContainerProps> = ({
   }, [filteredChildren]);
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
-    console.log(event.target);
     const newValue = (event.target.value as string) || '';
-    console.log(newValue);
     setFinalPath(newValue);
+  };
+
+  const handleOpen = () => {
+    setShowList((v) => !v);
+    setOpen((v) => !v);
   };
 
   return (
     <>
+      <Button onClick={() => setShowFilters((v) => !v)}> Filter Child Tasks </Button>
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        {sweepArgs?.map((argument) => (
-          <GeneralTaskFilter key={`${argument?.k}-filter`} argument={argument} onChange={onChange} />
-        ))}
+        {showFilters &&
+          sweepArgs?.map((argument) => (
+            <GeneralTaskFilter key={`${argument?.k}-filter`} argument={argument} onChange={onChange} />
+          ))}
       </div>
-      <DiagnosticReportControls isOpen={open} setViewOption={handleChange} setOpen={setOpen} />
+      <DiagnosticReportControls isOpen={open} setViewOption={handleChange} setOpen={handleOpen} />
       {open && queryRef && (
         <DiagnosticReportWindowContainer sweepArgs={sweepArgs} queryRef={queryRef} finalPath={finalPath} />
       )}

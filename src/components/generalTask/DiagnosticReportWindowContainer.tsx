@@ -87,20 +87,20 @@ const DiagnosticReportWindowContainer: React.FC<DiagnosticReportWindowContainerP
       </Button>
       <Card className={classes.root}>
         <CardContent>
-          {filteredSubtasks[currentImage].inversion_solution.meta.map((kv) => (
-            <Typography key={kv?.k}>
-              {kv?.k}: {kv?.v}
-            </Typography>
-          ))}
+          <Typography>
+            {filteredSubtasks[currentImage].inversion_solution.meta.map((kv) => (
+              <span key={kv?.k}>
+                {kv?.k}: {kv?.v}, &nbsp;
+              </span>
+            ))}
+          </Typography>
           <img
-            style={{ width: '100%' }}
+            style={{ padding: '30px', width: '100%' }}
             src={reportUrl(finalPath, filteredSubtasks[currentImage].inversion_solution.id)}
             alt={finalPath}
           />
-          ;
         </CardContent>
       </Card>
-      ;
     </>
   );
 };
