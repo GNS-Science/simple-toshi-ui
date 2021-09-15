@@ -22,12 +22,14 @@ const MenuProps = {
 };
 interface DiagnosticReportControlsProps {
   isOpen: boolean;
+  setShowFilters: Dispatch<SetStateAction<boolean>>;
   setOpen: () => void;
   setViewOption: (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => void;
 }
 
 const DiagnosticReportControls: React.FC<DiagnosticReportControlsProps> = ({
   isOpen,
+  setShowFilters,
   setOpen,
   setViewOption,
 }: DiagnosticReportControlsProps) => {
@@ -38,6 +40,11 @@ const DiagnosticReportControls: React.FC<DiagnosticReportControlsProps> = ({
   const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
     setViewOption(event);
     setSelectedItem(event.target.value as string);
+  };
+
+  const handleOpen = () => {
+    setOpen();
+    setShowFilters(false);
   };
 
   return (
@@ -59,7 +66,7 @@ const DiagnosticReportControls: React.FC<DiagnosticReportControlsProps> = ({
           ))}
         </Select>
       </FormControl>
-      <Button onClick={setOpen}>{isOpen ? 'Close reports' : 'Open reports'}</Button>
+      <Button onClick={handleOpen}>{isOpen ? 'Close reports' : 'Open reports'}</Button>
     </>
   );
 };
