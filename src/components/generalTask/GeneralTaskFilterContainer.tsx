@@ -50,7 +50,9 @@ const GeneralTaskFilterContainer: React.FC<GeneralTaskFilterContainerProps> = ({
         ))}
       </div>
       <DiagnosticReportControls isOpen={open} setViewOption={handleChange} setOpen={setOpen} />
-      {open && queryRef && <DiagnosticReportWindowContainer queryRef={queryRef} finalPath={finalPath} />}
+      {open && queryRef && (
+        <DiagnosticReportWindowContainer sweepArgs={sweepArgs} queryRef={queryRef} finalPath={finalPath} />
+      )}
     </>
   );
 };

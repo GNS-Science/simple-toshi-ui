@@ -1,4 +1,5 @@
 import { EventResult, EventState } from '../components/generalTask/__generated__/GeneralTaskChildrenTabQuery.graphql';
+import { TaskSubType } from '../components/generalTask/__generated__/GeneralTaskFilterContainerQuery.graphql';
 
 export type GeneralTaskKeyValueListPairs = readonly ({
   readonly k: string | null;
@@ -70,3 +71,14 @@ export interface SolutionDiagnosticsOption {
   imgWdth: number | undefined;
   imgHght: number | undefined;
 }
+
+export type FilteredSubtask = {
+  __typename: 'AutomationTask';
+  inversion_solution: {
+    id: string;
+    meta: Array<{
+      readonly k: string | null;
+      readonly v: string | null;
+    } | null>;
+  };
+};

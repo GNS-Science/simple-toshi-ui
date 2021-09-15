@@ -37,7 +37,7 @@ const GeneralTaskFilter: React.FC<GeneralTaskFilterProps> = ({ argument, onChang
 
   return (
     <div>
-      <FormControl key={`${argument?.k}-container`} className={classes.formControl}>
+      <FormControl className={classes.formControl}>
         <InputLabel id={`${argument?.k}-label)`}>{argument?.k}</InputLabel>
         <Select
           labelId={`${argument?.k}-label`}

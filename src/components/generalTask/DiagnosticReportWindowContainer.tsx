@@ -3,7 +3,8 @@ import buildUrl from 'build-url-ts';
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { GeneralTaskFilterContainerQuery } from './__generated__/GeneralTaskFilterContainerQuery.graphql';
 import { generalTaskFilterContainerQuery } from './GeneralTaskFilterContainer';
-import { Button, Card, CardContent, makeStyles, Theme } from '@material-ui/core';
+import { Button, Card, CardContent, makeStyles, Theme, Typography } from '@material-ui/core';
+import { FilteredSubtask, SweepArguments } from '../../interfaces/generaltask';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -19,28 +20,45 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const reportBaseUrl = process.env.REACT_APP_REPORTS_URL;
-console.log(reportBaseUrl);
-
 interface DiagnosticReportWindowContainerProps {
+  readonly sweepArgs?: SweepArguments;
   queryRef: PreloadedQuery<GeneralTaskFilterContainerQuery, Record<string, unknown>>;
   finalPath: string;
 }
 
 const DiagnosticReportWindowContainer: React.FC<DiagnosticReportWindowContainerProps> = ({
+  sweepArgs,
   queryRef,
   finalPath,
 }: DiagnosticReportWindowContainerProps) => {
   const classes = useStyles();
   const [currentImage, setCurrentImage] = useState<number>(0);
   const data = usePreloadedQuery<GeneralTaskFilterContainerQuery>(generalTaskFilterContainerQuery, queryRef);
-  console.log(data);
   const subtasks = data?.nodes?.result?.edges.map((subtask) => subtask?.node);
-  const subtaskIds: string[] = [];
+  const filteredSubtasks: FilteredSubtask[] = [];
 
   subtasks?.map((subtask) => {
-    subtask?.__typename === 'AutomationTask' &&
-      subtask?.inversion_solution &&
-      subtaskIds.push(subtask?.inversion_solution?.id);
+    if (
+      subtask &&
+      subtask !== null &&
+      subtask.__typename === 'AutomationTask' &&
+      subtask.inversion_solution !== null &&
+      subtask.inversion_solution.meta !== null
+    ) {
+      const newSubtask: FilteredSubtask = {
+        __typename: 'AutomationTask',
+        inversion_solution: {
+          id: subtask.inversion_solution.id,
+          meta: [],
+        },
+      };
+      subtask.inversion_solution.meta.map((kv) => {
+        kv !== null &&
+          sweepArgs?.some((argument) => argument?.k?.includes(kv.k as string)) &&
+          newSubtask.inversion_solution.meta.push(kv);
+      });
+      filteredSubtasks.push(newSubtask);
+    }
   });
 
   const reportUrl = (finalPath: string, id: string) => {
@@ -50,7 +68,7 @@ const DiagnosticReportWindowContainer: React.FC<DiagnosticReportWindowContainerP
   };
 
   const nextImage = () => {
-    currentImage < subtaskIds.length - 1 && setCurrentImage(currentImage + 1);
+    currentImage < filteredSubtasks.length - 1 && setCurrentImage(currentImage + 1);
   };
 
   const prevImage = () => {
@@ -63,13 +81,23 @@ const DiagnosticReportWindowContainer: React.FC<DiagnosticReportWindowContainerP
         {' '}
         Previous{' '}
       </Button>
-      <Button color="primary" onClick={nextImage} disabled={currentImage === subtaskIds.length - 1}>
+      <Button color="primary" onClick={nextImage} disabled={currentImage === filteredSubtasks.length - 1}>
         {' '}
         Next{' '}
       </Button>
       <Card className={classes.root}>
         <CardContent>
-          <img style={{ width: '100%' }} src={reportUrl(finalPath, subtaskIds[currentImage])} alt={finalPath} />;
+          {filteredSubtasks[currentImage].inversion_solution.meta.map((kv) => (
+            <Typography key={kv?.k}>
+              {kv?.k}: {kv?.v}
+            </Typography>
+          ))}
+          <img
+            style={{ width: '100%' }}
+            src={reportUrl(finalPath, filteredSubtasks[currentImage].inversion_solution.id)}
+            alt={finalPath}
+          />
+          ;
         </CardContent>
       </Card>
       ;
