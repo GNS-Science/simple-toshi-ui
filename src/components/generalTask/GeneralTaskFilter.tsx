@@ -1,4 +1,13 @@
-import { FormControl, Input, InputLabel, makeStyles, MenuItem, Select } from '@material-ui/core';
+import {
+  Checkbox,
+  FormControl,
+  Input,
+  InputLabel,
+  ListItemText,
+  makeStyles,
+  MenuItem,
+  Select,
+} from '@material-ui/core';
 import React, { useState } from 'react';
 import { SweepArgument } from '../../interfaces/generaltask';
 
@@ -46,12 +55,14 @@ const GeneralTaskFilter: React.FC<GeneralTaskFilterProps> = ({ argument, onChang
           value={seletedItems}
           multiple
           onChange={handleChange}
+          renderValue={(selectedItems) => (selectedItems as string[]).join(', ')}
           input={<Input />}
           MenuProps={MenuProps}
         >
           {argument?.v?.map((value) => (
             <MenuItem key={value} value={`${value}`}>
-              {value}
+              <Checkbox checked={seletedItems.indexOf(value as string) > -1} />
+              <ListItemText primary={value} />
             </MenuItem>
           ))}
         </Select>

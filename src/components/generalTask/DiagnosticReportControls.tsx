@@ -44,7 +44,7 @@ const DiagnosticReportControls: React.FC<DiagnosticReportControlsProps> = ({
 
   const handleOpen = () => {
     setOpen();
-    setShowFilters(false);
+    setShowFilters((v) => !v);
   };
 
   return (
