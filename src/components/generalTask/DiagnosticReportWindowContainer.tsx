@@ -31,6 +31,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     paddingLeft: 70,
     paddingRight: 70,
   },
+  image: {
+    padding: '30px',
+    width: '100%',
+  },
 }));
 
 const reportBaseUrl = process.env.REACT_APP_REPORTS_URL;
@@ -95,19 +99,6 @@ const DiagnosticReportWindowContainer: React.FC<DiagnosticReportWindowContainerP
 
   return (
     <>
-      <div className={classes.buttonContainer}>
-        <IconButton className={classes.button} color="primary" onClick={prevImage} disabled={currentImage === 0}>
-          <ArrowBackIosIcon />
-        </IconButton>
-        <IconButton
-          className={classes.button}
-          color="primary"
-          onClick={nextImage}
-          disabled={currentImage === filteredSubtasks.length - 1}
-        >
-          <ArrowForwardIosIcon />
-        </IconButton>
-      </div>
       <Card className={classes.root}>
         <CardContent>
           <Typography>
@@ -121,8 +112,21 @@ const DiagnosticReportWindowContainer: React.FC<DiagnosticReportWindowContainerP
             ))}
           </Typography>
           <Link to={`/InversionSolution/${filteredSubtasks[currentImage].inversion_solution.id}`}>[more]</Link>
+          <div className={classes.buttonContainer}>
+            <IconButton className={classes.button} color="primary" onClick={prevImage} disabled={currentImage === 0}>
+              <ArrowBackIosIcon />
+            </IconButton>
+            <IconButton
+              className={classes.button}
+              color="primary"
+              onClick={nextImage}
+              disabled={currentImage === filteredSubtasks.length - 1}
+            >
+              <ArrowForwardIosIcon />
+            </IconButton>
+          </div>
           <img
-            style={{ padding: '30px', width: '100%' }}
+            className={classes.image}
             src={reportUrl(finalPath, filteredSubtasks[currentImage].inversion_solution.id)}
             alt={finalPath}
           />

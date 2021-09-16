@@ -7,7 +7,15 @@ import { FilteredChildren, SweepArguments } from '../../interfaces/generaltask';
 import DiagnosticReportControls from './DiagnosticReportControls';
 import DiagnosticReportWindowContainer from './DiagnosticReportWindowContainer';
 import { Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/styles';
 
+const useStyles = makeStyles(() => ({
+  filterContainer: { display: 'flex', flexWrap: 'wrap' },
+  controlsContainer: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+}));
 interface GeneralTaskFilterContainerProps {
   readonly sweepArgs?: SweepArguments;
   setShowList: Dispatch<SetStateAction<boolean>>;
@@ -23,6 +31,7 @@ const GeneralTaskFilterContainer: React.FC<GeneralTaskFilterContainerProps> = ({
   filteredChildren,
   childrenListLength,
 }: GeneralTaskFilterContainerProps) => {
+  const classes = useStyles();
   const [queryRef, loadQuery] = useQueryLoader<GeneralTaskFilterContainerQuery>(generalTaskFilterContainerQuery);
   const [showFilters, setShowFilters] = useState(false);
   const [open, setOpen] = useState(false);
@@ -53,18 +62,20 @@ const GeneralTaskFilterContainer: React.FC<GeneralTaskFilterContainerProps> = ({
 
   return (
     <>
-      <DiagnosticReportControls
-        isOpen={open}
-        setShowFilters={setShowFilters}
-        setViewOption={handleChange}
-        setOpen={handleOpen}
-      />
-      <Button onClick={() => setShowFilters((v) => !v)}>
-        <span>
-          Filter({filteredChildren?.data?.length}/{childrenListLength})
-        </span>
-      </Button>
-      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+      <div className={classes.controlsContainer}>
+        <DiagnosticReportControls
+          isOpen={open}
+          setShowFilters={setShowFilters}
+          setViewOption={handleChange}
+          setOpen={handleOpen}
+        />
+        <Button onClick={() => setShowFilters((v) => !v)}>
+          <span>
+            Filter({filteredChildren?.data?.length}/{childrenListLength})
+          </span>
+        </Button>
+      </div>
+      <div className={classes.filterContainer}>
         {showFilters &&
           sweepArgs?.map((argument) => (
             <GeneralTaskFilter key={`${argument?.k}-filter`} argument={argument} onChange={onChange} />

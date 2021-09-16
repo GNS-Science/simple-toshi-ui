@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
-import { Button, FormControl, Input, InputLabel, makeStyles, MenuItem, Select, Theme } from '@material-ui/core';
+import { Button, FormControl, Input, makeStyles, MenuItem, Select, Theme } from '@material-ui/core';
 import { diagnosticReportViewOptions as options } from '../../constants/diagnosticReport';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -33,7 +33,7 @@ const DiagnosticReportControls: React.FC<DiagnosticReportControlsProps> = ({
   setOpen,
   setViewOption,
 }: DiagnosticReportControlsProps) => {
-  const [selectedItem, setSelectedItem] = useState<string>('');
+  const [selectedItem, setSelectedItem] = useState<string>(options[0].finalPath);
 
   const classes = useStyles();
 
@@ -50,7 +50,6 @@ const DiagnosticReportControls: React.FC<DiagnosticReportControlsProps> = ({
   return (
     <>
       <FormControl className={classes.formControl}>
-        <InputLabel id={`report-hash-label`}>Report Location</InputLabel>
         <Select
           labelId={`report-hash-label`}
           name={`Report Location`}
