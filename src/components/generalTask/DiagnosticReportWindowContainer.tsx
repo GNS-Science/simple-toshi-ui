@@ -102,7 +102,10 @@ const DiagnosticReportWindowContainer: React.FC<DiagnosticReportWindowContainerP
       <Card className={classes.root}>
         <CardContent>
           <Typography>
-            <h4>Inversion Solution {filteredSubtasks[currentImage].inversion_solution.id} </h4>
+            <h4>
+              Inversion Solution {filteredSubtasks[currentImage].inversion_solution.id}&nbsp;&nbsp;&nbsp;
+              <Link to={`/InversionSolution/${filteredSubtasks[currentImage].inversion_solution.id}`}>[more]</Link>
+            </h4>
           </Typography>
           <Typography>
             {filteredSubtasks[currentImage].inversion_solution.meta.map((kv) => (
@@ -111,7 +114,6 @@ const DiagnosticReportWindowContainer: React.FC<DiagnosticReportWindowContainerP
               </span>
             ))}
           </Typography>
-          <Link to={`/InversionSolution/${filteredSubtasks[currentImage].inversion_solution.id}`}>[more]</Link>
           <div className={classes.buttonContainer}>
             <IconButton className={classes.button} color="primary" onClick={prevImage} disabled={currentImage === 0}>
               <ArrowBackIosIcon />
