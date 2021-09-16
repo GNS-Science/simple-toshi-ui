@@ -4,6 +4,7 @@ import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { GeneralTaskFilterContainerQuery } from './__generated__/GeneralTaskFilterContainerQuery.graphql';
 import { generalTaskFilterContainerQuery } from './GeneralTaskFilterContainer';
 import { Button, Card, CardContent, makeStyles, Theme, Typography } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import { FilteredSubtask, SweepArguments } from '../../interfaces/generaltask';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -88,12 +89,16 @@ const DiagnosticReportWindowContainer: React.FC<DiagnosticReportWindowContainerP
       <Card className={classes.root}>
         <CardContent>
           <Typography>
+            <h4>Inversion Solution {filteredSubtasks[currentImage].inversion_solution.id} </h4>
+          </Typography>
+          <Typography>
             {filteredSubtasks[currentImage].inversion_solution.meta.map((kv) => (
               <span key={kv?.k}>
                 {kv?.k}: {kv?.v}, &nbsp;
               </span>
             ))}
           </Typography>
+          <Link to={`/InversionSolution/${filteredSubtasks[currentImage].inversion_solution.id}`}>[more]</Link>
           <img
             style={{ padding: '30px', width: '100%' }}
             src={reportUrl(finalPath, filteredSubtasks[currentImage].inversion_solution.id)}
