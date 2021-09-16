@@ -20,6 +20,17 @@ const useStyles = makeStyles((theme: Theme) => ({
   control: {
     padding: theme.spacing(2),
   },
+  buttonContainer: {
+    paddingLeft: '25%',
+    paddingRight: '25%',
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  button: {
+    paddingLeft: 70,
+    paddingRight: 70,
+  },
 }));
 
 const reportBaseUrl = process.env.REACT_APP_REPORTS_URL;
@@ -84,12 +95,19 @@ const DiagnosticReportWindowContainer: React.FC<DiagnosticReportWindowContainerP
 
   return (
     <>
-      <IconButton color="primary" onClick={prevImage} disabled={currentImage === 0}>
-        <ArrowBackIosIcon />
-      </IconButton>
-      <IconButton color="primary" onClick={nextImage} disabled={currentImage === filteredSubtasks.length - 1}>
-        <ArrowForwardIosIcon />
-      </IconButton>
+      <div className={classes.buttonContainer}>
+        <IconButton className={classes.button} color="primary" onClick={prevImage} disabled={currentImage === 0}>
+          <ArrowBackIosIcon />
+        </IconButton>
+        <IconButton
+          className={classes.button}
+          color="primary"
+          onClick={nextImage}
+          disabled={currentImage === filteredSubtasks.length - 1}
+        >
+          <ArrowForwardIosIcon />
+        </IconButton>
+      </div>
       <Card className={classes.root}>
         <CardContent>
           <Typography>
