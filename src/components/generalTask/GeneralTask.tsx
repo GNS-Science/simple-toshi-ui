@@ -71,9 +71,6 @@ const GeneralTask: React.FC = () => {
           <GeneralTaskDetailTab sweepArgs={sweepsList(argumentLists, sweptArguments)} data={data} />
         </TabPanel>
         <TabPanel tab={tab} index={1}>
-          <Typography>
-            <strong>Child tasks</strong>
-          </Typography>
           <React.Suspense fallback={<CircularProgress />}>
             <GeneralTaskChildrenTab sweepArgs={sweepsList(argumentLists, sweptArguments)} id={id} />
           </React.Suspense>
