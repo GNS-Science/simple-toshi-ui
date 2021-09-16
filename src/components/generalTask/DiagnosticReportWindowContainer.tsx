@@ -3,9 +3,11 @@ import buildUrl from 'build-url-ts';
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { GeneralTaskFilterContainerQuery } from './__generated__/GeneralTaskFilterContainerQuery.graphql';
 import { generalTaskFilterContainerQuery } from './GeneralTaskFilterContainer';
-import { Button, Card, CardContent, makeStyles, Theme, Typography } from '@material-ui/core';
+import { Card, CardContent, IconButton, makeStyles, Theme, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { FilteredSubtask, SweepArguments } from '../../interfaces/generaltask';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -82,14 +84,12 @@ const DiagnosticReportWindowContainer: React.FC<DiagnosticReportWindowContainerP
 
   return (
     <>
-      <Button color="primary" onClick={prevImage} disabled={currentImage === 0}>
-        {' '}
-        Previous{' '}
-      </Button>
-      <Button color="primary" onClick={nextImage} disabled={currentImage === filteredSubtasks.length - 1}>
-        {' '}
-        Next{' '}
-      </Button>
+      <IconButton color="primary" onClick={prevImage} disabled={currentImage === 0}>
+        <ArrowBackIosIcon />
+      </IconButton>
+      <IconButton color="primary" onClick={nextImage} disabled={currentImage === filteredSubtasks.length - 1}>
+        <ArrowForwardIosIcon />
+      </IconButton>
       <Card className={classes.root}>
         <CardContent>
           <Typography>
