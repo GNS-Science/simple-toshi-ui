@@ -76,6 +76,10 @@ const DiagnosticReportWindowContainer: React.FC<DiagnosticReportWindowContainerP
     currentImage > 0 && setCurrentImage(currentImage - 1);
   };
 
+  if (!filteredSubtasks[currentImage]) {
+    return <Typography> There are no subtasks to show. </Typography>;
+  }
+
   return (
     <>
       <Button color="primary" onClick={prevImage} disabled={currentImage === 0}>
