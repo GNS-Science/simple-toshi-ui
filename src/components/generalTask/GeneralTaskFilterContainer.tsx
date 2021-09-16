@@ -15,6 +15,9 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     alignItems: 'center',
   },
+  hidden: {
+    display: 'none',
+  },
 }));
 interface GeneralTaskFilterContainerProps {
   readonly sweepArgs?: SweepArguments;
@@ -75,11 +78,10 @@ const GeneralTaskFilterContainer: React.FC<GeneralTaskFilterContainerProps> = ({
           </span>
         </Button>
       </div>
-      <div className={classes.filterContainer}>
-        {showFilters &&
-          sweepArgs?.map((argument) => (
-            <GeneralTaskFilter key={`${argument?.k}-filter`} argument={argument} onChange={onChange} />
-          ))}
+      <div className={showFilters ? classes.filterContainer : classes.hidden}>
+        {sweepArgs?.map((argument) => (
+          <GeneralTaskFilter key={`${argument?.k}-filter`} argument={argument} onChange={onChange} />
+        ))}
       </div>
       {open && queryRef && (
         <DiagnosticReportWindowContainer sweepArgs={sweepArgs} queryRef={queryRef} finalPath={finalPath} />
