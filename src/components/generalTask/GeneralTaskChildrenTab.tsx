@@ -73,6 +73,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
           setShowList={setShowList}
           onChange={handleChange}
           filteredChildren={filteredChildren}
+          childrenListLength={childTasks?.length ?? 0}
         />
       </React.Suspense>
       <React.Suspense fallback={<CircularProgress />}>

@@ -13,6 +13,7 @@ interface GeneralTaskFilterContainerProps {
   setShowList: Dispatch<SetStateAction<boolean>>;
   onChange: (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => void;
   filteredChildren?: FilteredChildren;
+  childrenListLength: number;
 }
 
 const GeneralTaskFilterContainer: React.FC<GeneralTaskFilterContainerProps> = ({
@@ -20,6 +21,7 @@ const GeneralTaskFilterContainer: React.FC<GeneralTaskFilterContainerProps> = ({
   setShowList,
   onChange,
   filteredChildren,
+  childrenListLength,
 }: GeneralTaskFilterContainerProps) => {
   const [queryRef, loadQuery] = useQueryLoader<GeneralTaskFilterContainerQuery>(generalTaskFilterContainerQuery);
   const [showFilters, setShowFilters] = useState(false);
@@ -51,7 +53,11 @@ const GeneralTaskFilterContainer: React.FC<GeneralTaskFilterContainerProps> = ({
 
   return (
     <>
-      <Button onClick={() => setShowFilters((v) => !v)}> Filter Child Tasks </Button>
+      <Button onClick={() => setShowFilters((v) => !v)}>
+        <span>
+          Filter({filteredChildren?.data?.length}/{childrenListLength})
+        </span>
+      </Button>
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {showFilters &&
           sweepArgs?.map((argument) => (
