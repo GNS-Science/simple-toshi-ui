@@ -46,9 +46,11 @@ const GeneralTaskFilterContainer: React.FC<GeneralTaskFilterContainerProps> = ({
   const [open, setOpen] = useState(false);
   const [finalPath, setFinalPath] = useState<string>(options[0].finalPath);
 
+  const maxLength = process.env.REACT_APP_REPORTS_LIMIT ?? 24;
+
   useEffect(() => {
     const filteredChildrenData = filteredChildren?.data ?? [];
-    if (filteredChildrenData.length <= 8) {
+    if (filteredChildrenData.length <= maxLength) {
       const filteredChildrenIds: string[] = [];
       filteredChildrenData.map((child) => {
         (child?.__typename === 'AutomationTask' || child?.__typename === 'RuptureGenerationTask') &&
