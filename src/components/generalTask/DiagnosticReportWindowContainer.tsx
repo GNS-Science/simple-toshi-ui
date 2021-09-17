@@ -1,24 +1,18 @@
 import React, { useState } from 'react';
-import buildUrl from 'build-url-ts';
-import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
-import { GeneralTaskFilterContainerQuery } from './__generated__/GeneralTaskFilterContainerQuery.graphql';
-import { generalTaskFilterContainerQuery } from './GeneralTaskFilterContainer';
-import { Card, CardContent, IconButton, makeStyles, Theme, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import { FilteredSubtask, SweepArguments } from '../../interfaces/generaltask';
+import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
+import { Card, CardContent, IconButton, makeStyles, Typography } from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import buildUrl from 'build-url-ts';
 
-const useStyles = makeStyles((theme: Theme) => ({
+import { generalTaskFilterContainerQuery } from './GeneralTaskFilterContainer';
+import { FilteredSubtask, SweepArguments } from '../../interfaces/generaltask';
+import { GeneralTaskFilterContainerQuery } from './__generated__/GeneralTaskFilterContainerQuery.graphql';
+
+const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
-  },
-  paper: {
-    height: 140,
-    width: 100,
-  },
-  control: {
-    padding: theme.spacing(2),
   },
   buttonContainer: {
     paddingLeft: '25%',

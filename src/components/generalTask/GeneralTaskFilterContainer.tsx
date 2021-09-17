@@ -1,13 +1,14 @@
-import { graphql } from 'babel-plugin-relay/macro';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import GeneralTaskFilter from './GeneralTaskFilter';
-import { GeneralTaskFilterContainerQuery } from './__generated__/GeneralTaskFilterContainerQuery.graphql';
 import { useQueryLoader } from 'react-relay';
-import { FilteredChildren, SweepArguments } from '../../interfaces/generaltask';
-import DiagnosticReportControls from './DiagnosticReportControls';
-import DiagnosticReportWindowContainer from './DiagnosticReportWindowContainer';
+import { graphql } from 'babel-plugin-relay/macro';
 import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
+
+import GeneralTaskFilter from './GeneralTaskFilter';
+import DiagnosticReportControls from './DiagnosticReportControls';
+import DiagnosticReportWindowContainer from './DiagnosticReportWindowContainer';
+import { GeneralTaskFilterContainerQuery } from './__generated__/GeneralTaskFilterContainerQuery.graphql';
+import { FilteredChildren, SweepArguments } from '../../interfaces/generaltask';
 import { diagnosticReportViewOptions as options } from '../../constants/diagnosticReport';
 
 const useStyles = makeStyles(() => ({
@@ -25,6 +26,7 @@ const useStyles = makeStyles(() => ({
     display: 'none',
   },
 }));
+
 interface GeneralTaskFilterContainerProps {
   readonly sweepArgs?: SweepArguments;
   setShowList: Dispatch<SetStateAction<boolean>>;

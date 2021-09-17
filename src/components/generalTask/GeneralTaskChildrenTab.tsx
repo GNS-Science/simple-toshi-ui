@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { graphql } from 'babel-plugin-relay/macro';
 import { useLazyLoadQuery } from 'react-relay/hooks';
 import { Typography, CircularProgress } from '@material-ui/core';
-import ChildTaskTable from './ChildTaskTable';
 
+import ChildTaskTable from './ChildTaskTable';
 import { GeneralTaskChildrenTabQuery } from './__generated__/GeneralTaskChildrenTabQuery.graphql';
 import GeneralTaskFilterContainer from './GeneralTaskFilterContainer';
 import { FilteredArguments, FilteredChildren, SweepArguments } from '../../interfaces/generaltask';

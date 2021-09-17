@@ -1,5 +1,4 @@
 import { EventResult, EventState } from '../components/generalTask/__generated__/GeneralTaskChildrenTabQuery.graphql';
-import { TaskSubType } from '../components/generalTask/__generated__/GeneralTaskFilterContainerQuery.graphql';
 
 export type GeneralTaskKeyValueListPairs = readonly ({
   readonly k: string | null;

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, FormControl, Input, makeStyles, MenuItem, Select, Theme } from '@material-ui/core';
+
 import { diagnosticReportViewOptions as options } from '../../constants/diagnosticReport';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -43,13 +44,9 @@ const DiagnosticReportControls: React.FC<DiagnosticReportControlsProps> = ({
     setSelectedItem(event.target.value as string);
   };
 
-  const handleOpen = () => {
-    setOpen();
-  };
-
   return (
     <>
-      <Button onClick={handleOpen}>{isOpen ? 'Show List' : 'Show Report'}</Button>
+      <Button onClick={setOpen}>{isOpen ? 'Show List' : 'Show Report'}</Button>
       <FormControl className={isOpen ? classes.formControl : classes.hidden}>
         <Select
           labelId={`report-hash-label`}

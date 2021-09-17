@@ -1,8 +1,9 @@
-import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@material-ui/core';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
+import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@material-ui/core';
 import { format } from 'date-fns';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 import KeyValueListTable from './KeyValueListTable';
 import { GeneralTaskQueryResponse } from './__generated__/GeneralTaskQuery.graphql';
 import { SweepArguments } from '../../interfaces/generaltask';
@@ -11,9 +12,11 @@ interface GeneralTaskDetailTabProps {
   data: GeneralTaskQueryResponse;
   sweepArgs: SweepArguments;
 }
+
 const GeneralTaskDetailTab: React.FC<GeneralTaskDetailTabProps> = ({ data, sweepArgs }: GeneralTaskDetailTabProps) => {
   const createdDate = data?.node?.created ? format(new Date(data?.node?.created as string), 'PPPppp') : '';
   const updatedDate = data?.node?.updated ? format(new Date(data?.node?.updated as string), 'PPPppp') : '';
+
   return (
     <>
       <Typography>
