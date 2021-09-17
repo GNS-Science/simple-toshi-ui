@@ -2,18 +2,9 @@ import { Box, makeStyles, Theme } from '@material-ui/core';
 import React from 'react';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
-    display: 'flex',
-  },
   tabPanel: {
     width: '80%',
-    padding: theme.spacing(2),
-  },
-  tab: {
-    width: '20%',
-    borderRight: `1px solid ${theme.palette.divider}`,
+    padding: theme.spacing(0),
   },
 }));
 
