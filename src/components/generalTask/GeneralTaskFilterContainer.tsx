@@ -8,6 +8,7 @@ import DiagnosticReportControls from './DiagnosticReportControls';
 import DiagnosticReportWindowContainer from './DiagnosticReportWindowContainer';
 import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
+import { diagnosticReportViewOptions as options } from '../../constants/diagnosticReport';
 
 const useStyles = makeStyles(() => ({
   filterContainer: {
@@ -43,7 +44,7 @@ const GeneralTaskFilterContainer: React.FC<GeneralTaskFilterContainerProps> = ({
   const [queryRef, loadQuery] = useQueryLoader<GeneralTaskFilterContainerQuery>(generalTaskFilterContainerQuery);
   const [showFilters, setShowFilters] = useState(false);
   const [open, setOpen] = useState(false);
-  const [finalPath, setFinalPath] = useState<string>('');
+  const [finalPath, setFinalPath] = useState<string>(options[0].finalPath);
 
   useEffect(() => {
     const filteredChildrenData = filteredChildren?.data ?? [];
