@@ -25,9 +25,14 @@ const useStyles = makeStyles(() => ({
     paddingLeft: 70,
     paddingRight: 70,
   },
+  imageContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
   image: {
-    padding: '30px',
-    width: '100%',
+    padding: '5px',
+    maxHeight: '90vh',
+    maxWidth: '100%',
   },
 }));
 
@@ -121,11 +126,13 @@ const DiagnosticReportWindowContainer: React.FC<DiagnosticReportWindowContainerP
               <ArrowForwardIosIcon />
             </IconButton>
           </div>
-          <img
-            className={classes.image}
-            src={reportUrl(finalPath, filteredSubtasks[currentImage].inversion_solution.id)}
-            alt={finalPath}
-          />
+          <div className={classes.imageContainer}>
+            <img
+              className={classes.image}
+              src={reportUrl(finalPath, filteredSubtasks[currentImage].inversion_solution.id)}
+              alt={finalPath}
+            />
+          </div>
         </CardContent>
       </Card>
     </>

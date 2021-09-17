@@ -15,10 +15,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
     display: 'flex',
-  },
-  tabPanel: {
-    width: '80%',
-    padding: theme.spacing(2),
+    padding: 0,
   },
   tab: {
     width: '20%',
