@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, FormControl, Input, makeStyles, MenuItem, Select, Theme } from '@material-ui/core';
 import { diagnosticReportViewOptions as options } from '../../constants/diagnosticReport';
 
@@ -7,6 +7,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: theme.spacing(2),
     minWidth: 260,
     maxWidth: 300,
+  },
+  hidden: {
+    visibility: 'hidden',
   },
 }));
 
@@ -22,14 +25,12 @@ const MenuProps = {
 };
 interface DiagnosticReportControlsProps {
   isOpen: boolean;
-  setShowFilters: Dispatch<SetStateAction<boolean>>;
   setOpen: () => void;
   setViewOption: (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => void;
 }
 
 const DiagnosticReportControls: React.FC<DiagnosticReportControlsProps> = ({
   isOpen,
-  setShowFilters,
   setOpen,
   setViewOption,
 }: DiagnosticReportControlsProps) => {
@@ -44,12 +45,12 @@ const DiagnosticReportControls: React.FC<DiagnosticReportControlsProps> = ({
 
   const handleOpen = () => {
     setOpen();
-    setShowFilters((v) => !v);
   };
 
   return (
     <>
-      <FormControl className={classes.formControl}>
+      <Button onClick={handleOpen}>{isOpen ? 'Show List' : 'Show Report'}</Button>
+      <FormControl className={isOpen ? classes.formControl : classes.hidden}>
         <Select
           labelId={`report-hash-label`}
           name={`Report Location`}
@@ -65,7 +66,6 @@ const DiagnosticReportControls: React.FC<DiagnosticReportControlsProps> = ({
           ))}
         </Select>
       </FormControl>
-      <Button onClick={handleOpen}>{isOpen ? 'Close reports' : 'Open reports'}</Button>
     </>
   );
 };

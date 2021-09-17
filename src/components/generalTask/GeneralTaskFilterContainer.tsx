@@ -71,17 +71,12 @@ const GeneralTaskFilterContainer: React.FC<GeneralTaskFilterContainerProps> = ({
   return (
     <>
       <div className={classes.controlsContainer}>
-        <DiagnosticReportControls
-          isOpen={open}
-          setShowFilters={setShowFilters}
-          setViewOption={handleChange}
-          setOpen={handleOpen}
-        />
         <Button onClick={() => setShowFilters((v) => !v)}>
           <span>
             Filter({filteredChildren?.data?.length}/{childrenListLength})
           </span>
         </Button>
+        <DiagnosticReportControls isOpen={open} setViewOption={handleChange} setOpen={handleOpen} />
       </div>
       <div className={showFilters ? classes.filterContainer : classes.hidden}>
         {sweepArgs?.map((argument) => (
