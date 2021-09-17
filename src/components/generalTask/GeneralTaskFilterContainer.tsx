@@ -10,7 +10,12 @@ import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles(() => ({
-  filterContainer: { display: 'flex', flexWrap: 'wrap' },
+  filterContainer: {
+    width: '100%',
+    display: 'flex',
+    flexWrap: 'wrap',
+    paddingLeft: 10,
+  },
   controlsContainer: {
     display: 'flex',
     alignItems: 'center',

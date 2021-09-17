@@ -13,7 +13,7 @@ import { SweepArgument } from '../../interfaces/generaltask';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
-    margin: theme.spacing(2),
+    margin: theme.spacing(0.7),
     minWidth: 260,
     maxWidth: 300,
   },
