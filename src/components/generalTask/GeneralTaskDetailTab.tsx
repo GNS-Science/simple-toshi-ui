@@ -4,7 +4,7 @@ import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mate
 import { format } from 'date-fns';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import KeyValueListTable from './KeyValueListTable';
+import KeyValueListTable from '../common/KeyValueListTable';
 import { GeneralTaskQueryResponse } from './__generated__/GeneralTaskQuery.graphql';
 import { SweepArguments } from '../../interfaces/generaltask';
 
