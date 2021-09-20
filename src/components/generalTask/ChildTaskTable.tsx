@@ -36,28 +36,37 @@ const AlternatingRow = withStyles((theme) => ({
 }))(TableRow);
 
 export interface ChildTaskTableProps {
-  data?: (
-    | {
-        readonly __typename: 'RuptureGenerationTask';
-        readonly id: string;
-        readonly created: unknown | null;
-        readonly duration: number | null;
-        readonly state: EventState | null;
-        readonly result: EventResult | null;
-      }
-    | {
-        readonly __typename: 'AutomationTask';
-        readonly id: string;
-        readonly created: unknown | null;
-        readonly duration: number | null;
-        readonly state: EventState | null;
-        readonly result: EventResult | null;
-      }
-    | {
-        readonly __typename: '%other';
-      }
-    | undefined
-  )[];
+  data?:
+    | (
+        | {
+            readonly __typename: 'RuptureGenerationTask';
+            readonly id: string;
+            readonly created: unknown | null;
+            readonly duration: number | null;
+            readonly state: EventState | null;
+            readonly result: EventResult | null;
+            readonly arguments: ReadonlyArray<{
+              readonly k: string | null;
+              readonly v: string | null;
+            } | null> | null;
+          }
+        | {
+            readonly __typename: 'AutomationTask';
+            readonly id: string;
+            readonly created: unknown | null;
+            readonly duration: number | null;
+            readonly state: EventState | null;
+            readonly result: EventResult | null;
+            readonly arguments: ReadonlyArray<{
+              readonly k: string | null;
+              readonly v: string | null;
+            } | null> | null;
+          }
+        | {
+            readonly __typename: '%other';
+          }
+        | undefined
+      )[];
 }
 
 const ChildTaskTable: React.FC<ChildTaskTableProps> = ({ data }: ChildTaskTableProps) => {
