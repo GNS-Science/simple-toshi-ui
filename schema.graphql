@@ -47,6 +47,9 @@ type AutomationTask implements Node & Thing & AutomationTaskInterface {
   metrics: [KeyValuePair]
   model_type: ModelType
   task_type: TaskSubType
+
+  """the primary result of this task (only for task_type == INVERSION."""
+  inversion_solution: InversionSolution
 }
 
 input AutomationTaskInput {
@@ -665,6 +668,11 @@ interface Node {
   id: ID!
 }
 
+type NodeFilter {
+  ok: Boolean
+  result(before: String, after: String, first: Int, last: Int): SearchResultConnection
+}
+
 """
 The Relay compliant `PageInfo` type, containing data necessary to paginate this connection.
 """
@@ -692,6 +700,7 @@ type QueryRoot {
 
   """The ID of the object"""
   node(id: ID!): Node
+  nodes(id_in: [ID]): NodeFilter
   search(search_term: String): Search
 
   """The ID of the object"""

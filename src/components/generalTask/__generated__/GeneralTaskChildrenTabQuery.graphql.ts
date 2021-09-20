@@ -21,6 +21,10 @@ export type GeneralTaskChildrenTabQueryResponse = {
                         readonly duration: number | null;
                         readonly state: EventState | null;
                         readonly result: EventResult | null;
+                        readonly arguments: ReadonlyArray<{
+                            readonly k: string | null;
+                            readonly v: string | null;
+                        } | null> | null;
                     } | {
                         readonly __typename: "RuptureGenerationTask";
                         readonly id: string;
@@ -28,6 +32,10 @@ export type GeneralTaskChildrenTabQueryResponse = {
                         readonly duration: number | null;
                         readonly state: EventState | null;
                         readonly result: EventResult | null;
+                        readonly arguments: ReadonlyArray<{
+                            readonly k: string | null;
+                            readonly v: string | null;
+                        } | null> | null;
                     } | {
                         /*This will never be '%other', but we need some
                         value in case none of the concrete values match.*/
@@ -65,6 +73,10 @@ query GeneralTaskChildrenTabQuery(
                 duration
                 state
                 result
+                arguments {
+                  k
+                  v
+                }
               }
               ... on RuptureGenerationTask {
                 __typename
@@ -73,6 +85,10 @@ query GeneralTaskChildrenTabQuery(
                 duration
                 state
                 result
+                arguments {
+                  k
+                  v
+                }
               }
               ... on Node {
                 __isNode: __typename
@@ -146,20 +162,47 @@ v7 = {
   "name": "result",
   "storageKey": null
 },
-v8 = [
+v8 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "KeyValuePair",
+  "kind": "LinkedField",
+  "name": "arguments",
+  "plural": true,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "k",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "v",
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+},
+v9 = [
   (v3/*: any*/),
   (v2/*: any*/),
   (v4/*: any*/),
   (v5/*: any*/),
   (v6/*: any*/),
-  (v7/*: any*/)
+  (v7/*: any*/),
+  (v8/*: any*/)
 ],
-v9 = [
+v10 = [
   (v2/*: any*/),
   (v4/*: any*/),
   (v5/*: any*/),
   (v6/*: any*/),
-  (v7/*: any*/)
+  (v7/*: any*/),
+  (v8/*: any*/)
 ];
 return {
   "fragment": {
@@ -214,13 +257,13 @@ return {
                             "selections": [
                               {
                                 "kind": "InlineFragment",
-                                "selections": (v8/*: any*/),
+                                "selections": (v9/*: any*/),
                                 "type": "AutomationTask",
                                 "abstractKey": null
                               },
                               {
                                 "kind": "InlineFragment",
-                                "selections": (v8/*: any*/),
+                                "selections": (v9/*: any*/),
                                 "type": "RuptureGenerationTask",
                                 "abstractKey": null
                               }
@@ -301,13 +344,13 @@ return {
                               (v3/*: any*/),
                               {
                                 "kind": "InlineFragment",
-                                "selections": (v9/*: any*/),
+                                "selections": (v10/*: any*/),
                                 "type": "AutomationTask",
                                 "abstractKey": null
                               },
                               {
                                 "kind": "InlineFragment",
-                                "selections": (v9/*: any*/),
+                                "selections": (v10/*: any*/),
                                 "type": "RuptureGenerationTask",
                                 "abstractKey": null
                               },
@@ -342,14 +385,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "ab25639bac248fe803d34038dee959ab",
+    "cacheID": "6102e8d8b449a6ec53e78d65d93702ca",
     "id": null,
     "metadata": {},
     "name": "GeneralTaskChildrenTabQuery",
     "operationKind": "query",
-    "text": "query GeneralTaskChildrenTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on GeneralTask {\n      id\n      children {\n        edges {\n          node {\n            child {\n              __typename\n              ... on AutomationTask {\n                __typename\n                id\n                created\n                duration\n                state\n                result\n              }\n              ... on RuptureGenerationTask {\n                __typename\n                id\n                created\n                duration\n                state\n                result\n              }\n              ... on Node {\n                __isNode: __typename\n                id\n              }\n            }\n            id\n          }\n        }\n      }\n    }\n    id\n  }\n}\n"
+    "text": "query GeneralTaskChildrenTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on GeneralTask {\n      id\n      children {\n        edges {\n          node {\n            child {\n              __typename\n              ... on AutomationTask {\n                __typename\n                id\n                created\n                duration\n                state\n                result\n                arguments {\n                  k\n                  v\n                }\n              }\n              ... on RuptureGenerationTask {\n                __typename\n                id\n                created\n                duration\n                state\n                result\n                arguments {\n                  k\n                  v\n                }\n              }\n              ... on Node {\n                __isNode: __typename\n                id\n              }\n            }\n            id\n          }\n        }\n      }\n    }\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '2381dada481e87e81a8971a0678f3b3a';
+(node as any).hash = 'dec7bd31319c83790e5fe0a4fa452613';
 export default node;
