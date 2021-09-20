@@ -82,17 +82,19 @@ describe('GeneralTask component', () => {
     expect(await findByText('mock_k_1')).toBeInTheDocument();
   });
 
-  // it('displays Child tasks tab when clicked', async () => {
-  //   jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ id: '1234 ' });
-  //   const environment = createMockEnvironment();
+  it('displays mock Child tasks tab when clicked', async () => {
+    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ id: '1234 ' });
+    const environment = createMockEnvironment();
 
-  //   environment.mock.queueOperationResolver((operation) => MockPayloadGenerator.generate(operation, mockResolver));
+    environment.mock.queueOperationResolver((operation) =>
+      MockPayloadGenerator.generate(operation, mockGeneralTaskQueryResolver),
+    );
 
-  //   const { getByText, findByText } = setup(environment);
-  //   fireEvent.click(getByText('Child Tasks'));
+    const { getByText, findByText } = setup(environment);
+    fireEvent.click(getByText('Child Tasks'));
 
-  //   expect(await findByText('children tab component')).toBeInTheDocument();
-  // });
+    expect(await findByText('children tab component')).toBeInTheDocument();
+  });
 
   it('displays not found when no matching id', async () => {
     jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ id: '1234' });
