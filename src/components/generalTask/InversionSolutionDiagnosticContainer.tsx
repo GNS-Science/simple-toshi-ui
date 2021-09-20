@@ -4,10 +4,10 @@ import { graphql } from 'babel-plugin-relay/macro';
 import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 
-import GeneralTaskFilter from './GeneralTaskFilter';
+import SweepArgumentFilter from './SweepArgumentFilter';
 import DiagnosticReportControls from './DiagnosticReportControls';
-import DiagnosticReportWindowContainer from './DiagnosticReportWindowContainer';
-import { GeneralTaskFilterContainerQuery } from './__generated__/GeneralTaskFilterContainerQuery.graphql';
+import DiagnosticReportsCard from './DiagnosticReportsCard';
+import { InversionSolutionDiagnosticContainerQuery } from './__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
 import { FilteredChildren, SweepArguments } from '../../interfaces/generaltask';
 import { diagnosticReportViewOptions as options } from '../../constants/diagnosticReport';
 
@@ -27,7 +27,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-interface GeneralTaskFilterContainerProps {
+interface InversionSolutionDiagnosticContainerProps {
   readonly sweepArgs?: SweepArguments;
   setShowList: Dispatch<SetStateAction<boolean>>;
   onChange: (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => void;
@@ -35,17 +35,19 @@ interface GeneralTaskFilterContainerProps {
   childrenListLength: number;
 }
 
-const GeneralTaskFilterContainer: React.FC<GeneralTaskFilterContainerProps> = ({
+const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnosticContainerProps> = ({
   sweepArgs,
   setShowList,
   onChange,
   filteredChildren,
   childrenListLength,
-}: GeneralTaskFilterContainerProps) => {
+}: InversionSolutionDiagnosticContainerProps) => {
   const classes = useStyles();
-  const [queryRef, loadQuery] = useQueryLoader<GeneralTaskFilterContainerQuery>(generalTaskFilterContainerQuery);
+  const [queryRef, loadQuery] = useQueryLoader<InversionSolutionDiagnosticContainerQuery>(
+    inversionSolutionDiagnosticContainerQuery,
+  );
   const [showFilters, setShowFilters] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [showReport, setShowReport] = useState(false);
   const [finalPath, setFinalPath] = useState<string>(options[0].finalPath);
 
   const maxLength = process.env.REACT_APP_REPORTS_LIMIT ?? 24;
@@ -68,9 +70,9 @@ const GeneralTaskFilterContainer: React.FC<GeneralTaskFilterContainerProps> = ({
     setFinalPath(newValue);
   };
 
-  const handleOpen = () => {
+  const handleViewChange = () => {
     setShowList((v) => !v);
-    setOpen((v) => !v);
+    setShowReport((v) => !v);
   };
 
   return (
@@ -78,27 +80,27 @@ const GeneralTaskFilterContainer: React.FC<GeneralTaskFilterContainerProps> = ({
       <div className={classes.controlsContainer}>
         <Button onClick={() => setShowFilters((v) => !v)}>
           <span>
-            Filter({filteredChildren?.data?.length}/{childrenListLength})
+            Filter&nbsp;({filteredChildren?.data?.length}/{childrenListLength})
           </span>
         </Button>
-        <DiagnosticReportControls isOpen={open} setViewOption={handleChange} setOpen={handleOpen} />
+        <DiagnosticReportControls isOpen={showReport} setViewOption={handleChange} setOpen={handleViewChange} />
       </div>
       <div className={showFilters ? classes.filterContainer : classes.hidden}>
         {sweepArgs?.map((argument) => (
-          <GeneralTaskFilter key={`${argument?.k}-filter`} argument={argument} onChange={onChange} />
+          <SweepArgumentFilter key={`${argument?.k}-filter`} argument={argument} onChange={onChange} />
         ))}
       </div>
-      {open && queryRef && (
-        <DiagnosticReportWindowContainer sweepArgs={sweepArgs} queryRef={queryRef} finalPath={finalPath} />
+      {showReport && queryRef && (
+        <DiagnosticReportsCard sweepArgs={sweepArgs} queryRef={queryRef} finalPath={finalPath} />
       )}
     </>
   );
 };
 
-export default GeneralTaskFilterContainer;
+export default InversionSolutionDiagnosticContainer;
 
-export const generalTaskFilterContainerQuery = graphql`
-  query GeneralTaskFilterContainerQuery($id: [ID!]) {
+export const inversionSolutionDiagnosticContainerQuery = graphql`
+  query InversionSolutionDiagnosticContainerQuery($id: [ID!]) {
     nodes(id_in: $id) {
       result {
         edges {

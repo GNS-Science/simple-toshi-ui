@@ -4,10 +4,10 @@
 
 import { ConcreteRequest } from "relay-runtime";
 export type TaskSubType = "HAZARD" | "INVERSION" | "REPORT" | "RUPTURE_SET" | "%future added value";
-export type GeneralTaskFilterContainerQueryVariables = {
+export type InversionSolutionDiagnosticContainerQueryVariables = {
     id?: Array<string> | null;
 };
-export type GeneralTaskFilterContainerQueryResponse = {
+export type InversionSolutionDiagnosticContainerQueryResponse = {
     readonly nodes: {
         readonly result: {
             readonly edges: ReadonlyArray<{
@@ -32,15 +32,15 @@ export type GeneralTaskFilterContainerQueryResponse = {
         } | null;
     } | null;
 };
-export type GeneralTaskFilterContainerQuery = {
-    readonly response: GeneralTaskFilterContainerQueryResponse;
-    readonly variables: GeneralTaskFilterContainerQueryVariables;
+export type InversionSolutionDiagnosticContainerQuery = {
+    readonly response: InversionSolutionDiagnosticContainerQueryResponse;
+    readonly variables: InversionSolutionDiagnosticContainerQueryVariables;
 };
 
 
 
 /*
-query GeneralTaskFilterContainerQuery(
+query InversionSolutionDiagnosticContainerQuery(
   $id: [ID!]
 ) {
   nodes(id_in: $id) {
@@ -170,7 +170,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "GeneralTaskFilterContainerQuery",
+    "name": "InversionSolutionDiagnosticContainerQuery",
     "selections": [
       {
         "alias": null,
@@ -226,7 +226,7 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "GeneralTaskFilterContainerQuery",
+    "name": "InversionSolutionDiagnosticContainerQuery",
     "selections": [
       {
         "alias": null,
@@ -285,14 +285,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "2f03437322615211a01ca1d3dc0bfdc4",
+    "cacheID": "cca2b24380617b8f1ff1ec36b4ee74fa",
     "id": null,
     "metadata": {},
-    "name": "GeneralTaskFilterContainerQuery",
+    "name": "InversionSolutionDiagnosticContainerQuery",
     "operationKind": "query",
-    "text": "query GeneralTaskFilterContainerQuery(\n  $id: [ID!]\n) {\n  nodes(id_in: $id) {\n    result {\n      edges {\n        node {\n          __typename\n          ... on AutomationTask {\n            created\n            task_type\n            inversion_solution {\n              id\n              file_name\n              meta {\n                k\n                v\n              }\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query InversionSolutionDiagnosticContainerQuery(\n  $id: [ID!]\n) {\n  nodes(id_in: $id) {\n    result {\n      edges {\n        node {\n          __typename\n          ... on AutomationTask {\n            created\n            task_type\n            inversion_solution {\n              id\n              file_name\n              meta {\n                k\n                v\n              }\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '136f13995a0777cefa44de571cf8575b';
+(node as any).hash = '714837ed9b8d2f97384906cc607f3b7c';
 export default node;

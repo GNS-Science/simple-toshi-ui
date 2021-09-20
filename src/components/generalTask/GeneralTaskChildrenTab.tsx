@@ -5,7 +5,7 @@ import { Typography, CircularProgress } from '@material-ui/core';
 
 import ChildTaskTable from './ChildTaskTable';
 import { GeneralTaskChildrenTabQuery } from './__generated__/GeneralTaskChildrenTabQuery.graphql';
-import GeneralTaskFilterContainer from './GeneralTaskFilterContainer';
+import SweepArgumentFilterContainer from './InversionSolutionDiagnosticContainer';
 import { FilteredArguments, FilteredChildren, SweepArguments } from '../../interfaces/generaltask';
 
 interface GeneralTaskChildrenTabProps {
@@ -68,7 +68,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   return (
     <div>
       <React.Suspense fallback={<CircularProgress />}>
-        <GeneralTaskFilterContainer
+        <SweepArgumentFilterContainer
           sweepArgs={sweepArgs}
           setShowList={setShowList}
           onChange={handleChange}

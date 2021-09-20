@@ -71,7 +71,7 @@ export interface SolutionDiagnosticsOption {
   imgHght: number | undefined;
 }
 
-export type FilteredSubtask = {
+export type ValidatedSubtask = {
   __typename: 'AutomationTask';
   inversion_solution: {
     id: string;

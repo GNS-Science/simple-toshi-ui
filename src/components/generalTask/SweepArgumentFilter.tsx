@@ -30,12 +30,12 @@ const MenuProps = {
   },
 };
 
-interface GeneralTaskFilterProps {
+interface SweepArgumentFilterProps {
   argument: SweepArgument;
   onChange: (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => void;
 }
 
-const GeneralTaskFilter: React.FC<GeneralTaskFilterProps> = ({ argument, onChange }: GeneralTaskFilterProps) => {
+const SweepArgumentFilter: React.FC<SweepArgumentFilterProps> = ({ argument, onChange }: SweepArgumentFilterProps) => {
   const [seletedItems, setSelectedItems] = useState<string[]>([]);
   const classes = useStyles();
 
@@ -71,4 +71,4 @@ const GeneralTaskFilter: React.FC<GeneralTaskFilterProps> = ({ argument, onChang
   );
 };
 
-export default GeneralTaskFilter;
+export default SweepArgumentFilter;

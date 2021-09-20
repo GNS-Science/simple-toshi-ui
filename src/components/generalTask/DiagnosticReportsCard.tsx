@@ -6,9 +6,9 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import buildUrl from 'build-url-ts';
 
-import { generalTaskFilterContainerQuery } from './GeneralTaskFilterContainer';
-import { FilteredSubtask, SweepArguments } from '../../interfaces/generaltask';
-import { GeneralTaskFilterContainerQuery } from './__generated__/GeneralTaskFilterContainerQuery.graphql';
+import { inversionSolutionDiagnosticContainerQuery } from './InversionSolutionDiagnosticContainer';
+import { ValidatedSubtask, SweepArguments } from '../../interfaces/generaltask';
+import { InversionSolutionDiagnosticContainerQuery } from './__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -20,6 +20,7 @@ const useStyles = makeStyles(() => ({
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
+    alignItems: 'center',
   },
   button: {
     paddingLeft: 70,
@@ -37,22 +38,25 @@ const useStyles = makeStyles(() => ({
 }));
 
 const reportBaseUrl = process.env.REACT_APP_REPORTS_URL;
-interface DiagnosticReportWindowContainerProps {
+interface DiagnosticReportsCardProps {
   readonly sweepArgs?: SweepArguments;
-  queryRef: PreloadedQuery<GeneralTaskFilterContainerQuery, Record<string, unknown>>;
+  queryRef: PreloadedQuery<InversionSolutionDiagnosticContainerQuery, Record<string, unknown>>;
   finalPath: string;
 }
 
-const DiagnosticReportWindowContainer: React.FC<DiagnosticReportWindowContainerProps> = ({
+const DiagnosticReportsCard: React.FC<DiagnosticReportsCardProps> = ({
   sweepArgs,
   queryRef,
   finalPath,
-}: DiagnosticReportWindowContainerProps) => {
+}: DiagnosticReportsCardProps) => {
   const classes = useStyles();
   const [currentImage, setCurrentImage] = useState<number>(0);
-  const data = usePreloadedQuery<GeneralTaskFilterContainerQuery>(generalTaskFilterContainerQuery, queryRef);
+  const data = usePreloadedQuery<InversionSolutionDiagnosticContainerQuery>(
+    inversionSolutionDiagnosticContainerQuery,
+    queryRef,
+  );
   const subtasks = data?.nodes?.result?.edges.map((subtask) => subtask?.node);
-  const filteredSubtasks: FilteredSubtask[] = [];
+  const validatedSubtasks: ValidatedSubtask[] = [];
 
   subtasks?.map((subtask) => {
     if (
@@ -62,7 +66,7 @@ const DiagnosticReportWindowContainer: React.FC<DiagnosticReportWindowContainerP
       subtask.inversion_solution !== null &&
       subtask.inversion_solution.meta !== null
     ) {
-      const newSubtask: FilteredSubtask = {
+      const newSubtask: ValidatedSubtask = {
         __typename: 'AutomationTask',
         inversion_solution: {
           id: subtask.inversion_solution.id,
@@ -74,7 +78,7 @@ const DiagnosticReportWindowContainer: React.FC<DiagnosticReportWindowContainerP
           sweepArgs?.some((argument) => argument?.k?.includes(kv.k as string)) &&
           newSubtask.inversion_solution.meta.push(kv);
       });
-      filteredSubtasks.push(newSubtask);
+      validatedSubtasks.push(newSubtask);
     }
   });
 
@@ -85,15 +89,19 @@ const DiagnosticReportWindowContainer: React.FC<DiagnosticReportWindowContainerP
   };
 
   const nextImage = () => {
-    currentImage < filteredSubtasks.length - 1 && setCurrentImage(currentImage + 1);
+    currentImage < validatedSubtasks.length - 1 && setCurrentImage(currentImage + 1);
   };
 
   const prevImage = () => {
     currentImage > 0 && setCurrentImage(currentImage - 1);
   };
 
-  if (!filteredSubtasks[currentImage]) {
-    return <Typography> There are no subtasks to show. </Typography>;
+  if (!subtasks || subtasks.length === 0) {
+    return <Typography> Filter query has not run. </Typography>;
+  }
+
+  if (!validatedSubtasks[currentImage]) {
+    return <Typography> There are no valid reports to show. </Typography>;
   }
 
   return (
@@ -102,12 +110,12 @@ const DiagnosticReportWindowContainer: React.FC<DiagnosticReportWindowContainerP
         <CardContent>
           <Typography>
             <h4>
-              Inversion Solution {filteredSubtasks[currentImage].inversion_solution.id}&nbsp;&nbsp;&nbsp;
-              <Link to={`/InversionSolution/${filteredSubtasks[currentImage].inversion_solution.id}`}>[more]</Link>
+              Inversion Solution {validatedSubtasks[currentImage].inversion_solution.id}&nbsp;&nbsp;&nbsp;
+              <Link to={`/InversionSolution/${validatedSubtasks[currentImage].inversion_solution.id}`}>[more]</Link>
             </h4>
           </Typography>
           <Typography>
-            {filteredSubtasks[currentImage].inversion_solution.meta.map((kv) => (
+            {validatedSubtasks[currentImage].inversion_solution.meta.map((kv) => (
               <span key={kv?.k}>
                 {kv?.k}: {kv?.v}, &nbsp;
               </span>
@@ -117,11 +125,14 @@ const DiagnosticReportWindowContainer: React.FC<DiagnosticReportWindowContainerP
             <IconButton className={classes.button} color="primary" onClick={prevImage} disabled={currentImage === 0}>
               <ArrowBackIosIcon />
             </IconButton>
+            <Typography>
+              {currentImage + 1}&nbsp;of&nbsp;{validatedSubtasks.length}
+            </Typography>
             <IconButton
               className={classes.button}
               color="primary"
               onClick={nextImage}
-              disabled={currentImage === filteredSubtasks.length - 1}
+              disabled={currentImage === validatedSubtasks.length - 1}
             >
               <ArrowForwardIosIcon />
             </IconButton>
@@ -129,7 +140,7 @@ const DiagnosticReportWindowContainer: React.FC<DiagnosticReportWindowContainerP
           <div className={classes.imageContainer}>
             <img
               className={classes.image}
-              src={reportUrl(finalPath, filteredSubtasks[currentImage].inversion_solution.id)}
+              src={reportUrl(finalPath, validatedSubtasks[currentImage].inversion_solution.id)}
               alt={finalPath}
             />
           </div>
@@ -139,4 +150,4 @@ const DiagnosticReportWindowContainer: React.FC<DiagnosticReportWindowContainerP
   );
 };
 
-export default DiagnosticReportWindowContainer;
+export default DiagnosticReportsCard;
