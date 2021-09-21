@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
-import { Card, CardContent, IconButton, makeStyles, Typography } from '@material-ui/core';
+import { Button, Card, CardContent, IconButton, makeStyles, Typography } from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import buildUrl from 'build-url-ts';
@@ -42,7 +42,8 @@ interface DiagnosticReportsCardProps {
   readonly sweepArgs?: SweepArguments;
   queryRef: PreloadedQuery<InversionSolutionDiagnosticContainerQuery, Record<string, unknown>>;
   finalPath: string;
-  handleSetFavourites: (event: React.ChangeEvent<{ value: unknown }>) => void;
+  handleSetFavourites: (id: string) => void;
+  handleSetDiscards: (id: string) => void;
 }
 
 const DiagnosticReportsCard: React.FC<DiagnosticReportsCardProps> = ({
@@ -50,6 +51,7 @@ const DiagnosticReportsCard: React.FC<DiagnosticReportsCardProps> = ({
   queryRef,
   finalPath,
   handleSetFavourites,
+  handleSetDiscards,
 }: DiagnosticReportsCardProps) => {
   const classes = useStyles();
   const [currentImage, setCurrentImage] = useState<number>(0);
@@ -138,6 +140,12 @@ const DiagnosticReportsCard: React.FC<DiagnosticReportsCardProps> = ({
             >
               <ArrowForwardIosIcon />
             </IconButton>
+            <Button onClick={() => handleSetFavourites(validatedSubtasks[currentImage].inversion_solution.id)}>
+              <img src="/hand-rock.svg" />
+            </Button>
+            <Button onClick={() => handleSetDiscards(validatedSubtasks[currentImage].inversion_solution.id)}>
+              <img src="/hand-scissors.svg" />
+            </Button>
           </div>
           <div className={classes.imageContainer}>
             <img
