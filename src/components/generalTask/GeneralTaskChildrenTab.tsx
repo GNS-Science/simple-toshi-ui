@@ -93,7 +93,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
 
 export default GeneralTaskChildrenTab;
 
-const generalTaskChildrenTabQuery = graphql`
+export const generalTaskChildrenTabQuery = graphql`
   query GeneralTaskChildrenTabQuery($id: ID!) {
     node(id: $id) {
       ... on GeneralTask {

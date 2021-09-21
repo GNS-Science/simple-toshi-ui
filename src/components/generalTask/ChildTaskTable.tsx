@@ -3,6 +3,7 @@ import { makeStyles, Paper, Table, TableBody, TableCell, TableHead, TableRow, wi
 import { Link } from 'react-router-dom';
 import { EventResult, EventState } from './__generated__/GeneralTaskChildrenTabQuery.graphql';
 import { formatDuration, intervalToDuration, secondsToMilliseconds, format } from 'date-fns';
+import { formatDate } from '../../utils';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -100,9 +101,7 @@ const ChildTaskTable: React.FC<ChildTaskTableProps> = ({ data }: ChildTaskTableP
               if (e?.__typename === 'RuptureGenerationTask') {
                 return (
                   <AlternatingRow key={e?.id}>
-                    <TableCell className={classes.tableCell}>
-                      {e?.created ? format(new Date(e?.created as string), 'PPPppp') : ''}
-                    </TableCell>
+                    <TableCell className={classes.tableCell}>{formatDate(e?.created as string)}</TableCell>
                     <TableCell className={classes.tableCell}>
                       {e?.duration
                         ? formatDuration(
@@ -127,9 +126,7 @@ const ChildTaskTable: React.FC<ChildTaskTableProps> = ({ data }: ChildTaskTableP
               } else if (e?.__typename === 'AutomationTask') {
                 return (
                   <AlternatingRow key={e?.id}>
-                    <TableCell className={classes.tableCell}>
-                      {e?.created ? format(new Date(e?.created as string), 'PPPppp') : ''}
-                    </TableCell>
+                    <TableCell className={classes.tableCell}>{formatDate(e?.created as string)}</TableCell>
                     <TableCell className={classes.tableCell}>
                       {e?.duration
                         ? formatDuration(

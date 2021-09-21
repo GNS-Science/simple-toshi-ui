@@ -78,7 +78,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   return (
     <>
       <div className={classes.controlsContainer}>
-        <Button onClick={() => setShowFilters((v) => !v)}>
+        <Button role="filterButton" onClick={() => setShowFilters((v) => !v)}>
           <span>
             Filter&nbsp;({filteredChildren?.data?.length}/{childrenListLength})
           </span>
