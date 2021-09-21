@@ -14,6 +14,8 @@ jobs:
     env:
       REACT_APP_GRAPH_ENDPOINT: ${{ secrets.REACT_APP_GRAPH_ENDPOINT_TEST }}
       REACT_APP_GRAPH_API_KEY: ${{ secrets.REACT_APP_GRAPH_API_KEY_TEST }}
+      REACT_APP_REPORTS_URL: ${{ secrets.REACT_APP_REPORTS_URL_TEST }}
+      REACT_APP_REPORTS_LIMIT: ${{ secrets.REACT_APP_REPORTS_LIMIT_TEST }}
 
     strategy:
       matrix:
