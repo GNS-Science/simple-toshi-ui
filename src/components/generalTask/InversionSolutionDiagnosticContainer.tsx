@@ -49,6 +49,8 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   const [showFilters, setShowFilters] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const [finalPath, setFinalPath] = useState<string>(options[0].finalPath);
+  const [favourites, setFavourites] = useState<string[]>([]);
+  const [discard, setDiscard] = useState<string[]>([]);
 
   const maxLength = process.env.REACT_APP_REPORTS_LIMIT ?? 24;
 
@@ -73,6 +75,13 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   const handleViewChange = () => {
     setShowList((v) => !v);
     setShowReport((v) => !v);
+  };
+
+  const handleSetFavourites = (event: React.ChangeEvent<{ value: unknown }>) => {
+    const newEntry = (event.target.value as string) || '';
+    const currentFavourites = favourites;
+    currentFavouites.push(newEntry);
+    setFavourites(currentFavourites);
   };
 
   return (

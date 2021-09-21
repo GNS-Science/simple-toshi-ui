@@ -42,12 +42,14 @@ interface DiagnosticReportsCardProps {
   readonly sweepArgs?: SweepArguments;
   queryRef: PreloadedQuery<InversionSolutionDiagnosticContainerQuery, Record<string, unknown>>;
   finalPath: string;
+  handleSetFavourites: (event: React.ChangeEvent<{ value: unknown }>) => void;
 }
 
 const DiagnosticReportsCard: React.FC<DiagnosticReportsCardProps> = ({
   sweepArgs,
   queryRef,
   finalPath,
+  handleSetFavourites,
 }: DiagnosticReportsCardProps) => {
   const classes = useStyles();
   const [currentImage, setCurrentImage] = useState<number>(0);
