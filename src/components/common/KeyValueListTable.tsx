@@ -1,5 +1,6 @@
 import React from 'react';
 import { makeStyles, Paper, Table, TableBody, TableCell, TableHead, TableRow, withStyles } from '@material-ui/core';
+import { GeneralTaskKeyValueListPairs } from '../../interfaces/generaltask';
 
 const useStyles = makeStyles({
   root: {
@@ -25,10 +26,7 @@ const AlternatingRow = withStyles((theme) => ({
 
 export interface KeyValueListTableProps {
   header: string | null;
-  readonly data?: readonly ({
-    readonly k: string | null;
-    readonly v: readonly (string | null)[] | null;
-  } | null)[];
+  readonly data?: GeneralTaskKeyValueListPairs;
 }
 
 const renderValues = (vals: readonly (string | null)[] | null | undefined): string | null => {

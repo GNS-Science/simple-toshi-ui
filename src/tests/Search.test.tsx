@@ -145,6 +145,12 @@ describe('Search component', () => {
     const searchButton = await findByText('Search');
     userEvent.type(searchInput, 'test');
     userEvent.click(searchButton);
-    expect(await findByText('General Task')).toBeInTheDocument();
+    expect(await findByText('Type: General Task'));
+    expect(await findByText('Description:'));
+    expect(await findByText('Notes:'));
+    expect(await findByText('Created:'));
+    expect(await findByText('Model Type:'));
+    expect(await findByText('Subtask Type:'));
+    expect(await findByText('Count:'));
   });
 });

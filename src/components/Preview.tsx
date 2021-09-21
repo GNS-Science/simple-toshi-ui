@@ -87,6 +87,20 @@ function Preview(): React.ReactElement {
           </Typography>
         </CardContent>
       </Card>
+
+      <Card className={classes.root}>
+        <CardContent>
+          <Typography color="textPrimary" variant="h5" gutterBottom>
+            Launching report windows
+          </Typography>
+          <Typography className={classes.pos} component="p">
+            needs some work for cross-browser compat
+            <Button size="small" href="/preview/DR">
+              go
+            </Button>
+          </Typography>
+        </CardContent>
+      </Card>
     </Container>
   );
 }

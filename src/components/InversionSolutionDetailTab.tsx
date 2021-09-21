@@ -2,7 +2,8 @@ import { Typography } from '@material-ui/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { formatBytes } from './FileDetail';
-import KeyValueTable from './KeyValueTable';
+import { InversionSolutionDetailTabQuery } from './__generated__/InversionSolutionDetailTabQuery.graphql';
+import KeyValueTable from './common/KeyValueTable';
 
 interface InversionSolutionDetailTabProps {
   id?: string | null | undefined;
