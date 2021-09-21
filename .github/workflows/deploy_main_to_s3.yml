@@ -14,7 +14,9 @@ jobs:
     env:
       REACT_APP_GRAPH_ENDPOINT: ${{ secrets.REACT_APP_GRAPH_ENDPOINT }}
       REACT_APP_GRAPH_API_KEY: ${{ secrets.REACT_APP_GRAPH_API_KEY }}
-
+      REACT_APP_REPORTS_URL: ${{ secrets.REACT_APP_REPORTS_URL }}
+      REACT_APP_REPORTS_LIMIT: ${{ secrets.REACT_APP_REPORTS_LIMIT }}
+      
     strategy:
       matrix:
         node-version: [15.x]
