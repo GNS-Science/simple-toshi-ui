@@ -9,7 +9,7 @@ import buildUrl from 'build-url-ts';
 import { inversionSolutionDiagnosticContainerQuery } from './InversionSolutionDiagnosticContainer';
 import { ValidatedSubtask, SweepArguments } from '../../interfaces/generaltask';
 import { InversionSolutionDiagnosticContainerQuery } from './__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
-import FavouriteDiscardControls from '../common/FavouriteDiscardControls';
+import FavouriteDiscardControls from '../common/FavouriteControls';
 
 const useStyles = makeStyles(() => ({
   root: {

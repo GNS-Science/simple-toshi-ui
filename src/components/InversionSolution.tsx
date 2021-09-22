@@ -4,7 +4,7 @@ import { useLazyLoadQuery, useQueryLoader } from 'react-relay';
 import { graphql } from 'babel-plugin-relay/macro';
 import { Box, CircularProgress, makeStyles, Tab, Tabs, Theme, Typography } from '@material-ui/core';
 
-import FavouriteDiscardControls from './common/FavouriteDiscardControls';
+import FavouriteControls from './common/FavouriteControls';
 import InversionSolutionDetailTab, { inversionSolutionDetailTabQuery } from './InversionSolutionDetailTab';
 import InversionSolutionMfdTab from './InversionSolutionMfdTab';
 import InversionSolutionHazardTab from './InversionSolutionHazardTab';
@@ -102,7 +102,7 @@ const InversionSolution: React.FC = () => {
     <>
       <Typography variant="h5" gutterBottom>
         InversionSolution: {data?.node?.id}&nbsp;
-        <FavouriteDiscardControls id={data?.node?.id as string} />
+        <FavouriteControls id={data?.node?.id as string} />
       </Typography>
       <Box className={classes.root}>
         <Tabs
