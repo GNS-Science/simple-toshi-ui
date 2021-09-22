@@ -1,16 +1,16 @@
-import { Box, CircularProgress, makeStyles, Tab, Tabs, Theme, Typography } from '@material-ui/core';
-import { graphql } from 'babel-plugin-relay/macro';
 import React from 'react';
-import { useLazyLoadQuery, useQueryLoader } from 'react-relay';
 import { useHistory, useParams } from 'react-router-dom';
+import { useLazyLoadQuery, useQueryLoader } from 'react-relay';
+import { graphql } from 'babel-plugin-relay/macro';
+import { Box, CircularProgress, makeStyles, Tab, Tabs, Theme, Typography } from '@material-ui/core';
+
+import FavouriteDiscardControls from './common/FavouriteDiscardControls';
 import InversionSolutionDetailTab, { inversionSolutionDetailTabQuery } from './InversionSolutionDetailTab';
 import InversionSolutionMfdTab from './InversionSolutionMfdTab';
 import InversionSolutionHazardTab from './InversionSolutionHazardTab';
-
 import RuptureSetDiags from './RuptureSetDiags';
 import { InversionSolutionQuery } from './__generated__/InversionSolutionQuery.graphql';
 import { InversionSolutionDetailTabQuery } from './__generated__/InversionSolutionDetailTabQuery.graphql';
-import FavouriteDiscardControls from './common/FavouriteDiscardControls';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -55,7 +55,6 @@ const InversionSolution: React.FC = () => {
     );
   }
 
-  //const ruptureSetId = data?.node?.produced_by_id;
   const ruptureSetId = data?.node?.meta?.filter((kv) => kv?.k == 'rupture_set_file_id')[0]?.v;
 
   const mfdTableId = (): string => {
@@ -118,13 +117,6 @@ const InversionSolution: React.FC = () => {
             className={classes.tab}
           />
           <Tab label="MFD plot" id="inversionSolutionMfdTab" value="InversionSolutionMfdTab" className={classes.tab} />
-          {/* <Tab
-            label="Hazard map"
-            id="inversionSolutionHazardTab"
-            value="InversionSolutionHazardTab"
-            className={classes.tab}
-            />
-          */}
           {ruptureSetId && (
             <Tab label="Rupture Diags" id="ruptureSetTab" value="RuptureSetDiagnosticsTab" className={classes.tab} />
           )}
