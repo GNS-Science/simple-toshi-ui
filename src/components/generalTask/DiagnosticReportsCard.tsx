@@ -9,7 +9,7 @@ import buildUrl from 'build-url-ts';
 import { inversionSolutionDiagnosticContainerQuery } from './InversionSolutionDiagnosticContainer';
 import { ValidatedSubtask, SweepArguments } from '../../interfaces/generaltask';
 import { InversionSolutionDiagnosticContainerQuery } from './__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
-import FavouriteDiscardControls from '../common/FavouriteControls';
+import FavouriteControls from '../common/FavouriteControls';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -137,7 +137,7 @@ const DiagnosticReportsCard: React.FC<DiagnosticReportsCardProps> = ({
             >
               <ArrowForwardIosIcon />
             </IconButton>
-            <FavouriteDiscardControls id={validatedSubtasks[currentImage].inversion_solution.id} />
+            <FavouriteControls id={validatedSubtasks[currentImage].inversion_solution.id} />
           </div>
           <div className={classes.imageContainer}>
             <img
