@@ -68,10 +68,10 @@ const DiagnosticReportsCard: React.FC<DiagnosticReportsCardProps> = ({
   const validatedSubtasks: ValidatedSubtask[] = [];
 
   useEffect(() => {
-    const cachedFavourites = localStorage.getItem('favourites');
-    cachedFavourites !== null && setFavourites(JSON.parse(cachedFavourites, reviver));
-    const cachedDiscards = localStorage.getItem('discards');
-    cachedDiscards !== null && setDiscards(JSON.parse(cachedDiscards, reviver));
+    const cachedFavourites = localStorage.getItem('IS-favourites');
+    cachedFavourites !== null && setFavourites(new Map(JSON.parse(cachedFavourites, reviver)));
+    const cachedDiscards = localStorage.getItem('IS-discards');
+    cachedDiscards !== null && setDiscards(new Map(JSON.parse(cachedDiscards, reviver)));
   }, []);
 
   const handleFavouritesAndDiscards = (id: string, type: string) => {
