@@ -144,8 +144,6 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
   useEffect(() => {
     const cachedFavourites = localStorage.getItem('IS-favourites');
     cachedFavourites !== null && setISFavourites(new Map(JSON.parse(cachedFavourites, reviver)));
-    const cachedDiscards = localStorage.getItem('IS-discards');
-    cachedDiscards !== null && setISDiscards(new Map(JSON.parse(cachedDiscards, reviver)));
   }, []);
 
   return (
