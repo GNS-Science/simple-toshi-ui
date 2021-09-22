@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { Button, Card, CardContent, IconButton, makeStyles, Typography } from '@material-ui/core';
@@ -9,6 +9,7 @@ import buildUrl from 'build-url-ts';
 import { inversionSolutionDiagnosticContainerQuery } from './InversionSolutionDiagnosticContainer';
 import { ValidatedSubtask, SweepArguments } from '../../interfaces/generaltask';
 import { InversionSolutionDiagnosticContainerQuery } from './__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
+import { replacer, reviver } from '../../utils';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -35,6 +36,12 @@ const useStyles = makeStyles(() => ({
     maxHeight: '90vh',
     maxWidth: '100%',
   },
+  icon: {
+    filter: 'invert(88%) sepia(0%) saturate(1246%) hue-rotate(152deg) brightness(99%) contrast(97%)',
+  },
+  iconSelected: {
+    filter: 'invert(48%) sepia(27%) saturate(2609%) hue-rotate(189deg) brightness(104%) contrast(102%)',
+  },
 }));
 
 const reportBaseUrl = process.env.REACT_APP_REPORTS_URL;
@@ -42,25 +49,42 @@ interface DiagnosticReportsCardProps {
   readonly sweepArgs?: SweepArguments;
   queryRef: PreloadedQuery<InversionSolutionDiagnosticContainerQuery, Record<string, unknown>>;
   finalPath: string;
-  handleSetFavourites: (id: string) => void;
-  handleSetDiscards: (id: string) => void;
 }
 
 const DiagnosticReportsCard: React.FC<DiagnosticReportsCardProps> = ({
   sweepArgs,
   queryRef,
   finalPath,
-  handleSetFavourites,
-  handleSetDiscards,
 }: DiagnosticReportsCardProps) => {
   const classes = useStyles();
   const [currentImage, setCurrentImage] = useState<number>(0);
+  const [favourites, setFavourites] = useState(new Map());
+  const [discards, setDiscards] = useState(new Map());
   const data = usePreloadedQuery<InversionSolutionDiagnosticContainerQuery>(
     inversionSolutionDiagnosticContainerQuery,
     queryRef,
   );
   const subtasks = data?.nodes?.result?.edges.map((subtask) => subtask?.node);
   const validatedSubtasks: ValidatedSubtask[] = [];
+
+  useEffect(() => {
+    const cachedFavourites = localStorage.getItem('favourites');
+    cachedFavourites !== null && setFavourites(JSON.parse(cachedFavourites, reviver));
+    const cachedDiscards = localStorage.getItem('discards');
+    cachedDiscards !== null && setDiscards(JSON.parse(cachedDiscards, reviver));
+  }, []);
+
+  const handleFavouritesAndDiscards = (id: string, type: string) => {
+    if (type === 'favourite') {
+      favourites.has(id) ? favourites.delete(id) : setFavourites(favourites.set(id, true));
+      localStorage.setItem('IS-favourites', JSON.stringify(favourites, replacer));
+    }
+
+    if (type === 'discard') {
+      discards.has(id) ? discards.delete(id) : setDiscards(discards.set(id, true));
+      localStorage.setItem('IS-discards', JSON.stringify(discards, replacer));
+    }
+  };
 
   subtasks?.map((subtask) => {
     if (
@@ -140,11 +164,33 @@ const DiagnosticReportsCard: React.FC<DiagnosticReportsCardProps> = ({
             >
               <ArrowForwardIosIcon />
             </IconButton>
-            <Button onClick={() => handleSetFavourites(validatedSubtasks[currentImage].inversion_solution.id)}>
-              <img src="/hand-rock.svg" />
+            <Button
+              onClick={() =>
+                handleFavouritesAndDiscards(validatedSubtasks[currentImage].inversion_solution.id, 'favourite')
+              }
+            >
+              <img
+                className={
+                  favourites.has(validatedSubtasks[currentImage].inversion_solution.id)
+                    ? classes.iconSelected
+                    : classes.icon
+                }
+                src="/hand-rock.svg"
+              />
             </Button>
-            <Button onClick={() => handleSetDiscards(validatedSubtasks[currentImage].inversion_solution.id)}>
-              <img src="/hand-scissors.svg" />
+            <Button
+              onClick={() =>
+                handleFavouritesAndDiscards(validatedSubtasks[currentImage].inversion_solution.id, 'discard')
+              }
+            >
+              <img
+                className={
+                  discards.has(validatedSubtasks[currentImage].inversion_solution.id)
+                    ? classes.iconSelected
+                    : classes.icon
+                }
+                src="/hand-scissors.svg"
+              />
             </Button>
           </div>
           <div className={classes.imageContainer}>

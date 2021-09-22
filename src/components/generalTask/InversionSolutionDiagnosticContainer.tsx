@@ -49,17 +49,8 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   const [showFilters, setShowFilters] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const [finalPath, setFinalPath] = useState<string>(options[0].finalPath);
-  const [favourites, setFavourites] = useState<string[]>([]);
-  const [discards, setDiscards] = useState<string[]>([]);
 
   const maxLength = process.env.REACT_APP_REPORTS_LIMIT ?? 24;
-
-  useEffect(() => {
-    const cachedFavourites = localStorage.getItem('favourites');
-    cachedFavourites !== null && setFavourites(JSON.parse(cachedFavourites));
-    const cachedDiscards = localStorage.getItem('discards');
-    cachedDiscards !== null && setDiscards(JSON.parse(cachedDiscards));
-  }, []);
 
   useEffect(() => {
     const filteredChildrenData = filteredChildren?.data ?? [];
@@ -84,22 +75,6 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
     setShowReport((v) => !v);
   };
 
-  const handleSetFavourites = (id: string) => {
-    const newEntry = id || '';
-    const currentFavourites = favourites;
-    currentFavourites.push(newEntry);
-    setFavourites(currentFavourites);
-    localStorage.setItem('favourites', JSON.stringify(currentFavourites));
-  };
-
-  const handleSetDiscards = (id: string) => {
-    const newEntry = id || '';
-    const currentDiscards = discards;
-    currentDiscards.push(newEntry);
-    setFavourites(currentDiscards);
-    localStorage.setItem('discards', JSON.stringify(currentDiscards));
-  };
-
   return (
     <>
       <div className={classes.controlsContainer}>
@@ -116,13 +91,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
         ))}
       </div>
       {showReport && queryRef && (
-        <DiagnosticReportsCard
-          handleSetFavourites={handleSetFavourites}
-          handleSetDiscards={handleSetDiscards}
-          sweepArgs={sweepArgs}
-          queryRef={queryRef}
-          finalPath={finalPath}
-        />
+        <DiagnosticReportsCard sweepArgs={sweepArgs} queryRef={queryRef} finalPath={finalPath} />
       )}
     </>
   );
