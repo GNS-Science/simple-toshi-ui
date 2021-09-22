@@ -10,6 +10,7 @@ import InversionSolutionHazardTab from './InversionSolutionHazardTab';
 import RuptureSetDiags from './RuptureSetDiags';
 import { InversionSolutionQuery } from './__generated__/InversionSolutionQuery.graphql';
 import { InversionSolutionDetailTabQuery } from './__generated__/InversionSolutionDetailTabQuery.graphql';
+import FavouriteDiscardControls from './common/FavouriteDiscardControls';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -31,29 +32,6 @@ interface InversionSolutionParams {
   id: string;
   tab: string;
 }
-
-const inversionSolutionQuery = graphql`
-  query InversionSolutionQuery($id: ID!) {
-    node(id: $id) {
-      ... on InversionSolution {
-        id
-        mfd_table_id
-        hazard_table_id
-        produced_by_id
-        created
-        meta {
-          k
-          v
-        }
-        tables {
-          table_id
-          table_type
-          created
-        }
-      }
-    }
-  }
-`;
 
 const InversionSolution: React.FC = () => {
   const classes = useStyles();
@@ -124,7 +102,8 @@ const InversionSolution: React.FC = () => {
   return (
     <>
       <Typography variant="h5" gutterBottom>
-        InversionSolution: {data?.node?.id}
+        InversionSolution: {data?.node?.id}&nbsp;
+        <FavouriteDiscardControls id={data?.node?.id as string} />
       </Typography>
       <Box className={classes.root}>
         <Tabs
@@ -144,7 +123,7 @@ const InversionSolution: React.FC = () => {
             id="inversionSolutionHazardTab"
             value="InversionSolutionHazardTab"
             className={classes.tab}
-          />
+            />
           */}
           {ruptureSetId && (
             <Tab label="Rupture Diags" id="ruptureSetTab" value="RuptureSetDiagnosticsTab" className={classes.tab} />
@@ -157,3 +136,26 @@ const InversionSolution: React.FC = () => {
 };
 
 export default InversionSolution;
+
+const inversionSolutionQuery = graphql`
+  query InversionSolutionQuery($id: ID!) {
+    node(id: $id) {
+      ... on InversionSolution {
+        id
+        mfd_table_id
+        hazard_table_id
+        produced_by_id
+        created
+        meta {
+          k
+          v
+        }
+        tables {
+          table_id
+          table_type
+          created
+        }
+      }
+    }
+  }
+`;
