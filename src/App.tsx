@@ -140,7 +140,6 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
   const env = props.environment || RelayEnvironment;
   const LocalStorageProvider = LocalStorageContext.Provider;
   const [ISFavourites, setISFavourites] = useState(new Map());
-  const [ISDiscards, setISDiscards] = useState(new Map());
 
   useEffect(() => {
     const cachedFavourites = localStorage.getItem('IS-favourites');
@@ -157,8 +156,6 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
             value={{
               ISFavourites,
               setISFavourites,
-              ISDiscards,
-              setISDiscards,
             }}
           >
             <MenuBar />
