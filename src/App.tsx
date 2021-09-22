@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import logo from './logo.svg';
 
@@ -34,6 +34,8 @@ import RuptureSetViews from './components/RuptureSetViews';
 import HazardMap from './components/HazardMap';
 import Find from './components/Find';
 import AutomationTask from './components/AutomationTask';
+import LocalStorageContext from './contexts/localStorage';
+import { reviver } from './utils';
 
 const useStyles = makeStyles({
   root: {
@@ -136,55 +138,74 @@ function App(props: { preloadedQuery: PreloadedQuery<AppStrongMotionStationQuery
 // - <Suspense> specifies a fallback in case a child suspends.
 function AppRoot(props: { environment?: Environment }): React.ReactElement {
   const env = props.environment || RelayEnvironment;
-  // console.log('E', environment);
+  const LocalStorageProvider = LocalStorageContext.Provider;
+  const [ISFavourites, setISFavourites] = useState(new Map());
+  const [ISDiscards, setISDiscards] = useState(new Map());
+
+  useEffect(() => {
+    const cachedFavourites = localStorage.getItem('IS-favourites');
+    cachedFavourites !== null && setISFavourites(new Map(JSON.parse(cachedFavourites, reviver)));
+    const cachedDiscards = localStorage.getItem('IS-discards');
+    cachedDiscards !== null && setISDiscards(new Map(JSON.parse(cachedDiscards, reviver)));
+  }, []);
+
   return (
     <RelayEnvironmentProvider environment={env}>
       <React.Suspense fallback={<Loading />}>
         <BrowserRouter>
-          <MenuBar />
-          <Container maxWidth="md" style={{ paddingTop: '40px', wordWrap: 'break-word' }}>
-            <Switch>
-              <Route path="/RuptureGenerationTask/:id">
-                <RuptureGenerationTask />
-              </Route>
-              <Route path="/FileDetail/:id/:tab?">
-                <FileDetail />
-              </Route>
-              <Route path="/InversionSolution/:id/:tab?">
-                <InversionSolution />
-              </Route>
-              <Route path="/Search">
-                <Search />
-              </Route>
-              <Route path="/GeneralTask/:id">
-                <GeneralTask />
-              </Route>
-              <Route path="/AutomationTask/:id">
-                <AutomationTask />
-              </Route>
-              <Route path="/Find/:id?">
-                <Find />
-              </Route>
-              <Route path="/Preview/MFD">
-                <PreviewMFD width={800} height={600} bar_width={15} />
-              </Route>
-              <Route path="/Preview/lineMFD">
-                <PreviewLineMFD />
-              </Route>
-              <Route path="/Preview/views">
-                <RuptureSetViews />
-              </Route>
-              <Route path="/Preview/hazard">
-                <HazardMap />
-              </Route>
-              <Route path="/Preview">
-                <Preview />
-              </Route>
-              <Route path="/">
-                <App preloadedQuery={preloadedQuery} />
-              </Route>
-            </Switch>
-          </Container>
+          <LocalStorageProvider
+            value={{
+              ISFavourites,
+              setISFavourites,
+              ISDiscards,
+              setISDiscards,
+            }}
+          >
+            <MenuBar />
+            <Container maxWidth="md" style={{ paddingTop: '40px', wordWrap: 'break-word' }}>
+              <Switch>
+                <Route path="/RuptureGenerationTask/:id">
+                  <RuptureGenerationTask />
+                </Route>
+                <Route path="/FileDetail/:id/:tab?">
+                  <FileDetail />
+                </Route>
+                <Route path="/InversionSolution/:id/:tab?">
+                  <InversionSolution />
+                </Route>
+                <Route path="/Search">
+                  <Search />
+                </Route>
+                <Route path="/GeneralTask/:id">
+                  <GeneralTask />
+                </Route>
+                <Route path="/AutomationTask/:id">
+                  <AutomationTask />
+                </Route>
+                <Route path="/Find/:id?">
+                  <Find />
+                </Route>
+                <Route path="/Preview/MFD">
+                  <PreviewMFD width={800} height={600} bar_width={15} />
+                </Route>
+                <Route path="/Preview/lineMFD">
+                  <PreviewLineMFD />
+                </Route>
+                <Route path="/Preview/views">
+                  <RuptureSetViews />
+                </Route>
+                <Route path="/Preview/hazard">
+                  <HazardMap />
+                </Route>
+                <Route path="/Preview">
+                  <Preview />
+                </Route>
+                <Route path="/">
+                  <App preloadedQuery={preloadedQuery} />
+                </Route>
+              </Switch>
+            </Container>
+          </LocalStorageProvider>
         </BrowserRouter>
       </React.Suspense>
     </RelayEnvironmentProvider>
