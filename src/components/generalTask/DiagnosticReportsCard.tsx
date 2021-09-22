@@ -75,15 +75,35 @@ const DiagnosticReportsCard: React.FC<DiagnosticReportsCardProps> = ({
   }, []);
 
   const handleFavouritesAndDiscards = (id: string, type: string) => {
+    const currentFavourites = favourites;
+    const currentDiscards = discards;
+
     if (type === 'favourite') {
-      favourites.has(id) ? favourites.delete(id) : setFavourites(favourites.set(id, true));
-      localStorage.setItem('IS-favourites', JSON.stringify(favourites, replacer));
+      if (currentDiscards.has(id) && !currentFavourites.has(id)) {
+        currentDiscards.delete(id);
+        currentFavourites.set(id, true);
+      } else if (!currentDiscards.has(id) && currentFavourites.has(id)) {
+        currentFavourites.delete(id);
+      } else {
+        currentFavourites.set(id, true);
+      }
     }
 
     if (type === 'discard') {
-      discards.has(id) ? discards.delete(id) : setDiscards(discards.set(id, true));
-      localStorage.setItem('IS-discards', JSON.stringify(discards, replacer));
+      if (currentFavourites.has(id) && !currentDiscards.has(id)) {
+        currentFavourites.delete(id);
+        currentDiscards.set(id, true);
+      } else if (!currentFavourites.has(id) && currentDiscards.has(id)) {
+        currentDiscards.delete(id);
+      } else {
+        currentDiscards.set(id, true);
+      }
     }
+
+    setFavourites(new Map(currentFavourites));
+    setDiscards(new Map(currentDiscards));
+    localStorage.setItem('IS-favourites', JSON.stringify(currentFavourites, replacer));
+    localStorage.setItem('IS-discards', JSON.stringify(discards, replacer));
   };
 
   subtasks?.map((subtask) => {
