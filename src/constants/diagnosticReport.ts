@@ -52,7 +52,7 @@ export const diagnosticReportViewOptions: SolutionDiagnosticsOption[] = [
   {
     viewType: ViewTypeEnum.Image,
     displayName: 'Participation >= M7',
-    finalPath: 'sol_partic_supra_seis_to_m7.png',
+    finalPath: 'sol_partic_m7.png',
     imgHght: 600,
     imgWdth: 500,
   },
