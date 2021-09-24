@@ -1,12 +1,13 @@
-import { Box, CircularProgress, makeStyles, Tab, Tabs, Theme, Typography } from '@material-ui/core';
-import { graphql } from 'babel-plugin-relay/macro';
 import React from 'react';
-import { useLazyLoadQuery, useQueryLoader } from 'react-relay';
 import { useHistory, useParams } from 'react-router-dom';
+import { useLazyLoadQuery, useQueryLoader } from 'react-relay';
+import { graphql } from 'babel-plugin-relay/macro';
+import { Box, CircularProgress, makeStyles, Tab, Tabs, Theme, Typography } from '@material-ui/core';
+
+import FavouriteControls from './common/FavouriteControls';
 import InversionSolutionDetailTab, { inversionSolutionDetailTabQuery } from './InversionSolutionDetailTab';
 import InversionSolutionMfdTab from './InversionSolutionMfdTab';
 import InversionSolutionHazardTab from './InversionSolutionHazardTab';
-
 import RuptureSetDiags from './RuptureSetDiags';
 import { InversionSolutionQuery } from './__generated__/InversionSolutionQuery.graphql';
 import { InversionSolutionDetailTabQuery } from './__generated__/InversionSolutionDetailTabQuery.graphql';
@@ -32,29 +33,6 @@ interface InversionSolutionParams {
   tab: string;
 }
 
-const inversionSolutionQuery = graphql`
-  query InversionSolutionQuery($id: ID!) {
-    node(id: $id) {
-      ... on InversionSolution {
-        id
-        mfd_table_id
-        hazard_table_id
-        produced_by_id
-        created
-        meta {
-          k
-          v
-        }
-        tables {
-          table_id
-          table_type
-          created
-        }
-      }
-    }
-  }
-`;
-
 const InversionSolution: React.FC = () => {
   const classes = useStyles();
   const { id, tab } = useParams<InversionSolutionParams>();
@@ -77,7 +55,6 @@ const InversionSolution: React.FC = () => {
     );
   }
 
-  //const ruptureSetId = data?.node?.produced_by_id;
   const ruptureSetId = data?.node?.meta?.filter((kv) => kv?.k == 'rupture_set_file_id')[0]?.v;
 
   const mfdTableId = (): string => {
@@ -124,7 +101,8 @@ const InversionSolution: React.FC = () => {
   return (
     <>
       <Typography variant="h5" gutterBottom>
-        InversionSolution: {data?.node?.id}
+        InversionSolution: {data?.node?.id}&nbsp;
+        <FavouriteControls id={data?.node?.id as string} producedBy={data?.node?.produced_by_id as string} />
       </Typography>
       <Box className={classes.root}>
         <Tabs
@@ -139,13 +117,6 @@ const InversionSolution: React.FC = () => {
             className={classes.tab}
           />
           <Tab label="MFD plot" id="inversionSolutionMfdTab" value="InversionSolutionMfdTab" className={classes.tab} />
-          {/* <Tab
-            label="Hazard map"
-            id="inversionSolutionHazardTab"
-            value="InversionSolutionHazardTab"
-            className={classes.tab}
-          />
-          */}
           {ruptureSetId && (
             <Tab label="Rupture Diags" id="ruptureSetTab" value="RuptureSetDiagnosticsTab" className={classes.tab} />
           )}
@@ -157,3 +128,26 @@ const InversionSolution: React.FC = () => {
 };
 
 export default InversionSolution;
+
+const inversionSolutionQuery = graphql`
+  query InversionSolutionQuery($id: ID!) {
+    node(id: $id) {
+      ... on InversionSolution {
+        id
+        mfd_table_id
+        hazard_table_id
+        produced_by_id
+        created
+        meta {
+          k
+          v
+        }
+        tables {
+          table_id
+          table_type
+          created
+        }
+      }
+    }
+  }
+`;

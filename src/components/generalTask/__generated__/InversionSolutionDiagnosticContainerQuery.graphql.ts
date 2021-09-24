@@ -15,6 +15,7 @@ export type InversionSolutionDiagnosticContainerQueryResponse = {
                     readonly __typename: "AutomationTask";
                     readonly created: unknown | null;
                     readonly task_type: TaskSubType | null;
+                    readonly id: string;
                     readonly inversion_solution: {
                         readonly id: string;
                         readonly file_name: string | null;
@@ -51,6 +52,7 @@ query InversionSolutionDiagnosticContainerQuery(
           ... on AutomationTask {
             created
             task_type
+            id
             inversion_solution {
               id
               file_name
@@ -117,6 +119,7 @@ v4 = {
       "name": "task_type",
       "storageKey": null
     },
+    (v3/*: any*/),
     {
       "alias": null,
       "args": null,
@@ -285,14 +288,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "cca2b24380617b8f1ff1ec36b4ee74fa",
+    "cacheID": "3f337c8c4dde77ce99810633c80d645a",
     "id": null,
     "metadata": {},
     "name": "InversionSolutionDiagnosticContainerQuery",
     "operationKind": "query",
-    "text": "query InversionSolutionDiagnosticContainerQuery(\n  $id: [ID!]\n) {\n  nodes(id_in: $id) {\n    result {\n      edges {\n        node {\n          __typename\n          ... on AutomationTask {\n            created\n            task_type\n            inversion_solution {\n              id\n              file_name\n              meta {\n                k\n                v\n              }\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query InversionSolutionDiagnosticContainerQuery(\n  $id: [ID!]\n) {\n  nodes(id_in: $id) {\n    result {\n      edges {\n        node {\n          __typename\n          ... on AutomationTask {\n            created\n            task_type\n            id\n            inversion_solution {\n              id\n              file_name\n              meta {\n                k\n                v\n              }\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '714837ed9b8d2f97384906cc607f3b7c';
+(node as any).hash = '6da4064849d40df93e861d3a554c5ebe';
 export default node;
