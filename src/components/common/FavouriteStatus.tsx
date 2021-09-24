@@ -8,6 +8,9 @@ const useStyles = makeStyles(() => ({
     height: 35,
     filter: 'invert(48%) sepia(27%) saturate(2609%) hue-rotate(189deg) brightness(104%) contrast(102%)',
   },
+  iconHidden: {
+    visibility: 'hidden',
+  },
 }));
 
 interface FavouriteStatusProps {
@@ -18,11 +21,19 @@ const FavouriteStatus: React.FC<FavouriteStatusProps> = ({ id }: FavouriteStatus
   const classes = useStyles();
   const { ISFavourites } = useContext(LocalStorageContext);
 
-  if (ISFavourites?.hasOwnProperty(id)) {
-    return <img className={classes.icon} src="/hand-rock.svg" />;
-  }
+  const favourited = () => {
+    if (ISFavourites) {
+      for (const item in ISFavourites) {
+        if (ISFavourites[item].producedBy === id) return true;
+      }
+    }
+  };
 
-  return <></>;
+  return (
+    <>
+      <img className={favourited() ? classes.icon : classes.iconHidden} src="/hand-rock.svg" />
+    </>
+  );
 };
 
 export default FavouriteStatus;
