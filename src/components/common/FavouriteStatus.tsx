@@ -5,7 +5,7 @@ import LocalStorageContext from '../../contexts/localStorage';
 
 const useStyles = makeStyles(() => ({
   icon: {
-    height: 35,
+    height: 20,
     filter: 'invert(48%) sepia(27%) saturate(2609%) hue-rotate(189deg) brightness(104%) contrast(102%)',
   },
   iconHidden: {
