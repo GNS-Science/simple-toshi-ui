@@ -1,8 +1,8 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Button, makeStyles } from '@material-ui/core';
 
-import { replacer } from '../../utils';
 import LocalStorageContext from '../../contexts/localStorage';
+import _ from 'lodash';
 
 const useStyles = makeStyles(() => ({
   icon: {
@@ -17,24 +17,31 @@ const useStyles = makeStyles(() => ({
 
 interface FavouriteControlsProps {
   id: string;
+  producedBy: string;
 }
 
-const FavouriteControls: React.FC<FavouriteControlsProps> = ({ id }: FavouriteControlsProps) => {
+const FavouriteControls: React.FC<FavouriteControlsProps> = ({ id, producedBy }: FavouriteControlsProps) => {
   const classes = useStyles();
   const { ISFavourites, setISFavourites } = useContext(LocalStorageContext);
 
-  const handleFavourites = (id: string) => {
-    const currentFavourites = ISFavourites;
-    currentFavourites.has(id) ? currentFavourites.delete(id) : currentFavourites.set(id, true);
-
-    setISFavourites(new Map(currentFavourites));
-    localStorage.setItem('IS-favourites', JSON.stringify(currentFavourites, replacer));
+  const handleFavourites = () => {
+    let favourites = ISFavourites;
+    if (favourites === null) {
+      favourites = {
+        [id]: { producedBy },
+      };
+    } else if (favourites[id]) {
+      favourites = _.omit(favourites, id);
+    } else {
+      favourites[id] = { producedBy };
+    }
+    setISFavourites(favourites);
   };
 
   return (
     <>
-      <Button onClick={() => handleFavourites(id)}>
-        <img className={ISFavourites.has(id) ? classes.iconSelected : classes.icon} src="/hand-rock.svg" />
+      <Button onClick={handleFavourites}>
+        <img className={ISFavourites?.hasOwnProperty(id) ? classes.iconSelected : classes.icon} src="/hand-rock.svg" />
       </Button>
     </>
   );

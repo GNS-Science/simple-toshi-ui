@@ -1,6 +1,9 @@
-import { Dispatch, SetStateAction } from 'react';
-
 export interface LocalStorageContextInterface {
-  ISFavourites: Map<string, boolean>;
-  setISFavourites: Dispatch<SetStateAction<Map<string, boolean>>>;
+  ISFavourites: LocalStorageInstance;
+  setISFavourites: (newValue: LocalStorageInstance) => void;
+}
+
+export type LocalStorageInstance = Record<string, LocalStorageValue> | null;
+export interface LocalStorageValue {
+  producedBy: string;
 }

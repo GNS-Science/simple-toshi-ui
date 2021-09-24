@@ -69,6 +69,7 @@ const DiagnosticReportsCard: React.FC<DiagnosticReportsCardProps> = ({
     ) {
       const newSubtask: ValidatedSubtask = {
         __typename: 'AutomationTask',
+        id: subtask.id,
         inversion_solution: {
           id: subtask.inversion_solution.id,
           meta: [],
@@ -137,7 +138,10 @@ const DiagnosticReportsCard: React.FC<DiagnosticReportsCardProps> = ({
             >
               <ArrowForwardIosIcon />
             </IconButton>
-            <FavouriteControls id={validatedSubtasks[currentImage].inversion_solution.id} />
+            <FavouriteControls
+              id={validatedSubtasks[currentImage].inversion_solution.id}
+              producedBy={validatedSubtasks[currentImage].id}
+            />
           </div>
           <div className={classes.imageContainer}>
             <img

@@ -102,7 +102,7 @@ const InversionSolution: React.FC = () => {
     <>
       <Typography variant="h5" gutterBottom>
         InversionSolution: {data?.node?.id}&nbsp;
-        <FavouriteControls id={data?.node?.id as string} />
+        <FavouriteControls id={data?.node?.id as string} producedBy={data?.node?.produced_by_id as string} />
       </Typography>
       <Box className={classes.root}>
         <Tabs

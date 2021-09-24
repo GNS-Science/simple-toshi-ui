@@ -109,6 +109,7 @@ export const inversionSolutionDiagnosticContainerQuery = graphql`
             ... on AutomationTask {
               created
               task_type
+              id
               inversion_solution {
                 id
                 file_name

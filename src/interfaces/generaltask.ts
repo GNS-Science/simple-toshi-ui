@@ -73,6 +73,7 @@ export interface SolutionDiagnosticsOption {
 
 export type ValidatedSubtask = {
   __typename: 'AutomationTask';
+  id: string;
   inversion_solution: {
     id: string;
     meta: Array<{

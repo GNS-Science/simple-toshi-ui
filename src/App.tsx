@@ -17,6 +17,7 @@ import {
   Container,
   Typography,
 } from '@material-ui/core';
+import { useLocalStorage } from '@rehooks/local-storage';
 
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import RuptureGenerationTask from './components/RuptureGenerationTask';
@@ -36,6 +37,7 @@ import Find from './components/Find';
 import AutomationTask from './components/AutomationTask';
 import LocalStorageContext from './contexts/localStorage';
 import { reviver } from './utils';
+import { LocalStorageInstance } from './interfaces/localStorage';
 
 const useStyles = makeStyles({
   root: {
@@ -89,7 +91,6 @@ const preloadedQuery = loadQuery<AppStrongMotionStationQuery>(RelayEnvironment, 
 //   handling the failure case here.
 function App(props: { preloadedQuery: PreloadedQuery<AppStrongMotionStationQuery> }) {
   const data = usePreloadedQuery<AppStrongMotionStationQuery>(appStrongMotionStationQuery, props.preloadedQuery);
-  // console.log("preloadedQuery", data);
 
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
@@ -138,13 +139,10 @@ function App(props: { preloadedQuery: PreloadedQuery<AppStrongMotionStationQuery
 // - <Suspense> specifies a fallback in case a child suspends.
 function AppRoot(props: { environment?: Environment }): React.ReactElement {
   const env = props.environment || RelayEnvironment;
+  //TODO - resolve @rehook/local-storage, version currently pinned to 2.4.0
+  //see https://github.com/rehooks/local-storage/issues/77 for more info
+  const [ISFavourites, setISFavourites] = useLocalStorage<LocalStorageInstance>('IS-Favourites');
   const LocalStorageProvider = LocalStorageContext.Provider;
-  const [ISFavourites, setISFavourites] = useState(new Map());
-
-  useEffect(() => {
-    const cachedFavourites = localStorage.getItem('IS-favourites');
-    cachedFavourites !== null && setISFavourites(new Map(JSON.parse(cachedFavourites, reviver)));
-  }, []);
 
   return (
     <RelayEnvironmentProvider environment={env}>
