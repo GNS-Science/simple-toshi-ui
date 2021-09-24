@@ -70,6 +70,7 @@ const DiagnosticReportsCard: React.FC<DiagnosticReportsCardProps> = ({
       const newSubtask: ValidatedSubtask = {
         __typename: 'AutomationTask',
         id: subtask.id,
+
         inversion_solution: {
           id: subtask.inversion_solution.id,
           meta: [],
