@@ -23,18 +23,9 @@ interface FavouriteControlsProps {
 const FavouriteControls: React.FC<FavouriteControlsProps> = ({ id, producedBy }: FavouriteControlsProps) => {
   const classes = useStyles();
   const { ISFavourites, setISFavourites } = useContext(LocalStorageContext);
-
   const handleFavourites = () => {
-    let favourites = ISFavourites;
-    if (favourites === null) {
-      favourites = {
-        [id]: { producedBy },
-      };
-    } else if (favourites[id]) {
-      favourites = _.omit(favourites, id);
-    } else {
-      favourites[id] = { producedBy };
-    }
+    let favourites = { ...ISFavourites };
+    favourites[id] ? (favourites = _.omit(favourites, id)) : (favourites[id] = { producedBy });
     setISFavourites(favourites);
   };
 
