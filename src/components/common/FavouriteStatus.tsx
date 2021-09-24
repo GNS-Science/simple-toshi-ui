@@ -22,6 +22,7 @@ const FavouriteStatus: React.FC<FavouriteStatusProps> = ({ id }: FavouriteStatus
   const { ISFavourites } = useContext(LocalStorageContext);
 
   const favourited = () => {
+    //TODO can we one-liner?
     if (ISFavourites) {
       for (const item in ISFavourites) {
         if (ISFavourites[item].producedBy === id) return true;
