@@ -34,9 +34,11 @@ const useStyles = makeStyles(() => ({
   },
   image: {
     padding: '5px',
-    maxHeight: '90vh',
-    maxWidth: '50%',
+    maxHeight: '80vh',
+    width: '25%',
     objectFit: 'contain',
+    flexGrow: 3,
+    flexShrink: 4,
   },
 }));
 
