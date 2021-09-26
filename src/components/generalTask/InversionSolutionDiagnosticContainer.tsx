@@ -25,6 +25,9 @@ const useStyles = makeStyles(() => ({
   hidden: {
     display: 'none',
   },
+  button: {
+    margin: 10,
+  },
 }));
 
 interface InversionSolutionDiagnosticContainerProps {
@@ -78,7 +81,12 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   return (
     <>
       <div className={classes.controlsContainer}>
-        <Button onClick={() => setShowFilters((v) => !v)}>
+        <Button
+          className={classes.button}
+          variant="contained"
+          color="default"
+          onClick={() => setShowFilters((v) => !v)}
+        >
           <span>
             Filter&nbsp;({filteredChildren?.data?.length}/{childrenListLength})
           </span>
