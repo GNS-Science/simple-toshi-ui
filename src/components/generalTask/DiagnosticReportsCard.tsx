@@ -30,11 +30,13 @@ const useStyles = makeStyles(() => ({
   imageContainer: {
     display: 'flex',
     justifyContent: 'center',
+    flexWrap: 'wrap',
   },
   image: {
     padding: '5px',
     maxHeight: '90vh',
-    maxWidth: '100%',
+    maxWidth: '50%',
+    objectFit: 'contain',
   },
 }));
 
@@ -42,7 +44,7 @@ const reportBaseUrl = process.env.REACT_APP_REPORTS_URL;
 interface DiagnosticReportsCardProps {
   readonly sweepArgs?: SweepArguments;
   queryRef: PreloadedQuery<InversionSolutionDiagnosticContainerQuery, Record<string, unknown>>;
-  finalPath: string;
+  finalPath: string[];
 }
 
 const DiagnosticReportsCard: React.FC<DiagnosticReportsCardProps> = ({
@@ -145,11 +147,14 @@ const DiagnosticReportsCard: React.FC<DiagnosticReportsCardProps> = ({
             />
           </div>
           <div className={classes.imageContainer}>
-            <img
-              className={classes.image}
-              src={reportUrl(finalPath, validatedSubtasks[currentImage].inversion_solution.id)}
-              alt={finalPath}
-            />
+            {finalPath.map((path) => (
+              <img
+                key={path}
+                className={classes.image}
+                src={reportUrl(path, validatedSubtasks[currentImage].inversion_solution.id)}
+                alt={path}
+              />
+            ))}
           </div>
         </CardContent>
       </Card>
