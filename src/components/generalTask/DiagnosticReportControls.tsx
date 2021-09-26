@@ -64,13 +64,11 @@ const DiagnosticReportControls: React.FC<DiagnosticReportControlsProps> = ({
           multiple
           onChange={handleChange}
           input={<Input />}
-          renderValue={(selected: unknown) => (
-            <div className={classes.chips}>
-              {(selected as string[]).map((value) => (
-                <Chip key={value} label={value} className={classes.chip} />
-              ))}
-            </div>
-          )}
+          renderValue={(selected) => {
+            const selectedArray = selected as string[];
+            if (selectedArray.length === 1) return selectedArray[0];
+            if (selectedArray.length >= 1) return 'Multiple selected';
+          }}
           MenuProps={MenuProps}
         >
           {options.map((opt) => (
