@@ -115,12 +115,10 @@ const DiagnosticReportsCard: React.FC<DiagnosticReportsCardProps> = ({
     <>
       <Card className={classes.root}>
         <CardContent>
-          <Typography>
-            <h4>
-              Inversion Solution {validatedSubtasks[currentImage].inversion_solution.id}&nbsp;&nbsp;&nbsp;
-              <Link to={`/InversionSolution/${validatedSubtasks[currentImage].inversion_solution.id}`}>[more]</Link>
-            </h4>
-          </Typography>
+          <h4>
+            Inversion Solution {validatedSubtasks[currentImage].inversion_solution.id}&nbsp;&nbsp;&nbsp;
+            <Link to={`/InversionSolution/${validatedSubtasks[currentImage].inversion_solution.id}`}>[more]</Link>
+          </h4>
           <Typography>
             {validatedSubtasks[currentImage].inversion_solution.meta.map((kv) => (
               <span key={kv?.k}>
