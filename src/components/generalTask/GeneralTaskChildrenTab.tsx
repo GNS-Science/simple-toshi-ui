@@ -7,6 +7,7 @@ import ChildTaskTable from './ChildTaskTable';
 import { GeneralTaskChildrenTabQuery } from './__generated__/GeneralTaskChildrenTabQuery.graphql';
 import SweepArgumentFilterContainer from './InversionSolutionDiagnosticContainer';
 import { FilteredArguments, FilteredChildren, SweepArguments } from '../../interfaces/generaltask';
+import { updateFilteredArguments } from '../../service/generalTask.service';
 
 interface GeneralTaskChildrenTabProps {
   id: string;
@@ -24,22 +25,11 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const childTasks = data?.node?.children?.edges?.map((e) => e?.node?.child);
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
-    const currentFilteredArguments = [...filteredArguments.data];
-    const itemIndex = currentFilteredArguments.findIndex((item) => item.k === event.target.name);
-
-    if (itemIndex !== -1) {
-      currentFilteredArguments[itemIndex].v = event.target.value as string[];
-      currentFilteredArguments[itemIndex].v.length === 0 && currentFilteredArguments.splice(itemIndex, 1);
-    } else {
-      currentFilteredArguments.push({
-        k: event.target.name as string,
-        v: event.target.value as string[],
-      });
-    }
-
-    const newFilteredArguments = {
-      data: currentFilteredArguments,
-    };
+    const newFilteredArguments = updateFilteredArguments(
+      filteredArguments,
+      event.target.value as string[],
+      event.target.name as string,
+    );
     setFilteredArguments(newFilteredArguments);
   };
 
