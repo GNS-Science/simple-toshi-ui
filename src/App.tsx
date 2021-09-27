@@ -154,7 +154,7 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
             }}
           >
             <MenuBar />
-            <Container maxWidth="md" style={{ paddingTop: '40px', wordWrap: 'break-word' }}>
+            <Container maxWidth="xl" style={{ paddingTop: '40px', wordWrap: 'break-word' }}>
               <Switch>
                 <Route path="/RuptureGenerationTask/:id">
                   <RuptureGenerationTask />

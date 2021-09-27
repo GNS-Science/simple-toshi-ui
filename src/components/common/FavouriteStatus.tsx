@@ -10,6 +10,7 @@ const useStyles = makeStyles(() => ({
   },
   iconHidden: {
     visibility: 'hidden',
+    height: 20,
   },
 }));
 

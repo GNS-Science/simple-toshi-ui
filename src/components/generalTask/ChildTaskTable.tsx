@@ -14,6 +14,8 @@ const useStyles = makeStyles((theme) => ({
   table: {
     tableLayout: 'fixed',
     wordWrap: 'break-word',
+    paddingLeft: '15%',
+    paddingRight: '15%',
   },
   tableCell: {
     borderBottom: 'none',
