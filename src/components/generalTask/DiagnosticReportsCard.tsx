@@ -30,11 +30,15 @@ const useStyles = makeStyles(() => ({
   imageContainer: {
     display: 'flex',
     justifyContent: 'center',
+    flexWrap: 'wrap',
   },
   image: {
     padding: '5px',
-    maxHeight: '90vh',
-    maxWidth: '100%',
+    maxHeight: '80vh',
+    width: '25%',
+    objectFit: 'contain',
+    flexGrow: 3,
+    flexShrink: 4,
   },
 }));
 
@@ -42,7 +46,7 @@ const reportBaseUrl = process.env.REACT_APP_REPORTS_URL;
 interface DiagnosticReportsCardProps {
   readonly sweepArgs?: SweepArguments;
   queryRef: PreloadedQuery<InversionSolutionDiagnosticContainerQuery, Record<string, unknown>>;
-  finalPath: string;
+  finalPath: string[];
 }
 
 const DiagnosticReportsCard: React.FC<DiagnosticReportsCardProps> = ({
@@ -111,12 +115,10 @@ const DiagnosticReportsCard: React.FC<DiagnosticReportsCardProps> = ({
     <>
       <Card className={classes.root}>
         <CardContent>
-          <Typography>
-            <h4>
-              Inversion Solution {validatedSubtasks[currentImage].inversion_solution.id}&nbsp;&nbsp;&nbsp;
-              <Link to={`/InversionSolution/${validatedSubtasks[currentImage].inversion_solution.id}`}>[more]</Link>
-            </h4>
-          </Typography>
+          <h4>
+            Inversion Solution {validatedSubtasks[currentImage].inversion_solution.id}&nbsp;&nbsp;&nbsp;
+            <Link to={`/InversionSolution/${validatedSubtasks[currentImage].inversion_solution.id}`}>[more]</Link>
+          </h4>
           <Typography>
             {validatedSubtasks[currentImage].inversion_solution.meta.map((kv) => (
               <span key={kv?.k}>
@@ -145,11 +147,14 @@ const DiagnosticReportsCard: React.FC<DiagnosticReportsCardProps> = ({
             />
           </div>
           <div className={classes.imageContainer}>
-            <img
-              className={classes.image}
-              src={reportUrl(finalPath, validatedSubtasks[currentImage].inversion_solution.id)}
-              alt={finalPath}
-            />
+            {finalPath.map((path) => (
+              <img
+                key={path}
+                className={classes.image}
+                src={reportUrl(path, validatedSubtasks[currentImage].inversion_solution.id)}
+                alt={path}
+              />
+            ))}
           </div>
         </CardContent>
       </Card>

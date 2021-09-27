@@ -25,6 +25,9 @@ const useStyles = makeStyles(() => ({
   hidden: {
     display: 'none',
   },
+  button: {
+    margin: 10,
+  },
 }));
 
 interface InversionSolutionDiagnosticContainerProps {
@@ -48,7 +51,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   );
   const [showFilters, setShowFilters] = useState(false);
   const [showReport, setShowReport] = useState(false);
-  const [finalPath, setFinalPath] = useState<string>(options[0].finalPath);
+  const [finalPath, setFinalPath] = useState<string[]>([options[0].finalPath]);
 
   const maxLength = process.env.REACT_APP_REPORTS_LIMIT ?? 24;
 
@@ -66,7 +69,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   }, [filteredChildren]);
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
-    const newValue = (event.target.value as string) || '';
+    const newValue = (event.target.value as string[]) || [];
     setFinalPath(newValue);
   };
 
@@ -78,7 +81,12 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   return (
     <>
       <div className={classes.controlsContainer}>
-        <Button onClick={() => setShowFilters((v) => !v)}>
+        <Button
+          className={classes.button}
+          variant="contained"
+          color="default"
+          onClick={() => setShowFilters((v) => !v)}
+        >
           <span>
             Filter&nbsp;({filteredChildren?.data?.length}/{childrenListLength})
           </span>
