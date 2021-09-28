@@ -123,8 +123,8 @@ const InversionSolution: React.FC = () => {
             value="InversionSolutionDetailTab"
             className={classes.tab}
           />
-          <Tab label="Report" id="DiagnosticReportTab" value="DiagnosticReportTab" className={classes.tab} />
           <Tab label="MFD plot" id="inversionSolutionMfdTab" value="InversionSolutionMfdTab" className={classes.tab} />
+          <Tab label="Solution Diags" id="DiagnosticReportTab" value="DiagnosticReportTab" className={classes.tab} />
           {ruptureSetId && (
             <Tab label="Rupture Diags" id="ruptureSetTab" value="RuptureSetDiagnosticsTab" className={classes.tab} />
           )}
