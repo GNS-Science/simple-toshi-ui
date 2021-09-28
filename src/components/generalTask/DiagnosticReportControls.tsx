@@ -53,7 +53,7 @@ const DiagnosticReportControls: React.FC<DiagnosticReportControlsProps> = ({
 
   return (
     <>
-      <Button color="primary" variant="contained" onClick={setOpen}>
+      <Button color="default" variant="contained" onClick={setOpen}>
         {isOpen ? 'Show List' : 'Show Report'}
       </Button>
       <FormControl className={isOpen ? classes.formControl : classes.hidden}>
@@ -66,7 +66,10 @@ const DiagnosticReportControls: React.FC<DiagnosticReportControlsProps> = ({
           input={<Input />}
           renderValue={(selected) => {
             const selectedArray = selected as string[];
-            if (selectedArray.length === 1) return selectedArray[0];
+            if (selectedArray.length === 1) {
+              const index = options.findIndex((opt) => opt.finalPath === selectedArray[0]);
+              return options[index].displayName;
+            }
             if (selectedArray.length >= 1) return 'Multiple selected';
           }}
           MenuProps={MenuProps}
