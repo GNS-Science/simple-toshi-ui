@@ -3,7 +3,7 @@ import React from 'react';
 import { Box, Typography } from '@material-ui/core';
 import { useLazyLoadQuery } from 'react-relay';
 
-import { magRateData, IMagRate } from './PreviewMFD_data';
+import { magRateData, IMagRate } from '../PreviewMFD_data';
 import { InversionSolutionMfdTabQuery } from './__generated__/InversionSolutionMfdTabQuery.graphql';
 
 import { AnimatedAxis, AnimatedLineSeries, Tooltip, XYChart } from '@visx/xychart';
