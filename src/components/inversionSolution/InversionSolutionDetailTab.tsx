@@ -1,8 +1,9 @@
-import { Typography } from '@material-ui/core';
-import { graphql } from 'babel-plugin-relay/macro';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
+import { Typography } from '@material-ui/core';
+import { graphql } from 'babel-plugin-relay/macro';
+
 import { formatBytes } from '../FileDetail';
 import { InversionSolutionDetailTabQuery } from './__generated__/InversionSolutionDetailTabQuery.graphql';
 import KeyValueTable from '../common/KeyValueTable';

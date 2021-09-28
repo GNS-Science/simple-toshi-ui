@@ -11,6 +11,7 @@ import InversionSolutionHazardTab from './InversionSolutionHazardTab';
 import RuptureSetDiags from '../RuptureSetDiags';
 import { InversionSolutionQuery } from './__generated__/InversionSolutionQuery.graphql';
 import { InversionSolutionDetailTabQuery } from './__generated__/InversionSolutionDetailTabQuery.graphql';
+import DiagnosticReportTab from './DiagnosticReportTab';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -95,6 +96,12 @@ const InversionSolution: React.FC = () => {
             {ruptureSetId && <RuptureSetDiags fileId={ruptureSetId} metaAsString={''} />}
           </Box>
         );
+      case 'DiagnosticReportTab':
+        return (
+          <Box className={classes.tabPanel}>
+            <DiagnosticReportTab id={id} />
+          </Box>
+        );
     }
   };
 
@@ -116,6 +123,7 @@ const InversionSolution: React.FC = () => {
             value="InversionSolutionDetailTab"
             className={classes.tab}
           />
+          <Tab label="Report" id="DiagnosticReportTab" value="DiagnosticReportTab" className={classes.tab} />
           <Tab label="MFD plot" id="inversionSolutionMfdTab" value="InversionSolutionMfdTab" className={classes.tab} />
           {ruptureSetId && (
             <Tab label="Rupture Diags" id="ruptureSetTab" value="RuptureSetDiagnosticsTab" className={classes.tab} />
