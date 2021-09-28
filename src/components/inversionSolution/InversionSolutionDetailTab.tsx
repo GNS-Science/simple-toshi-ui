@@ -3,9 +3,9 @@ import { graphql } from 'babel-plugin-relay/macro';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
-import { formatBytes } from './FileDetail';
+import { formatBytes } from '../FileDetail';
 import { InversionSolutionDetailTabQuery } from './__generated__/InversionSolutionDetailTabQuery.graphql';
-import KeyValueTable from './common/KeyValueTable';
+import KeyValueTable from '../common/KeyValueTable';
 
 export const inversionSolutionDetailTabQuery = graphql`
   query InversionSolutionDetailTabQuery($id: ID!) {

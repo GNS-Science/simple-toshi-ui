@@ -4,11 +4,11 @@ import { useLazyLoadQuery, useQueryLoader } from 'react-relay';
 import { graphql } from 'babel-plugin-relay/macro';
 import { Box, CircularProgress, makeStyles, Tab, Tabs, Theme, Typography } from '@material-ui/core';
 
-import FavouriteControls from './common/FavouriteControls';
+import FavouriteControls from '../common/FavouriteControls';
 import InversionSolutionDetailTab, { inversionSolutionDetailTabQuery } from './InversionSolutionDetailTab';
 import InversionSolutionMfdTab from './InversionSolutionMfdTab';
 import InversionSolutionHazardTab from './InversionSolutionHazardTab';
-import RuptureSetDiags from './RuptureSetDiags';
+import RuptureSetDiags from '../RuptureSetDiags';
 import { InversionSolutionQuery } from './__generated__/InversionSolutionQuery.graphql';
 import { InversionSolutionDetailTabQuery } from './__generated__/InversionSolutionDetailTabQuery.graphql';
 
