@@ -45,6 +45,9 @@ const MenuBar: React.FC = () => {
             <MenuItem component={Link} to="/Preview" onClick={handleClose}>
               Preview
             </MenuItem>
+            <MenuItem component={Link} to="/MySolutions" onClick={handleClose}>
+              My Solutions
+            </MenuItem>
           </Menu>
           <Typography style={{ margin: '0 auto' }} variant="h6">
             Toshi
