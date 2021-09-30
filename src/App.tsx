@@ -37,6 +37,7 @@ import Find from './components/Find';
 import AutomationTask from './components/AutomationTask';
 import LocalStorageContext from './contexts/localStorage';
 import { LocalStorageInstance } from './interfaces/localStorage';
+import MySolutions from './components/MySolutions';
 
 const useStyles = makeStyles({
   root: {
@@ -176,6 +177,9 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
                 </Route>
                 <Route path="/Find/:id?">
                   <Find />
+                </Route>
+                <Route path="/MySolutions">
+                  <MySolutions />
                 </Route>
                 <Route path="/Preview/MFD">
                   <PreviewMFD width={800} height={600} bar_width={15} />

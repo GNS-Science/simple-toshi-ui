@@ -1,15 +1,15 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { useQueryLoader } from 'react-relay';
+import React, { Dispatch, SetStateAction, useState } from 'react';
+import { useLazyLoadQuery } from 'react-relay';
 import { graphql } from 'babel-plugin-relay/macro';
 import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 
 import SweepArgumentFilter from './SweepArgumentFilter';
-import DiagnosticReportControls from './DiagnosticReportControls';
-import DiagnosticReportsCard from './DiagnosticReportsCard';
 import { InversionSolutionDiagnosticContainerQuery } from './__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
-import { FilteredChildren, SweepArguments } from '../../interfaces/generaltask';
-import { diagnosticReportViewOptions as options } from '../../constants/diagnosticReport';
+import { SweepArguments } from '../../interfaces/generaltask';
+import DiagnosticReportContainer from '../diagnosticReportView/DiagnosticReportContainer';
+import { ValidatedSubtask } from '../../interfaces/diagnosticReport';
+import { validateSubtask } from '../../service/generalTask.service';
 
 const useStyles = makeStyles(() => ({
   filterContainer: {
@@ -34,7 +34,7 @@ interface InversionSolutionDiagnosticContainerProps {
   readonly sweepArgs?: SweepArguments;
   setShowList: Dispatch<SetStateAction<boolean>>;
   onChange: (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => void;
-  filteredChildren?: FilteredChildren;
+  ids?: string[];
   childrenListLength: number;
 }
 
@@ -42,36 +42,17 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   sweepArgs,
   setShowList,
   onChange,
-  filteredChildren,
+  ids,
   childrenListLength,
 }: InversionSolutionDiagnosticContainerProps) => {
   const classes = useStyles();
-  const [queryRef, loadQuery] = useQueryLoader<InversionSolutionDiagnosticContainerQuery>(
-    inversionSolutionDiagnosticContainerQuery,
-  );
   const [showFilters, setShowFilters] = useState(false);
   const [showReport, setShowReport] = useState(false);
-  const [finalPath, setFinalPath] = useState<string[]>([options[0].finalPath]);
+  const data = useLazyLoadQuery<InversionSolutionDiagnosticContainerQuery>(inversionSolutionDiagnosticContainerQuery, {
+    id: ids,
+  });
 
-  const maxLength = process.env.REACT_APP_REPORTS_LIMIT ?? 24;
-
-  useEffect(() => {
-    const filteredChildrenData = filteredChildren?.data ?? [];
-    if (filteredChildrenData.length <= maxLength) {
-      const filteredChildrenIds: string[] = [];
-      filteredChildrenData.map((child) => {
-        (child?.__typename === 'AutomationTask' || child?.__typename === 'RuptureGenerationTask') &&
-          child.id !== undefined &&
-          filteredChildrenIds.push(child?.id);
-      });
-      loadQuery({ id: filteredChildrenIds });
-    }
-  }, [filteredChildren]);
-
-  const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
-    const newValue = (event.target.value as string[]) || [];
-    setFinalPath(newValue);
-  };
+  const validatedSubtasks: ValidatedSubtask[] = validateSubtask(data, sweepArgs ?? []);
 
   const handleViewChange = () => {
     setShowList((v) => !v);
@@ -88,19 +69,19 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
           onClick={() => setShowFilters((v) => !v)}
         >
           <span>
-            Filter&nbsp;({filteredChildren?.data?.length}/{childrenListLength})
+            Filter&nbsp;({ids?.length}/{childrenListLength})
           </span>
         </Button>
-        <DiagnosticReportControls isOpen={showReport} setViewOption={handleChange} setOpen={handleViewChange} />
+        <Button color="default" variant="contained" onClick={handleViewChange}>
+          {showReport ? 'Show List' : 'Show Report'}
+        </Button>
       </div>
       <div className={showFilters ? classes.filterContainer : classes.hidden}>
         {sweepArgs?.map((argument) => (
           <SweepArgumentFilter key={`${argument?.k}-filter`} argument={argument} onChange={onChange} />
         ))}
       </div>
-      {showReport && queryRef && (
-        <DiagnosticReportsCard sweepArgs={sweepArgs} queryRef={queryRef} finalPath={finalPath} />
-      )}
+      {showReport && <DiagnosticReportContainer automationTasks={validatedSubtasks} />}
     </>
   );
 };

@@ -5,7 +5,7 @@ import { Typography, CircularProgress } from '@material-ui/core';
 
 import ChildTaskTable from './ChildTaskTable';
 import { GeneralTaskChildrenTabQuery } from './__generated__/GeneralTaskChildrenTabQuery.graphql';
-import SweepArgumentFilterContainer from './InversionSolutionDiagnosticContainer';
+import InversionSolutionDiagnosticContainer from './InversionSolutionDiagnosticContainer';
 import { FilteredArguments, FilteredChildren, SweepArguments } from '../../interfaces/generaltask';
 
 interface GeneralTaskChildrenTabProps {
@@ -20,8 +20,10 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const [showList, setShowList] = useState(true);
   const [filteredArguments, setFilteredArguments] = useState<FilteredArguments>({ data: [] });
   const [filteredChildren, setFilteredChildren] = useState<FilteredChildren>({ data: [] });
+  const [filteredChildrenIds, setFilteredChildrenIds] = useState<string[]>([]);
   const data = useLazyLoadQuery<GeneralTaskChildrenTabQuery>(generalTaskChildrenTabQuery, { id });
   const childTasks = data?.node?.children?.edges?.map((e) => e?.node?.child);
+  const maxLength = process.env.REACT_APP_REPORTS_LIMIT ?? 24;
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
     const currentFilteredArguments = [...filteredArguments.data];
@@ -57,6 +59,19 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     setFilteredChildren(newFilteredChildren);
   }, [filteredArguments]);
 
+  useEffect(() => {
+    const filteredChildrenData = filteredChildren?.data ?? [];
+    if (filteredChildrenData.length <= maxLength) {
+      const ids: string[] = [];
+      filteredChildrenData.map((child) => {
+        (child?.__typename === 'AutomationTask' || child?.__typename === 'RuptureGenerationTask') &&
+          child.id !== undefined &&
+          ids.push(child?.id);
+      });
+      setFilteredChildrenIds(ids);
+    }
+  }, [filteredChildren]);
+
   if (!data?.node) {
     return (
       <Typography variant="h5" gutterBottom>
@@ -68,11 +83,11 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   return (
     <div>
       <React.Suspense fallback={<CircularProgress />}>
-        <SweepArgumentFilterContainer
+        <InversionSolutionDiagnosticContainer
           sweepArgs={sweepArgs}
           setShowList={setShowList}
           onChange={handleChange}
-          filteredChildren={filteredChildren}
+          ids={filteredChildrenIds}
           childrenListLength={childTasks?.length ?? 0}
         />
       </React.Suspense>
