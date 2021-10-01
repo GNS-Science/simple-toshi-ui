@@ -5,10 +5,11 @@ import { useLazyLoadQuery } from 'react-relay/hooks';
 import { Typography, CircularProgress, makeStyles, Theme, Tabs, Tab, Box } from '@material-ui/core';
 
 import { GeneralTaskQuery } from './__generated__/GeneralTaskQuery.graphql';
-import GeneralTaskChildrenTab from './GeneralTaskChildrenTab';
-import GeneralTaskDetailTab from './GeneralTaskDetailTab';
-import { GeneralTaskKeyValueListPairs } from '../../interfaces/generaltask';
-import TabPanel from '../common/TabPanel';
+import GeneralTaskChildrenTab from '../components/generalTask/GeneralTaskChildrenTab';
+import GeneralTaskDetailTab from '../components/generalTask/GeneralTaskDetailTab';
+import { GeneralTaskKeyValueListPairs } from '../interfaces/generaltask';
+import TabPanel from '../components/common/TabPanel';
+import { sweepsList } from '../service/generalTask.service';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -48,11 +49,6 @@ const GeneralTask: React.FC = () => {
 
   const sweptArguments = data?.node?.swept_arguments ?? [''];
   const argumentLists = data?.node?.argument_lists ?? [];
-
-  const sweepsList = (arg_lists: GeneralTaskKeyValueListPairs, sweeps: readonly (string | null)[]) => {
-    if (arg_lists) return arg_lists.filter((el) => sweeps.includes(el ? el.k : ''));
-    return [];
-  };
 
   return (
     <>

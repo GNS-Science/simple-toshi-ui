@@ -1,3 +1,4 @@
+import { Typography } from '@material-ui/core';
 import { graphql } from 'babel-plugin-relay/macro';
 import React, { useContext, useState } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
@@ -15,7 +16,13 @@ const MySolutions: React.FC = () => {
 
   const data = useLazyLoadQuery<MySolutionsQuery>(mySolutionsQuery, { id });
   console.log(data);
-  return <>hello</>;
+  return (
+    <>
+      <Typography variant="h5" gutterBottom>
+        My Solutions
+      </Typography>
+    </>
+  );
 };
 
 export default MySolutions;

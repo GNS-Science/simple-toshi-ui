@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useQueryLoader } from 'react-relay';
 import { graphql } from 'babel-plugin-relay/macro';
-import { Button, Drawer, Toolbar } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 
 import SweepArgumentFilter from './SweepArgumentFilter';
@@ -33,6 +33,7 @@ const useStyles = makeStyles(() => ({
 
 interface InversionSolutionDiagnosticContainerProps {
   readonly sweepArgs?: SweepArguments;
+  showList: boolean;
   setShowList: Dispatch<SetStateAction<boolean>>;
   onChange: (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => void;
   ids?: string[];
@@ -42,6 +43,7 @@ interface InversionSolutionDiagnosticContainerProps {
 
 const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnosticContainerProps> = ({
   sweepArgs,
+  showList,
   setShowList,
   onChange,
   ids,
@@ -50,7 +52,6 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
 }: InversionSolutionDiagnosticContainerProps) => {
   const classes = useStyles();
   const [showFilters, setShowFilters] = useState(false);
-  const [showReport, setShowReport] = useState(false);
   const [viewOptions, setViewOptions] = useState<string[]>([options[0].finalPath]);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [queryRef, loadQuery] = useQueryLoader<InversionSolutionDiagnosticContainerQuery>(
@@ -63,7 +64,6 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
 
   const handleViewChange = () => {
     setShowList((v) => !v);
-    setShowReport((v) => !v);
   };
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
@@ -88,13 +88,13 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
             Filter&nbsp;({ids?.length}/{childrenListLength})
           </span>
         </Button>
-        <Button color="default" variant="contained" onClick={handleViewChange}>
-          {showReport ? 'Show List' : 'Show Report'}
+        <Button className={classes.button} color="default" variant="contained" onClick={handleViewChange}>
+          {showList ? 'Show Report' : 'Show List'}
         </Button>
-        <DiagnosticReportControls setViewOption={handleChange} />
-        <Button color="default" variant="contained" onClick={handleDrawerOpen}>
+        <Button className={classes.button} color="default" variant="contained" onClick={handleDrawerOpen}>
           Details
         </Button>
+        <DiagnosticReportControls setViewOption={handleChange} />
       </div>
       <div className={showFilters ? classes.filterContainer : classes.hidden}>
         {sweepArgs?.map((argument) => (
@@ -104,7 +104,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
           Apply
         </Button>
       </div>
-      {queryRef && showReport && (
+      {queryRef && !showList && (
         <DiagnosticReportContainer sweepArgs={sweepArgs} viewOptions={viewOptions} queryRef={queryRef} />
       )}
       <GeneralTaskDetailDrawer openDrawer={openDrawer} />
