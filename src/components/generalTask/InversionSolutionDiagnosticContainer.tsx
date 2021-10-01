@@ -1,5 +1,5 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
-import { useLazyLoadQuery } from 'react-relay';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useQueryLoader } from 'react-relay';
 import { graphql } from 'babel-plugin-relay/macro';
 import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
@@ -8,8 +8,8 @@ import SweepArgumentFilter from './SweepArgumentFilter';
 import { InversionSolutionDiagnosticContainerQuery } from './__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
 import { SweepArguments } from '../../interfaces/generaltask';
 import DiagnosticReportContainer from '../diagnosticReportView/DiagnosticReportContainer';
-import { ValidatedSubtask } from '../../interfaces/diagnosticReport';
-import { validateSubtask } from '../../service/generalTask.service';
+import DiagnosticReportControls from '../diagnosticReportView/DiagnosticReportControls';
+import { diagnosticReportViewOptions as options } from '../../constants/diagnosticReport';
 
 const useStyles = makeStyles(() => ({
   filterContainer: {
@@ -36,6 +36,7 @@ interface InversionSolutionDiagnosticContainerProps {
   onChange: (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => void;
   ids?: string[];
   childrenListLength: number;
+  applyFilter: () => void;
 }
 
 const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnosticContainerProps> = ({
@@ -44,24 +45,34 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   onChange,
   ids,
   childrenListLength,
+  applyFilter,
 }: InversionSolutionDiagnosticContainerProps) => {
   const classes = useStyles();
   const [showFilters, setShowFilters] = useState(false);
   const [showReport, setShowReport] = useState(false);
-  const data = useLazyLoadQuery<InversionSolutionDiagnosticContainerQuery>(inversionSolutionDiagnosticContainerQuery, {
-    id: ids,
-  });
+  const [viewOptions, setViewOptions] = useState<string[]>([options[0].finalPath]);
+  const [queryRef, loadQuery] = useQueryLoader<InversionSolutionDiagnosticContainerQuery>(
+    inversionSolutionDiagnosticContainerQuery,
+  );
 
-  const validatedSubtasks: ValidatedSubtask[] = validateSubtask(data, sweepArgs ?? []);
+  useEffect(() => {
+    loadQuery({ id: ids });
+  }, [ids]);
 
   const handleViewChange = () => {
     setShowList((v) => !v);
     setShowReport((v) => !v);
   };
 
+  const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
+    const newValue = (event.target.value as string[]) || [];
+    setViewOptions(newValue);
+  };
+
   return (
     <>
       <div className={classes.controlsContainer}>
+        {' '}
         <Button
           className={classes.button}
           variant="contained"
@@ -75,13 +86,19 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
         <Button color="default" variant="contained" onClick={handleViewChange}>
           {showReport ? 'Show List' : 'Show Report'}
         </Button>
+        <DiagnosticReportControls setViewOption={handleChange} />
       </div>
       <div className={showFilters ? classes.filterContainer : classes.hidden}>
         {sweepArgs?.map((argument) => (
           <SweepArgumentFilter key={`${argument?.k}-filter`} argument={argument} onChange={onChange} />
         ))}
+        <Button color="primary" variant="contained" onClick={applyFilter}>
+          Apply
+        </Button>
       </div>
-      {showReport && <DiagnosticReportContainer automationTasks={validatedSubtasks} />}
+      {queryRef && showReport && (
+        <DiagnosticReportContainer sweepArgs={sweepArgs} viewOptions={viewOptions} queryRef={queryRef} />
+      )}
     </>
   );
 };

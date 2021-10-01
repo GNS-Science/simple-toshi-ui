@@ -1,28 +1,29 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import DiagnosticReportControls from './DiagnosticReportControls';
-import { diagnosticReportViewOptions as options } from '../../constants/diagnosticReport';
 import DiagnosticReportCard from './DiagnosticReportCard';
-import { ValidatedSubtask } from '../../interfaces/generaltask';
+import { SweepArguments } from '../../interfaces/generaltask';
+import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
+import { InversionSolutionDiagnosticContainerQuery } from '../generalTask/__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
+import { validateSubtask } from '../../service/generalTask.service';
+import { inversionSolutionDiagnosticContainerQuery } from '../generalTask/InversionSolutionDiagnosticContainer';
 
 interface DiagnosticReportViewProps {
-  automationTasks: ValidatedSubtask[];
+  sweepArgs?: SweepArguments;
+  viewOptions: string[];
+  queryRef: PreloadedQuery<InversionSolutionDiagnosticContainerQuery, Record<string, unknown>>;
 }
 
-const DiagnosticReportView: React.FC<DiagnosticReportViewProps> = ({ automationTasks }: DiagnosticReportViewProps) => {
-  const [viewOptions, setViewOptions] = useState<string[]>([options[0].finalPath]);
-
-  const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
-    const newValue = (event.target.value as string[]) || [];
-    setViewOptions(newValue);
-  };
-
-  return (
-    <>
-      <DiagnosticReportControls setViewOption={handleChange} />
-      <DiagnosticReportCard viewOptions={viewOptions} automationTasks={automationTasks} />
-    </>
+const DiagnosticReportView: React.FC<DiagnosticReportViewProps> = ({
+  sweepArgs,
+  viewOptions,
+  queryRef,
+}: DiagnosticReportViewProps) => {
+  const data = usePreloadedQuery<InversionSolutionDiagnosticContainerQuery>(
+    inversionSolutionDiagnosticContainerQuery,
+    queryRef,
   );
+  const validatedSubtasks = validateSubtask(data, sweepArgs ?? []);
+  return <DiagnosticReportCard viewOptions={viewOptions} automationTasks={validatedSubtasks} />;
 };
 
 export default DiagnosticReportView;

@@ -45,7 +45,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     setFilteredArguments(newFilteredArguments);
   };
 
-  useEffect(() => {
+  const applyFilter = () => {
     const filtered = childTasks?.filter((child) => {
       if (child?.__typename === 'AutomationTask' || child?.__typename === 'RuptureGenerationTask') {
         return filteredArguments.data?.every((sweepArgument) => {
@@ -57,7 +57,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     });
     const newFilteredChildren = { data: filtered };
     setFilteredChildren(newFilteredChildren);
-  }, [filteredArguments]);
+  };
 
   useEffect(() => {
     const filteredChildrenData = filteredChildren?.data ?? [];
@@ -89,6 +89,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
           onChange={handleChange}
           ids={filteredChildrenIds}
           childrenListLength={childTasks?.length ?? 0}
+          applyFilter={applyFilter}
         />
       </React.Suspense>
       <React.Suspense fallback={<CircularProgress />}>
