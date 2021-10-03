@@ -3,9 +3,11 @@ export type ValidatedSubtask = {
   id: string;
   inversion_solution: {
     id: string;
-    meta: Array<{
-      readonly k: string | null;
-      readonly v: string | null;
-    } | null>;
+    meta: ValidatedSubtaskMeta;
   };
 };
+
+export type ValidatedSubtaskMeta = Array<{
+  readonly k: string | null;
+  readonly v: string | null;
+} | null>;

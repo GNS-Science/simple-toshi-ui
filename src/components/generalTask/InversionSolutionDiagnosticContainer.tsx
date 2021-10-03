@@ -11,6 +11,7 @@ import DiagnosticReportContainer from '../diagnosticReportView/DiagnosticReportC
 import DiagnosticReportControls from '../diagnosticReportView/DiagnosticReportControls';
 import { diagnosticReportViewOptions as options } from '../../constants/diagnosticReport';
 import GeneralTaskDetailDrawer from '../diagnosticReportView/GeneralTaskDetailDrawer';
+import ControlsBar from '../common/ControlsBar';
 
 const useStyles = makeStyles(() => ({
   filterContainer: {
@@ -19,15 +20,8 @@ const useStyles = makeStyles(() => ({
     flexWrap: 'wrap',
     paddingLeft: 10,
   },
-  controlsContainer: {
-    display: 'flex',
-    alignItems: 'center',
-  },
   hidden: {
     display: 'none',
-  },
-  button: {
-    margin: 10,
   },
 }));
 
@@ -71,31 +65,22 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
     setViewOptions(newValue);
   };
 
-  const handleDrawerOpen = () => {
-    setOpenDrawer((v) => !v);
-  };
   return (
     <>
-      <div className={classes.controlsContainer}>
-        {' '}
-        <Button
-          className={classes.button}
-          variant="contained"
-          color="default"
-          onClick={() => setShowFilters((v) => !v)}
-        >
+      <ControlsBar>
+        <Button variant="contained" color="default" onClick={() => setShowFilters((v) => !v)}>
           <span>
             Filter&nbsp;({ids?.length}/{childrenListLength})
           </span>
         </Button>
-        <Button className={classes.button} color="default" variant="contained" onClick={handleViewChange}>
+        <Button color="default" variant="contained" onClick={handleViewChange}>
           {showList ? 'Show Report' : 'Show List'}
         </Button>
-        <Button className={classes.button} color="default" variant="contained" onClick={handleDrawerOpen}>
+        <Button color="default" variant="contained" onClick={() => setOpenDrawer((v) => !v)}>
           Details
         </Button>
         <DiagnosticReportControls setViewOption={handleChange} />
-      </div>
+      </ControlsBar>
       <div className={showFilters ? classes.filterContainer : classes.hidden}>
         {sweepArgs?.map((argument) => (
           <SweepArgumentFilter key={`${argument?.k}-filter`} argument={argument} onChange={onChange} />
