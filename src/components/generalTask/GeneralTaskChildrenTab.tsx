@@ -86,7 +86,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
         {showList && (
           <div>
             {!!filteredChildren.data?.length ? (
-              <ChildTaskTable data={childTasks} />
+              <ChildTaskTable data={filteredChildren} />
             ) : (
               data?.node?.children?.edges?.length && <ChildTaskTable data={childTasks} />
             )}
