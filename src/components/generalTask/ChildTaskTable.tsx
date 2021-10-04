@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles, Paper, Table, TableBody, TableCell, TableHead, TableRow, withStyles } from '@material-ui/core';
 
-import { EventResult, EventState } from './__generated__/GeneralTaskChildrenTabQuery.graphql';
 import { formatDuration, intervalToDuration, secondsToMilliseconds, format } from 'date-fns';
 import FavouriteStatus from '../common/FavouriteStatus';
+import { ValidatedChildren } from '../../interfaces/generaltask';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,37 +40,7 @@ const AlternatingRow = withStyles((theme) => ({
 }))(TableRow);
 
 export interface ChildTaskTableProps {
-  data?:
-    | (
-        | {
-            readonly __typename: 'RuptureGenerationTask';
-            readonly id: string;
-            readonly created: unknown | null;
-            readonly duration: number | null;
-            readonly state: EventState | null;
-            readonly result: EventResult | null;
-            readonly arguments: ReadonlyArray<{
-              readonly k: string | null;
-              readonly v: string | null;
-            } | null> | null;
-          }
-        | {
-            readonly __typename: 'AutomationTask';
-            readonly id: string;
-            readonly created: unknown | null;
-            readonly duration: number | null;
-            readonly state: EventState | null;
-            readonly result: EventResult | null;
-            readonly arguments: ReadonlyArray<{
-              readonly k: string | null;
-              readonly v: string | null;
-            } | null> | null;
-          }
-        | {
-            readonly __typename: '%other';
-          }
-        | undefined
-      )[];
+  data?: ValidatedChildren;
 }
 
 const ChildTaskTable: React.FC<ChildTaskTableProps> = ({ data }: ChildTaskTableProps) => {
@@ -91,7 +61,7 @@ const ChildTaskTable: React.FC<ChildTaskTableProps> = ({ data }: ChildTaskTableP
           </AlternatingRow>
         </TableHead>
         <TableBody>
-          {data
+          {data?.data
             ?.sort((e1, e2) => {
               if (e1?.__typename === 'RuptureGenerationTask' && e2?.__typename === 'RuptureGenerationTask') {
                 const created1 = e1?.created ? (e1?.created as string) : '';

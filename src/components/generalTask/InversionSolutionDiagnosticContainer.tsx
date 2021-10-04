@@ -36,6 +36,7 @@ interface InversionSolutionDiagnosticContainerProps {
   childrenListLength: number;
   applyFilter: () => void;
   data: GeneralTaskQueryResponse;
+  handleViewChange: () => void;
 }
 
 const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnosticContainerProps> = ({
@@ -47,6 +48,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   childrenListLength,
   applyFilter,
   data,
+  handleViewChange,
 }: InversionSolutionDiagnosticContainerProps) => {
   const classes = useStyles();
   const [showFilters, setShowFilters] = useState(false);
@@ -59,10 +61,6 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   useEffect(() => {
     loadQuery({ id: ids });
   }, [ids]);
-
-  const handleViewChange = () => {
-    setShowList((v) => !v);
-  };
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
     const newValue = (event.target.value as string[]) || [];

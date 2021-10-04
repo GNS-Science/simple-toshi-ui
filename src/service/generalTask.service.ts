@@ -1,5 +1,6 @@
+import { GeneralTaskChildrenTabQueryResponse } from '../components/generalTask/__generated__/GeneralTaskChildrenTabQuery.graphql';
 import { InversionSolutionDiagnosticContainerQueryResponse } from '../components/generalTask/__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
-import { SweepArguments, ValidatedSubtask } from '../interfaces/generaltask';
+import { ValidatedChildren, SweepArguments, ValidatedSubtask } from '../interfaces/generaltask';
 import { FilteredArguments, GeneralTaskKeyValueListPairs } from '../interfaces/generaltask';
 
 export const sweepsList = (
@@ -66,4 +67,43 @@ export const validateSubtask = (
     }
   });
   return validatedSubtasks;
+};
+
+export const validateChildTasks = (data: GeneralTaskChildrenTabQueryResponse): ValidatedChildren => {
+  const childTasks = data?.node?.children?.edges?.map((e) => e?.node?.child);
+  const validatedChildTasks: ValidatedChildren = { data: [] };
+
+  childTasks?.map((task) => {
+    if (task && task.__typename !== '%other') {
+      validatedChildTasks.data?.push(task);
+    }
+  });
+
+  return validatedChildTasks;
+};
+
+export const getChildTaskIdArray = (filteredChildren: ValidatedChildren): string[] | void => {
+  const maxLength = parseInt(process.env.REACT_APP_REPORTS_LIMIT ?? '24');
+  const idArray: string[] = [];
+
+  if (filteredChildren.data && filteredChildren.data.length <= maxLength) {
+    filteredChildren.data?.map((task) => {
+      idArray.push(task.id);
+    });
+    return idArray;
+  }
+};
+
+export const applyChildTaskFilter = (
+  childTasks: ValidatedChildren,
+  filteredArguments: FilteredArguments,
+): ValidatedChildren => {
+  const filtered = childTasks.data?.filter((child) => {
+    return filteredArguments.data?.every((sweepArgument) => {
+      return child?.arguments?.some((argument) => {
+        return sweepArgument.k.includes(argument?.k as string) && sweepArgument.v.includes(argument?.v as string);
+      });
+    });
+  });
+  return { data: filtered };
 };
