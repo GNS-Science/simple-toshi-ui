@@ -8,15 +8,18 @@ import { GeneralTaskChildrenTabQuery } from './__generated__/GeneralTaskChildren
 import InversionSolutionDiagnosticContainer from './InversionSolutionDiagnosticContainer';
 import { FilteredArguments, FilteredChildren, SweepArguments } from '../../interfaces/generaltask';
 import { updateFilteredArguments } from '../../service/generalTask.service';
+import { GeneralTaskQueryResponse } from '../../pages/__generated__/GeneralTaskQuery.graphql';
 
 interface GeneralTaskChildrenTabProps {
   id: string;
   readonly sweepArgs?: SweepArguments;
+  generalTaskData: GeneralTaskQueryResponse;
 }
 
 const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   id,
   sweepArgs,
+  generalTaskData,
 }: GeneralTaskChildrenTabProps) => {
   const [showList, setShowList] = useState(true);
   const [filteredArguments, setFilteredArguments] = useState<FilteredArguments>({ data: [] });
@@ -74,6 +77,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     <div>
       <React.Suspense fallback={<CircularProgress />}>
         <InversionSolutionDiagnosticContainer
+          data={generalTaskData}
           sweepArgs={sweepArgs}
           showList={showList}
           setShowList={setShowList}

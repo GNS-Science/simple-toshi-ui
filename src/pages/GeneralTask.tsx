@@ -7,7 +7,6 @@ import { Typography, CircularProgress, makeStyles, Theme, Tabs, Tab, Box } from 
 import { GeneralTaskQuery } from './__generated__/GeneralTaskQuery.graphql';
 import GeneralTaskChildrenTab from '../components/generalTask/GeneralTaskChildrenTab';
 import GeneralTaskDetailTab from '../components/generalTask/GeneralTaskDetailTab';
-import { GeneralTaskKeyValueListPairs } from '../interfaces/generaltask';
 import TabPanel from '../components/common/TabPanel';
 import { sweepsList } from '../service/generalTask.service';
 
@@ -65,7 +64,11 @@ const GeneralTask: React.FC = () => {
         </TabPanel>
         <TabPanel tab={tab} index={1}>
           <React.Suspense fallback={<CircularProgress />}>
-            <GeneralTaskChildrenTab sweepArgs={sweepsList(argumentLists, sweptArguments)} id={id} />
+            <GeneralTaskChildrenTab
+              generalTaskData={data}
+              sweepArgs={sweepsList(argumentLists, sweptArguments)}
+              id={id}
+            />
           </React.Suspense>
         </TabPanel>
       </Box>

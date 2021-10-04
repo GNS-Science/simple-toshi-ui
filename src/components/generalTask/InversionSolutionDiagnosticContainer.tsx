@@ -12,6 +12,8 @@ import DiagnosticReportControls from '../diagnosticReportView/DiagnosticReportCo
 import { diagnosticReportViewOptions as options } from '../../constants/diagnosticReport';
 import GeneralTaskDetailDrawer from '../diagnosticReportView/GeneralTaskDetailDrawer';
 import ControlsBar from '../common/ControlsBar';
+import { GeneralTaskQueryResponse } from '../../pages/__generated__/GeneralTaskQuery.graphql';
+import { GeneralTaskDetails } from '../../interfaces/diagnosticReport';
 
 const useStyles = makeStyles(() => ({
   filterContainer: {
@@ -33,6 +35,7 @@ interface InversionSolutionDiagnosticContainerProps {
   ids?: string[];
   childrenListLength: number;
   applyFilter: () => void;
+  data: GeneralTaskQueryResponse;
 }
 
 const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnosticContainerProps> = ({
@@ -43,6 +46,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   ids,
   childrenListLength,
   applyFilter,
+  data,
 }: InversionSolutionDiagnosticContainerProps) => {
   const classes = useStyles();
   const [showFilters, setShowFilters] = useState(false);
@@ -63,6 +67,16 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
     const newValue = (event.target.value as string[]) || [];
     setViewOptions(newValue);
+  };
+
+  const generalTaskDetails: GeneralTaskDetails = {
+    title: data?.node?.title ?? '',
+    id: data?.node?.id ?? '',
+    created: (data?.node?.created as string) ?? '',
+    model_type: data?.node?.model_type ?? '',
+    description: data?.node?.description ?? '',
+    notes: data?.node?.notes ?? '',
+    swept_arguments: (data?.node?.swept_arguments as string[]) ?? [],
   };
 
   return (
@@ -92,7 +106,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
       {queryRef && !showList && (
         <DiagnosticReportContainer sweepArgs={sweepArgs} viewOptions={viewOptions} queryRef={queryRef} />
       )}
-      <GeneralTaskDetailDrawer openDrawer={openDrawer} />
+      <GeneralTaskDetailDrawer generalTaskDetails={generalTaskDetails} openDrawer={openDrawer} />
     </>
   );
 };

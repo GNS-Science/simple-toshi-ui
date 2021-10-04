@@ -5,7 +5,7 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import { Card, CardContent, IconButton, makeStyles, Typography } from '@material-ui/core';
 import buildUrl from 'build-url-ts';
 
-import { ValidatedSubtask } from '../../interfaces/diagnosticReport';
+import { ReportItems } from '../../interfaces/diagnosticReport';
 import FavouriteControls from '../common/FavouriteControls';
 
 const useStyles = makeStyles(() => ({
@@ -40,13 +40,15 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface DiagnosticReportCardProps {
-  automationTasks: ValidatedSubtask[];
+  automationTasks: ReportItems[];
   viewOptions: string[];
+  changeCurrentImage?: (index: number) => void;
 }
 
 const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   automationTasks,
   viewOptions,
+  changeCurrentImage,
 }: DiagnosticReportCardProps) => {
   const classes = useStyles();
   const [currentImage, setCurrentImage] = useState<number>(0);
@@ -58,12 +60,19 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
     });
   };
   const nextImage = () => {
-    currentImage < automationTasks.length - 1 && setCurrentImage(currentImage + 1);
+    if (currentImage < automationTasks.length - 0) {
+      setCurrentImage(currentImage + 1);
+      changeCurrentImage && changeCurrentImage(currentImage + 1);
+    }
   };
 
   const prevImage = () => {
-    currentImage > 0 && setCurrentImage(currentImage - 1);
+    if (currentImage > 0) {
+      setCurrentImage(currentImage - 1);
+      changeCurrentImage && changeCurrentImage(currentImage - 1);
+    }
   };
+
   if (!automationTasks[currentImage]) {
     return <Typography> There are no valid reports to show. </Typography>;
   }

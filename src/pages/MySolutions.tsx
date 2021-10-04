@@ -1,48 +1,45 @@
+import React, { useContext, useEffect, useState } from 'react';
+import { useLazyLoadQuery } from 'react-relay';
 import { Button, Typography } from '@material-ui/core';
 import { graphql } from 'babel-plugin-relay/macro';
-import React, { useContext, useState } from 'react';
-import { useLazyLoadQuery } from 'react-relay';
 import DiagnosticReportControls from '../components/diagnosticReportView/DiagnosticReportControls';
+import GeneralTaskDetailDrawer from '../components/diagnosticReportView/GeneralTaskDetailDrawer';
+import DiagnosticReportCard from '../components/diagnosticReportView/DiagnosticReportCard';
 import MySolutionsList from '../components/mySolutions/MySolutionsList';
+import ControlsBar from '../components/common/ControlsBar';
 import LocalStorageContext from '../contexts/localStorage';
 import { SolutionItem } from '../interfaces/mySolutions';
+import { GeneralTaskDetails, ReportItems } from '../interfaces/diagnosticReport';
 import { MySolutionsQuery } from './__generated__/MySolutionsQuery.graphql';
 import { diagnosticReportViewOptions as options } from '../constants/diagnosticReport';
-import { ValidatedSubtask } from '../interfaces/diagnosticReport';
-import DiagnosticReportCard from '../components/diagnosticReportView/DiagnosticReportCard';
-import ControlsBar from '../components/common/ControlsBar';
-import GeneralTaskDetailDrawer from '../components/diagnosticReportView/GeneralTaskDetailDrawer';
+import { getGeneralTaskDetails } from '../service/mySolution.service';
 
 const MySolutions: React.FC = () => {
   const { ISFavourites } = useContext(LocalStorageContext);
   const [showList, setShowList] = useState(true);
   const [viewOptions, setViewOptions] = useState<string[]>([options[0].finalPath]);
   const [openDrawer, setOpenDrawer] = useState(false);
-  const id: string[] = [];
+  const [currentImage, setCurrentImage] = useState<number>(0);
 
+  const id: string[] = [];
   for (const inversionSolution in ISFavourites) {
     id.push(ISFavourites[inversionSolution].producedBy);
   }
 
   const data = useLazyLoadQuery<MySolutionsQuery>(mySolutionsQuery, { id });
   const automationTasks = data?.nodes?.result?.edges.map((e) => e?.node) ?? [];
-  const validATs: SolutionItem[] = [];
-
-  const reportItems: ValidatedSubtask[] = [];
+  const listItems: SolutionItem[] = [];
+  const reportItems: ReportItems[] = [];
 
   automationTasks.map((item) => {
     if (item && item !== null && item.__typename === 'AutomationTask' && item.inversion_solution !== null) {
-      validATs.push(item);
+      listItems.push(item);
     }
   });
-  const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
-    const newValue = (event.target.value as string[]) || [];
-    setViewOptions(newValue);
-  };
 
-  validATs.map((task) => {
+  listItems.map((task) => {
     const newMeta = task.inversion_solution?.meta ?? [];
-    const validatedTask: ValidatedSubtask = {
+    const validatedTask: ReportItems = {
       __typename: 'AutomationTask',
       id: task.id,
       inversion_solution: {
@@ -53,6 +50,22 @@ const MySolutions: React.FC = () => {
     reportItems.push(validatedTask);
   });
 
+  const [currentGeneralTask, setCurrentGeneralTask] = useState<GeneralTaskDetails>(
+    getGeneralTaskDetails(listItems, reportItems, 0),
+  );
+  const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
+    const newValue = (event.target.value as string[]) || [];
+    setViewOptions(newValue);
+  };
+
+  const handleChangeCurrentImage = (index: number) => {
+    setCurrentImage(index);
+  };
+
+  useEffect(() => {
+    setCurrentGeneralTask(getGeneralTaskDetails(listItems, reportItems, currentImage));
+  }, [currentImage]);
+
   return (
     <>
       <Typography variant="h5" gutterBottom>
@@ -62,17 +75,23 @@ const MySolutions: React.FC = () => {
         <Button variant="contained" color="default" onClick={() => setShowList((v) => !v)}>
           Show Report
         </Button>
-        <Button color="default" variant="contained" onClick={() => setOpenDrawer((v) => !v)}>
-          Details
-        </Button>
+        {!showList && (
+          <Button color="default" variant="contained" onClick={() => setOpenDrawer((v) => !v)}>
+            Details
+          </Button>
+        )}
         <DiagnosticReportControls setViewOption={handleChange} />
       </ControlsBar>
       {showList ? (
-        <MySolutionsList solutionsList={validATs} />
+        <MySolutionsList solutionsList={listItems} />
       ) : (
-        <DiagnosticReportCard automationTasks={reportItems} viewOptions={viewOptions} />
+        <DiagnosticReportCard
+          changeCurrentImage={handleChangeCurrentImage}
+          automationTasks={reportItems}
+          viewOptions={viewOptions}
+        />
       )}
-      <GeneralTaskDetailDrawer openDrawer={openDrawer} />
+      {!showList && <GeneralTaskDetailDrawer generalTaskDetails={currentGeneralTask} openDrawer={openDrawer} />}
     </>
   );
 };
