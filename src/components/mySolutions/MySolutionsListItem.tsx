@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography } from '@material-ui/core';
+import { Card, CardContent, Grid, List, ListItem, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
@@ -23,19 +23,37 @@ const MySolutionsListItem: React.FC<MySolutionsListItemProps> = ({ automationTas
       <Card className={classes.card}>
         <CardContent>
           <Typography variant="h5">Inversion solution: {inversionSolution?.id}</Typography>
-          <Typography>
-            <strong>Produced by General Task:</strong> {parentTask?.id}&nbsp;&nbsp;
-            <Link to={`/GeneralTask/${parentTask?.id}`}>[more]</Link>
-          </Typography>
-          <Typography>
-            <strong>Title</strong> {parentTask?.title}
-          </Typography>
-          <Typography>
-            <strong>Created</strong> {parentTask?.created}
-          </Typography>
-          <Typography>
-            <strong>Model Type</strong> {parentTask?.model_type}
-          </Typography>
+          <Grid container spacing={1}>
+            <Grid item xs={5}>
+              <List dense>
+                <ListItem disableGutters={true}>
+                  <Typography>
+                    <strong>Produced by General Task:</strong> {parentTask?.id}&nbsp;&nbsp;
+                    <Link to={`/GeneralTask/${parentTask?.id}`}>[more]</Link>
+                  </Typography>
+                </ListItem>
+                <ListItem disableGutters={true}>
+                  <Typography>
+                    <strong>Title</strong> {parentTask?.title}
+                  </Typography>
+                </ListItem>
+              </List>
+            </Grid>
+            <Grid item xs={5}>
+              <List dense>
+                <ListItem disableGutters={true}>
+                  <Typography>
+                    <strong>Created</strong> {parentTask?.created}
+                  </Typography>
+                </ListItem>
+                <ListItem disableGutters={true}>
+                  <Typography>
+                    <strong>Model Type</strong> {parentTask?.model_type}
+                  </Typography>
+                </ListItem>
+              </List>
+            </Grid>
+          </Grid>
           {parentTask?.description && (
             <>
               <Typography>

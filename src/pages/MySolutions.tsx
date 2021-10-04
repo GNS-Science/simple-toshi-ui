@@ -80,7 +80,7 @@ const MySolutions: React.FC = () => {
             Details
           </Button>
         )}
-        <DiagnosticReportControls setViewOption={handleChange} />
+        {!showList && <DiagnosticReportControls setViewOption={handleChange} />}
       </ControlsBar>
       {showList ? (
         <MySolutionsList solutionsList={listItems} />
