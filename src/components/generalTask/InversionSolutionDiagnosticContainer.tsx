@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQueryLoader } from 'react-relay';
 import { graphql } from 'babel-plugin-relay/macro';
 import { Button } from '@material-ui/core';
@@ -30,7 +30,6 @@ const useStyles = makeStyles(() => ({
 interface InversionSolutionDiagnosticContainerProps {
   readonly sweepArgs?: SweepArguments;
   showList: boolean;
-  setShowList: Dispatch<SetStateAction<boolean>>;
   onChange: (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => void;
   ids?: string[];
   childrenListLength: number;
@@ -42,7 +41,6 @@ interface InversionSolutionDiagnosticContainerProps {
 const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnosticContainerProps> = ({
   sweepArgs,
   showList,
-  setShowList,
   onChange,
   ids,
   childrenListLength,
