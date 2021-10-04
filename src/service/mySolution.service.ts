@@ -1,5 +1,3 @@
-import { LocalStorageChanged } from '@rehooks/local-storage/lib/local-storage-events';
-import { report } from 'process';
 import { GeneralTaskDetails, ReportItems } from '../interfaces/diagnosticReport';
 import { LocalStorageInstance } from '../interfaces/localStorage';
 import { SolutionItem } from '../interfaces/mySolutions';
