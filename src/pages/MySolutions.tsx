@@ -119,6 +119,10 @@ export const mySolutionsQuery = graphql`
                         model_type
                         swept_arguments
                         notes #hover
+                        argument_lists {
+                          k
+                          v
+                        }
                       }
                     }
                   }

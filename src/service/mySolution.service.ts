@@ -16,5 +16,6 @@ export const getGeneralTaskDetails = (
     model_type: (currentTaskParent?.model_type as string) ?? '',
     notes: (currentTaskParent?.notes as string) ?? '',
     swept_arguments: (currentTaskParent?.swept_arguments as string[]) ?? [],
+    argument_lists: currentTaskParent?.argument_lists ?? [],
   };
 };

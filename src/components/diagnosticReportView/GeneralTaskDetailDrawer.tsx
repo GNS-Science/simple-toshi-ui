@@ -1,8 +1,12 @@
 import React from 'react';
-import { Divider, Drawer, Toolbar, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
-import { GeneralTaskDetails } from '../../interfaces/diagnosticReport';
 import ReactMarkdown from 'react-markdown';
+import { Accordion, AccordionDetails, AccordionSummary, Divider, Drawer, Toolbar, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/styles';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
+import { GeneralTaskDetails } from '../../interfaces/diagnosticReport';
+import KeyValueListTable from '../common/KeyValueListTable';
+import { sweepsList } from '../../service/generalTask.service';
 
 const useStyles = makeStyles(() => ({
   drawer: {
@@ -16,6 +20,9 @@ const useStyles = makeStyles(() => ({
   detailsContainer: {
     paddingTop: 20,
   },
+  argumentsContainer: {
+    paddingTop: 20,
+  },
 }));
 
 interface GeneralTaskDetailDrawerProps {
@@ -27,6 +34,8 @@ const GeneralTaskDetailDrawer: React.FC<GeneralTaskDetailDrawerProps> = ({
   generalTaskDetails,
 }: GeneralTaskDetailDrawerProps) => {
   const classes = useStyles();
+  const sweepArguments = sweepsList(generalTaskDetails.argument_lists ?? [], generalTaskDetails.swept_arguments);
+
   return (
     <Drawer anchor={'right'} variant="persistent" classes={{ paper: classes.drawerPaper }} open={openDrawer}>
       <Toolbar />{' '}
@@ -60,6 +69,31 @@ const GeneralTaskDetailDrawer: React.FC<GeneralTaskDetailDrawerProps> = ({
             <ReactMarkdown>{generalTaskDetails.notes}</ReactMarkdown>
           </span>
         )}
+        <div className={classes.argumentsContainer}>
+          <Accordion>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography>
+                <strong>Swept Arguments</strong>
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              {generalTaskDetails?.argument_lists && <KeyValueListTable header={null} data={sweepArguments} />}
+            </AccordionDetails>
+          </Accordion>
+
+          <Accordion>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography>
+                <strong>All Arguments</strong>
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              {generalTaskDetails.argument_lists && (
+                <KeyValueListTable header={null} data={generalTaskDetails.argument_lists} />
+              )}
+            </AccordionDetails>
+          </Accordion>
+        </div>
       </div>
     </Drawer>
   );

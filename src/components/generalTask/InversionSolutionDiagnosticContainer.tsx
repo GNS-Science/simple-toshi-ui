@@ -77,6 +77,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
     description: data?.node?.description ?? '',
     notes: data?.node?.notes ?? '',
     swept_arguments: (data?.node?.swept_arguments as string[]) ?? [],
+    argument_lists: data?.node?.argument_lists ?? [],
   };
 
   return (

@@ -14,6 +14,10 @@ export interface SolutionItem {
           readonly model_type: ModelType | null;
           readonly swept_arguments: ReadonlyArray<string | null> | null;
           readonly notes: string | null;
+          readonly argument_lists: ReadonlyArray<{
+            readonly k: string | null;
+            readonly v: ReadonlyArray<string | null> | null;
+          } | null> | null;
         };
       } | null;
     } | null>;

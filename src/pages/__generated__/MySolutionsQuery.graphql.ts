@@ -25,6 +25,10 @@ export type MySolutionsQueryResponse = {
                                     readonly model_type: ModelType | null;
                                     readonly swept_arguments: ReadonlyArray<string | null> | null;
                                     readonly notes: string | null;
+                                    readonly argument_lists: ReadonlyArray<{
+                                        readonly k: string | null;
+                                        readonly v: ReadonlyArray<string | null> | null;
+                                    } | null> | null;
                                 };
                             } | null;
                         } | null>;
@@ -74,6 +78,10 @@ query MySolutionsQuery(
                     model_type
                     swept_arguments
                     notes
+                    argument_lists {
+                      k
+                      v
+                    }
                   }
                   id
                 }
@@ -127,7 +135,23 @@ v3 = {
   "name": "id",
   "storageKey": null
 },
-v4 = {
+v4 = [
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "k",
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "v",
+    "storageKey": null
+  }
+],
+v5 = {
   "alias": null,
   "args": null,
   "concreteType": "GeneralTask",
@@ -177,11 +201,21 @@ v4 = {
       "kind": "ScalarField",
       "name": "notes",
       "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "KeyValueListPair",
+      "kind": "LinkedField",
+      "name": "argument_lists",
+      "plural": true,
+      "selections": (v4/*: any*/),
+      "storageKey": null
     }
   ],
   "storageKey": null
 },
-v5 = {
+v6 = {
   "alias": null,
   "args": null,
   "concreteType": "InversionSolution",
@@ -197,22 +231,7 @@ v5 = {
       "kind": "LinkedField",
       "name": "meta",
       "plural": true,
-      "selections": [
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "k",
-          "storageKey": null
-        },
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "v",
-          "storageKey": null
-        }
-      ],
+      "selections": (v4/*: any*/),
       "storageKey": null
     }
   ],
@@ -286,7 +305,7 @@ return {
                                     "name": "node",
                                     "plural": false,
                                     "selections": [
-                                      (v4/*: any*/)
+                                      (v5/*: any*/)
                                     ],
                                     "storageKey": null
                                   }
@@ -296,7 +315,7 @@ return {
                             ],
                             "storageKey": null
                           },
-                          (v5/*: any*/)
+                          (v6/*: any*/)
                         ],
                         "type": "AutomationTask",
                         "abstractKey": null
@@ -384,7 +403,7 @@ return {
                                     "name": "node",
                                     "plural": false,
                                     "selections": [
-                                      (v4/*: any*/),
+                                      (v5/*: any*/),
                                       (v3/*: any*/)
                                     ],
                                     "storageKey": null
@@ -395,7 +414,7 @@ return {
                             ],
                             "storageKey": null
                           },
-                          (v5/*: any*/)
+                          (v6/*: any*/)
                         ],
                         "type": "AutomationTask",
                         "abstractKey": null
@@ -423,14 +442,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "11c5cb5be7697f8b6fdd5a5379984934",
+    "cacheID": "b28d6e827fefb3fa03720202eedc81fb",
     "id": null,
     "metadata": {},
     "name": "MySolutionsQuery",
     "operationKind": "query",
-    "text": "query MySolutionsQuery(\n  $id: [ID!]\n) {\n  nodes(id_in: $id) {\n    result {\n      edges {\n        node {\n          __typename\n          ... on AutomationTask {\n            id\n            parents {\n              edges {\n                node {\n                  parent {\n                    id\n                    created\n                    title\n                    description\n                    model_type\n                    swept_arguments\n                    notes\n                  }\n                  id\n                }\n              }\n            }\n            inversion_solution {\n              id\n              meta {\n                k\n                v\n              }\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query MySolutionsQuery(\n  $id: [ID!]\n) {\n  nodes(id_in: $id) {\n    result {\n      edges {\n        node {\n          __typename\n          ... on AutomationTask {\n            id\n            parents {\n              edges {\n                node {\n                  parent {\n                    id\n                    created\n                    title\n                    description\n                    model_type\n                    swept_arguments\n                    notes\n                    argument_lists {\n                      k\n                      v\n                    }\n                  }\n                  id\n                }\n              }\n            }\n            inversion_solution {\n              id\n              meta {\n                k\n                v\n              }\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'f81b0c1568e8be8866a8ba13a83fc8f0';
+(node as any).hash = 'b5f1f95e4470ff5d0048305bfe673f84';
 export default node;
