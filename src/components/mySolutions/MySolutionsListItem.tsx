@@ -22,7 +22,10 @@ const MySolutionsListItem: React.FC<MySolutionsListItemProps> = ({ automationTas
     <>
       <Card className={classes.card}>
         <CardContent>
-          <Typography variant="h5">Inversion solution: {inversionSolution?.id}</Typography>
+          <Typography variant="h5">
+            Inversion solution: {inversionSolution?.id}&nbsp;&nbsp;
+            <Link to={`/InversionSolution/${inversionSolution?.id}`}>[more]</Link>
+          </Typography>
           <Grid container spacing={1}>
             <Grid item xs={5}>
               <List dense>
