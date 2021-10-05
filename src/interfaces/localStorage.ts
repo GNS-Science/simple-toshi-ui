@@ -1,9 +1,11 @@
 export interface LocalStorageContextInterface {
-  ISFavourites: LocalStorageInstance;
-  setISFavourites: (newValue: LocalStorageInstance) => void;
+  ISFavourites: ISFavouritesInstance;
+  setISFavourites: (newValue: ISFavouritesInstance) => void;
+  reportViewSelections: string[];
+  setReportViewSelections: (newValue: string[]) => void;
 }
 
-export type LocalStorageInstance = Record<string, LocalStorageValue> | null;
-export interface LocalStorageValue {
+export type ISFavouritesInstance = Record<string, ISFavouriteValue> | null;
+export interface ISFavouriteValue {
   producedBy: string;
 }

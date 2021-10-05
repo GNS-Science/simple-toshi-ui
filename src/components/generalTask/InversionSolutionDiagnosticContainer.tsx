@@ -68,11 +68,6 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
     }
   }, [filteredChildren]);
 
-  const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
-    const newValue = (event.target.value as string[]) || [];
-    setFinalPath(newValue);
-  };
-
   const handleViewChange = () => {
     setShowList((v) => !v);
     setShowReport((v) => !v);
@@ -91,7 +86,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
             Filter&nbsp;({filteredChildren?.data?.length}/{childrenListLength})
           </span>
         </Button>
-        <DiagnosticReportControls isOpen={showReport} setViewOption={handleChange} setOpen={handleViewChange} />
+        <DiagnosticReportControls isOpen={showReport} setViewOption={setFinalPath} setOpen={handleViewChange} />
       </div>
       <div className={showFilters ? classes.filterContainer : classes.hidden}>
         {sweepArgs?.map((argument) => (
