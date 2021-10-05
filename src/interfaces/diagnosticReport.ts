@@ -1,4 +1,4 @@
-export type ReportItems = {
+export type ReportItem = {
   __typename: 'AutomationTask';
   id: string;
   inversion_solution: {

@@ -5,7 +5,7 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import { Card, CardContent, IconButton, makeStyles, Typography } from '@material-ui/core';
 import buildUrl from 'build-url-ts';
 
-import { ReportItems } from '../../interfaces/diagnosticReport';
+import { ReportItem } from '../../interfaces/diagnosticReport';
 import FavouriteControls from '../common/FavouriteControls';
 
 const useStyles = makeStyles(() => ({
@@ -40,7 +40,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface DiagnosticReportCardProps {
-  automationTasks: ReportItems[];
+  automationTasks: ReportItem[];
   viewOptions: string[];
   changeCurrentImage?: (index: number) => void;
 }
