@@ -55,7 +55,7 @@ const MySolutions: React.FC = () => {
       </Typography>
       <ControlsBar>
         <Button variant="contained" color="default" onClick={() => setShowList((v) => !v)}>
-          Show Report
+          {showList ? 'Show Report' : 'Show Report'}
         </Button>
         {!showList && (
           <Button color="default" variant="contained" onClick={() => setOpenDrawer((v) => !v)}>
