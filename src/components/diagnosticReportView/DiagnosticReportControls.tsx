@@ -32,15 +32,12 @@ const MenuProps = {
     },
   },
 };
+
 interface DiagnosticReportControlsProps {
-  isOpen: boolean;
-  setOpen: () => void;
   setViewOption: (newViewOptions: string[]) => void;
 }
 
 const DiagnosticReportControls: React.FC<DiagnosticReportControlsProps> = ({
-  isOpen,
-  setOpen,
   setViewOption,
 }: DiagnosticReportControlsProps) => {
   const { reportViewSelections, setReportViewSelections } = useContext(LocalStorageContext);
@@ -69,10 +66,7 @@ const DiagnosticReportControls: React.FC<DiagnosticReportControlsProps> = ({
 
   return (
     <>
-      <Button color="default" variant="contained" onClick={setOpen}>
-        {isOpen ? 'Show List' : 'Show Report'}
-      </Button>
-      <FormControl className={isOpen ? classes.formControl : classes.hidden}>
+      <FormControl className={classes.formControl}>
         <Select
           labelId={`report-hash-label`}
           name={`Report Location`}

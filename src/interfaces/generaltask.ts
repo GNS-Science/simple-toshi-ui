@@ -5,7 +5,7 @@ export type GeneralTaskKeyValueListPairs = readonly ({
   readonly v: readonly (string | null)[] | null;
 } | null)[];
 
-export interface FilteredChildren {
+export interface ValidatedChildren {
   data?:
     | (
         | {
@@ -32,10 +32,6 @@ export interface FilteredChildren {
               readonly v: string | null;
             } | null> | null;
           }
-        | {
-            readonly __typename: '%other';
-          }
-        | undefined
       )[];
 }
 
