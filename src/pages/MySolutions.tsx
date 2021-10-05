@@ -35,11 +35,6 @@ const MySolutions: React.FC = () => {
     getGeneralTaskDetails(listItems, reportItems, 0),
   );
 
-  const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
-    const newValue = (event.target.value as string[]) || [];
-    setViewOptions(newValue);
-  };
-
   const handleChangeCurrentImage = (index: number) => {
     setCurrentImage(index);
   };
@@ -62,7 +57,7 @@ const MySolutions: React.FC = () => {
             Details
           </Button>
         )}
-        {!showList && <DiagnosticReportControls setViewOption={handleChange} />}
+        {!showList && <DiagnosticReportControls setViewOption={setViewOptions} />}
       </ControlsBar>
       {showList ? (
         <MySolutionsList solutionsList={listItems} />
