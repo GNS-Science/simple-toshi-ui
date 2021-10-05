@@ -1,11 +1,11 @@
-import { GeneralTaskDetails, ReportItems } from '../interfaces/diagnosticReport';
+import { GeneralTaskDetails, ReportItem } from '../interfaces/diagnosticReport';
 import { LocalStorageInstance } from '../interfaces/localStorage';
-import { SolutionItem } from '../interfaces/mySolutions';
+import { MetaArguments, SolutionItem } from '../interfaces/mySolutions';
 import { MySolutionsQueryResponse } from '../pages/__generated__/MySolutionsQuery.graphql';
 
 export const getGeneralTaskDetails = (
   listItems: SolutionItem[],
-  reportItems: ReportItems[],
+  reportItems: ReportItem[],
   reportItemIndex: number,
 ): GeneralTaskDetails => {
   const currentTask = listItems.find((item) => item.id === reportItems[reportItemIndex].id);
@@ -33,16 +33,18 @@ export const validateListItems = (data: MySolutionsQueryResponse): SolutionItem[
   return listItems;
 };
 
-export const getReportItems = (listItems: SolutionItem[]): ReportItems[] => {
-  const reportItems: ReportItems[] = [];
+export const getReportItems = (listItems: SolutionItem[]): ReportItem[] => {
+  const reportItems: ReportItem[] = [];
   listItems.map((task) => {
-    const newMeta = task.inversion_solution?.meta ?? [];
-    const validatedTask: ReportItems = {
+    const taskMeta = task.inversion_solution?.meta ?? [];
+    const sweepArguments = (task?.parents?.edges[0]?.node?.parent?.swept_arguments as string[]) ?? [];
+    const metaFiltered = filterMetaArguments(taskMeta, sweepArguments);
+    const validatedTask: ReportItem = {
       __typename: 'AutomationTask',
       id: task.id,
       inversion_solution: {
         id: task.inversion_solution?.id as string,
-        meta: [...newMeta],
+        meta: [...metaFiltered],
       },
     };
     reportItems.push(validatedTask);
@@ -56,4 +58,12 @@ export const getMySolutionIdsArray = (ISFavourites: LocalStorageInstance): strin
     ids.push(ISFavourites[inversionSolution].producedBy);
   }
   return ids;
+};
+
+export const filterMetaArguments = (metaArguments: MetaArguments, sweepArguments: string[]): MetaArguments => {
+  const filteredMetaArguments = metaArguments.filter((kv) => {
+    return kv !== null && sweepArguments.some((argument) => argument.includes(kv.k as string));
+  });
+  console.log('filteredMeta', filteredMetaArguments);
+  return filteredMetaArguments;
 };

@@ -30,3 +30,7 @@ export interface SolutionItem {
     } | null> | null;
   } | null;
 }
+export type MetaArguments = readonly ({
+  readonly k: string | null;
+  readonly v: string | null;
+} | null)[];
