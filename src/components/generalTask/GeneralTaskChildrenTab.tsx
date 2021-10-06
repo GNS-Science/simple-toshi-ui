@@ -5,57 +5,60 @@ import { Typography, CircularProgress } from '@material-ui/core';
 
 import ChildTaskTable from './ChildTaskTable';
 import { GeneralTaskChildrenTabQuery } from './__generated__/GeneralTaskChildrenTabQuery.graphql';
-import SweepArgumentFilterContainer from './InversionSolutionDiagnosticContainer';
-import { FilteredArguments, FilteredChildren, SweepArguments } from '../../interfaces/generaltask';
+import InversionSolutionDiagnosticContainer from './InversionSolutionDiagnosticContainer';
+import { FilteredArguments, ValidatedChildren, SweepArguments } from '../../interfaces/generaltask';
+import {
+  applyChildTaskFilter,
+  getChildTaskIdArray,
+  updateFilteredArguments,
+  validateChildTasks,
+} from '../../service/generalTask.service';
+import { GeneralTaskQueryResponse } from '../../pages/__generated__/GeneralTaskQuery.graphql';
 
 interface GeneralTaskChildrenTabProps {
   id: string;
   readonly sweepArgs?: SweepArguments;
+  generalTaskData: GeneralTaskQueryResponse;
 }
 
 const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   id,
   sweepArgs,
+  generalTaskData,
 }: GeneralTaskChildrenTabProps) => {
   const [showList, setShowList] = useState(true);
   const [filteredArguments, setFilteredArguments] = useState<FilteredArguments>({ data: [] });
-  const [filteredChildren, setFilteredChildren] = useState<FilteredChildren>({ data: [] });
+  const [filteredChildren, setFilteredChildren] = useState<ValidatedChildren>({ data: [] });
+  const [filteredChildrenIds, setFilteredChildrenIds] = useState<string[]>([]);
   const data = useLazyLoadQuery<GeneralTaskChildrenTabQuery>(generalTaskChildrenTabQuery, { id });
-  const childTasks = data?.node?.children?.edges?.map((e) => e?.node?.child);
+  const childTasks = validateChildTasks(data);
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
-    const currentFilteredArguments = [...filteredArguments.data];
-    const itemIndex = currentFilteredArguments.findIndex((item) => item.k === event.target.name);
-
-    if (itemIndex !== -1) {
-      currentFilteredArguments[itemIndex].v = event.target.value as string[];
-      currentFilteredArguments[itemIndex].v.length === 0 && currentFilteredArguments.splice(itemIndex, 1);
-    } else {
-      currentFilteredArguments.push({
-        k: event.target.name as string,
-        v: event.target.value as string[],
-      });
-    }
-
-    const newFilteredArguments = {
-      data: currentFilteredArguments,
-    };
+    const newFilteredArguments = updateFilteredArguments(
+      filteredArguments,
+      event.target.value as string[],
+      event.target.name as string,
+    );
     setFilteredArguments(newFilteredArguments);
   };
 
+  const applyFilter = () => {
+    const filtered = applyChildTaskFilter(childTasks, filteredArguments);
+    setFilteredChildren(filtered);
+  };
+
   useEffect(() => {
-    const filtered = childTasks?.filter((child) => {
-      if (child?.__typename === 'AutomationTask' || child?.__typename === 'RuptureGenerationTask') {
-        return filteredArguments.data?.every((sweepArgument) => {
-          return child?.arguments?.some((argument) => {
-            return sweepArgument.k.includes(argument?.k as string) && sweepArgument.v.includes(argument?.v as string);
-          });
-        });
-      }
-    });
-    const newFilteredChildren = { data: filtered };
-    setFilteredChildren(newFilteredChildren);
-  }, [filteredArguments]);
+    const ids = getChildTaskIdArray(filteredChildren);
+    ids && setFilteredChildrenIds(ids);
+  }, [filteredChildren]);
+
+  const handleViewChange = () => {
+    if (showList && filteredArguments.data.length === 0 && filteredChildren.data?.length === 0) {
+      const ids = getChildTaskIdArray(childTasks);
+      ids && setFilteredChildrenIds(ids);
+    }
+    setShowList((v) => !v);
+  };
 
   if (!data?.node) {
     return (
@@ -68,19 +71,22 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   return (
     <div>
       <React.Suspense fallback={<CircularProgress />}>
-        <SweepArgumentFilterContainer
+        <InversionSolutionDiagnosticContainer
+          data={generalTaskData}
           sweepArgs={sweepArgs}
-          setShowList={setShowList}
+          showList={showList}
           onChange={handleChange}
-          filteredChildren={filteredChildren}
-          childrenListLength={childTasks?.length ?? 0}
+          ids={filteredChildrenIds}
+          childrenListLength={childTasks.data?.length ?? 0}
+          applyFilter={applyFilter}
+          handleViewChange={handleViewChange}
         />
       </React.Suspense>
       <React.Suspense fallback={<CircularProgress />}>
         {showList && (
           <div>
             {!!filteredChildren.data?.length ? (
-              <ChildTaskTable data={filteredChildren.data} />
+              <ChildTaskTable data={filteredChildren} />
             ) : (
               data?.node?.children?.edges?.length && <ChildTaskTable data={childTasks} />
             )}

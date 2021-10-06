@@ -23,7 +23,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import RuptureGenerationTask from './components/RuptureGenerationTask';
 import FileDetail from './components/FileDetail';
 import Search from './components/Search';
-import GeneralTask from './components/generalTask/GeneralTask';
+import GeneralTask from './pages/GeneralTask';
 import MenuBar from './components/MenuBar';
 import InversionSolution from './components/inversionSolution/InversionSolution';
 
@@ -36,7 +36,8 @@ import HazardMap from './components/HazardMap';
 import Find from './components/Find';
 import AutomationTask from './components/AutomationTask';
 import LocalStorageContext from './contexts/localStorage';
-import { LocalStorageInstance } from './interfaces/localStorage';
+import { ISFavouritesInstance } from './interfaces/localStorage';
+import MySolutions from './pages/MySolutions';
 
 const useStyles = makeStyles({
   root: {
@@ -140,7 +141,8 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
   const env = props.environment || RelayEnvironment;
   //TODO - resolve @rehook/local-storage, version currently pinned to 2.4.0
   //see https://github.com/rehooks/local-storage/issues/77 for more info
-  const [ISFavourites, setISFavourites] = useLocalStorage<LocalStorageInstance>('IS-Favourites');
+  const [ISFavourites, setISFavourites] = useLocalStorage<ISFavouritesInstance>('IS-Favourites');
+  const [reportViewSelections, setReportViewSelections] = useLocalStorage<string[]>('report-view-selections', []);
   const LocalStorageProvider = LocalStorageContext.Provider;
 
   return (
@@ -151,6 +153,8 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
             value={{
               ISFavourites,
               setISFavourites,
+              reportViewSelections,
+              setReportViewSelections,
             }}
           >
             <MenuBar />
@@ -176,6 +180,9 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
                 </Route>
                 <Route path="/Find/:id?">
                   <Find />
+                </Route>
+                <Route path="/MySolutions">
+                  <MySolutions />
                 </Route>
                 <Route path="/Preview/MFD">
                   <PreviewMFD width={800} height={600} bar_width={15} />

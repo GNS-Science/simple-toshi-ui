@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { Button, Checkbox, FormControl, Input, makeStyles, MenuItem, Select, Theme } from '@material-ui/core';
+import React, { useContext, useEffect, useState } from 'react';
+import { Checkbox, FormControl, Input, makeStyles, MenuItem, Select, Theme } from '@material-ui/core';
 
 import { diagnosticReportViewOptions as options } from '../../constants/diagnosticReport';
+import LocalStorageContext from '../../contexts/localStorage';
 
 const useStyles = makeStyles((theme: Theme) => ({
   formControl: {
@@ -31,32 +32,41 @@ const MenuProps = {
     },
   },
 };
+
 interface DiagnosticReportControlsProps {
-  isOpen: boolean;
-  setOpen: () => void;
-  setViewOption: (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => void;
+  setViewOption: (newViewOptions: string[]) => void;
 }
 
 const DiagnosticReportControls: React.FC<DiagnosticReportControlsProps> = ({
-  isOpen,
-  setOpen,
   setViewOption,
 }: DiagnosticReportControlsProps) => {
+  const { reportViewSelections, setReportViewSelections } = useContext(LocalStorageContext);
   const [selectedItems, setSelectedItems] = useState<string[]>([options[0].finalPath]);
 
   const classes = useStyles();
 
+  useEffect(() => {
+    if (reportViewSelections.length) {
+      setViewOption(reportViewSelections);
+      setSelectedItems(reportViewSelections);
+    }
+  }, []);
+
+  useEffect(() => {
+    setViewOption(reportViewSelections);
+    setSelectedItems(reportViewSelections);
+  }, [reportViewSelections]);
+
   const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
-    setViewOption(event);
-    setSelectedItems(event.target.value as string[]);
+    const value = (event.target.value as string[]) || [];
+    setViewOption(value);
+    setSelectedItems(value);
+    setReportViewSelections(value);
   };
 
   return (
     <>
-      <Button color="default" variant="contained" onClick={setOpen}>
-        {isOpen ? 'Show List' : 'Show Report'}
-      </Button>
-      <FormControl className={isOpen ? classes.formControl : classes.hidden}>
+      <FormControl className={classes.formControl}>
         <Select
           labelId={`report-hash-label`}
           name={`Report Location`}
