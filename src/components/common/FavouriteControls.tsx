@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { Button, makeStyles } from '@material-ui/core';
+import React, { useContext, useEffect } from 'react';
+import { Button, makeStyles, Tooltip } from '@material-ui/core';
 
 import LocalStorageContext from '../../contexts/localStorage';
 import _ from 'lodash';
@@ -29,11 +29,25 @@ const FavouriteControls: React.FC<FavouriteControlsProps> = ({ id, producedBy }:
     setISFavourites(favourites);
   };
 
+  const keypressHandler = (event: KeyboardEvent) => {
+    if (event.key === 'r') handleFavourites();
+  };
+
+  useEffect(() => {
+    window.addEventListener('keypress', keypressHandler);
+    return () => window.removeEventListener('keypress', keypressHandler);
+  }, [ISFavourites]);
+
   return (
     <>
-      <Button onClick={handleFavourites}>
-        <img className={ISFavourites?.hasOwnProperty(id) ? classes.iconSelected : classes.icon} src="/hand-rock.svg" />
-      </Button>
+      <Tooltip title="use (r) to favourite/remove item">
+        <Button onClick={handleFavourites}>
+          <img
+            className={ISFavourites?.hasOwnProperty(id) ? classes.iconSelected : classes.icon}
+            src="/hand-rock.svg"
+          />
+        </Button>
+      </Tooltip>
     </>
   );
 };

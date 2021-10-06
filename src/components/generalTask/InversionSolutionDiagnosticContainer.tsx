@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useQueryLoader } from 'react-relay';
 import { graphql } from 'babel-plugin-relay/macro';
-import { Button } from '@material-ui/core';
+import { Button, Tooltip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 
 import SweepArgumentFilter from './SweepArgumentFilter';
@@ -76,30 +76,36 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
     argument_lists: data?.node?.argument_lists ?? [],
   };
 
-  const hotkeyHandler = (event: KeyboardEvent) => {
-    if (event.key === 't') handleViewChange();
-    if (event.key === 'f') setShowFilters((v) => !v);
-    if (event.key === 'd') setOpenDrawer((v) => !v);
+  const keypressHandler = (event: KeyboardEvent) => {
+    if (event.key === 's' || event.key === 'S') handleViewChange();
+    if (event.key === 'f' || event.key === 'F') setShowFilters((v) => !v);
+    if (event.key === 'd' || event.key === 'D') setOpenDrawer((v) => !v);
   };
 
   useEffect(() => {
-    window.addEventListener('keypress', hotkeyHandler);
+    window.addEventListener('keypress', keypressHandler);
   }, []);
 
   return (
     <>
       <ControlsBar>
-        <Button variant="contained" color="default" onClick={() => setShowFilters((v) => !v)}>
-          <span>
-            Filter&nbsp;({ids?.length}/{childrenListLength})
-          </span>
-        </Button>
-        <Button color="default" variant="contained" onClick={handleViewChange}>
-          {showList ? 'Show Report' : 'Show List'}
-        </Button>
-        <Button color="default" variant="contained" onClick={() => setOpenDrawer((v) => !v)}>
-          Details
-        </Button>
+        <Tooltip title="use (f) to open/close filters">
+          <Button variant="contained" color="default" onClick={() => setShowFilters((v) => !v)}>
+            <span>
+              Filter&nbsp;({ids?.length}/{childrenListLength})
+            </span>
+          </Button>
+        </Tooltip>
+        <Tooltip title="use (s) to toggle between views">
+          <Button color="default" variant="contained" onClick={handleViewChange}>
+            {showList ? 'Show Report' : 'Show List'}
+          </Button>
+        </Tooltip>
+        <Tooltip title="use (d) to open/close details">
+          <Button color="default" variant="contained" onClick={() => setOpenDrawer((v) => !v)}>
+            Details
+          </Button>
+        </Tooltip>
         <DiagnosticReportControls setViewOption={handleChange} />
       </ControlsBar>
       <div className={showFilters ? classes.filterContainer : classes.hidden}>

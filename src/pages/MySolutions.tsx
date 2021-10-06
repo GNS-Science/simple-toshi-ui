@@ -49,7 +49,7 @@ const MySolutions: React.FC = () => {
   }, [currentImage]);
 
   const hotkeyHandler = (event: KeyboardEvent) => {
-    if (event.key === 't') setShowList((v) => !v);
+    if (event.key === 's') setShowList((v) => !v);
     if (event.key === 'd') setOpenDrawer((v) => !v);
   };
 
@@ -63,7 +63,7 @@ const MySolutions: React.FC = () => {
         My Solutions
       </Typography>
       <ControlsBar>
-        <Tooltip title="use (t) to toggle between views">
+        <Tooltip title="use (s) to toggle between views">
           <Button variant="contained" color="default" onClick={() => setShowList((v) => !v)}>
             {showList ? 'Show Report' : 'Show Report'}
           </Button>

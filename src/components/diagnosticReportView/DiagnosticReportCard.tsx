@@ -74,8 +74,8 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   };
 
   const hotkeyHandler = (event: KeyboardEvent) => {
-    if (event.key === 'ArrowRight') nextImage();
-    if (event.key === 'ArrowLeft') prevImage();
+    if (event.key === '>') nextImage();
+    if (event.key === '<') prevImage();
   };
 
   useEffect(() => {
@@ -103,7 +103,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             ))}
           </Typography>
           <div className={classes.buttonContainer}>
-            <Tooltip title="use left/right arrow keys to navigate">
+            <Tooltip title="use < > comparison operators to navigate">
               <IconButton className={classes.button} color="primary" onClick={prevImage} disabled={currentImage === 0}>
                 <ArrowBackIosIcon />
               </IconButton>
@@ -111,7 +111,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             <Typography>
               {currentImage + 1}&nbsp;of&nbsp;{automationTasks.length}
             </Typography>
-            <Tooltip title="use left/right arrow keys to navigate">
+            <Tooltip title="use < > comparison operators to navigate">
               <IconButton
                 className={classes.button}
                 color="primary"
