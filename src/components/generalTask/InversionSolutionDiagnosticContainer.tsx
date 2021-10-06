@@ -78,6 +78,15 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
     setShowReport((v) => !v);
   };
 
+  const hotkeyHandler = (event: KeyboardEvent) => {
+    if (event.key === 't') handleViewChange();
+    if (event.key === 'f') setShowFilters((v) => !v);
+  };
+
+  useEffect(() => {
+    window.addEventListener('keypress', hotkeyHandler);
+  }, []);
+
   return (
     <>
       <div className={classes.controlsContainer}>

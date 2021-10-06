@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { Card, CardContent, IconButton, makeStyles, Typography } from '@material-ui/core';
@@ -102,6 +102,16 @@ const DiagnosticReportsCard: React.FC<DiagnosticReportsCardProps> = ({
   const prevImage = () => {
     currentImage > 0 && setCurrentImage(currentImage - 1);
   };
+
+  const hotkeyHandler = (event: KeyboardEvent) => {
+    if (event.key === 'ArrowRight') nextImage();
+    if (event.key === 'ArrowLeft') prevImage();
+  };
+
+  useEffect(() => {
+    window.addEventListener('keyup', hotkeyHandler);
+    return () => window.removeEventListener('keyup', hotkeyHandler);
+  }, [currentImage]);
 
   if (!subtasks || subtasks.length === 0) {
     return <Typography> Filter query has not run. </Typography>;
