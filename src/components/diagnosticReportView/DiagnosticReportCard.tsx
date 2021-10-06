@@ -111,7 +111,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             <Typography>
               {currentImage + 1}&nbsp;of&nbsp;{automationTasks.length}
             </Typography>
-            <Tooltip title="use < > comparison operators to navigate">
+            <Tooltip title="use (<,) (>.) or arrow keys to navigate">
               <IconButton
                 className={classes.button}
                 color="primary"
