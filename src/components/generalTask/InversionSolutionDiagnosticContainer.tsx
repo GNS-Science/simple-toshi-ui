@@ -89,19 +89,19 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   return (
     <>
       <ControlsBar>
-        <Tooltip title="use (f) to open/close filters">
+        <Tooltip title="use (f/F) to open/close filters">
           <Button variant="contained" color="default" onClick={() => setShowFilters((v) => !v)}>
             <span>
               Filter&nbsp;({ids?.length}/{childrenListLength})
             </span>
           </Button>
         </Tooltip>
-        <Tooltip title="use (s) to toggle between views">
+        <Tooltip title="use (s/S) to toggle between views">
           <Button color="default" variant="contained" onClick={handleViewChange}>
             {showList ? 'Show Report' : 'Show List'}
           </Button>
         </Tooltip>
-        <Tooltip title="use (d) to open/close details">
+        <Tooltip title="use (d/D) to open/close details">
           <Button color="default" variant="contained" onClick={() => setOpenDrawer((v) => !v)}>
             Details
           </Button>

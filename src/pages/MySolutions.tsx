@@ -63,13 +63,13 @@ const MySolutions: React.FC = () => {
         My Solutions
       </Typography>
       <ControlsBar>
-        <Tooltip title="use (s) to toggle between views">
+        <Tooltip title="use (s/S) to toggle between views">
           <Button variant="contained" color="default" onClick={() => setShowList((v) => !v)}>
             {showList ? 'Show Report' : 'Show Report'}
           </Button>
         </Tooltip>
         {!showList && (
-          <Tooltip title="use (d) to open/close details">
+          <Tooltip title="use (d/D) to open/close details">
             <Button color="default" variant="contained" onClick={() => setOpenDrawer((v) => !v)}>
               Details
             </Button>

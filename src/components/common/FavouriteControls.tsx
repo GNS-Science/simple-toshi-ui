@@ -30,7 +30,7 @@ const FavouriteControls: React.FC<FavouriteControlsProps> = ({ id, producedBy }:
   };
 
   const keypressHandler = (event: KeyboardEvent) => {
-    if (event.key === 'r') handleFavourites();
+    if (event.key === 'r' || event.key === 'R') handleFavourites();
   };
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const FavouriteControls: React.FC<FavouriteControlsProps> = ({ id, producedBy }:
 
   return (
     <>
-      <Tooltip title="use (r) to favourite/remove item">
+      <Tooltip title="use (r/R) to favourite/remove item">
         <Button onClick={handleFavourites}>
           <img
             className={ISFavourites?.hasOwnProperty(id) ? classes.iconSelected : classes.icon}
