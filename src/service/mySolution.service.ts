@@ -1,5 +1,5 @@
 import { GeneralTaskDetails, ReportItem } from '../interfaces/diagnosticReport';
-import { LocalStorageInstance } from '../interfaces/localStorage';
+import { ISFavouritesInstance } from '../interfaces/localStorage';
 import { MetaArguments, SolutionItem } from '../interfaces/mySolutions';
 import { MySolutionsQueryResponse } from '../pages/__generated__/MySolutionsQuery.graphql';
 
@@ -52,7 +52,7 @@ export const getReportItems = (listItems: SolutionItem[]): ReportItem[] => {
   return reportItems;
 };
 
-export const getMySolutionIdsArray = (ISFavourites: LocalStorageInstance): string[] => {
+export const getMySolutionIdsArray = (ISFavourites: ISFavouritesInstance): string[] => {
   const ids: string[] = [];
   for (const inversionSolution in ISFavourites) {
     ids.push(ISFavourites[inversionSolution].producedBy);

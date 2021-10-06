@@ -36,7 +36,7 @@ import HazardMap from './components/HazardMap';
 import Find from './components/Find';
 import AutomationTask from './components/AutomationTask';
 import LocalStorageContext from './contexts/localStorage';
-import { LocalStorageInstance } from './interfaces/localStorage';
+import { ISFavouritesInstance } from './interfaces/localStorage';
 import MySolutions from './pages/MySolutions';
 
 const useStyles = makeStyles({
@@ -141,7 +141,8 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
   const env = props.environment || RelayEnvironment;
   //TODO - resolve @rehook/local-storage, version currently pinned to 2.4.0
   //see https://github.com/rehooks/local-storage/issues/77 for more info
-  const [ISFavourites, setISFavourites] = useLocalStorage<LocalStorageInstance>('IS-Favourites');
+  const [ISFavourites, setISFavourites] = useLocalStorage<ISFavouritesInstance>('IS-Favourites');
+  const [reportViewSelections, setReportViewSelections] = useLocalStorage<string[]>('report-view-selections', []);
   const LocalStorageProvider = LocalStorageContext.Provider;
 
   return (
@@ -152,6 +153,8 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
             value={{
               ISFavourites,
               setISFavourites,
+              reportViewSelections,
+              setReportViewSelections,
             }}
           >
             <MenuBar />

@@ -60,11 +60,6 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
     loadQuery({ id: ids });
   }, [ids]);
 
-  const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
-    const newValue = (event.target.value as string[]) || [];
-    setViewOptions(newValue);
-  };
-
   const generalTaskDetails: GeneralTaskDetails = {
     title: data?.node?.title ?? '',
     id: data?.node?.id ?? '',
@@ -106,7 +101,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
             Details
           </Button>
         </Tooltip>
-        <DiagnosticReportControls setViewOption={handleChange} />
+        <DiagnosticReportControls setViewOption={setViewOptions} />
       </ControlsBar>
       <div className={showFilters ? classes.filterContainer : classes.hidden}>
         {sweepArgs?.map((argument) => (
