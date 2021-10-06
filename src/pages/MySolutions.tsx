@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
-import { Button, Typography } from '@material-ui/core';
+import { Button, Tooltip, Typography } from '@material-ui/core';
 import { graphql } from 'babel-plugin-relay/macro';
 
 import DiagnosticReportControls from '../components/diagnosticReportView/DiagnosticReportControls';
@@ -43,19 +43,32 @@ const MySolutions: React.FC = () => {
     setCurrentGeneralTask(getGeneralTaskDetails(listItems, reportItems, currentImage));
   }, [currentImage]);
 
+  const hotkeyHandler = (event: KeyboardEvent) => {
+    if (event.key === 's' || event.key === 'S') setShowList((v) => !v);
+    if (event.key === 'd' || event.key === 'D') setOpenDrawer((v) => !v);
+  };
+
+  useEffect(() => {
+    window.addEventListener('keypress', hotkeyHandler);
+  }, []);
+
   return (
     <>
       <Typography variant="h5" gutterBottom>
         My Solutions
       </Typography>
       <ControlsBar>
-        <Button variant="contained" color="default" onClick={() => setShowList((v) => !v)}>
-          {showList ? 'Show Report' : 'Show Report'}
-        </Button>
-        {!showList && (
-          <Button color="default" variant="contained" onClick={() => setOpenDrawer((v) => !v)}>
-            Details
+        <Tooltip title="use (s/S) to toggle between views">
+          <Button variant="contained" color="default" onClick={() => setShowList((v) => !v)}>
+            {showList ? 'Show Report' : 'Show Report'}
           </Button>
+        </Tooltip>
+        {!showList && (
+          <Tooltip title="use (d/D) to open/close details">
+            <Button color="default" variant="contained" onClick={() => setOpenDrawer((v) => !v)}>
+              Details
+            </Button>
+          </Tooltip>
         )}
         {!showList && <DiagnosticReportControls setViewOption={setViewOptions} />}
       </ControlsBar>

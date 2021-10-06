@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import { Card, CardContent, IconButton, makeStyles, Typography } from '@material-ui/core';
+import { Card, CardContent, IconButton, makeStyles, Tooltip, Typography } from '@material-ui/core';
 import buildUrl from 'build-url-ts';
 
 import { ReportItem } from '../../interfaces/diagnosticReport';
@@ -60,7 +60,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
     });
   };
   const nextImage = () => {
-    if (currentImage < automationTasks.length - 0) {
+    if (currentImage < automationTasks.length - 1) {
       setCurrentImage(currentImage + 1);
       changeCurrentImage && changeCurrentImage(currentImage + 1);
     }
@@ -72,6 +72,16 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       changeCurrentImage && changeCurrentImage(currentImage - 1);
     }
   };
+
+  const hotkeyHandler = (event: KeyboardEvent) => {
+    if (event.key === '>' || event.key === '.' || event.key === 'ArrowRight') nextImage();
+    if (event.key === '<' || event.key === ',' || event.key === 'ArrowLeft') prevImage();
+  };
+
+  useEffect(() => {
+    window.addEventListener('keyup', hotkeyHandler);
+    return () => window.removeEventListener('keyup', hotkeyHandler);
+  }, [currentImage]);
 
   if (!automationTasks[currentImage]) {
     return <Typography> There are no valid reports to show. </Typography>;
@@ -93,20 +103,24 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             ))}
           </Typography>
           <div className={classes.buttonContainer}>
-            <IconButton className={classes.button} color="primary" onClick={prevImage} disabled={currentImage === 0}>
-              <ArrowBackIosIcon />
-            </IconButton>
+            <Tooltip title="use (<,) (>.) or arrow keys to navigate">
+              <IconButton className={classes.button} color="primary" onClick={prevImage} disabled={currentImage === 0}>
+                <ArrowBackIosIcon />
+              </IconButton>
+            </Tooltip>
             <Typography>
               {currentImage + 1}&nbsp;of&nbsp;{automationTasks.length}
             </Typography>
-            <IconButton
-              className={classes.button}
-              color="primary"
-              onClick={nextImage}
-              disabled={currentImage === automationTasks.length - 1}
-            >
-              <ArrowForwardIosIcon />
-            </IconButton>
+            <Tooltip title="use (<,) (>.) or arrow keys to navigate">
+              <IconButton
+                className={classes.button}
+                color="primary"
+                onClick={nextImage}
+                disabled={currentImage === automationTasks.length - 1}
+              >
+                <ArrowForwardIosIcon />
+              </IconButton>
+            </Tooltip>
             <FavouriteControls
               id={automationTasks[currentImage].inversion_solution.id}
               producedBy={automationTasks[currentImage].id}
