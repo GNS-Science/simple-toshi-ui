@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Checkbox, FormControl, Input, makeStyles, MenuItem, Select, Theme } from '@material-ui/core';
+import { Checkbox, FormControl, Input, makeStyles, MenuItem, Select, Theme } from '@material-ui/core';
 
 import { diagnosticReportViewOptions as options } from '../../constants/diagnosticReport';
 
@@ -31,15 +31,12 @@ const MenuProps = {
     },
   },
 };
+
 interface DiagnosticReportControlsProps {
-  isOpen: boolean;
-  setOpen: () => void;
   setViewOption: (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => void;
 }
 
 const DiagnosticReportControls: React.FC<DiagnosticReportControlsProps> = ({
-  isOpen,
-  setOpen,
   setViewOption,
 }: DiagnosticReportControlsProps) => {
   const [selectedItems, setSelectedItems] = useState<string[]>([options[0].finalPath]);
@@ -53,10 +50,7 @@ const DiagnosticReportControls: React.FC<DiagnosticReportControlsProps> = ({
 
   return (
     <>
-      <Button color="default" variant="contained" onClick={setOpen}>
-        {isOpen ? 'Show List' : 'Show Report'}
-      </Button>
-      <FormControl className={isOpen ? classes.formControl : classes.hidden}>
+      <FormControl className={classes.formControl}>
         <Select
           labelId={`report-hash-label`}
           name={`Report Location`}

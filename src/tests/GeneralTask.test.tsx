@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { createMockEnvironment, MockPayloadGenerator, RelayMockEnvironment } from 'relay-test-utils';
-import GeneralTask from '../components/generalTask/GeneralTask';
+import GeneralTask from '../pages/GeneralTask';
 import ReactRouter from 'react-router';
 import { RelayEnvironmentProvider } from 'react-relay/hooks';
 import { cleanup, render } from '@testing-library/react';
