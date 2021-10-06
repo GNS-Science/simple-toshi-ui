@@ -48,6 +48,15 @@ const MySolutions: React.FC = () => {
     setCurrentGeneralTask(getGeneralTaskDetails(listItems, reportItems, currentImage));
   }, [currentImage]);
 
+  const hotkeyHandler = (event: KeyboardEvent) => {
+    if (event.key === 't') setShowList((v) => !v);
+    if (event.key === 'd') setOpenDrawer((v) => !v);
+  };
+
+  useEffect(() => {
+    window.addEventListener('keypress', hotkeyHandler);
+  }, []);
+
   return (
     <>
       <Typography variant="h5" gutterBottom>
