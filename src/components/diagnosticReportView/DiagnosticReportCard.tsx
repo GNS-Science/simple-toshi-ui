@@ -74,8 +74,8 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   };
 
   const hotkeyHandler = (event: KeyboardEvent) => {
-    if (event.key === '>') nextImage();
-    if (event.key === '<') prevImage();
+    if (event.key === '>' || event.key === '.' || event.key === 'ArrowRight') nextImage();
+    if (event.key === '<' || event.key === ',' || event.key === 'ArrowLeft') prevImage();
   };
 
   useEffect(() => {

@@ -49,8 +49,8 @@ const MySolutions: React.FC = () => {
   }, [currentImage]);
 
   const hotkeyHandler = (event: KeyboardEvent) => {
-    if (event.key === 's') setShowList((v) => !v);
-    if (event.key === 'd') setOpenDrawer((v) => !v);
+    if (event.key === 's' || event.key === 'S') setShowList((v) => !v);
+    if (event.key === 'd' || event.key === 'D') setOpenDrawer((v) => !v);
   };
 
   useEffect(() => {
