@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
-import { Button, Typography } from '@material-ui/core';
+import { Button, Tooltip, Typography } from '@material-ui/core';
 import { graphql } from 'babel-plugin-relay/macro';
 
 import DiagnosticReportControls from '../components/diagnosticReportView/DiagnosticReportControls';
@@ -63,13 +63,17 @@ const MySolutions: React.FC = () => {
         My Solutions
       </Typography>
       <ControlsBar>
-        <Button variant="contained" color="default" onClick={() => setShowList((v) => !v)}>
-          {showList ? 'Show Report' : 'Show Report'}
-        </Button>
-        {!showList && (
-          <Button color="default" variant="contained" onClick={() => setOpenDrawer((v) => !v)}>
-            Details
+        <Tooltip title="use (t) to toggle between views">
+          <Button variant="contained" color="default" onClick={() => setShowList((v) => !v)}>
+            {showList ? 'Show Report' : 'Show Report'}
           </Button>
+        </Tooltip>
+        {!showList && (
+          <Tooltip title="use (d) to open/close details">
+            <Button color="default" variant="contained" onClick={() => setOpenDrawer((v) => !v)}>
+              Details
+            </Button>
+          </Tooltip>
         )}
         {!showList && <DiagnosticReportControls setViewOption={handleChange} />}
       </ControlsBar>

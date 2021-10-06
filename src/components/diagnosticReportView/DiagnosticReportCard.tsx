@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import { Card, CardContent, IconButton, makeStyles, Typography } from '@material-ui/core';
+import { Card, CardContent, IconButton, makeStyles, Tooltip, Typography } from '@material-ui/core';
 import buildUrl from 'build-url-ts';
 
 import { ReportItem } from '../../interfaces/diagnosticReport';
@@ -103,20 +103,24 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             ))}
           </Typography>
           <div className={classes.buttonContainer}>
-            <IconButton className={classes.button} color="primary" onClick={prevImage} disabled={currentImage === 0}>
-              <ArrowBackIosIcon />
-            </IconButton>
+            <Tooltip title="use left/right arrow keys to navigate">
+              <IconButton className={classes.button} color="primary" onClick={prevImage} disabled={currentImage === 0}>
+                <ArrowBackIosIcon />
+              </IconButton>
+            </Tooltip>
             <Typography>
               {currentImage + 1}&nbsp;of&nbsp;{automationTasks.length}
             </Typography>
-            <IconButton
-              className={classes.button}
-              color="primary"
-              onClick={nextImage}
-              disabled={currentImage === automationTasks.length - 1}
-            >
-              <ArrowForwardIosIcon />
-            </IconButton>
+            <Tooltip title="use left/right arrow keys to navigate">
+              <IconButton
+                className={classes.button}
+                color="primary"
+                onClick={nextImage}
+                disabled={currentImage === automationTasks.length - 1}
+              >
+                <ArrowForwardIosIcon />
+              </IconButton>
+            </Tooltip>
             <FavouriteControls
               id={automationTasks[currentImage].inversion_solution.id}
               producedBy={automationTasks[currentImage].id}
