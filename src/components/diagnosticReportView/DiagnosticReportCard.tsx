@@ -60,7 +60,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
     });
   };
   const nextImage = () => {
-    if (currentImage < automationTasks.length - 0) {
+    if (currentImage < automationTasks.length) {
       setCurrentImage(currentImage + 1);
       changeCurrentImage && changeCurrentImage(currentImage + 1);
     }
