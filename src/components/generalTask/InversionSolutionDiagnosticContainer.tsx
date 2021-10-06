@@ -79,6 +79,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   const hotkeyHandler = (event: KeyboardEvent) => {
     if (event.key === 't') handleViewChange();
     if (event.key === 'f') setShowFilters((v) => !v);
+    if (event.key === 'd') setOpenDrawer((v) => !v);
   };
 
   useEffect(() => {
