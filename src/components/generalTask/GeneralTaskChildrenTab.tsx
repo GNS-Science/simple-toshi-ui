@@ -10,10 +10,12 @@ import { FilteredArguments, ValidatedChildren, SweepArguments } from '../../inte
 import {
   applyChildTaskFilter,
   getChildTaskIdArray,
+  maxLength,
   updateFilteredArguments,
   validateChildTasks,
 } from '../../service/generalTask.service';
 import { GeneralTaskQueryResponse } from '../../pages/__generated__/GeneralTaskQuery.graphql';
+import Alert from '../common/Alert';
 
 interface GeneralTaskChildrenTabProps {
   id: string;
@@ -30,6 +32,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const [filteredArguments, setFilteredArguments] = useState<FilteredArguments>({ data: [] });
   const [filteredChildren, setFilteredChildren] = useState<ValidatedChildren>({ data: [] });
   const [filteredChildrenIds, setFilteredChildrenIds] = useState<string[]>([]);
+  const [openAlert, setOpenAlert] = useState(false);
   const data = useLazyLoadQuery<GeneralTaskChildrenTabQuery>(generalTaskChildrenTabQuery, { id });
   const childTasks = validateChildTasks(data);
 
@@ -45,6 +48,9 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const applyFilter = () => {
     const filtered = applyChildTaskFilter(childTasks, filteredArguments);
     setFilteredChildren(filtered);
+    if (filtered?.data?.length ?? 0 > maxLength) {
+      setOpenAlert(true);
+    }
   };
 
   useEffect(() => {
@@ -60,6 +66,10 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     setShowList((v) => !v);
   };
 
+  const handleClose = () => {
+    setOpenAlert(false);
+  };
+
   if (!data?.node) {
     return (
       <Typography variant="h5" gutterBottom>
@@ -70,6 +80,14 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
 
   return (
     <div>
+      {openAlert && (
+        <Alert
+          open={openAlert}
+          title="Cannot Query Reports"
+          text={`Reports cannot be queried when the list of filtered child tasks is over ${maxLength}.`}
+          handleClose={handleClose}
+        />
+      )}
       <React.Suspense fallback={<CircularProgress />}>
         <InversionSolutionDiagnosticContainer
           data={generalTaskData}
