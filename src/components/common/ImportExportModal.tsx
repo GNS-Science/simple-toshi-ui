@@ -69,7 +69,7 @@ const ImportExportModal: React.FC<ExportModalProps> = ({
               <h2 id="simple-modal-title">{title}</h2>
               {handleImport && (
                 <form
-                  onSubmit={(e) => {
+                  onSubmit={() => {
                     handleImport(value);
                   }}
                 >
