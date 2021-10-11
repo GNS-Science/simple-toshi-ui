@@ -18,14 +18,17 @@ import {
   getReportItems,
   validateListItems,
 } from '../service/mySolution.service';
+import ImportExportModal from '../components/common/ImportExportModal';
 
 const MySolutions: React.FC = () => {
   const [showList, setShowList] = useState(true);
   const [viewOptions, setViewOptions] = useState<string[]>([options[0].finalPath]);
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [openExportModal, setOpenExportModal] = useState(false);
+  const [openImportModal, setOpenImportModal] = useState(false);
   const [currentImage, setCurrentImage] = useState<number>(0);
 
-  const { ISFavourites } = useContext(LocalStorageContext);
+  const { ISFavourites, setISFavourites } = useContext(LocalStorageContext);
   const id = getMySolutionIdsArray(ISFavourites);
   const data = useLazyLoadQuery<MySolutionsQuery>(mySolutionsQuery, { id });
   const listItems = validateListItems(data);
@@ -52,6 +55,11 @@ const MySolutions: React.FC = () => {
     window.addEventListener('keypress', hotkeyHandler);
   }, []);
 
+  const handleImport = (value: string) => {
+    const ISFavObj = JSON.parse(value);
+    setISFavourites(ISFavObj);
+  };
+
   return (
     <>
       <Typography variant="h5" gutterBottom>
@@ -59,19 +67,39 @@ const MySolutions: React.FC = () => {
       </Typography>
       <ControlsBar>
         <Tooltip title="use (s/S) to toggle between views">
-          <Button variant="contained" color="default" onClick={() => setShowList((v) => !v)}>
+          <Button variant="contained" onClick={() => setShowList((v) => !v)}>
             {showList ? 'Show Report' : 'Show Report'}
           </Button>
         </Tooltip>
+        <Button variant="contained" onClick={() => setOpenExportModal(true)}>
+          Export
+        </Button>
+        <Button variant="contained" onClick={() => setOpenImportModal(true)}>
+          Import
+        </Button>
         {!showList && (
           <Tooltip title="use (d/D) to open/close details">
-            <Button color="default" variant="contained" onClick={() => setOpenDrawer((v) => !v)}>
+            <Button variant="contained" onClick={() => setOpenDrawer((v) => !v)}>
               Details
             </Button>
           </Tooltip>
         )}
         {!showList && <DiagnosticReportControls setViewOption={setViewOptions} />}
       </ControlsBar>
+      <ImportExportModal
+        input={false}
+        openModal={openExportModal}
+        title="EXPORT JSON"
+        text={JSON.stringify(ISFavourites)}
+        handleClose={() => setOpenExportModal(false)}
+      />
+      <ImportExportModal
+        input={true}
+        openModal={openImportModal}
+        title="IMPORT JSON"
+        handleClose={() => setOpenImportModal(false)}
+        handleImport={handleImport}
+      />
       {showList ? (
         <MySolutionsList solutionsList={listItems} />
       ) : (
