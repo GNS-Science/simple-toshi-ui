@@ -29,6 +29,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   generalTaskData,
 }: GeneralTaskChildrenTabProps) => {
   const [showList, setShowList] = useState(true);
+  const [showFilter, setShowFilter] = useState(false);
   const [filteredArguments, setFilteredArguments] = useState<FilteredArguments>({ data: [] });
   const [filteredChildren, setFilteredChildren] = useState<ValidatedChildren>({ data: [] });
   const [filteredChildrenIds, setFilteredChildrenIds] = useState<string[]>([]);
@@ -40,6 +41,8 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   useEffect(() => {
     const urlFilterString: string = new URLSearchParams(search).get('filter') ?? '';
     const urlShowListString: string = new URLSearchParams(search).get('showList') ?? '';
+    const urlShowFilterString: string = new URLSearchParams(search).get('showFilter') ?? '';
+
     if (urlFilterString.length) {
       const urlFilter: FilteredArguments = JSON.parse(urlFilterString);
       setFilteredArguments(urlFilter);
@@ -50,6 +53,10 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
       const urlShowList = JSON.parse(urlShowListString);
       setShowList(urlShowList);
     }
+    if (urlShowFilterString.length) {
+      const urlShowFilter = JSON.parse(urlShowFilterString);
+      setShowFilter(urlShowFilter);
+    }
   }, []);
 
   useEffect(() => {
@@ -58,13 +65,14 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
         queryParams: {
           filter: JSON.stringify(filteredArguments),
           showList: JSON.stringify(showList),
+          showFilter: JSON.stringify(showFilter),
         },
       });
       history.replaceState(null, '', url);
     } else {
       history.replaceState(null, '', baseUrl);
     }
-  }, [filteredArguments, showList]);
+  }, [filteredArguments, showList, showFilter]);
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
     const newFilteredArguments = updateFilteredArguments(
@@ -108,6 +116,8 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
           data={generalTaskData}
           sweepArgs={sweepArgs}
           showList={showList}
+          showFilter={showFilter}
+          setShowFilter={setShowFilter}
           onChange={handleChange}
           ids={filteredChildrenIds}
           filterCount={`${filteredChildren.data?.length ?? 0}/${childTasks.data?.length ?? 0}`}

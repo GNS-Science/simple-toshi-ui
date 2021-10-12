@@ -30,6 +30,8 @@ const useStyles = makeStyles(() => ({
 interface InversionSolutionDiagnosticContainerProps {
   readonly sweepArgs?: SweepArguments;
   showList: boolean;
+  showFilter: boolean;
+  setShowFilter: (value: boolean) => void;
   onChange: (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => void;
   ids?: string[];
   filterCount: string;
@@ -41,6 +43,8 @@ interface InversionSolutionDiagnosticContainerProps {
 const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnosticContainerProps> = ({
   sweepArgs,
   showList,
+  showFilter,
+  setShowFilter,
   onChange,
   ids,
   filterCount,
@@ -49,7 +53,6 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   handleViewChange,
 }: InversionSolutionDiagnosticContainerProps) => {
   const classes = useStyles();
-  const [showFilters, setShowFilters] = useState(false);
   const [viewOptions, setViewOptions] = useState<string[]>([options[0].finalPath]);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [queryRef, loadQuery] = useQueryLoader<InversionSolutionDiagnosticContainerQuery>(
@@ -73,19 +76,20 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
 
   const keypressHandler = (event: KeyboardEvent) => {
     if (event.key === 's' || event.key === 'S') handleViewChange();
-    if (event.key === 'f' || event.key === 'F') setShowFilters((v) => !v);
+    if (event.key === 'f' || event.key === 'F') setShowFilter(!showFilter);
     if (event.key === 'd' || event.key === 'D') setOpenDrawer((v) => !v);
   };
 
   useEffect(() => {
     window.addEventListener('keypress', keypressHandler);
-  }, []);
+    return () => window.removeEventListener('keypress', keypressHandler);
+  }, [showFilter]);
 
   return (
     <>
       <ControlsBar>
         <Tooltip title="use (f/F) to open/close filters">
-          <Button variant="contained" color="default" onClick={() => setShowFilters((v) => !v)}>
+          <Button variant="contained" color="default" onClick={() => setShowFilter(!showFilter)}>
             <span>Filter&nbsp;({filterCount})</span>
           </Button>
         </Tooltip>
@@ -101,7 +105,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
         </Tooltip>
         <DiagnosticReportControls setViewOption={setViewOptions} />
       </ControlsBar>
-      <div className={showFilters ? classes.filterContainer : classes.hidden}>
+      <div className={showFilter ? classes.filterContainer : classes.hidden}>
         {sweepArgs?.map((argument) => (
           <SweepArgumentFilter key={`${argument?.k}-filter`} argument={argument} onChange={onChange} />
         ))}
