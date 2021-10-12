@@ -9,6 +9,7 @@ import GeneralTaskChildrenTab from '../components/generalTask/GeneralTaskChildre
 import GeneralTaskDetailTab from '../components/generalTask/GeneralTaskDetailTab';
 import TabPanel from '../components/common/TabPanel';
 import { sweepsList } from '../service/generalTask.service';
+import { GeneralTaskParams } from '../interfaces/generaltask';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -23,18 +24,23 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-interface GeneralTaskParams {
-  id: string;
-}
-
 const GeneralTask: React.FC = () => {
   const classes = useStyles();
-  const [tab, setTab] = useState(0);
-  const { id } = useParams<GeneralTaskParams>();
+  const { id, tabName } = useParams<GeneralTaskParams>();
   const data = useLazyLoadQuery<GeneralTaskQuery>(generalTaskQuery, { id });
+  const baseUrl = `/GeneralTask/${id}`;
+
+  const initTab = (tabName: string): number => {
+    !tabName && history.pushState(null, '', `${baseUrl}/Details`);
+    return tabName === 'ChildTasks' ? 1 : 0;
+  };
+  const [tab, setTab] = useState<number>(initTab(tabName));
 
   // eslint-disable-next-line @typescript-eslint/ban-types
   const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+    newValue === 1
+      ? history.replaceState(null, '', `${baseUrl}/ChildTasks`)
+      : history.replaceState(null, '', `${baseUrl}/Details`);
     setTab(newValue);
   };
 

@@ -1,5 +1,10 @@
 import { EventResult, EventState } from '../components/generalTask/__generated__/GeneralTaskChildrenTabQuery.graphql';
 
+export interface GeneralTaskParams {
+  id: string;
+  tabName: string;
+}
+
 export type GeneralTaskKeyValueListPairs = readonly ({
   readonly k: string | null;
   readonly v: readonly (string | null)[] | null;

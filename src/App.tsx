@@ -172,7 +172,7 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
                 <Route path="/Search">
                   <Search />
                 </Route>
-                <Route path="/GeneralTask/:id">
+                <Route path="/GeneralTask/:id/:tabName?/:filter?">
                   <GeneralTask />
                 </Route>
                 <Route path="/AutomationTask/:id">
