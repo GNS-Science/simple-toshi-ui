@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { graphql } from 'babel-plugin-relay/macro';
 import { useLazyLoadQuery } from 'react-relay/hooks';
 import { Typography, CircularProgress } from '@material-ui/core';
+import buildUrl from 'build-url-ts';
 
 import ChildTaskTable from './ChildTaskTable';
 import { GeneralTaskChildrenTabQuery } from './__generated__/GeneralTaskChildrenTabQuery.graphql';
@@ -32,6 +34,37 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const [filteredChildrenIds, setFilteredChildrenIds] = useState<string[]>([]);
   const data = useLazyLoadQuery<GeneralTaskChildrenTabQuery>(generalTaskChildrenTabQuery, { id });
   const childTasks = validateChildTasks(data);
+  const baseUrl = `/GeneralTask/${id}/ChildTasks`;
+  const search = useLocation().search;
+
+  useEffect(() => {
+    const urlFilterString: string = new URLSearchParams(search).get('filter') ?? '';
+    const urlShowListString: string = new URLSearchParams(search).get('showList') ?? '';
+    if (urlFilterString.length) {
+      const urlFilter: FilteredArguments = JSON.parse(urlFilterString);
+      setFilteredArguments(urlFilter);
+      const currentFilteredChildren = applyChildTaskFilter(childTasks, urlFilter);
+      setFilteredChildren(currentFilteredChildren);
+    }
+    if (urlShowListString.length) {
+      const urlShowList = JSON.parse(urlShowListString);
+      setShowList(urlShowList);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (filteredArguments.data.length !== 0) {
+      const url = buildUrl(baseUrl, {
+        queryParams: {
+          filter: JSON.stringify(filteredArguments),
+          showList: JSON.stringify(showList),
+        },
+      });
+      history.replaceState(null, '', url);
+    } else {
+      history.replaceState(null, '', baseUrl);
+    }
+  }, [filteredArguments, showList]);
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
     const newFilteredArguments = updateFilteredArguments(

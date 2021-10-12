@@ -3,6 +3,7 @@ import { EventResult, EventState } from '../components/generalTask/__generated__
 export interface GeneralTaskParams {
   id: string;
   tabName: string;
+  filter: string;
 }
 
 export type GeneralTaskKeyValueListPairs = readonly ({
