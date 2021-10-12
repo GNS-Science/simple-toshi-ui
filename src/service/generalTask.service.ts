@@ -1,7 +1,9 @@
 import { GeneralTaskChildrenTabQueryResponse } from '../components/generalTask/__generated__/GeneralTaskChildrenTabQuery.graphql';
 import { InversionSolutionDiagnosticContainerQueryResponse } from '../components/generalTask/__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
+import { GeneralTaskDetails } from '../interfaces/diagnosticReport';
 import { ValidatedChildren, SweepArguments, ValidatedSubtask } from '../interfaces/generaltask';
 import { FilteredArguments, GeneralTaskKeyValueListPairs } from '../interfaces/generaltask';
+import { GeneralTaskQueryResponse } from '../pages/__generated__/GeneralTaskQuery.graphql';
 
 export const sweepsList = (
   arg_lists: GeneralTaskKeyValueListPairs,
@@ -106,4 +108,17 @@ export const applyChildTaskFilter = (
     });
   });
   return { data: filtered };
+};
+
+export const getGeneralTaskDetailsFromQueryResponse = (data: GeneralTaskQueryResponse): GeneralTaskDetails => {
+  return {
+    title: data?.node?.title ?? '',
+    id: data?.node?.id ?? '',
+    created: (data?.node?.created as string) ?? '',
+    model_type: data?.node?.model_type ?? '',
+    description: data?.node?.description ?? '',
+    notes: data?.node?.notes ?? '',
+    swept_arguments: (data?.node?.swept_arguments as string[]) ?? [],
+    argument_lists: data?.node?.argument_lists ?? [],
+  };
 };

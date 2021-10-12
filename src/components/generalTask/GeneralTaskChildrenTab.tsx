@@ -9,9 +9,11 @@ import ChildTaskTable from './ChildTaskTable';
 import { GeneralTaskChildrenTabQuery } from './__generated__/GeneralTaskChildrenTabQuery.graphql';
 import InversionSolutionDiagnosticContainer from './InversionSolutionDiagnosticContainer';
 import { FilteredArguments, ValidatedChildren, SweepArguments } from '../../interfaces/generaltask';
+import { diagnosticReportViewOptions as options } from '../../constants/diagnosticReport';
 import {
   applyChildTaskFilter,
   getChildTaskIdArray,
+  getGeneralTaskDetailsFromQueryResponse,
   updateFilteredArguments,
   validateChildTasks,
 } from '../../service/generalTask.service';
@@ -33,6 +35,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const [filteredArguments, setFilteredArguments] = useState<FilteredArguments>({ data: [] });
   const [filteredChildren, setFilteredChildren] = useState<ValidatedChildren>({ data: [] });
   const [filteredChildrenIds, setFilteredChildrenIds] = useState<string[]>([]);
+  const [viewOptions, setViewOptions] = useState<string[]>([options[0].finalPath]);
   const data = useLazyLoadQuery<GeneralTaskChildrenTabQuery>(generalTaskChildrenTabQuery, { id });
   const childTasks = validateChildTasks(data);
   const baseUrl = `/GeneralTask/${id}/ChildTasks`;
@@ -42,6 +45,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     const urlFilterString: string = new URLSearchParams(search).get('filter') ?? '';
     const urlShowListString: string = new URLSearchParams(search).get('showList') ?? '';
     const urlShowFilterString: string = new URLSearchParams(search).get('showFilter') ?? '';
+    const urlViewOptionsString: string = new URLSearchParams(search).get('viewOptions') ?? '';
 
     if (urlFilterString.length) {
       const urlFilter: FilteredArguments = JSON.parse(urlFilterString);
@@ -57,6 +61,10 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
       const urlShowFilter = JSON.parse(urlShowFilterString);
       setShowFilter(urlShowFilter);
     }
+    if (urlViewOptionsString.length) {
+      const urlViewOptions = JSON.parse(urlViewOptionsString);
+      setViewOptions(urlViewOptions);
+    }
   }, []);
 
   useEffect(() => {
@@ -66,13 +74,14 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
           filter: JSON.stringify(filteredArguments),
           showList: JSON.stringify(showList),
           showFilter: JSON.stringify(showFilter),
+          viewOptions: JSON.stringify(viewOptions),
         },
       });
       history.replaceState(null, '', url);
     } else {
       history.replaceState(null, '', baseUrl);
     }
-  }, [filteredArguments, showList, showFilter]);
+  }, [filteredArguments, showList, showFilter, viewOptions]);
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
     const newFilteredArguments = updateFilteredArguments(
@@ -113,14 +122,16 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     <div>
       <React.Suspense fallback={<CircularProgress />}>
         <InversionSolutionDiagnosticContainer
-          data={generalTaskData}
+          generalTaskDetails={getGeneralTaskDetailsFromQueryResponse(generalTaskData)}
           sweepArgs={sweepArgs}
+          ids={filteredChildrenIds}
+          filterCount={`${filteredChildren.data?.length ?? 0}/${childTasks.data?.length ?? 0}`}
           showList={showList}
           showFilter={showFilter}
           setShowFilter={setShowFilter}
+          viewOptions={viewOptions}
+          setViewOptions={setViewOptions}
           onChange={handleChange}
-          ids={filteredChildrenIds}
-          filterCount={`${filteredChildren.data?.length ?? 0}/${childTasks.data?.length ?? 0}`}
           applyFilter={applyFilter}
           handleViewChange={handleViewChange}
         />
