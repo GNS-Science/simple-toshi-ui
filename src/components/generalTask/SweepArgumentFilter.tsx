@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
   Checkbox,
   FormControl,
@@ -8,8 +10,7 @@ import {
   MenuItem,
   Select,
 } from '@material-ui/core';
-import React, { useState } from 'react';
-import { SweepArgument } from '../../interfaces/generaltask';
+import { FilteredArguments, SweepArgument } from '../../interfaces/generaltask';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -31,6 +32,7 @@ const MenuProps = {
 };
 
 interface SweepArgumentFilterProps {
+  filteredArguments: FilteredArguments;
   argument: SweepArgument;
   onChange: (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => void;
 }
@@ -38,11 +40,27 @@ interface SweepArgumentFilterProps {
 const SweepArgumentFilter: React.FC<SweepArgumentFilterProps> = ({ argument, onChange }: SweepArgumentFilterProps) => {
   const [seletedItems, setSelectedItems] = useState<string[]>([]);
   const classes = useStyles();
+  const search = useLocation().search;
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
     onChange(event);
     setSelectedItems(event.target.value as string[]);
   };
+
+  useEffect(() => {
+    const urlFilterString: string = new URLSearchParams(search).get('filter') ?? '';
+    const urlFilter: FilteredArguments = JSON.parse(urlFilterString);
+    if (urlFilter.data?.length === 0) {
+      return;
+    } else {
+      urlFilter.data.map((kv) => {
+        if (kv.k.includes(argument?.k as string)) {
+          console.log(kv.v);
+          setSelectedItems(kv.v);
+        }
+      });
+    }
+  }, []);
 
   return (
     <div>
