@@ -11,6 +11,7 @@ import {
   Select,
 } from '@material-ui/core';
 import { FilteredArguments, SweepArgument } from '../../interfaces/generaltask';
+import { setStateFromSearchParams } from '../../service/generalTask.service';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -47,18 +48,15 @@ const SweepArgumentFilter: React.FC<SweepArgumentFilterProps> = ({ argument, onC
   };
 
   useEffect(() => {
-    const urlFilterString: string = new URLSearchParams(search).get('filter') ?? '';
-    const urlFilter: FilteredArguments = JSON.parse(urlFilterString);
-    if (urlFilter.data?.length === 0) {
-      return;
-    } else {
-      urlFilter.data.map((kv) => {
-        if (kv.k.includes(argument?.k as string)) {
-          console.log(kv.v);
-          setSelectedItems(kv.v);
-        }
-      });
-    }
+    setStateFromSearchParams(search, 'filter', undefined, (filterArgs: FilteredArguments) => {
+      if (filterArgs.data?.length) {
+        filterArgs.data.map((kv) => {
+          if (kv.k.includes(argument?.k as string)) {
+            setSelectedItems(kv.v);
+          }
+        });
+      }
+    });
   }, []);
 
   return (

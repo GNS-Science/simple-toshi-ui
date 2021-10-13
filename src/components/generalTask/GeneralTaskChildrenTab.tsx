@@ -14,6 +14,7 @@ import {
   applyChildTaskFilter,
   getChildTaskIdArray,
   getGeneralTaskDetailsFromQueryResponse,
+  setStateFromSearchParams,
   updateFilteredArguments,
   validateChildTasks,
 } from '../../service/generalTask.service';
@@ -42,29 +43,13 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const search = useLocation().search;
 
   useEffect(() => {
-    const urlFilterString: string = new URLSearchParams(search).get('filter') ?? '';
-    const urlShowListString: string = new URLSearchParams(search).get('showList') ?? '';
-    const urlShowFilterString: string = new URLSearchParams(search).get('showFilter') ?? '';
-    const urlViewOptionsString: string = new URLSearchParams(search).get('viewOptions') ?? '';
-
-    if (urlFilterString.length) {
-      const urlFilter: FilteredArguments = JSON.parse(urlFilterString);
-      setFilteredArguments(urlFilter);
-      const currentFilteredChildren = applyChildTaskFilter(childTasks, urlFilter);
+    setStateFromSearchParams(search, 'showList', setShowList);
+    setStateFromSearchParams(search, 'showFilter', setShowFilter);
+    setStateFromSearchParams(search, 'viewOptions', setViewOptions);
+    setStateFromSearchParams(search, 'filter', setFilteredArguments, (filter: FilteredArguments) => {
+      const currentFilteredChildren = applyChildTaskFilter(childTasks, filter);
       setFilteredChildren(currentFilteredChildren);
-    }
-    if (urlShowListString.length) {
-      const urlShowList = JSON.parse(urlShowListString);
-      setShowList(urlShowList);
-    }
-    if (urlShowFilterString.length) {
-      const urlShowFilter = JSON.parse(urlShowFilterString);
-      setShowFilter(urlShowFilter);
-    }
-    if (urlViewOptionsString.length) {
-      const urlViewOptions = JSON.parse(urlViewOptionsString);
-      setViewOptions(urlViewOptions);
-    }
+    });
   }, []);
 
   useEffect(() => {

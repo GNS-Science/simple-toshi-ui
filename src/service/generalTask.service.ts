@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from 'react';
 import { GeneralTaskChildrenTabQueryResponse } from '../components/generalTask/__generated__/GeneralTaskChildrenTabQuery.graphql';
 import { InversionSolutionDiagnosticContainerQueryResponse } from '../components/generalTask/__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
 import { GeneralTaskDetails } from '../interfaces/diagnosticReport';
@@ -121,4 +122,21 @@ export const getGeneralTaskDetailsFromQueryResponse = (data: GeneralTaskQueryRes
     swept_arguments: (data?.node?.swept_arguments as string[]) ?? [],
     argument_lists: data?.node?.argument_lists ?? [],
   };
+};
+
+export const setStateFromSearchParams = (
+  search: string,
+  name: string,
+  set?:
+    | Dispatch<SetStateAction<FilteredArguments>>
+    | Dispatch<SetStateAction<boolean>>
+    | Dispatch<SetStateAction<string[]>>,
+  cb?: (filterArgs: FilteredArguments) => void,
+): void => {
+  const urlSearchParamString: string = new URLSearchParams(search).get(name) ?? '';
+  if (urlSearchParamString.length) {
+    const urlSearchParam = JSON.parse(urlSearchParamString);
+    set && set(urlSearchParam);
+    cb && cb(urlSearchParam);
+  }
 };
