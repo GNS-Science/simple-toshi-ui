@@ -53,7 +53,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   }, []);
 
   useEffect(() => {
-    if (filteredArguments.data.length !== 0) {
+    if (filteredArguments.data.length || viewOptions.length || showFilter === true || showList === false) {
       const url = buildUrl(baseUrl, {
         queryParams: {
           filter: JSON.stringify(filteredArguments),
