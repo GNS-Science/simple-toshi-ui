@@ -32,7 +32,6 @@ const MenuProps = {
 };
 
 interface SweepArgumentFilterProps {
-  filteredArguments: FilteredArguments;
   argument: SweepArgument;
   onChange: (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => void;
 }
