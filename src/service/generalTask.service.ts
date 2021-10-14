@@ -124,7 +124,7 @@ export const getGeneralTaskDetailsFromQueryResponse = (data: GeneralTaskQueryRes
   };
 };
 
-export const setStateFromSearchParams = (
+export const setStateFromSearchParams = async (
   search: string,
   name: string,
   set?:
@@ -132,7 +132,7 @@ export const setStateFromSearchParams = (
     | Dispatch<SetStateAction<boolean>>
     | Dispatch<SetStateAction<string[]>>,
   cb?: (filterArgs: FilteredArguments) => void,
-): void => {
+): Promise<void> => {
   const urlSearchParamString: string = new URLSearchParams(search).get(name) ?? '';
   if (urlSearchParamString.length) {
     const urlSearchParam = JSON.parse(urlSearchParamString);

@@ -43,13 +43,17 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const search = useLocation().search;
 
   useEffect(() => {
-    setStateFromSearchParams(search, 'showList', setShowList);
-    setStateFromSearchParams(search, 'showFilter', setShowFilter);
-    setStateFromSearchParams(search, 'viewOptions', setViewOptions);
-    setStateFromSearchParams(search, 'filter', setFilteredArguments, (filter: FilteredArguments) => {
-      const currentFilteredChildren = applyChildTaskFilter(childTasks, filter);
-      setFilteredChildren(currentFilteredChildren);
-    });
+    try {
+      setStateFromSearchParams(search, 'showList', setShowList);
+      setStateFromSearchParams(search, 'showFilter', setShowFilter);
+      setStateFromSearchParams(search, 'viewOptions', setViewOptions);
+      setStateFromSearchParams(search, 'filter', setFilteredArguments, (filter: FilteredArguments) => {
+        const currentFilteredChildren = applyChildTaskFilter(childTasks, filter);
+        setFilteredChildren(currentFilteredChildren);
+      });
+    } catch (e) {
+      history.replaceState(null, '', baseUrl);
+    }
   }, []);
 
   useEffect(() => {
