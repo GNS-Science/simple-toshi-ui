@@ -83,7 +83,7 @@ export const validateChildTasks = (data: GeneralTaskChildrenTabQueryResponse): V
   return validatedChildTasks;
 };
 
-export const getChildTaskIdArray = (filteredChildren: ValidatedChildren): string[] | void => {
+export const getChildTaskIdArray = (filteredChildren: ValidatedChildren): string[] => {
   const idArray: string[] = [];
 
   if (filteredChildren.data && filteredChildren.data.length <= maxLength) {
@@ -91,6 +91,8 @@ export const getChildTaskIdArray = (filteredChildren: ValidatedChildren): string
       idArray.push(task.id);
     });
     return idArray;
+  } else {
+    return [];
   }
 };
 

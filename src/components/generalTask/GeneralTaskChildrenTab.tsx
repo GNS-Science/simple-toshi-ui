@@ -62,6 +62,9 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     if (showList && filteredArguments.data.length === 0 && filteredChildren.data?.length === 0) {
       const ids = getChildTaskIdArray(childTasks);
       ids && setFilteredChildrenIds(ids);
+      if (ids.length === 0) {
+        setOpenAlert(true);
+      }
     }
     setShowList((v) => !v);
   };
