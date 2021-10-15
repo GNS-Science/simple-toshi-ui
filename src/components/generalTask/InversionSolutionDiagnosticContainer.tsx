@@ -32,7 +32,7 @@ interface InversionSolutionDiagnosticContainerProps {
   showList: boolean;
   onChange: (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => void;
   ids?: string[];
-  childrenListLength: number;
+  filterCount: string;
   applyFilter: () => void;
   data: GeneralTaskQueryResponse;
   handleViewChange: () => void;
@@ -43,7 +43,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   showList,
   onChange,
   ids,
-  childrenListLength,
+  filterCount,
   applyFilter,
   data,
   handleViewChange,
@@ -86,9 +86,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
       <ControlsBar>
         <Tooltip title="use (f/F) to open/close filters">
           <Button variant="contained" color="default" onClick={() => setShowFilters((v) => !v)}>
-            <span>
-              Filter&nbsp;({ids?.length}/{childrenListLength})
-            </span>
+            <span>Filter&nbsp;({filterCount})</span>
           </Button>
         </Tooltip>
         <Tooltip title="use (s/S) to toggle between views">

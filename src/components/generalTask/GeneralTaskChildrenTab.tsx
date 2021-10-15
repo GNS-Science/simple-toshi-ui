@@ -95,7 +95,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
           showList={showList}
           onChange={handleChange}
           ids={filteredChildrenIds}
-          childrenListLength={childTasks.data?.length ?? 0}
+          filterCount={`${filteredChildren.data?.length ?? 0}/${childTasks.data?.length ?? 0}`}
           applyFilter={applyFilter}
           handleViewChange={handleViewChange}
         />
