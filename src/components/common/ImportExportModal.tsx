@@ -2,22 +2,12 @@ import { Button, IconButton, makeStyles, Modal, TextField, Theme, Tooltip } from
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import React, { useState } from 'react';
 
-function rand() {
-  return Math.round(Math.random() * 20) - 10;
-}
-
-function getModalStyle() {
-  const top = 50 + rand();
-  const left = 50 + rand();
-
-  return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
-  };
-}
-
 const useStyles = makeStyles((theme: Theme) => ({
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   paper: {
     position: 'absolute',
     width: 1000,
@@ -52,7 +42,6 @@ const ImportExportModal: React.FC<ExportModalProps> = ({
   handleImport,
 }: ExportModalProps) => {
   const classes = useStyles();
-  const [modalStyle] = useState(getModalStyle);
   const [value, setValue] = useState<string>('');
 
   return (
@@ -60,10 +49,11 @@ const ImportExportModal: React.FC<ExportModalProps> = ({
       <Modal
         open={openModal}
         onClose={handleClose}
+        className={classes.modal}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
-        <div style={modalStyle} className={classes.paper}>
+        <div className={classes.paper}>
           {input ? (
             <>
               <h2 id="simple-modal-title">{title}</h2>
