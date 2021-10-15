@@ -66,7 +66,7 @@ const MySolutions: React.FC = () => {
         My Solutions
       </Typography>
       <ControlsBar>
-        <ButtonGroup variant="contained" aria-label="outlined primary button group">
+        <ButtonGroup variant="contained">
           <Button variant="contained" onClick={() => setOpenSaveModal(true)}>
             Save
           </Button>
