@@ -64,6 +64,5 @@ export const filterMetaArguments = (metaArguments: MetaArguments, sweepArguments
   const filteredMetaArguments = metaArguments.filter((kv) => {
     return kv !== null && sweepArguments.some((argument) => argument.includes(kv.k as string));
   });
-  console.log('filteredMeta', filteredMetaArguments);
   return filteredMetaArguments;
 };
