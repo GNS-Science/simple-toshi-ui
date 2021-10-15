@@ -60,10 +60,10 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     if (filteredArguments.data.length || viewOptions.length || showFilter === true || showList === false) {
       const url = buildUrl(baseUrl, {
         queryParams: {
-          filter: JSON.stringify(filteredArguments),
-          showList: JSON.stringify(showList),
-          showFilter: JSON.stringify(showFilter),
-          viewOptions: JSON.stringify(viewOptions),
+          filter: btoa(JSON.stringify(filteredArguments)),
+          showList: btoa(JSON.stringify(showList)),
+          showFilter: btoa(JSON.stringify(showFilter)),
+          viewOptions: btoa(JSON.stringify(viewOptions)),
         },
       });
       history.replaceState(null, '', url);

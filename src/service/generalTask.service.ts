@@ -134,8 +134,9 @@ export const setStateFromSearchParams = async (
   cb?: (filterArgs: FilteredArguments) => void,
 ): Promise<void> => {
   const urlSearchParamString: string = new URLSearchParams(search).get(name) ?? '';
+  const urlSearchParamStringDecoded: string = atob(urlSearchParamString);
   if (urlSearchParamString.length) {
-    const urlSearchParam = JSON.parse(urlSearchParamString);
+    const urlSearchParam = JSON.parse(urlSearchParamStringDecoded);
     set && set(urlSearchParam);
     cb && cb(urlSearchParam);
   }
