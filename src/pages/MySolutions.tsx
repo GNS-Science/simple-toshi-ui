@@ -19,13 +19,14 @@ import {
   validateListItems,
 } from '../service/mySolution.service';
 import ImportExportModal from '../components/common/ImportExportModal';
+import SplitButton from '../components/common/SplitButton';
 
 const MySolutions: React.FC = () => {
   const [showList, setShowList] = useState(true);
   const [viewOptions, setViewOptions] = useState<string[]>([options[0].finalPath]);
   const [openDrawer, setOpenDrawer] = useState(false);
-  const [openExportModal, setOpenExportModal] = useState(false);
-  const [openImportModal, setOpenImportModal] = useState(false);
+  const [openSaveModal, setOpenSaveModal] = useState(false);
+  const [openLoadModal, setOpenLoadModal] = useState(false);
   const [currentImage, setCurrentImage] = useState<number>(0);
 
   const { ISFavourites, setISFavourites } = useContext(LocalStorageContext);
@@ -60,23 +61,27 @@ const MySolutions: React.FC = () => {
     setISFavourites(ISFavObj);
   };
 
+  const handleSaveLoad = (option: string) => {
+    if (option === 'Save') {
+      setOpenSaveModal(true);
+    }
+    if (option === 'Load') {
+      setOpenLoadModal(true);
+    }
+  };
+
   return (
     <>
       <Typography variant="h5" gutterBottom>
         My Solutions
       </Typography>
       <ControlsBar>
+        <SplitButton options={['Save', 'Load']} onClick={handleSaveLoad} />
         <Tooltip title="use (s/S) to toggle between views">
           <Button variant="contained" onClick={() => setShowList((v) => !v)}>
             {showList ? 'Show Report' : 'Show Report'}
           </Button>
         </Tooltip>
-        <Button variant="contained" onClick={() => setOpenExportModal(true)}>
-          Export
-        </Button>
-        <Button variant="contained" onClick={() => setOpenImportModal(true)}>
-          Import
-        </Button>
         {!showList && (
           <Tooltip title="use (d/D) to open/close details">
             <Button variant="contained" onClick={() => setOpenDrawer((v) => !v)}>
@@ -88,16 +93,16 @@ const MySolutions: React.FC = () => {
       </ControlsBar>
       <ImportExportModal
         input={false}
-        openModal={openExportModal}
+        openModal={openSaveModal}
         title="EXPORT JSON"
         text={JSON.stringify(ISFavourites)}
-        handleClose={() => setOpenExportModal(false)}
+        handleClose={() => setOpenSaveModal(false)}
       />
       <ImportExportModal
         input={true}
-        openModal={openImportModal}
+        openModal={openLoadModal}
         title="IMPORT JSON"
-        handleClose={() => setOpenImportModal(false)}
+        handleClose={() => setOpenLoadModal(false)}
         handleImport={handleImport}
       />
       {showList ? (
