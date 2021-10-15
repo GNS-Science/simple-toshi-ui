@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
-import { Button, Tooltip, Typography } from '@material-ui/core';
+import { Button, ButtonGroup, Tooltip, Typography } from '@material-ui/core';
 import { graphql } from 'babel-plugin-relay/macro';
 
 import DiagnosticReportControls from '../components/diagnosticReportView/DiagnosticReportControls';
@@ -19,7 +19,6 @@ import {
   validateListItems,
 } from '../service/mySolution.service';
 import ImportExportModal from '../components/common/ImportExportModal';
-import SplitButton from '../components/common/SplitButton';
 
 const MySolutions: React.FC = () => {
   const [showList, setShowList] = useState(true);
@@ -61,22 +60,20 @@ const MySolutions: React.FC = () => {
     setISFavourites(ISFavObj);
   };
 
-  const handleSaveLoad = (option: string) => {
-    if (option === 'Save') {
-      setOpenSaveModal(true);
-    }
-    if (option === 'Load') {
-      setOpenLoadModal(true);
-    }
-  };
-
   return (
     <>
       <Typography variant="h5" gutterBottom>
         My Solutions
       </Typography>
       <ControlsBar>
-        <SplitButton options={['Save', 'Load']} onClick={handleSaveLoad} />
+        <ButtonGroup variant="contained" aria-label="outlined primary button group">
+          <Button variant="contained" onClick={() => setOpenSaveModal(true)}>
+            Save
+          </Button>
+          <Button variant="contained" onClick={() => setOpenLoadModal(true)}>
+            Load
+          </Button>
+        </ButtonGroup>
         <Tooltip title="use (s/S) to toggle between views">
           <Button variant="contained" onClick={() => setShowList((v) => !v)}>
             {showList ? 'Show Report' : 'Show Report'}
