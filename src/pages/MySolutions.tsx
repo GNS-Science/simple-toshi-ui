@@ -18,7 +18,7 @@ import {
   getReportItems,
   validateListItems,
 } from '../service/mySolution.service';
-import ImportExportModal from '../components/common/ImportExportModal';
+import ImportExportModal from '../components/common/Modal/ImportExportModal';
 
 const MySolutions: React.FC = () => {
   const [showList, setShowList] = useState(true);
