@@ -15,10 +15,12 @@ import {
   getChildTaskIdArray,
   getGeneralTaskDetailsFromQueryResponse,
   setStateFromSearchParams,
+  maxLength,
   updateFilteredArguments,
   validateChildTasks,
 } from '../../service/generalTask.service';
 import { GeneralTaskQueryResponse } from '../../pages/__generated__/GeneralTaskQuery.graphql';
+import Alert from '../common/Alert';
 
 interface GeneralTaskChildrenTabProps {
   id: string;
@@ -37,6 +39,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const [filteredChildren, setFilteredChildren] = useState<ValidatedChildren>({ data: [] });
   const [filteredChildrenIds, setFilteredChildrenIds] = useState<string[]>([]);
   const [viewOptions, setViewOptions] = useState<string[]>([options[0].finalPath]);
+  const [openAlert, setOpenAlert] = useState(false);
   const data = useLazyLoadQuery<GeneralTaskChildrenTabQuery>(generalTaskChildrenTabQuery, { id });
   const childTasks = validateChildTasks(data);
   const baseUrl = `/GeneralTask/${id}/ChildTasks`;
@@ -84,6 +87,9 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const applyFilter = () => {
     const filtered = applyChildTaskFilter(childTasks, filteredArguments);
     setFilteredChildren(filtered);
+    if ((filtered?.data?.length ?? 0) > maxLength) {
+      setOpenAlert(true);
+    }
   };
 
   useEffect(() => {
@@ -95,8 +101,15 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     if (showList && filteredArguments.data.length === 0 && filteredChildren.data?.length === 0) {
       const ids = getChildTaskIdArray(childTasks);
       ids && setFilteredChildrenIds(ids);
+      if (ids.length === 0) {
+        setOpenAlert(true);
+      }
     }
     setShowList((v) => !v);
+  };
+
+  const handleClose = () => {
+    setOpenAlert(false);
   };
 
   if (!data?.node) {
@@ -109,6 +122,14 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
 
   return (
     <div>
+      {openAlert && (
+        <Alert
+          open={openAlert}
+          title="Cannot Query Reports"
+          text={`Reports cannot be queried when the list of filtered child tasks is over ${maxLength}.`}
+          handleClose={handleClose}
+        />
+      )}
       <React.Suspense fallback={<CircularProgress />}>
         <InversionSolutionDiagnosticContainer
           generalTaskDetails={getGeneralTaskDetailsFromQueryResponse(generalTaskData)}

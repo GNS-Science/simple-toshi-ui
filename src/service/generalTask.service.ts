@@ -6,6 +6,7 @@ import { ValidatedChildren, SweepArguments, ValidatedSubtask } from '../interfac
 import { FilteredArguments, GeneralTaskKeyValueListPairs } from '../interfaces/generaltask';
 import { GeneralTaskQueryResponse } from '../pages/__generated__/GeneralTaskQuery.graphql';
 
+export const maxLength = parseInt(process.env.REACT_APP_REPORTS_LIMIT ?? '24');
 export const sweepsList = (
   arg_lists: GeneralTaskKeyValueListPairs,
   sweeps: readonly (string | null)[],
@@ -85,8 +86,7 @@ export const validateChildTasks = (data: GeneralTaskChildrenTabQueryResponse): V
   return validatedChildTasks;
 };
 
-export const getChildTaskIdArray = (filteredChildren: ValidatedChildren): string[] | void => {
-  const maxLength = parseInt(process.env.REACT_APP_REPORTS_LIMIT ?? '24');
+export const getChildTaskIdArray = (filteredChildren: ValidatedChildren): string[] => {
   const idArray: string[] = [];
 
   if (filteredChildren.data && filteredChildren.data.length <= maxLength) {
@@ -94,6 +94,8 @@ export const getChildTaskIdArray = (filteredChildren: ValidatedChildren): string
       idArray.push(task.id);
     });
     return idArray;
+  } else {
+    return [];
   }
 };
 
