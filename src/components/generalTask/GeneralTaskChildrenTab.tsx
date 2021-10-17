@@ -93,6 +93,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
       )}
       <React.Suspense fallback={<CircularProgress />}>
         <InversionSolutionDiagnosticContainer
+          filteredChildren={filteredChildren}
           data={generalTaskData}
           sweepArgs={sweepArgs}
           showList={showList}
