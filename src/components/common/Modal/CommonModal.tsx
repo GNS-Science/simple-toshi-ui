@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-interface ExportModalProps {
+interface CommonModalProps {
   input: boolean;
   openModal: boolean;
   title: string;
@@ -27,14 +27,14 @@ interface ExportModalProps {
   handleImport?: (value: string) => void;
 }
 
-const ImportExportModal: React.FC<ExportModalProps> = ({
+const CommonModal: React.FC<CommonModalProps> = ({
   input,
   openModal,
   title,
   text,
   handleClose,
   handleImport,
-}: ExportModalProps) => {
+}: CommonModalProps) => {
   const classes = useStyles();
 
   return (
@@ -64,4 +64,4 @@ const ImportExportModal: React.FC<ExportModalProps> = ({
   );
 };
 
-export default ImportExportModal;
+export default CommonModal;

@@ -34,6 +34,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
 }: GeneralTaskChildrenTabProps) => {
   const { id, clipBoard } = useParams<GeneralTaskParams>();
   const { reportViewSelections, setReportViewSelections } = useContext(LocalStorageContext);
+
   const [showList, setShowList] = useState(true);
   const [showFilter, setShowFilter] = useState(false);
   const [filteredArguments, setFilteredArguments] = useState<FilteredArguments>({ data: [] });
@@ -41,15 +42,15 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const [filteredChildrenIds, setFilteredChildrenIds] = useState<string[]>([]);
   const [viewOptions, setViewOptions] = useState<string[]>([options[0].finalPath]);
   const [openAlert, setOpenAlert] = useState(false);
-  const [isClipBoard, setIsClipBoard] = useState<boolean>(clipBoard === 'ClipBoard');
+
   const data = useLazyLoadQuery<GeneralTaskChildrenTabQuery>(generalTaskChildrenTabQuery, { id });
   const childTasks = validateChildTasks(data);
   const search = useLocation().search;
   const baseUrl = `${process.env.REACT_APP_ROOT_PATH}/GeneralTask/${id}/ChildTasks/ClipBoard`;
+  const isClipBoard = clipBoard === 'ClipBoard';
 
   useEffect(() => {
-    if (clipBoard === 'ClipBoard') {
-      setIsClipBoard(true);
+    if (isClipBoard) {
       try {
         setStateFromSearchParams(search, 'showList', setShowList);
         setStateFromSearchParams(search, 'showFilter', setShowFilter);

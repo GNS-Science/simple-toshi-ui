@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Checkbox, FormControl, Input, makeStyles, MenuItem, Select, Theme } from '@material-ui/core';
 
 import { diagnosticReportViewOptions as options } from '../../constants/diagnosticReport';
-import LocalStorageContext from '../../contexts/localStorage';
 
 const useStyles = makeStyles((theme: Theme) => ({
   formControl: {

@@ -12,7 +12,7 @@ import DiagnosticReportControls from '../diagnosticReportView/DiagnosticReportCo
 import GeneralTaskDetailDrawer from '../diagnosticReportView/GeneralTaskDetailDrawer';
 import ControlsBar from '../common/ControlsBar';
 import { GeneralTaskDetails } from '../../interfaces/diagnosticReport';
-import ImportExportModal from '../common/Modal/ImportExportModal';
+import CommonModal from '../common/Modal/CommonModal';
 
 const useStyles = makeStyles(() => ({
   filterContainer: {
@@ -121,7 +121,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
         <DiagnosticReportContainer sweepArgs={sweepArgs} viewOptions={viewOptions} queryRef={queryRef} />
       )}
       <GeneralTaskDetailDrawer generalTaskDetails={generalTaskDetails} openDrawer={openDrawer} />
-      <ImportExportModal
+      <CommonModal
         input={false}
         title="Share with this url"
         openModal={showShare}

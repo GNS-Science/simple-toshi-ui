@@ -11,14 +11,13 @@ import ControlsBar from '../components/common/ControlsBar';
 import LocalStorageContext from '../contexts/localStorage';
 import { GeneralTaskDetails } from '../interfaces/diagnosticReport';
 import { MySolutionsQuery } from './__generated__/MySolutionsQuery.graphql';
-import { diagnosticReportViewOptions as options } from '../constants/diagnosticReport';
 import {
   getGeneralTaskDetails,
   getMySolutionIdsArray,
   getReportItems,
   validateListItems,
 } from '../service/mySolution.service';
-import ImportExportModal from '../components/common/Modal/ImportExportModal';
+import CommonModal from '../components/common/Modal/CommonModal';
 
 const MySolutions: React.FC = () => {
   const { reportViewSelections, setReportViewSelections } = useContext(LocalStorageContext);
@@ -90,14 +89,14 @@ const MySolutions: React.FC = () => {
           <DiagnosticReportControls viewOptions={reportViewSelections} setViewOption={setReportViewSelections} />
         )}
       </ControlsBar>
-      <ImportExportModal
+      <CommonModal
         input={false}
         openModal={openSaveModal}
         title="EXPORT JSON"
         text={JSON.stringify(ISFavourites)}
         handleClose={() => setOpenSaveModal(false)}
       />
-      <ImportExportModal
+      <CommonModal
         input={true}
         openModal={openLoadModal}
         title="IMPORT JSON"
