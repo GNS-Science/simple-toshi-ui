@@ -23,6 +23,7 @@ interface FavouriteControlsProps {
 const FavouriteControls: React.FC<FavouriteControlsProps> = ({ id, producedBy }: FavouriteControlsProps) => {
   const classes = useStyles();
   const { ISFavourites, setISFavourites } = useContext(LocalStorageContext);
+
   const handleFavourites = () => {
     let favourites = { ...ISFavourites };
     favourites[id] ? (favourites = _.omit(favourites, id)) : (favourites[id] = { producedBy });
@@ -36,7 +37,7 @@ const FavouriteControls: React.FC<FavouriteControlsProps> = ({ id, producedBy }:
   useEffect(() => {
     window.addEventListener('keypress', keypressHandler);
     return () => window.removeEventListener('keypress', keypressHandler);
-  }, [ISFavourites]);
+  }, [id, ISFavourites]);
 
   return (
     <>

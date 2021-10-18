@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/styles';
 
 import SweepArgumentFilter from './SweepArgumentFilter';
 import { InversionSolutionDiagnosticContainerQuery } from './__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
-import { SweepArguments } from '../../interfaces/generaltask';
+import { SweepArguments, ValidatedChildren } from '../../interfaces/generaltask';
 import DiagnosticReportContainer from '../diagnosticReportView/DiagnosticReportContainer';
 import DiagnosticReportControls from '../diagnosticReportView/DiagnosticReportControls';
 import { diagnosticReportViewOptions as options } from '../../constants/diagnosticReport';
@@ -28,6 +28,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface InversionSolutionDiagnosticContainerProps {
+  filteredChildren: ValidatedChildren;
   readonly sweepArgs?: SweepArguments;
   showList: boolean;
   onChange: (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => void;
@@ -39,6 +40,7 @@ interface InversionSolutionDiagnosticContainerProps {
 }
 
 const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnosticContainerProps> = ({
+  filteredChildren,
   sweepArgs,
   showList,
   onChange,
@@ -79,7 +81,8 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
 
   useEffect(() => {
     window.addEventListener('keypress', keypressHandler);
-  }, []);
+    return () => window.removeEventListener('keypress', keypressHandler);
+  }, [filteredChildren]);
 
   return (
     <>
