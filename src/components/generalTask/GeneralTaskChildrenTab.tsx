@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { graphql } from 'babel-plugin-relay/macro';
 import { useLazyLoadQuery } from 'react-relay/hooks';
@@ -21,6 +21,7 @@ import {
 } from '../../service/generalTask.service';
 import { GeneralTaskQueryResponse } from '../../pages/__generated__/GeneralTaskQuery.graphql';
 import Alert from '../common/Alert';
+import LocalStorageContext from '../../contexts/localStorage';
 
 interface GeneralTaskChildrenTabProps {
   readonly sweepArgs?: SweepArguments;
@@ -32,6 +33,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   generalTaskData,
 }: GeneralTaskChildrenTabProps) => {
   const { id, clipBoard } = useParams<GeneralTaskParams>();
+  const { reportViewSelections, setReportViewSelections } = useContext(LocalStorageContext);
   const [showList, setShowList] = useState(true);
   const [showFilter, setShowFilter] = useState(false);
   const [filteredArguments, setFilteredArguments] = useState<FilteredArguments>({ data: [] });
@@ -39,11 +41,11 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const [filteredChildrenIds, setFilteredChildrenIds] = useState<string[]>([]);
   const [viewOptions, setViewOptions] = useState<string[]>([options[0].finalPath]);
   const [openAlert, setOpenAlert] = useState(false);
-  const [isClipBoard, setIsClipBoard] = useState<boolean>(false);
+  const [isClipBoard, setIsClipBoard] = useState<boolean>(clipBoard === 'ClipBoard');
   const data = useLazyLoadQuery<GeneralTaskChildrenTabQuery>(generalTaskChildrenTabQuery, { id });
   const childTasks = validateChildTasks(data);
   const search = useLocation().search;
-  const baseUrl = `${process.env.REACT_APP_ROOT_PATH}/GeneralTask/${id}/ChildTask/ClipBoard`;
+  const baseUrl = `${process.env.REACT_APP_ROOT_PATH}/GeneralTask/${id}/ChildTasks/ClipBoard`;
 
   useEffect(() => {
     if (clipBoard === 'ClipBoard') {
@@ -68,7 +70,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
         filter: btoa(JSON.stringify(filteredArguments)),
         showList: btoa(JSON.stringify(showList)),
         showFilter: btoa(JSON.stringify(showFilter)),
-        viewOptions: btoa(JSON.stringify(viewOptions)),
+        viewOptions: btoa(JSON.stringify(reportViewSelections)),
       },
     });
     return url ?? '';
@@ -138,8 +140,8 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
           showList={showList}
           showFilter={showFilter}
           setShowFilter={setShowFilter}
-          viewOptions={viewOptions}
-          setViewOptions={setViewOptions}
+          viewOptions={isClipBoard ? viewOptions : reportViewSelections}
+          setViewOptions={isClipBoard ? setViewOptions : setReportViewSelections}
           onChange={handleChange}
           applyFilter={applyFilter}
           handleViewChange={handleViewChange}

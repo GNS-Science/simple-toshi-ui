@@ -21,8 +21,8 @@ import {
 import ImportExportModal from '../components/common/Modal/ImportExportModal';
 
 const MySolutions: React.FC = () => {
+  const { reportViewSelections, setReportViewSelections } = useContext(LocalStorageContext);
   const [showList, setShowList] = useState(true);
-  const [viewOptions, setViewOptions] = useState<string[]>([options[0].finalPath]);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openSaveModal, setOpenSaveModal] = useState(false);
   const [openLoadModal, setOpenLoadModal] = useState(false);
@@ -86,7 +86,9 @@ const MySolutions: React.FC = () => {
             </Button>
           </Tooltip>
         )}
-        {!showList && <DiagnosticReportControls setViewOption={setViewOptions} />}
+        {!showList && (
+          <DiagnosticReportControls viewOptions={reportViewSelections} setViewOption={setReportViewSelections} />
+        )}
       </ControlsBar>
       <ImportExportModal
         input={false}
@@ -108,7 +110,7 @@ const MySolutions: React.FC = () => {
         <DiagnosticReportCard
           changeCurrentImage={handleChangeCurrentImage}
           automationTasks={reportItems}
-          viewOptions={viewOptions}
+          viewOptions={reportViewSelections}
         />
       )}
       {!showList && <GeneralTaskDetailDrawer generalTaskDetails={currentGeneralTask} openDrawer={openDrawer} />}

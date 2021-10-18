@@ -107,7 +107,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
         <Button variant="contained" onClick={handleShare}>
           Share
         </Button>
-        <DiagnosticReportControls setViewOption={setViewOptions} />
+        <DiagnosticReportControls viewOptions={viewOptions} setViewOption={setViewOptions} />
       </ControlsBar>
       <div className={showFilter ? classes.filterContainer : classes.hidden}>
         {sweepArgs?.map((argument) => (
