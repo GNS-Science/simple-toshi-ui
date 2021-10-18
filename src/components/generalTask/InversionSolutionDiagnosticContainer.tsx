@@ -12,6 +12,7 @@ import DiagnosticReportControls from '../diagnosticReportView/DiagnosticReportCo
 import GeneralTaskDetailDrawer from '../diagnosticReportView/GeneralTaskDetailDrawer';
 import ControlsBar from '../common/ControlsBar';
 import { GeneralTaskDetails } from '../../interfaces/diagnosticReport';
+import ImportExportModal from '../common/Modal/ImportExportModal';
 
 const useStyles = makeStyles(() => ({
   filterContainer: {
@@ -38,6 +39,7 @@ interface InversionSolutionDiagnosticContainerProps {
   onChange: (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => void;
   applyFilter: () => void;
   handleViewChange: () => void;
+  getUrl: () => string;
 }
 
 const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnosticContainerProps> = ({
@@ -53,12 +55,15 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   onChange,
   applyFilter,
   handleViewChange,
+  getUrl,
 }: InversionSolutionDiagnosticContainerProps) => {
   const classes = useStyles();
   const [openDrawer, setOpenDrawer] = useState(false);
   const [queryRef, loadQuery] = useQueryLoader<InversionSolutionDiagnosticContainerQuery>(
     inversionSolutionDiagnosticContainerQuery,
   );
+  const [showShare, setShowShare] = useState(false);
+  const [sharableUrl, setSharableUrl] = useState<string>('');
 
   useEffect(() => {
     loadQuery({ id: ids });
@@ -75,24 +80,33 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
     return () => window.removeEventListener('keypress', keypressHandler);
   }, [showFilter]);
 
+  const handleShare = () => {
+    const url = getUrl();
+    setSharableUrl(url);
+    setShowShare(true);
+  };
+
   return (
     <>
       <ControlsBar>
         <Tooltip title="use (f/F) to open/close filters">
-          <Button variant="contained" color="default" onClick={() => setShowFilter(!showFilter)}>
+          <Button color="default" onClick={() => setShowFilter(!showFilter)}>
             <span>Filter&nbsp;({filterCount})</span>
           </Button>
         </Tooltip>
         <Tooltip title="use (s/S) to toggle between views">
-          <Button color="default" variant="contained" onClick={handleViewChange}>
+          <Button variant="contained" onClick={handleViewChange}>
             {showList ? 'Show Report' : 'Show List'}
           </Button>
         </Tooltip>
         <Tooltip title="use (d/D) to open/close details">
-          <Button color="default" variant="contained" onClick={() => setOpenDrawer((v) => !v)}>
+          <Button variant="contained" onClick={() => setOpenDrawer((v) => !v)}>
             Details
           </Button>
         </Tooltip>
+        <Button variant="contained" onClick={handleShare}>
+          Share
+        </Button>
         <DiagnosticReportControls setViewOption={setViewOptions} />
       </ControlsBar>
       <div className={showFilter ? classes.filterContainer : classes.hidden}>
@@ -107,6 +121,13 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
         <DiagnosticReportContainer sweepArgs={sweepArgs} viewOptions={viewOptions} queryRef={queryRef} />
       )}
       <GeneralTaskDetailDrawer generalTaskDetails={generalTaskDetails} openDrawer={openDrawer} />
+      <ImportExportModal
+        input={false}
+        title="Share with this url"
+        openModal={showShare}
+        text={sharableUrl}
+        handleClose={() => setShowShare(false)}
+      />
     </>
   );
 };

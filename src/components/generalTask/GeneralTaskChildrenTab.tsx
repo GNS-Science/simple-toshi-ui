@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { graphql } from 'babel-plugin-relay/macro';
 import { useLazyLoadQuery } from 'react-relay/hooks';
 import { Typography, CircularProgress } from '@material-ui/core';
@@ -8,7 +8,7 @@ import buildUrl from 'build-url-ts';
 import ChildTaskTable from './ChildTaskTable';
 import { GeneralTaskChildrenTabQuery } from './__generated__/GeneralTaskChildrenTabQuery.graphql';
 import InversionSolutionDiagnosticContainer from './InversionSolutionDiagnosticContainer';
-import { FilteredArguments, ValidatedChildren, SweepArguments } from '../../interfaces/generaltask';
+import { FilteredArguments, ValidatedChildren, SweepArguments, GeneralTaskParams } from '../../interfaces/generaltask';
 import { diagnosticReportViewOptions as options } from '../../constants/diagnosticReport';
 import {
   applyChildTaskFilter,
@@ -23,16 +23,15 @@ import { GeneralTaskQueryResponse } from '../../pages/__generated__/GeneralTaskQ
 import Alert from '../common/Alert';
 
 interface GeneralTaskChildrenTabProps {
-  id: string;
   readonly sweepArgs?: SweepArguments;
   generalTaskData: GeneralTaskQueryResponse;
 }
 
 const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
-  id,
   sweepArgs,
   generalTaskData,
 }: GeneralTaskChildrenTabProps) => {
+  const { id, clipBoard } = useParams<GeneralTaskParams>();
   const [showList, setShowList] = useState(true);
   const [showFilter, setShowFilter] = useState(false);
   const [filteredArguments, setFilteredArguments] = useState<FilteredArguments>({ data: [] });
@@ -40,40 +39,40 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const [filteredChildrenIds, setFilteredChildrenIds] = useState<string[]>([]);
   const [viewOptions, setViewOptions] = useState<string[]>([options[0].finalPath]);
   const [openAlert, setOpenAlert] = useState(false);
+  const [isClipBoard, setIsClipBoard] = useState<boolean>(false);
   const data = useLazyLoadQuery<GeneralTaskChildrenTabQuery>(generalTaskChildrenTabQuery, { id });
   const childTasks = validateChildTasks(data);
-  const baseUrl = `/GeneralTask/${id}/ChildTasks`;
   const search = useLocation().search;
+  const baseUrl = `${process.env.REACT_APP_ROOT_PATH}/GeneralTask/${id}/ChildTask/ClipBoard`;
 
   useEffect(() => {
-    try {
-      setStateFromSearchParams(search, 'showList', setShowList);
-      setStateFromSearchParams(search, 'showFilter', setShowFilter);
-      setStateFromSearchParams(search, 'viewOptions', setViewOptions);
-      setStateFromSearchParams(search, 'filter', setFilteredArguments, (filter: FilteredArguments) => {
-        const currentFilteredChildren = applyChildTaskFilter(childTasks, filter);
-        setFilteredChildren(currentFilteredChildren);
-      });
-    } catch (e) {
-      history.replaceState(null, '', baseUrl);
+    if (clipBoard === 'ClipBoard') {
+      setIsClipBoard(true);
+      try {
+        setStateFromSearchParams(search, 'showList', setShowList);
+        setStateFromSearchParams(search, 'showFilter', setShowFilter);
+        setStateFromSearchParams(search, 'viewOptions', setViewOptions);
+        setStateFromSearchParams(search, 'filter', setFilteredArguments, (filter: FilteredArguments) => {
+          const currentFilteredChildren = applyChildTaskFilter(childTasks, filter);
+          setFilteredChildren(currentFilteredChildren);
+        });
+      } catch (e) {
+        history.replaceState(null, '', baseUrl);
+      }
     }
   }, []);
 
-  useEffect(() => {
-    if (filteredArguments.data.length || viewOptions.length || showFilter === true || showList === false) {
-      const url = buildUrl(baseUrl, {
-        queryParams: {
-          filter: btoa(JSON.stringify(filteredArguments)),
-          showList: btoa(JSON.stringify(showList)),
-          showFilter: btoa(JSON.stringify(showFilter)),
-          viewOptions: btoa(JSON.stringify(viewOptions)),
-        },
-      });
-      history.replaceState(null, '', url);
-    } else {
-      history.replaceState(null, '', baseUrl);
-    }
-  }, [filteredArguments, showList, showFilter, viewOptions]);
+  const getSharableUrl = (): string => {
+    const url = buildUrl(baseUrl, {
+      queryParams: {
+        filter: btoa(JSON.stringify(filteredArguments)),
+        showList: btoa(JSON.stringify(showList)),
+        showFilter: btoa(JSON.stringify(showFilter)),
+        viewOptions: btoa(JSON.stringify(viewOptions)),
+      },
+    });
+    return url ?? '';
+  };
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
     const newFilteredArguments = updateFilteredArguments(
@@ -144,6 +143,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
           onChange={handleChange}
           applyFilter={applyFilter}
           handleViewChange={handleViewChange}
+          getUrl={getSharableUrl}
         />
       </React.Suspense>
       <React.Suspense fallback={<CircularProgress />}>
