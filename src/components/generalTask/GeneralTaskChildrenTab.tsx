@@ -141,6 +141,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
       <React.Suspense fallback={<CircularProgress />}>
         <InversionSolutionDiagnosticContainer
           generalTaskDetails={getGeneralTaskDetailsFromQueryResponse(generalTaskData)}
+          filteredChildren={filteredChildren}
           sweepArgs={sweepArgs}
           ids={filteredChildrenIds}
           filterCount={`${filteredChildren.data?.length ?? 0}/${childTasks.data?.length ?? 0}`}

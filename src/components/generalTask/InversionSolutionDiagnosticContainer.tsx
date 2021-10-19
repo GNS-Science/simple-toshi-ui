@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/styles';
 
 import SweepArgumentFilter from './SweepArgumentFilter';
 import { InversionSolutionDiagnosticContainerQuery } from './__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
-import { SweepArguments } from '../../interfaces/generaltask';
+import { SweepArguments, ValidatedChildren } from '../../interfaces/generaltask';
 import DiagnosticReportContainer from '../diagnosticReportView/DiagnosticReportContainer';
 import DiagnosticReportControls from '../diagnosticReportView/DiagnosticReportControls';
 import GeneralTaskDetailDrawer from '../diagnosticReportView/GeneralTaskDetailDrawer';
@@ -28,6 +28,7 @@ const useStyles = makeStyles(() => ({
 
 interface InversionSolutionDiagnosticContainerProps {
   generalTaskDetails: GeneralTaskDetails;
+  filteredChildren: ValidatedChildren;
   readonly sweepArgs?: SweepArguments;
   ids?: string[];
   filterCount: string;
@@ -44,6 +45,7 @@ interface InversionSolutionDiagnosticContainerProps {
 
 const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnosticContainerProps> = ({
   generalTaskDetails,
+  filteredChildren,
   sweepArgs,
   ids,
   filterCount,
@@ -78,7 +80,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   useEffect(() => {
     window.addEventListener('keypress', keypressHandler);
     return () => window.removeEventListener('keypress', keypressHandler);
-  }, [showFilter]);
+  }, [filteredChildren]);
 
   const handleShare = () => {
     const url = getUrl();

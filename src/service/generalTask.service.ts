@@ -105,7 +105,10 @@ export const applyChildTaskFilter = (
   const filtered = childTasks.data?.filter((child) => {
     return filteredArguments.data?.every((sweepArgument) => {
       return child?.arguments?.some((argument) => {
-        return sweepArgument.k.includes(argument?.k as string) && sweepArgument.v.includes(argument?.v as string);
+        return (
+          (sweepArgument.k.includes(argument?.k as string) || pluralCompare(sweepArgument.k, argument?.k as string)) &&
+          sweepArgument.v.includes(argument?.v as string)
+        );
       });
     });
   });
@@ -130,4 +133,9 @@ export const getClipBoardObject = async (search: string): Promise<ClipBoardObjec
   const clipBoardDecoded = atob(clipBoard);
   const clipBoardObject = JSON.parse(clipBoardDecoded);
   return clipBoardObject;
+};
+
+const pluralCompare = (sweep: string, argName: string) => {
+  const pluralArgName = argName.replace('value', 'values');
+  return pluralArgName === sweep;
 };
