@@ -62,7 +62,7 @@ const SweepArgumentFilter: React.FC<SweepArgumentFilterProps> = ({ argument, onC
           }
         })
         .catch(() => {
-          alert('Broken URL');
+          setSelectedItems([]);
         });
     }
   }, []);

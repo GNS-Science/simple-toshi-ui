@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useHistory, Redirect } from 'react-router-dom';
 import { graphql } from 'babel-plugin-relay/macro';
 import { useLazyLoadQuery } from 'react-relay/hooks';
 import { Typography, CircularProgress } from '@material-ui/core';
@@ -23,6 +23,7 @@ import {
 import { GeneralTaskQueryResponse } from '../../pages/__generated__/GeneralTaskQuery.graphql';
 import Alert from '../common/Alert';
 import LocalStorageContext from '../../contexts/localStorage';
+import Notification from '../common/Notification';
 
 interface GeneralTaskChildrenTabProps {
   readonly sweepArgs?: SweepArguments;
@@ -43,10 +44,12 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const [filteredChildrenIds, setFilteredChildrenIds] = useState<string[]>([]);
   const [viewOptions, setViewOptions] = useState<string[]>([options[0].finalPath]);
   const [openAlert, setOpenAlert] = useState(false);
+  const [openNotification, setOpenNotification] = useState(false);
 
   const data = useLazyLoadQuery<GeneralTaskChildrenTabQuery>(generalTaskChildrenTabQuery, { id });
   const childTasks = validateChildTasks(data);
   const search = useLocation().search;
+  const history = useHistory();
   const baseUrl = `${process.env.REACT_APP_ROOT_PATH}/GeneralTask/${id}/ChildTasks`;
   const isClipBoard: boolean = determineClipBoard(search);
 
@@ -61,7 +64,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
           setFilteredChildren(applyChildTaskFilter(childTasks, res.filter));
         })
         .catch(() => {
-          alert('Broken URL');
+          setOpenNotification(true);
         });
     }
   }, []);
@@ -127,8 +130,14 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     );
   }
 
+  const handleCloseNotification = () => {
+    setOpenNotification(false);
+    history.push(`/GeneralTask/${id}/ChildTasks`);
+  };
+
   return (
     <div>
+      <Notification open={openNotification} handleClose={handleCloseNotification} message="Your url might be broken" />
       {openAlert && (
         <Alert
           open={openAlert}
