@@ -135,7 +135,7 @@ export const getClipBoardObject = async (search: string): Promise<ClipBoardObjec
   return clipBoardObject;
 };
 
-const pluralCompare = (sweep: string, argName: string) => {
+export const pluralCompare = (sweep: string, argName: string): boolean => {
   const pluralArgName = argName.replace('value', 'values');
   return pluralArgName === sweep;
 };
