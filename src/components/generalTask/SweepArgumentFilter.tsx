@@ -11,7 +11,7 @@ import {
   Select,
 } from '@material-ui/core';
 import { SweepArgument } from '../../interfaces/generaltask';
-import { getClipBoardObject } from '../../service/generalTask.service';
+import { determineClipBoard, getClipBoardObject } from '../../service/generalTask.service';
 import { pluralCompare } from '../../service/generalTask.service';
 
 const useStyles = makeStyles((theme) => ({
@@ -42,6 +42,7 @@ const SweepArgumentFilter: React.FC<SweepArgumentFilterProps> = ({ argument, onC
   const [seletedItems, setSelectedItems] = useState<string[]>([]);
   const classes = useStyles();
   const search = useLocation().search;
+  const isClipBoard: boolean = determineClipBoard(search);
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
     onChange(event);
@@ -49,19 +50,21 @@ const SweepArgumentFilter: React.FC<SweepArgumentFilterProps> = ({ argument, onC
   };
 
   useEffect(() => {
-    getClipBoardObject(search)
-      .then((res) => {
-        if (res.filter.data?.length) {
-          res.filter.data.map((kv) => {
-            if (kv.k.includes(argument?.k as string) || pluralCompare(kv.k, argument?.k as string)) {
-              setSelectedItems(kv.v);
-            }
-          });
-        }
-      })
-      .catch(() => {
-        alert('Broken URL');
-      });
+    if (isClipBoard) {
+      getClipBoardObject(search)
+        .then((res) => {
+          if (res.filter.data?.length) {
+            res.filter.data.map((kv) => {
+              if (kv.k.includes(argument?.k as string) || pluralCompare(kv.k, argument?.k as string)) {
+                setSelectedItems(kv.v);
+              }
+            });
+          }
+        })
+        .catch(() => {
+          alert('Broken URL');
+        });
+    }
   }, []);
 
   return (

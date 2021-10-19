@@ -18,6 +18,7 @@ import {
   updateFilteredArguments,
   validateChildTasks,
   getClipBoardObject,
+  determineClipBoard,
 } from '../../service/generalTask.service';
 import { GeneralTaskQueryResponse } from '../../pages/__generated__/GeneralTaskQuery.graphql';
 import Alert from '../common/Alert';
@@ -47,9 +48,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const childTasks = validateChildTasks(data);
   const search = useLocation().search;
   const baseUrl = `${process.env.REACT_APP_ROOT_PATH}/GeneralTask/${id}/ChildTasks`;
-  const clipBoardString = new URLSearchParams(search).get('clipBoard') ?? '';
-
-  const isClipBoard: boolean = clipBoardString.length > 0;
+  const isClipBoard: boolean = determineClipBoard(search);
 
   useEffect(() => {
     if (isClipBoard) {
@@ -62,7 +61,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
           setFilteredChildren(applyChildTaskFilter(childTasks, res.filter));
         })
         .catch(() => {
-          alert('BrokenURL');
+          alert('Broken URL');
         });
     }
   }, []);

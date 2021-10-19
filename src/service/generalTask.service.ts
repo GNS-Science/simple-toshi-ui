@@ -139,3 +139,8 @@ export const pluralCompare = (sweep: string, argName: string): boolean => {
   const pluralArgName = argName.replace('value', 'values');
   return pluralArgName === sweep;
 };
+
+export const determineClipBoard = (search: string): boolean => {
+  const clipBoardString = new URLSearchParams(search).get('clipBoard') ?? '';
+  return clipBoardString.length > 0;
+};
