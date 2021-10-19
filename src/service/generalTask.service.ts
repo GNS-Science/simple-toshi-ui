@@ -3,6 +3,7 @@ import { InversionSolutionDiagnosticContainerQueryResponse } from '../components
 import { ValidatedChildren, SweepArguments, ValidatedSubtask } from '../interfaces/generaltask';
 import { FilteredArguments, GeneralTaskKeyValueListPairs } from '../interfaces/generaltask';
 
+export const maxLength = parseInt(process.env.REACT_APP_REPORTS_LIMIT ?? '24');
 export const sweepsList = (
   arg_lists: GeneralTaskKeyValueListPairs,
   sweeps: readonly (string | null)[],
@@ -82,8 +83,7 @@ export const validateChildTasks = (data: GeneralTaskChildrenTabQueryResponse): V
   return validatedChildTasks;
 };
 
-export const getChildTaskIdArray = (filteredChildren: ValidatedChildren): string[] | void => {
-  const maxLength = parseInt(process.env.REACT_APP_REPORTS_LIMIT ?? '24');
+export const getChildTaskIdArray = (filteredChildren: ValidatedChildren): string[] => {
   const idArray: string[] = [];
 
   if (filteredChildren.data && filteredChildren.data.length <= maxLength) {
@@ -91,6 +91,8 @@ export const getChildTaskIdArray = (filteredChildren: ValidatedChildren): string
       idArray.push(task.id);
     });
     return idArray;
+  } else {
+    return [];
   }
 };
 
@@ -101,9 +103,17 @@ export const applyChildTaskFilter = (
   const filtered = childTasks.data?.filter((child) => {
     return filteredArguments.data?.every((sweepArgument) => {
       return child?.arguments?.some((argument) => {
-        return sweepArgument.k.includes(argument?.k as string) && sweepArgument.v.includes(argument?.v as string);
+        return (
+          (sweepArgument.k.includes(argument?.k as string) || pluralCompare(sweepArgument.k, argument?.k as string)) &&
+          sweepArgument.v.includes(argument?.v as string)
+        );
       });
     });
   });
   return { data: filtered };
+};
+
+const pluralCompare = (sweep: string, argName: string) => {
+  const pluralArgName = argName.replace('value', 'values');
+  return pluralArgName === sweep;
 };
