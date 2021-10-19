@@ -1,8 +1,7 @@
-import { Dispatch, SetStateAction } from 'react';
 import { GeneralTaskChildrenTabQueryResponse } from '../components/generalTask/__generated__/GeneralTaskChildrenTabQuery.graphql';
 import { InversionSolutionDiagnosticContainerQueryResponse } from '../components/generalTask/__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
 import { GeneralTaskDetails } from '../interfaces/diagnosticReport';
-import { ValidatedChildren, SweepArguments, ValidatedSubtask } from '../interfaces/generaltask';
+import { ValidatedChildren, SweepArguments, ValidatedSubtask, ClipBoardObject } from '../interfaces/generaltask';
 import { FilteredArguments, GeneralTaskKeyValueListPairs } from '../interfaces/generaltask';
 import { GeneralTaskQueryResponse } from '../pages/__generated__/GeneralTaskQuery.graphql';
 
@@ -126,20 +125,9 @@ export const getGeneralTaskDetailsFromQueryResponse = (data: GeneralTaskQueryRes
   };
 };
 
-export const setStateFromSearchParams = async (
-  search: string,
-  name: string,
-  set?:
-    | Dispatch<SetStateAction<FilteredArguments>>
-    | Dispatch<SetStateAction<boolean>>
-    | Dispatch<SetStateAction<string[]>>,
-  cb?: (filterArgs: FilteredArguments) => void,
-): Promise<void> => {
-  const urlSearchParamString: string = new URLSearchParams(search).get(name) ?? '';
-  const urlSearchParamStringDecoded: string = atob(urlSearchParamString);
-  if (urlSearchParamString.length) {
-    const urlSearchParam = JSON.parse(urlSearchParamStringDecoded);
-    set && set(urlSearchParam);
-    cb && cb(urlSearchParam);
-  }
+export const getClipBoardObject = async (search: string): Promise<ClipBoardObject> => {
+  const clipBoard = new URLSearchParams(search).get('clipBoard') ?? '';
+  const clipBoardDecoded = atob(clipBoard);
+  const clipBoardObject = JSON.parse(clipBoardDecoded);
+  return clipBoardObject;
 };

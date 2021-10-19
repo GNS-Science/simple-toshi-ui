@@ -10,8 +10,8 @@ import {
   MenuItem,
   Select,
 } from '@material-ui/core';
-import { FilteredArguments, SweepArgument } from '../../interfaces/generaltask';
-import { setStateFromSearchParams } from '../../service/generalTask.service';
+import { SweepArgument } from '../../interfaces/generaltask';
+import { getClipBoardObject } from '../../service/generalTask.service';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -48,15 +48,19 @@ const SweepArgumentFilter: React.FC<SweepArgumentFilterProps> = ({ argument, onC
   };
 
   useEffect(() => {
-    setStateFromSearchParams(search, 'filter', undefined, (filterArgs: FilteredArguments) => {
-      if (filterArgs.data?.length) {
-        filterArgs.data.map((kv) => {
-          if (kv.k.includes(argument?.k as string)) {
-            setSelectedItems(kv.v);
-          }
-        });
-      }
-    });
+    getClipBoardObject(search)
+      .then((res) => {
+        if (res.filter.data?.length) {
+          res.filter.data.map((kv) => {
+            if (kv.k.includes(argument?.k as string)) {
+              setSelectedItems(kv.v);
+            }
+          });
+        }
+      })
+      .catch(() => {
+        alert('Broken URL');
+      });
   }, []);
 
   return (

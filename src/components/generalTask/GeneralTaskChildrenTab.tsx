@@ -14,10 +14,10 @@ import {
   applyChildTaskFilter,
   getChildTaskIdArray,
   getGeneralTaskDetailsFromQueryResponse,
-  setStateFromSearchParams,
   maxLength,
   updateFilteredArguments,
   validateChildTasks,
+  getClipBoardObject,
 } from '../../service/generalTask.service';
 import { GeneralTaskQueryResponse } from '../../pages/__generated__/GeneralTaskQuery.graphql';
 import Alert from '../common/Alert';
@@ -32,7 +32,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   sweepArgs,
   generalTaskData,
 }: GeneralTaskChildrenTabProps) => {
-  const { id, clipBoard } = useParams<GeneralTaskParams>();
+  const { id } = useParams<GeneralTaskParams>();
   const { reportViewSelections, setReportViewSelections } = useContext(LocalStorageContext);
 
   const [showList, setShowList] = useState(true);
@@ -46,32 +46,38 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const data = useLazyLoadQuery<GeneralTaskChildrenTabQuery>(generalTaskChildrenTabQuery, { id });
   const childTasks = validateChildTasks(data);
   const search = useLocation().search;
-  const baseUrl = `${process.env.REACT_APP_ROOT_PATH}/GeneralTask/${id}/ChildTasks/ClipBoard`;
-  const isClipBoard = clipBoard === 'ClipBoard';
+  const baseUrl = `${process.env.REACT_APP_ROOT_PATH}/GeneralTask/${id}/ChildTasks`;
+  const clipBoardString = new URLSearchParams(search).get('clipBoard') ?? '';
+
+  const isClipBoard: boolean = clipBoardString.length > 0;
 
   useEffect(() => {
     if (isClipBoard) {
-      try {
-        setStateFromSearchParams(search, 'showList', setShowList);
-        setStateFromSearchParams(search, 'showFilter', setShowFilter);
-        setStateFromSearchParams(search, 'viewOptions', setViewOptions);
-        setStateFromSearchParams(search, 'filter', setFilteredArguments, (filter: FilteredArguments) => {
-          const currentFilteredChildren = applyChildTaskFilter(childTasks, filter);
-          setFilteredChildren(currentFilteredChildren);
+      getClipBoardObject(search)
+        .then((res) => {
+          setShowList(res.showList);
+          setShowFilter(res.showFilter);
+          setViewOptions(res.viewOptions);
+          setFilteredArguments(res.filter);
+          setFilteredChildren(applyChildTaskFilter(childTasks, res.filter));
+        })
+        .catch(() => {
+          alert('BrokenURL');
         });
-      } catch (e) {
-        history.replaceState(null, '', baseUrl);
-      }
     }
   }, []);
 
   const getSharableUrl = (): string => {
+    const shareViewOptions: string[] = isClipBoard ? viewOptions : reportViewSelections;
+    const sharableState = {
+      filter: filteredArguments,
+      showList: showList,
+      showFilter: showFilter,
+      viewOptions: shareViewOptions,
+    };
     const url = buildUrl(baseUrl, {
       queryParams: {
-        filter: btoa(JSON.stringify(filteredArguments)),
-        showList: btoa(JSON.stringify(showList)),
-        showFilter: btoa(JSON.stringify(showFilter)),
-        viewOptions: btoa(JSON.stringify(reportViewSelections)),
+        clipBoard: btoa(JSON.stringify(sharableState)),
       },
     });
     return url ?? '';

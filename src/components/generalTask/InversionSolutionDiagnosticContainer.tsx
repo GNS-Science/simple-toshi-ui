@@ -90,7 +90,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
     <>
       <ControlsBar>
         <Tooltip title="use (f/F) to open/close filters">
-          <Button color="default" onClick={() => setShowFilter(!showFilter)}>
+          <Button variant="contained" onClick={() => setShowFilter(!showFilter)}>
             <span>Filter&nbsp;({filterCount})</span>
           </Button>
         </Tooltip>

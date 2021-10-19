@@ -84,3 +84,10 @@ export type ValidatedSubtask = {
     } | null>;
   };
 };
+
+export interface ClipBoardObject {
+  filter: FilteredArguments;
+  showList: boolean;
+  showFilter: boolean;
+  viewOptions: string[];
+}
