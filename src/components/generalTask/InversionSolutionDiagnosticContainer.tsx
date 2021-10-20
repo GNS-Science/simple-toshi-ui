@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useQueryLoader } from 'react-relay';
 import { graphql } from 'babel-plugin-relay/macro';
-import { Button, Tooltip } from '@material-ui/core';
+import { Button, Fab, Tooltip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
+import ShareIcon from '@material-ui/icons/Share';
 
 import SweepArgumentFilter from './SweepArgumentFilter';
 import { InversionSolutionDiagnosticContainerQuery } from './__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
@@ -10,7 +11,6 @@ import { SweepArguments, ValidatedChildren } from '../../interfaces/generaltask'
 import DiagnosticReportContainer from '../diagnosticReportView/DiagnosticReportContainer';
 import DiagnosticReportControls from '../diagnosticReportView/DiagnosticReportControls';
 import GeneralTaskDetailDrawer from '../diagnosticReportView/GeneralTaskDetailDrawer';
-import ControlsBar from '../common/ControlsBar';
 import { GeneralTaskDetails } from '../../interfaces/diagnosticReport';
 import CommonModal from '../common/Modal/CommonModal';
 
@@ -23,6 +23,18 @@ const useStyles = makeStyles(() => ({
   },
   hidden: {
     display: 'none',
+  },
+  controlsContainer: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  control: {
+    margin: 10,
+  },
+  rightAlignControl: {
+    margin: 10,
+    position: 'absolute',
+    right: '2.5%',
   },
 }));
 
@@ -90,27 +102,27 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
 
   return (
     <>
-      <ControlsBar>
+      <div className={classes.controlsContainer}>
         <Tooltip title="use (f/F) to open/close filters">
-          <Button variant="contained" onClick={() => setShowFilter(!showFilter)}>
+          <Button className={classes.control} variant="contained" onClick={() => setShowFilter(!showFilter)}>
             <span>Filter&nbsp;({filterCount})</span>
           </Button>
         </Tooltip>
         <Tooltip title="use (s/S) to toggle between views">
-          <Button variant="contained" onClick={handleViewChange}>
+          <Button className={classes.control} variant="contained" onClick={handleViewChange}>
             {showList ? 'Show Report' : 'Show List'}
           </Button>
         </Tooltip>
         <Tooltip title="use (d/D) to open/close details">
-          <Button variant="contained" onClick={() => setOpenDrawer((v) => !v)}>
+          <Button className={classes.control} variant="contained" onClick={() => setOpenDrawer((v) => !v)}>
             Details
           </Button>
         </Tooltip>
-        <Button variant="contained" onClick={handleShare}>
-          Share
-        </Button>
         <DiagnosticReportControls viewOptions={viewOptions} setViewOption={setViewOptions} />
-      </ControlsBar>
+        <Fab className={classes.rightAlignControl} color="primary" onClick={handleShare}>
+          <ShareIcon />
+        </Fab>
+      </div>
       <div className={showFilter ? classes.filterContainer : classes.hidden}>
         {sweepArgs?.map((argument) => (
           <SweepArgumentFilter key={`${argument?.k}-filter`} argument={argument} onChange={onChange} />
