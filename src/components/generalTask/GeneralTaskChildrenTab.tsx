@@ -143,7 +143,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
         onClose={handleCloseNotification}
       >
         <MuiAlert variant="filled" severity="warning">
-          Sorry, this is a broken URL.
+          Sorry, this URL is invalid. The clipBoard state cannot be applied.
         </MuiAlert>
       </Snackbar>
       {openAlert && (
