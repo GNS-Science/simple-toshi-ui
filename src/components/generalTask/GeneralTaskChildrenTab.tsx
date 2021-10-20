@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useLocation, useParams, useHistory, Redirect } from 'react-router-dom';
+import { useLocation, useParams, useHistory } from 'react-router-dom';
 import { graphql } from 'babel-plugin-relay/macro';
 import { useLazyLoadQuery } from 'react-relay/hooks';
-import { Typography, CircularProgress } from '@material-ui/core';
+import { Typography, CircularProgress, Snackbar } from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
 import buildUrl from 'build-url-ts';
 
 import ChildTaskTable from './ChildTaskTable';
@@ -21,9 +22,8 @@ import {
   determineClipBoard,
 } from '../../service/generalTask.service';
 import { GeneralTaskQueryResponse } from '../../pages/__generated__/GeneralTaskQuery.graphql';
-import Alert from '../common/Alert';
+import DialogAlert from '../common/DialogAlert';
 import LocalStorageContext from '../../contexts/localStorage';
-import Notification from '../common/Notification';
 
 interface GeneralTaskChildrenTabProps {
   readonly sweepArgs?: SweepArguments;
@@ -137,9 +137,17 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
 
   return (
     <div>
-      <Notification open={openNotification} handleClose={handleCloseNotification} message="Your url might be broken" />
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={openNotification}
+        onClose={handleCloseNotification}
+      >
+        <MuiAlert variant="filled" severity="warning">
+          Sorry, this is a broken URL.
+        </MuiAlert>
+      </Snackbar>
       {openAlert && (
-        <Alert
+        <DialogAlert
           open={openAlert}
           title="Cannot Query Reports"
           text={`Reports cannot be queried when the list of filtered child tasks is over ${maxLength}.`}
