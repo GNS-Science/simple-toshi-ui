@@ -1,5 +1,12 @@
-import { isRegExp } from 'util/types';
-import { FilteredArgument, FilteredArguments, GeneralTaskKeyValueListPairs } from '../interfaces/generaltask';
+import { GeneralTaskChildrenTabQueryResponse } from '../components/generalTask/__generated__/GeneralTaskChildrenTabQuery.graphql';
+import { InversionSolutionDiagnosticContainerQueryResponse } from '../components/generalTask/__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
+import {
+  ValidatedChildren,
+  FilteredArguments,
+  GeneralTaskKeyValueListPairs,
+  SweepArguments,
+  ValidatedSubtask,
+} from '../interfaces/generaltask';
 import * as generalTaskService from './generalTask.service';
 
 describe('sweepList function', () => {
@@ -81,15 +88,285 @@ describe('updateFilteredArguments function', () => {
 });
 
 describe('For validateSubtask function', () => {
-  it.todo('should return validatedSubtasks where none required variables are null');
-  it.todo('Should return empty array if there are no valid subtasks');
+  it('should return validatedSubtasks where none required variables are null', () => {
+    const data: InversionSolutionDiagnosticContainerQueryResponse = {
+      nodes: {
+        result: {
+          edges: [
+            {
+              node: {
+                __typename: 'AutomationTask',
+                created: 'mockCreated',
+                task_type: 'HAZARD',
+                id: '1234',
+                inversion_solution: {
+                  id: '2345',
+                  file_name: 'mock file name',
+                  meta: [
+                    {
+                      k: 'mockK',
+                      v: 'mockV',
+                    },
+                    {
+                      k: 'mockK1',
+                      v: 'mockV1',
+                    },
+                  ],
+                },
+              },
+            },
+            {
+              node: {
+                __typename: 'AutomationTask',
+                created: 'mockCreated',
+                task_type: 'HAZARD',
+                id: '2222',
+                inversion_solution: {
+                  id: '3333',
+                  file_name: 'mock file name',
+                  meta: [
+                    {
+                      k: 'mockK',
+                      v: 'mockV',
+                    },
+                    {
+                      k: 'mockK1',
+                      v: 'mockV1',
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
+      },
+    };
+    const sweepArgs: SweepArguments = [
+      {
+        k: 'mockK',
+        v: ['mockV'],
+      },
+      {
+        k: 'mockK1',
+        v: ['mockV1'],
+      },
+    ];
+    const expected: ValidatedSubtask[] = [
+      {
+        __typename: 'AutomationTask',
+        id: '1234',
+        inversion_solution: {
+          id: '2345',
+          meta: [
+            {
+              k: 'mockK',
+              v: 'mockV',
+            },
+            {
+              k: 'mockK1',
+              v: 'mockV1',
+            },
+          ],
+        },
+      },
+      {
+        __typename: 'AutomationTask',
+        id: '2222',
+        inversion_solution: {
+          id: '3333',
+          meta: [
+            {
+              k: 'mockK',
+              v: 'mockV',
+            },
+            {
+              k: 'mockK1',
+              v: 'mockV1',
+            },
+          ],
+        },
+      },
+    ];
+    const result = generalTaskService.validateSubtask(data, sweepArgs);
+    expect(result).toEqual(expected);
+  });
 });
 
 describe('For validateChildTasks function', () => {
-  it.todo('Should return all childTasks that are not undefined, and with a valid typename (not %other)');
-  it.todo('Should return empty array if there are no valid childTasks');
+  it('Should return all childTasks that are not undefined, and with a valid typename (not %other)', () => {
+    const data: GeneralTaskChildrenTabQueryResponse = {
+      node: {
+        id: '1111',
+        children: {
+          edges: [
+            {
+              node: {
+                child: {
+                  __typename: 'AutomationTask',
+                  id: '1234',
+                  created: '1234',
+                  duration: 1,
+                  state: 'DONE',
+                  result: 'SUCCESS',
+                  arguments: [
+                    {
+                      k: 'mockK',
+                      v: 'mockV',
+                    },
+                    {
+                      k: 'mockK1',
+                      v: 'mockV1',
+                    },
+                  ],
+                },
+              },
+            },
+            {
+              node: {
+                child: {
+                  __typename: 'AutomationTask',
+                  id: '1111',
+                  created: '1234',
+                  duration: 2,
+                  state: 'DONE',
+                  result: 'SUCCESS',
+                  arguments: [
+                    {
+                      k: 'mockK',
+                      v: 'mockV',
+                    },
+                    {
+                      k: 'mockK1',
+                      v: 'mockV1',
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
+      },
+    };
+    const expected: ValidatedChildren = {
+      data: [
+        {
+          __typename: 'AutomationTask',
+          id: '1234',
+          created: '1234',
+          duration: 1,
+          state: 'DONE',
+          result: 'SUCCESS',
+          arguments: [
+            {
+              k: 'mockK',
+              v: 'mockV',
+            },
+            {
+              k: 'mockK1',
+              v: 'mockV1',
+            },
+          ],
+        },
+        {
+          __typename: 'AutomationTask',
+          id: '1111',
+          created: '1234',
+          duration: 2,
+          state: 'DONE',
+          result: 'SUCCESS',
+          arguments: [
+            {
+              k: 'mockK',
+              v: 'mockV',
+            },
+            {
+              k: 'mockK1',
+              v: 'mockV1',
+            },
+          ],
+        },
+      ],
+    };
+    const result = generalTaskService.validateChildTasks(data);
+    expect(result).toEqual(expected);
+  });
 });
 
 describe('For getChildTaskIdArray function', () => {
-  it.todo('Should return an array of childTasks ids');
+  it('Should return an array of childTasks ids', () => {
+    const childTasks: ValidatedChildren = {
+      data: [
+        {
+          __typename: 'AutomationTask',
+          id: '1111',
+          created: '1234',
+          duration: 1234,
+          state: 'DONE',
+          result: 'SUCCESS',
+          arguments: [
+            {
+              k: 'mockK',
+              v: 'mockV',
+            },
+            {
+              k: 'mockK1',
+              v: 'mockV',
+            },
+          ],
+        },
+      ],
+    };
+    const result = generalTaskService.getChildTaskIdArray(childTasks);
+    expect(result).toEqual(['1111']);
+  });
+});
+
+test('For applyChildTaskFilterFunction', () => {
+  const childTasks: ValidatedChildren = {
+    data: [
+      {
+        __typename: 'AutomationTask',
+        id: '1234',
+        created: 'mock name',
+        duration: 123,
+        state: 'DONE',
+        result: 'SUCCESS',
+        arguments: [
+          {
+            k: 'mdf_d_value_mock',
+            v: 'mockV',
+          },
+        ],
+      },
+    ],
+  };
+
+  const filteredArguments: FilteredArguments = {
+    data: [
+      {
+        k: 'mdf_d_values_mock',
+        v: ['mockV', 'mockV1'],
+      },
+    ],
+  };
+  const expected = {
+    data: [
+      {
+        __typename: 'AutomationTask',
+        id: '1234',
+        created: 'mock name',
+        duration: 123,
+        state: 'DONE',
+        result: 'SUCCESS',
+        arguments: [
+          {
+            k: 'mdf_d_value_mock',
+            v: 'mockV',
+          },
+        ],
+      },
+    ],
+  };
+  const result = generalTaskService.applyChildTaskFilter(childTasks, filteredArguments);
+  expect(result).toEqual(expected);
 });

@@ -46,12 +46,12 @@ const setup = (environment: RelayMockEnvironment) => {
   );
 };
 
-jest.mock('../utils', () => ({
+jest.mock('../../utils', () => ({
   formatDate: jest.fn(() => 'mock date'),
   renderArrayAsString: jest.fn(() => 'mock data string'),
 }));
 
-jest.mock('../components/generalTask/GeneralTaskChildrenTab', () => {
+jest.mock('../../components/generalTask/GeneralTaskChildrenTab', () => {
   return function MockGeneralTaskChildrenTab() {
     return <div>children tab component</div>;
   };
