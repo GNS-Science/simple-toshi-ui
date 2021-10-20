@@ -11,18 +11,17 @@ import ControlsBar from '../components/common/ControlsBar';
 import LocalStorageContext from '../contexts/localStorage';
 import { GeneralTaskDetails } from '../interfaces/diagnosticReport';
 import { MySolutionsQuery } from './__generated__/MySolutionsQuery.graphql';
-import { diagnosticReportViewOptions as options } from '../constants/diagnosticReport';
 import {
   getGeneralTaskDetails,
   getMySolutionIdsArray,
   getReportItems,
   validateListItems,
 } from '../service/mySolution.service';
-import ImportExportModal from '../components/common/ImportExportModal';
+import CommonModal from '../components/common/Modal/CommonModal';
 
 const MySolutions: React.FC = () => {
+  const { reportViewSelections, setReportViewSelections } = useContext(LocalStorageContext);
   const [showList, setShowList] = useState(true);
-  const [viewOptions, setViewOptions] = useState<string[]>([options[0].finalPath]);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openSaveModal, setOpenSaveModal] = useState(false);
   const [openLoadModal, setOpenLoadModal] = useState(false);
@@ -86,16 +85,18 @@ const MySolutions: React.FC = () => {
             </Button>
           </Tooltip>
         )}
-        {!showList && <DiagnosticReportControls setViewOption={setViewOptions} />}
+        {!showList && (
+          <DiagnosticReportControls viewOptions={reportViewSelections} setViewOption={setReportViewSelections} />
+        )}
       </ControlsBar>
-      <ImportExportModal
+      <CommonModal
         input={false}
         openModal={openSaveModal}
         title="EXPORT JSON"
         text={JSON.stringify(ISFavourites)}
         handleClose={() => setOpenSaveModal(false)}
       />
-      <ImportExportModal
+      <CommonModal
         input={true}
         openModal={openLoadModal}
         title="IMPORT JSON"
@@ -108,7 +109,7 @@ const MySolutions: React.FC = () => {
         <DiagnosticReportCard
           changeCurrentImage={handleChangeCurrentImage}
           automationTasks={reportItems}
-          viewOptions={viewOptions}
+          viewOptions={reportViewSelections}
         />
       )}
       {!showList && <GeneralTaskDetailDrawer generalTaskDetails={currentGeneralTask} openDrawer={openDrawer} />}

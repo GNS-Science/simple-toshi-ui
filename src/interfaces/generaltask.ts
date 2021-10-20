@@ -1,5 +1,11 @@
 import { EventResult, EventState } from '../components/generalTask/__generated__/GeneralTaskChildrenTabQuery.graphql';
 
+export interface GeneralTaskParams {
+  id: string;
+  tabName: string;
+  clipBoard: string;
+}
+
 export type GeneralTaskKeyValueListPairs = readonly ({
   readonly k: string | null;
   readonly v: readonly (string | null)[] | null;
@@ -78,3 +84,10 @@ export type ValidatedSubtask = {
     } | null>;
   };
 };
+
+export interface ClipBoardObject {
+  filter: FilteredArguments;
+  showList: boolean;
+  showFilter: boolean;
+  viewOptions: string[];
+}

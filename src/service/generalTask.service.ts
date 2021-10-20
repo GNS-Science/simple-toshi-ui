@@ -1,7 +1,9 @@
 import { GeneralTaskChildrenTabQueryResponse } from '../components/generalTask/__generated__/GeneralTaskChildrenTabQuery.graphql';
 import { InversionSolutionDiagnosticContainerQueryResponse } from '../components/generalTask/__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
-import { ValidatedChildren, SweepArguments, ValidatedSubtask } from '../interfaces/generaltask';
+import { GeneralTaskDetails } from '../interfaces/diagnosticReport';
+import { ValidatedChildren, SweepArguments, ValidatedSubtask, ClipBoardObject } from '../interfaces/generaltask';
 import { FilteredArguments, GeneralTaskKeyValueListPairs } from '../interfaces/generaltask';
+import { GeneralTaskQueryResponse } from '../pages/__generated__/GeneralTaskQuery.graphql';
 
 export const maxLength = parseInt(process.env.REACT_APP_REPORTS_LIMIT ?? '24');
 export const sweepsList = (
@@ -113,7 +115,32 @@ export const applyChildTaskFilter = (
   return { data: filtered };
 };
 
-const pluralCompare = (sweep: string, argName: string) => {
+export const getGeneralTaskDetailsFromQueryResponse = (data: GeneralTaskQueryResponse): GeneralTaskDetails => {
+  return {
+    title: data?.node?.title ?? '',
+    id: data?.node?.id ?? '',
+    created: (data?.node?.created as string) ?? '',
+    model_type: data?.node?.model_type ?? '',
+    description: data?.node?.description ?? '',
+    notes: data?.node?.notes ?? '',
+    swept_arguments: (data?.node?.swept_arguments as string[]) ?? [],
+    argument_lists: data?.node?.argument_lists ?? [],
+  };
+};
+
+export const getClipBoardObject = async (search: string): Promise<ClipBoardObject> => {
+  const clipBoard = new URLSearchParams(search).get('clipBoard') ?? '';
+  const clipBoardDecoded = atob(clipBoard);
+  const clipBoardObject = JSON.parse(clipBoardDecoded);
+  return clipBoardObject;
+};
+
+export const pluralCompare = (sweep: string, argName: string): boolean => {
   const pluralArgName = argName.replace('value', 'values');
   return pluralArgName === sweep;
+};
+
+export const determineClipBoard = (search: string): boolean => {
+  const clipBoardString = new URLSearchParams(search).get('clipBoard') ?? '';
+  return clipBoardString.length > 0;
 };

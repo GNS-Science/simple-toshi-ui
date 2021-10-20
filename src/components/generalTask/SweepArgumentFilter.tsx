@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
   Checkbox,
   FormControl,
@@ -8,8 +10,9 @@ import {
   MenuItem,
   Select,
 } from '@material-ui/core';
-import React, { useState } from 'react';
 import { SweepArgument } from '../../interfaces/generaltask';
+import { determineClipBoard, getClipBoardObject } from '../../service/generalTask.service';
+import { pluralCompare } from '../../service/generalTask.service';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -38,11 +41,31 @@ interface SweepArgumentFilterProps {
 const SweepArgumentFilter: React.FC<SweepArgumentFilterProps> = ({ argument, onChange }: SweepArgumentFilterProps) => {
   const [seletedItems, setSelectedItems] = useState<string[]>([]);
   const classes = useStyles();
+  const search = useLocation().search;
+  const isClipBoard: boolean = determineClipBoard(search);
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
     onChange(event);
     setSelectedItems(event.target.value as string[]);
   };
+
+  useEffect(() => {
+    if (isClipBoard) {
+      getClipBoardObject(search)
+        .then((res) => {
+          if (res.filter.data?.length) {
+            res.filter.data.map((kv) => {
+              if (kv.k.includes(argument?.k as string) || pluralCompare(kv.k, argument?.k as string)) {
+                setSelectedItems(kv.v);
+              }
+            });
+          }
+        })
+        .catch(() => {
+          setSelectedItems([]);
+        });
+    }
+  }, []);
 
   return (
     <div>

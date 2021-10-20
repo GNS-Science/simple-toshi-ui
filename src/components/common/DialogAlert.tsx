@@ -1,12 +1,12 @@
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@material-ui/core';
 import React from 'react';
-interface AlertProps {
+interface DialogAlertProps {
   open: boolean;
   title: string;
   text: string;
   handleClose: () => void;
 }
-const Alert: React.FC<AlertProps> = ({ open, title, text, handleClose }: AlertProps) => {
+const DialogAlert: React.FC<DialogAlertProps> = ({ open, title, text, handleClose }: DialogAlertProps) => {
   return (
     <>
       <Dialog
@@ -29,4 +29,4 @@ const Alert: React.FC<AlertProps> = ({ open, title, text, handleClose }: AlertPr
   );
 };
 
-export default Alert;
+export default DialogAlert;

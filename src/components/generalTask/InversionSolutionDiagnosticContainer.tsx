@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useQueryLoader } from 'react-relay';
 import { graphql } from 'babel-plugin-relay/macro';
-import { Button, Tooltip } from '@material-ui/core';
+import { Button, Fab, Tooltip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
+import ShareIcon from '@material-ui/icons/Share';
 
 import SweepArgumentFilter from './SweepArgumentFilter';
 import { InversionSolutionDiagnosticContainerQuery } from './__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
 import { SweepArguments, ValidatedChildren } from '../../interfaces/generaltask';
 import DiagnosticReportContainer from '../diagnosticReportView/DiagnosticReportContainer';
 import DiagnosticReportControls from '../diagnosticReportView/DiagnosticReportControls';
-import { diagnosticReportViewOptions as options } from '../../constants/diagnosticReport';
 import GeneralTaskDetailDrawer from '../diagnosticReportView/GeneralTaskDetailDrawer';
-import ControlsBar from '../common/ControlsBar';
-import { GeneralTaskQueryResponse } from '../../pages/__generated__/GeneralTaskQuery.graphql';
 import { GeneralTaskDetails } from '../../interfaces/diagnosticReport';
+import CommonModal from '../common/Modal/CommonModal';
 
 const useStyles = makeStyles(() => ({
   filterContainer: {
@@ -25,57 +24,68 @@ const useStyles = makeStyles(() => ({
   hidden: {
     display: 'none',
   },
+  controlsContainer: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  control: {
+    margin: 10,
+  },
+  rightAlignControl: {
+    margin: 10,
+    position: 'absolute',
+    right: '2.5%',
+  },
 }));
 
 interface InversionSolutionDiagnosticContainerProps {
+  generalTaskDetails: GeneralTaskDetails;
   filteredChildren: ValidatedChildren;
   readonly sweepArgs?: SweepArguments;
-  showList: boolean;
-  onChange: (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => void;
   ids?: string[];
   filterCount: string;
+  showList: boolean;
+  showFilter: boolean;
+  setShowFilter: (value: boolean) => void;
+  viewOptions: string[];
+  setViewOptions: (newViewOptions: string[]) => void;
+  onChange: (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => void;
   applyFilter: () => void;
-  data: GeneralTaskQueryResponse;
   handleViewChange: () => void;
+  getUrl: () => string;
 }
 
 const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnosticContainerProps> = ({
+  generalTaskDetails,
   filteredChildren,
   sweepArgs,
-  showList,
-  onChange,
   ids,
   filterCount,
+  showList,
+  showFilter,
+  setShowFilter,
+  viewOptions,
+  setViewOptions,
+  onChange,
   applyFilter,
-  data,
   handleViewChange,
+  getUrl,
 }: InversionSolutionDiagnosticContainerProps) => {
   const classes = useStyles();
-  const [showFilters, setShowFilters] = useState(false);
-  const [viewOptions, setViewOptions] = useState<string[]>([options[0].finalPath]);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [queryRef, loadQuery] = useQueryLoader<InversionSolutionDiagnosticContainerQuery>(
     inversionSolutionDiagnosticContainerQuery,
   );
+  const [showShare, setShowShare] = useState(false);
+  const [sharableUrl, setSharableUrl] = useState<string>('');
 
   useEffect(() => {
     loadQuery({ id: ids });
   }, [ids]);
 
-  const generalTaskDetails: GeneralTaskDetails = {
-    title: data?.node?.title ?? '',
-    id: data?.node?.id ?? '',
-    created: (data?.node?.created as string) ?? '',
-    model_type: data?.node?.model_type ?? '',
-    description: data?.node?.description ?? '',
-    notes: data?.node?.notes ?? '',
-    swept_arguments: (data?.node?.swept_arguments as string[]) ?? [],
-    argument_lists: data?.node?.argument_lists ?? [],
-  };
-
   const keypressHandler = (event: KeyboardEvent) => {
     if (event.key === 's' || event.key === 'S') handleViewChange();
-    if (event.key === 'f' || event.key === 'F') setShowFilters((v) => !v);
+    if (event.key === 'f' || event.key === 'F') setShowFilter(!showFilter);
     if (event.key === 'd' || event.key === 'D') setOpenDrawer((v) => !v);
   };
 
@@ -84,27 +94,36 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
     return () => window.removeEventListener('keypress', keypressHandler);
   }, [filteredChildren]);
 
+  const handleShare = () => {
+    const url = getUrl();
+    setSharableUrl(url);
+    setShowShare(true);
+  };
+
   return (
     <>
-      <ControlsBar>
+      <div className={classes.controlsContainer}>
         <Tooltip title="use (f/F) to open/close filters">
-          <Button variant="contained" color="default" onClick={() => setShowFilters((v) => !v)}>
+          <Button className={classes.control} variant="contained" onClick={() => setShowFilter(!showFilter)}>
             <span>Filter&nbsp;({filterCount})</span>
           </Button>
         </Tooltip>
         <Tooltip title="use (s/S) to toggle between views">
-          <Button color="default" variant="contained" onClick={handleViewChange}>
+          <Button className={classes.control} variant="contained" onClick={handleViewChange}>
             {showList ? 'Show Report' : 'Show List'}
           </Button>
         </Tooltip>
         <Tooltip title="use (d/D) to open/close details">
-          <Button color="default" variant="contained" onClick={() => setOpenDrawer((v) => !v)}>
+          <Button className={classes.control} variant="contained" onClick={() => setOpenDrawer((v) => !v)}>
             Details
           </Button>
         </Tooltip>
-        <DiagnosticReportControls setViewOption={setViewOptions} />
-      </ControlsBar>
-      <div className={showFilters ? classes.filterContainer : classes.hidden}>
+        <DiagnosticReportControls viewOptions={viewOptions} setViewOption={setViewOptions} />
+        <Fab className={classes.rightAlignControl} color="primary" onClick={handleShare}>
+          <ShareIcon />
+        </Fab>
+      </div>
+      <div className={showFilter ? classes.filterContainer : classes.hidden}>
         {sweepArgs?.map((argument) => (
           <SweepArgumentFilter key={`${argument?.k}-filter`} argument={argument} onChange={onChange} />
         ))}
@@ -116,6 +135,13 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
         <DiagnosticReportContainer sweepArgs={sweepArgs} viewOptions={viewOptions} queryRef={queryRef} />
       )}
       <GeneralTaskDetailDrawer generalTaskDetails={generalTaskDetails} openDrawer={openDrawer} />
+      <CommonModal
+        input={false}
+        title="Share with this url"
+        openModal={showShare}
+        text={sharableUrl}
+        handleClose={() => setShowShare(false)}
+      />
     </>
   );
 };
