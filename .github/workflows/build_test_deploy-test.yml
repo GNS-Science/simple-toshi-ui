@@ -14,7 +14,8 @@ jobs:
     env:
       REACT_APP_GRAPH_ENDPOINT: ${{ secrets.REACT_APP_GRAPH_ENDPOINT_TEST }}
       REACT_APP_GRAPH_API_KEY: ${{ secrets.REACT_APP_GRAPH_API_KEY_TEST }}
-
+      REACT_APP_ROOT_PATH: ${{ secrets.REACT_APP_ROOT_PATH_TEST }}
+      
     strategy:
       matrix:
         node-version: [15.x,]
