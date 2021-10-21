@@ -92,7 +92,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   useEffect(() => {
     window.addEventListener('keypress', keypressHandler);
     return () => window.removeEventListener('keypress', keypressHandler);
-  }, [filteredChildren]);
+  }, [filteredChildren, showFilter]);
 
   const handleShare = () => {
     const url = getUrl();
