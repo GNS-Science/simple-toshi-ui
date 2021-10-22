@@ -4,14 +4,16 @@ import { useLazyLoadQuery, useQueryLoader } from 'react-relay';
 import { graphql } from 'babel-plugin-relay/macro';
 import { Box, CircularProgress, makeStyles, Tab, Tabs, Theme, Typography } from '@material-ui/core';
 
-import FavouriteControls from '../common/FavouriteControls';
-import InversionSolutionDetailTab, { inversionSolutionDetailTabQuery } from './InversionSolutionDetailTab';
-import InversionSolutionMfdTab from './InversionSolutionMfdTab';
-import InversionSolutionHazardTab from './InversionSolutionHazardTab';
-import RuptureSetDiags from '../RuptureSetDiags';
+import FavouriteControls from '../components/common/FavouriteControls';
+import InversionSolutionDetailTab, {
+  inversionSolutionDetailTabQuery,
+} from '../components/inversionSolution/InversionSolutionDetailTab';
+import InversionSolutionMfdTab from '../components/inversionSolution/InversionSolutionMfdTab';
+import InversionSolutionHazardTab from '../components/inversionSolution/InversionSolutionHazardTab';
+import RuptureSetDiags from '../components/RuptureSetDiags';
 import { InversionSolutionQuery } from './__generated__/InversionSolutionQuery.graphql';
-import { InversionSolutionDetailTabQuery } from './__generated__/InversionSolutionDetailTabQuery.graphql';
-import DiagnosticReportTab from './DiagnosticReportTab';
+import { InversionSolutionDetailTabQuery } from '../components/inversionSolution/__generated__/InversionSolutionDetailTabQuery.graphql';
+import DiagnosticReportTab from '../components/inversionSolution/DiagnosticReportTab';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -41,6 +43,10 @@ const InversionSolution: React.FC = () => {
   const [queryRef, loadQuery] = useQueryLoader<InversionSolutionDetailTabQuery>(inversionSolutionDetailTabQuery);
 
   const history = useHistory();
+
+  const tables = data.node?.tables;
+  const hazardTable = tables?.find((table) => table?.table_type === 'HAZARD_SITES');
+  const hazardTableId = hazardTable?.table_id as string;
 
   React.useEffect(() => {
     if (tab === undefined || tab === 'InversionSolutionDetailTab') {
@@ -86,7 +92,7 @@ const InversionSolution: React.FC = () => {
         return (
           <Box className={classes.tabPanel}>
             <React.Suspense fallback={<CircularProgress />}>
-              {queryRef && <InversionSolutionHazardTab queryRef={queryRef} />}
+              {queryRef && <InversionSolutionHazardTab id={id} />}
             </React.Suspense>
           </Box>
         );
@@ -98,9 +104,7 @@ const InversionSolution: React.FC = () => {
         );
       case 'DiagnosticReportTab':
         return (
-          <Box className={classes.tabPanel}>
-            <DiagnosticReportTab id={id} />
-          </Box>
+          <Box className={classes.tabPanel}>{hazardTableId && <DiagnosticReportTab id={hazardTableId ?? ''} />}</Box>
         );
     }
   };
@@ -128,6 +132,7 @@ const InversionSolution: React.FC = () => {
           {ruptureSetId && (
             <Tab label="Rupture Diags" id="ruptureSetTab" value="RuptureSetDiagnosticsTab" className={classes.tab} />
           )}
+          {hazardTableId && <Tab label="Hazard" value="InversionSolutionHazardTab" className={classes.tab} />}
         </Tabs>
         {renderTab()}
       </Box>

@@ -25,7 +25,7 @@ import FileDetail from './components/FileDetail';
 import Search from './components/Search';
 import GeneralTask from './pages/GeneralTask';
 import MenuBar from './components/MenuBar';
-import InversionSolution from './components/inversionSolution/InversionSolution';
+import InversionSolution from './pages/InversionSolution';
 
 /* preview views (with no test coverage...) */
 import Preview from './components/Preview';
