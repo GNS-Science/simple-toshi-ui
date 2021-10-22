@@ -44,10 +44,6 @@ const InversionSolution: React.FC = () => {
 
   const history = useHistory();
 
-  const tables = data.node?.tables;
-  const hazardTable = tables?.find((table) => table?.table_type === 'HAZARD_SITES');
-  const hazardTableId = hazardTable?.table_id as string;
-
   React.useEffect(() => {
     if (tab === undefined || tab === 'InversionSolutionDetailTab') {
       loadQuery({ id });
@@ -63,6 +59,10 @@ const InversionSolution: React.FC = () => {
   }
 
   const ruptureSetId = data?.node?.meta?.filter((kv) => kv?.k == 'rupture_set_file_id')[0]?.v;
+
+  const tables = data.node?.tables;
+  const hazardTable = tables?.find((table) => table?.table_type === 'HAZARD_SITES');
+  const hazardTableId = hazardTable?.table_id as string;
 
   const mfdTableId = (): string => {
     if (data?.node?.mfd_table_id) return data?.node?.mfd_table_id;
@@ -92,7 +92,7 @@ const InversionSolution: React.FC = () => {
         return (
           <Box className={classes.tabPanel}>
             <React.Suspense fallback={<CircularProgress />}>
-              {queryRef && <InversionSolutionHazardTab id={id} />}
+              {hazardTableId && <InversionSolutionHazardTab id={hazardTableId} />}
             </React.Suspense>
           </Box>
         );
@@ -104,7 +104,9 @@ const InversionSolution: React.FC = () => {
         );
       case 'DiagnosticReportTab':
         return (
-          <Box className={classes.tabPanel}>{hazardTableId && <DiagnosticReportTab id={hazardTableId ?? ''} />}</Box>
+          <Box className={classes.tabPanel}>
+            <DiagnosticReportTab id={id} />
+          </Box>
         );
     }
   };
