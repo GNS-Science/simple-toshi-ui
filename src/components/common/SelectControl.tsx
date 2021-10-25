@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { Checkbox, FormControl, Input, InputLabel, makeStyles, MenuItem, Select, Theme } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -32,17 +32,19 @@ const MenuProps = {
 
 interface SelectControlProps {
   options: string[];
+  setOptions: Dispatch<SetStateAction<string>>;
   label: string;
 }
 
-const SelectControl: React.FC<SelectControlProps> = ({ options, label }: SelectControlProps) => {
-  const [selectedItems, setSelectedItems] = useState<string[]>([options[0]]);
+const SelectControl: React.FC<SelectControlProps> = ({ options, setOptions, label }: SelectControlProps) => {
+  const [selectedItems, setSelectedItems] = useState<string>(options[0]);
 
   const classes = useStyles();
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
-    const value = (event.target.value as string[]) || [];
+    const value = (event.target.value as string) || '';
     setSelectedItems(value);
+    setOptions(value);
   };
 
   return (
@@ -54,17 +56,8 @@ const SelectControl: React.FC<SelectControlProps> = ({ options, label }: SelectC
           label={'hello'}
           name={`Report Location`}
           value={selectedItems}
-          multiple
           onChange={handleChange}
           input={<Input />}
-          renderValue={(selected) => {
-            const selectedArray = selected as string[];
-            if (selectedArray.length === 1) {
-              const index = options.findIndex((opt) => opt === selectedArray[0]);
-              return options[index];
-            }
-            if (selectedArray.length >= 1) return 'Multiple selected';
-          }}
           MenuProps={MenuProps}
         >
           {options.map((opt) => (
