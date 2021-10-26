@@ -34,6 +34,8 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
   const data = useLazyLoadQuery<InversionSolutionHazardTabQuery>(inversionSolutionHazardTabQuery, { id });
   const rows = data?.node?.rows;
 
+  const minXBound = 2e-3;
+
   useEffect(() => {
     const xy: XY[] = [];
     let pgaValue = '';
@@ -49,7 +51,8 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
           item?.includes(pgaValue) &&
           item?.includes(forecastTime) &&
           item?.includes(gmpe) &&
-          item?.includes(backgroundSeismisity)
+          item?.includes(backgroundSeismisity) &&
+          parseFloat(item[7] ?? '0') >= minXBound
         );
       }
     });
@@ -89,10 +92,10 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
             <XYChart
               height={700}
               width={1200}
-              xScale={{ type: 'log', domain: [1e-4, 10] }}
-              yScale={{ type: 'log', domain: [1e-13, 1] }}
+              xScale={{ type: 'log', domain: [1e-3, 10] }}
+              yScale={{ type: 'log', domain: [1e-13, 2.0] }}
             >
-              <AnimatedAxis orientation="bottom" label="Gound Motion (g)" />
+              <AnimatedAxis orientation="bottom" label="Ground Motion (g)" />
               <AnimatedAxis orientation="left" label="Annual Frequency of Exceedence" />
               <AnimatedLineSeries
                 dataKey="hazard plot"
