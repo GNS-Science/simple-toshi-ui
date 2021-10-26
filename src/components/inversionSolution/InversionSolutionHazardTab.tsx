@@ -12,7 +12,7 @@ import {
 import ControlsBar from '../common/ControlsBar';
 import SelectControl from '../common/SelectControl';
 import { InversionSolutionHazardTabQuery } from './__generated__/InversionSolutionHazardTabQuery.graphql';
-import { AnimatedAxis, AnimatedLineSeries, Tooltip, XYChart } from '@visx/xychart';
+import { AnimatedAxis, AnimatedLineSeries, Grid, Tooltip, XYChart } from '@visx/xychart';
 
 interface InversionSolutionHazardTabProps {
   id: string;
@@ -36,11 +36,17 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
 
   useEffect(() => {
     const xy: XY[] = [];
+    let pgaValue = '';
+    if (PGA === 'PGA') {
+      pgaValue = '0.0';
+    } else {
+      pgaValue = PGA;
+    }
     const filtered = rows?.filter((item) => {
       if (item) {
         return (
           item?.includes(location) &&
-          item?.includes(PGA) &&
+          item?.includes(pgaValue) &&
           item?.includes(forecastTime) &&
           item?.includes(gmpe) &&
           item?.includes(backgroundSeismisity)
@@ -79,33 +85,41 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
             </ControlsBar>
             {/*{data?.node?.hazard_table?.name}*/}
           </Typography>
-          <XYChart height={700} width={1500} xScale={{ type: 'band' }} yScale={{ type: 'linear' }}>
-            <AnimatedAxis orientation="bottom" />
-            <AnimatedAxis orientation="left" />
-            <AnimatedLineSeries
-              dataKey="hazard plot"
-              data={filteredData}
-              xAccessor={(d) => d.x}
-              yAccessor={(d) => d.y}
-            />
-            <Tooltip
-              snapTooltipToDatumX
-              snapTooltipToDatumY
-              showDatumGlyph
-              glyphStyle={{ fill: '#000' }}
-              renderTooltip={({ tooltipData }) => {
-                const datum = tooltipData?.nearestDatum?.datum as XY;
-                if (datum) {
-                  return (
-                    <>
-                      <Typography>x: {datum.x}</Typography>
-                      <Typography>y: {datum.y}</Typography>
-                    </>
-                  );
-                }
-              }}
-            />
-          </XYChart>
+          <Box style={{ width: '100%', padding: '1rem' }}>
+            <XYChart
+              height={700}
+              width={1200}
+              xScale={{ type: 'log', domain: [1e-4, 10] }}
+              yScale={{ type: 'log', domain: [1e-13, 1] }}
+            >
+              <AnimatedAxis orientation="bottom" label="Gound Motion (g)" />
+              <AnimatedAxis orientation="left" label="Annual Frequency of Exceedence" />
+              <AnimatedLineSeries
+                dataKey="hazard plot"
+                data={filteredData}
+                xAccessor={(d) => d.x}
+                yAccessor={(d) => d.y}
+              />
+              <Grid rows={true} columns={true} />
+              <Tooltip
+                snapTooltipToDatumX
+                snapTooltipToDatumY
+                showDatumGlyph
+                glyphStyle={{ fill: '#000' }}
+                renderTooltip={({ tooltipData }) => {
+                  const datum = tooltipData?.nearestDatum?.datum as XY;
+                  if (datum) {
+                    return (
+                      <>
+                        <Typography>x: {datum.x.toExponential()}</Typography>
+                        <Typography>y: {datum.y.toExponential()}</Typography>
+                      </>
+                    );
+                  }
+                }}
+              />
+            </XYChart>
+          </Box>
         </Card>
       </Box>
     </>
