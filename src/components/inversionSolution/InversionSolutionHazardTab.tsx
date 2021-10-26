@@ -13,13 +13,11 @@ import ControlsBar from '../common/ControlsBar';
 import SelectControl from '../common/SelectControl';
 import { InversionSolutionHazardTabQuery } from './__generated__/InversionSolutionHazardTabQuery.graphql';
 import { AnimatedAxis, AnimatedLineSeries, Grid, Tooltip, XYChart } from '@visx/xychart';
+import { XY } from '../../interfaces/common';
+import { filterData } from '../../service/inversionSolution.service';
 
 interface InversionSolutionHazardTabProps {
   id: string;
-}
-interface XY {
-  x: number;
-  y: number;
 }
 
 const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
@@ -32,40 +30,10 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
   const [backgroundSeismisity, setBackgroundSeismisity] = useState<string>(bgSeismisityOptions[0]);
   const [filteredData, setFilteredData] = useState<XY[]>([]);
   const data = useLazyLoadQuery<InversionSolutionHazardTabQuery>(inversionSolutionHazardTabQuery, { id });
-  const rows = data?.node?.rows;
-
-  const minXBound = 2e-3;
 
   useEffect(() => {
-    const xy: XY[] = [];
-    let pgaValue = '';
-    if (PGA === 'PGA') {
-      pgaValue = '0.0';
-    } else {
-      pgaValue = PGA;
-    }
-    const filtered = rows?.filter((item) => {
-      if (item) {
-        return (
-          item?.includes(location) &&
-          item?.includes(pgaValue) &&
-          item?.includes(forecastTime) &&
-          item?.includes(gmpe) &&
-          item?.includes(backgroundSeismisity) &&
-          parseFloat(item[7] ?? '0') >= minXBound
-        );
-      }
-    });
-    filtered?.map((item) => {
-      if (item) {
-        const slicedArray = item.slice(7, 9);
-        const object: XY = {
-          x: parseFloat(slicedArray[0] as string),
-          y: parseFloat(slicedArray[1] as string),
-        };
-        xy.push(object);
-      }
-    });
+    const pgaValue = PGA === 'PGA' ? '0.0' : PGA;
+    const xy = filterData(data, location, pgaValue, forecastTime, gmpe, backgroundSeismisity);
     setFilteredData(xy);
   }, [location, PGA, forecastTime, gmpe, backgroundSeismisity]);
 
@@ -86,7 +54,6 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
               />
               <SelectControl label="Background Motion Model" options={gmpeOptions} setOptions={setGmpe} />
             </ControlsBar>
-            {/*{data?.node?.hazard_table?.name}*/}
           </Typography>
           <Box style={{ width: '100%', padding: '1rem' }}>
             <XYChart
