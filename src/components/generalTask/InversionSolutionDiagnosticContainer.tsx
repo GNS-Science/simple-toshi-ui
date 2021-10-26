@@ -7,12 +7,13 @@ import ShareIcon from '@material-ui/icons/Share';
 
 import SweepArgumentFilter from './SweepArgumentFilter';
 import { InversionSolutionDiagnosticContainerQuery } from './__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
-import { SweepArguments, ValidatedChildren } from '../../interfaces/generaltask';
+import { SweepArguments } from '../../interfaces/generaltask';
 import DiagnosticReportContainer from '../diagnosticReportView/DiagnosticReportContainer';
 import DiagnosticReportControls from '../diagnosticReportView/DiagnosticReportControls';
 import GeneralTaskDetailDrawer from '../diagnosticReportView/GeneralTaskDetailDrawer';
 import { GeneralTaskDetails } from '../../interfaces/diagnosticReport';
 import CommonModal from '../common/Modal/CommonModal';
+import { useShortcut } from '../../hooks/useShortcut';
 
 const useStyles = makeStyles(() => ({
   filterContainer: {
@@ -40,13 +41,12 @@ const useStyles = makeStyles(() => ({
 
 interface InversionSolutionDiagnosticContainerProps {
   generalTaskDetails: GeneralTaskDetails;
-  filteredChildren: ValidatedChildren;
   readonly sweepArgs?: SweepArguments;
   ids?: string[];
   filterCount: string;
   showList: boolean;
   showFilter: boolean;
-  setShowFilter: (value: boolean) => void;
+  setShowFilter: React.Dispatch<React.SetStateAction<boolean>>;
   viewOptions: string[];
   setViewOptions: (newViewOptions: string[]) => void;
   onChange: (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => void;
@@ -57,7 +57,6 @@ interface InversionSolutionDiagnosticContainerProps {
 
 const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnosticContainerProps> = ({
   generalTaskDetails,
-  filteredChildren,
   sweepArgs,
   ids,
   filterCount,
@@ -83,16 +82,9 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
     loadQuery({ id: ids });
   }, [ids]);
 
-  const keypressHandler = (event: KeyboardEvent) => {
-    if (event.key === 's' || event.key === 'S') handleViewChange();
-    if (event.key === 'f' || event.key === 'F') setShowFilter(!showFilter);
-    if (event.key === 'd' || event.key === 'D') setOpenDrawer((v) => !v);
-  };
-
-  useEffect(() => {
-    window.addEventListener('keypress', keypressHandler);
-    return () => window.removeEventListener('keypress', keypressHandler);
-  }, [filteredChildren]);
+  useShortcut(handleViewChange, ['s']);
+  useShortcut(() => setShowFilter((v) => !v), ['f']);
+  useShortcut(() => setOpenDrawer((v) => !v), ['d']);
 
   const handleShare = () => {
     const url = getUrl();
@@ -104,7 +96,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
     <>
       <div className={classes.controlsContainer}>
         <Tooltip title="use (f/F) to open/close filters">
-          <Button className={classes.control} variant="contained" onClick={() => setShowFilter(!showFilter)}>
+          <Button className={classes.control} variant="contained" onClick={() => setShowFilter((v) => !v)}>
             <span>Filter&nbsp;({filterCount})</span>
           </Button>
         </Tooltip>
