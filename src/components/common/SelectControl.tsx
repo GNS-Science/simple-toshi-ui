@@ -4,7 +4,7 @@ import { Checkbox, FormControl, Input, InputLabel, makeStyles, MenuItem, Select,
 const useStyles = makeStyles((theme: Theme) => ({
   formControl: {
     margin: theme.spacing(2),
-    minWidth: 260,
+    minWidth: 200,
     maxWidth: 300,
   },
   hidden: {
