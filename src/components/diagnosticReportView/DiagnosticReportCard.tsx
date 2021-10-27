@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import { Card, CardContent, IconButton, makeStyles, Tooltip, Typography } from '@material-ui/core';
+import { Card, CardContent, IconButton, makeStyles, Tooltip, Typography, Tabs, Tab } from '@material-ui/core';
 import buildUrl from 'build-url-ts';
 
 import { ReportItem } from '../../interfaces/diagnosticReport';
 import FavouriteControls from '../common/FavouriteControls';
+import DiagnosticReportTabPanel from './DiagnosticReportTabPanel';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -52,6 +53,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
 }: DiagnosticReportCardProps) => {
   const classes = useStyles();
   const [currentImage, setCurrentImage] = useState<number>(0);
+  const [currentTab, setCurrentTab] = useState<number>(0);
   const reportBaseUrl = process.env.REACT_APP_REPORTS_URL;
 
   const reportUrl = (path: string, id: string) => {
@@ -59,6 +61,13 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       path: `/opensha/DATA/${id}/solution_report/resources/${path}`,
     });
   };
+
+  const namedFaultsUrl = (id: string, typePath: string, faultPath: string, typeSuffix: string) => {
+    return buildUrl(reportBaseUrl, {
+      path: `/DATA69/${id}/named_fault_mfds/${typePath}/${faultPath}${typeSuffix}`,
+    });
+  };
+
   const nextImage = () => {
     if (currentImage < automationTasks.length - 1) {
       setCurrentImage(currentImage + 1);
@@ -71,6 +80,11 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       setCurrentImage(currentImage - 1);
       changeCurrentImage && changeCurrentImage(currentImage - 1);
     }
+  };
+
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+    setCurrentTab(newValue);
   };
 
   const hotkeyHandler = (event: KeyboardEvent) => {
@@ -126,16 +140,25 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
               producedBy={automationTasks[currentImage].id}
             />
           </div>
-          <div className={classes.imageContainer}>
-            {viewOptions.map((path) => (
-              <img
-                key={path}
-                className={classes.image}
-                src={reportUrl(path, automationTasks[currentImage].inversion_solution.id)}
-                alt={path}
-              />
-            ))}
-          </div>
+          <Tabs value={currentTab} onChange={handleTabChange}>
+            <Tab label="Reports" id="simple-tab-0" />
+            <Tab label="Named Faults" id="simple-tab-1" />
+          </Tabs>
+          <DiagnosticReportTabPanel value={currentTab} index={0}>
+            <div className={classes.imageContainer}>
+              {viewOptions.map((path) => (
+                <img
+                  key={path}
+                  className={classes.image}
+                  src={reportUrl(path, automationTasks[currentImage].inversion_solution.id)}
+                  alt={path}
+                />
+              ))}
+            </div>
+          </DiagnosticReportTabPanel>
+          <DiagnosticReportTabPanel value={currentTab} index={1}>
+            <p>named faults tab</p>
+          </DiagnosticReportTabPanel>
         </CardContent>
       </Card>
     </>
