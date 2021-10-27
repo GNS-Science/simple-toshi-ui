@@ -1,4 +1,11 @@
-export const mfdPlotOptions = {
+interface PlotOptions {
+  displayName: string;
+  typePath: string;
+  path: string;
+}
+type MfdPlotOptions = Record<string, PlotOptions>;
+
+export const mfdPlotOptions: MfdPlotOptions = {
   nucleationCumulative: {
     displayName: 'Nucleation Cumulative',
     typePath: 'nucleation_cumulative',
@@ -21,7 +28,12 @@ export const mfdPlotOptions = {
   },
 };
 
-export const namedFaultsOptions = [
+interface NamedFaultsOption {
+  displayName: string;
+  path: string;
+}
+
+export const namedFaultsOptions: NamedFaultsOption[] = [
   {
     displayName: 'Alpine George to Jacksons',
     path: 'Alpine_George_to_Jacksons_',
@@ -107,7 +119,7 @@ export const namedFaultsOptions = [
     path: 'Porters_Pass_',
   },
   {
-    displayNamae: 'Poutu',
+    displayName: 'Poutu',
     path: 'Poutu_',
   },
   {

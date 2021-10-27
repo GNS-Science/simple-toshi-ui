@@ -14,6 +14,8 @@ import GeneralTaskDetailDrawer from '../diagnosticReportView/GeneralTaskDetailDr
 import { GeneralTaskDetails } from '../../interfaces/diagnosticReport';
 import CommonModal from '../common/Modal/CommonModal';
 import { useShortcut } from '../../hooks/useShortcut';
+import MultiSelect from '../common/MultiSelect';
+import { mfdPlotOptions, namedFaultsOptions } from '../../constants/nameFaultsMfds';
 
 const useStyles = makeStyles(() => ({
   filterContainer: {
@@ -92,6 +94,14 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
     setShowShare(true);
   };
 
+  const plotOptions: string[] = [];
+
+  namedFaultsOptions.map((option) => {
+    plotOptions.push(option.displayName);
+  });
+
+  const [namedFaultsSelection, setNamedFaultsSelection] = useState<string[]>([plotOptions[0]]);
+
   return (
     <>
       <div className={classes.controlsContainer}>
@@ -111,6 +121,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
           </Button>
         </Tooltip>
         <DiagnosticReportControls viewOptions={viewOptions} setViewOption={setViewOptions} />
+        <MultiSelect name="Named Faults" options={plotOptions} setOptions={setNamedFaultsSelection} />
         <Fab className={classes.rightAlignControl} color="primary" onClick={handleShare}>
           <ShareIcon />
         </Fab>
