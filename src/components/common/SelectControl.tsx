@@ -53,8 +53,8 @@ const SelectControl: React.FC<SelectControlProps> = ({ options, setOptions, labe
         <InputLabel>{label}</InputLabel>
         <Select
           labelId={`report-hash-label`}
-          label={'hello'}
-          name={`Report Location`}
+          label={label}
+          name={label}
           value={selectedItems}
           onChange={handleChange}
           input={<Input />}
