@@ -27,15 +27,15 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
   const [PGA, setPGA] = useState<string>(pgaPeriodOptions[0]);
   const [forecastTime, setForecastTime] = useState<string>(forecastTimeSpanOptions[0]);
   const [gmpe, setGmpe] = useState<string>(gmpeOptions[0]);
-  const [backgroundSeismisity, setBackgroundSeismisity] = useState<string>(bgSeismisityOptions[0]);
+  const [backgroundSeismicity, setBackgroundSeismicity] = useState<string>(bgSeismisityOptions[0]);
   const [filteredData, setFilteredData] = useState<XY[]>([]);
   const data = useLazyLoadQuery<InversionSolutionHazardTabQuery>(inversionSolutionHazardTabQuery, { id });
 
   useEffect(() => {
     const pgaValue = PGA === 'PGA' ? '0.0' : PGA;
-    const xy = filterData(data, location, pgaValue, forecastTime, gmpe, backgroundSeismisity);
+    const xy = filterData(data, location, pgaValue, forecastTime, gmpe, backgroundSeismicity);
     setFilteredData(xy);
-  }, [location, PGA, forecastTime, gmpe, backgroundSeismisity]);
+  }, [location, PGA, forecastTime, gmpe, backgroundSeismicity]);
 
   return (
     <>
@@ -44,13 +44,13 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
           <Typography variant="h5" gutterBottom>
             <strong>Hazard:</strong>
             <ControlsBar>
-              <SelectControl label="location" options={locationOptions} setOptions={setLocation} />
+              <SelectControl label="Location" options={locationOptions} setOptions={setLocation} />
               <SelectControl label="PGA/SA period" options={pgaPeriodOptions} setOptions={setPGA} />
-              <SelectControl label="Forcast Timespan" options={forecastTimeSpanOptions} setOptions={setForecastTime} />
+              <SelectControl label="Forecast Timespan" options={forecastTimeSpanOptions} setOptions={setForecastTime} />
               <SelectControl
-                label="Background Seismisity"
+                label="Background Seismicity"
                 options={bgSeismisityOptions}
-                setOptions={setBackgroundSeismisity}
+                setOptions={setBackgroundSeismicity}
               />
               <SelectControl label="Background Motion Model" options={gmpeOptions} setOptions={setGmpe} />
             </ControlsBar>
@@ -63,7 +63,7 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
               yScale={{ type: 'log', domain: [1e-13, 2.0] }}
             >
               <AnimatedAxis orientation="bottom" label="Ground Motion (g)" />
-              <AnimatedAxis orientation="left" label="Annual Frequency of Exceedence" />
+              <AnimatedAxis orientation="left" label="Annual Frequency of Exceedance" />
               <AnimatedLineSeries
                 dataKey="hazard plot"
                 data={filteredData}
