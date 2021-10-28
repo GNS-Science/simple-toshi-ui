@@ -4,23 +4,24 @@
 
 import { ConcreteRequest } from "relay-runtime";
 export type RowItemType = "boolean" | "double" | "integer" | "string" | "%future added value";
+export type TableType = "GENERAL" | "HAZARD_GRIDDED" | "HAZARD_SITES" | "MFD_CURVES" | "%future added value";
 export type InversionSolutionHazardTabQueryVariables = {
     id: string;
 };
 export type InversionSolutionHazardTabQueryResponse = {
     readonly node: {
         readonly id?: string;
-        readonly meta?: ReadonlyArray<{
+        readonly name?: string | null;
+        readonly created?: unknown | null;
+        readonly table_type?: TableType | null;
+        readonly object_id?: string | null;
+        readonly column_headers?: ReadonlyArray<string | null> | null;
+        readonly column_types?: ReadonlyArray<RowItemType | null> | null;
+        readonly rows?: ReadonlyArray<ReadonlyArray<string | null> | null> | null;
+        readonly dimensions?: ReadonlyArray<{
             readonly k: string | null;
-            readonly v: string | null;
+            readonly v: ReadonlyArray<string | null> | null;
         } | null> | null;
-        readonly hazard_table?: {
-            readonly id: string;
-            readonly name: string | null;
-            readonly column_types: ReadonlyArray<RowItemType | null> | null;
-            readonly column_headers: ReadonlyArray<string | null> | null;
-            readonly rows: ReadonlyArray<ReadonlyArray<string | null> | null> | null;
-        } | null;
     } | null;
 };
 export type InversionSolutionHazardTabQuery = {
@@ -36,18 +37,18 @@ query InversionSolutionHazardTabQuery(
 ) {
   node(id: $id) {
     __typename
-    ... on InversionSolution {
+    ... on Table {
       id
-      meta {
+      name
+      created
+      table_type
+      object_id
+      column_headers
+      column_types
+      rows
+      dimensions {
         k
         v
-      }
-      hazard_table {
-        id
-        name
-        column_types
-        column_headers
-        rows
       }
     }
     id
@@ -80,9 +81,58 @@ v2 = {
 v3 = {
   "alias": null,
   "args": null,
-  "concreteType": "KeyValuePair",
+  "kind": "ScalarField",
+  "name": "name",
+  "storageKey": null
+},
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "created",
+  "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "table_type",
+  "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "object_id",
+  "storageKey": null
+},
+v7 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "column_headers",
+  "storageKey": null
+},
+v8 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "column_types",
+  "storageKey": null
+},
+v9 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "rows",
+  "storageKey": null
+},
+v10 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "KeyValueListPair",
   "kind": "LinkedField",
-  "name": "meta",
+  "name": "dimensions",
   "plural": true,
   "selections": [
     {
@@ -97,46 +147,6 @@ v3 = {
       "args": null,
       "kind": "ScalarField",
       "name": "v",
-      "storageKey": null
-    }
-  ],
-  "storageKey": null
-},
-v4 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "Table",
-  "kind": "LinkedField",
-  "name": "hazard_table",
-  "plural": false,
-  "selections": [
-    (v2/*: any*/),
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "name",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "column_types",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "column_headers",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "rows",
       "storageKey": null
     }
   ],
@@ -162,9 +172,15 @@ return {
             "selections": [
               (v2/*: any*/),
               (v3/*: any*/),
-              (v4/*: any*/)
+              (v4/*: any*/),
+              (v5/*: any*/),
+              (v6/*: any*/),
+              (v7/*: any*/),
+              (v8/*: any*/),
+              (v9/*: any*/),
+              (v10/*: any*/)
             ],
-            "type": "InversionSolution",
+            "type": "Table",
             "abstractKey": null
           }
         ],
@@ -200,9 +216,15 @@ return {
             "kind": "InlineFragment",
             "selections": [
               (v3/*: any*/),
-              (v4/*: any*/)
+              (v4/*: any*/),
+              (v5/*: any*/),
+              (v6/*: any*/),
+              (v7/*: any*/),
+              (v8/*: any*/),
+              (v9/*: any*/),
+              (v10/*: any*/)
             ],
-            "type": "InversionSolution",
+            "type": "Table",
             "abstractKey": null
           }
         ],
@@ -211,14 +233,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "ddae050558cff2a7819b3b200ed782b4",
+    "cacheID": "5f7a6a2a70c2f770ec68302e7f849a1a",
     "id": null,
     "metadata": {},
     "name": "InversionSolutionHazardTabQuery",
     "operationKind": "query",
-    "text": "query InversionSolutionHazardTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on InversionSolution {\n      id\n      meta {\n        k\n        v\n      }\n      hazard_table {\n        id\n        name\n        column_types\n        column_headers\n        rows\n      }\n    }\n    id\n  }\n}\n"
+    "text": "query InversionSolutionHazardTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on Table {\n      id\n      name\n      created\n      table_type\n      object_id\n      column_headers\n      column_types\n      rows\n      dimensions {\n        k\n        v\n      }\n    }\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'b79828305e9bc323e76c4b116ff5cca8';
+(node as any).hash = 'a013446f1925f50be6f297db810d7cde';
 export default node;

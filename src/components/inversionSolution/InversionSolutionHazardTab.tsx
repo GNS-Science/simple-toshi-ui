@@ -1,53 +1,41 @@
 import { Typography, Box, Card } from '@material-ui/core';
 import { graphql } from 'babel-plugin-relay/macro';
-import React from 'react';
-// eslint-disable-next-line
-import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
-import { LatLngExpression } from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import { Map, TileLayer } from 'react-leaflet';
-// import { formatBytes } from './FileDetail';
+import React, { useEffect, useState } from 'react';
+import { useLazyLoadQuery } from 'react-relay';
+import {
+  bgSeismisityOptions,
+  forecastTimeSpanOptions,
+  gmpeOptions,
+  locationOptions,
+  pgaPeriodOptions,
+} from '../../constants/inversionSolutionHazardTab';
+import ControlsBar from '../common/ControlsBar';
+import SelectControl from '../common/SelectControl';
 import { InversionSolutionHazardTabQuery } from './__generated__/InversionSolutionHazardTabQuery.graphql';
-// import KeyValueTable from './KeyValueTable';
-
-export const inversionSolutionHazardTabQuery = graphql`
-  query InversionSolutionHazardTabQuery($id: ID!) {
-    node(id: $id) {
-      ... on InversionSolution {
-        id
-        meta {
-          k
-          v
-        }
-        hazard_table {
-          id
-          name
-          column_types
-          column_headers
-          rows
-        }
-      }
-    }
-  }
-`;
+import { AnimatedAxis, AnimatedLineSeries, Grid, Tooltip, XYChart } from '@visx/xychart';
+import { XY } from '../../interfaces/common';
+import { filterData } from '../../service/inversionSolution.service';
 
 interface InversionSolutionHazardTabProps {
-  queryRef: PreloadedQuery<InversionSolutionHazardTabQuery, Record<string, unknown>>;
+  id: string;
 }
 
 const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
-  // eslint-disable-next-line
-  queryRef,
+  id,
 }: InversionSolutionHazardTabProps) => {
-  // const data = usePreloadedQuery<InversionSolutionHazardTabQuery>(inversionSolutionHazardTabQuery, queryRef);
+  const [location, setLocation] = useState<string>(locationOptions[0]);
+  const [PGA, setPGA] = useState<string>(pgaPeriodOptions[0]);
+  const [forecastTime, setForecastTime] = useState<string>(forecastTimeSpanOptions[0]);
+  const [gmpe, setGmpe] = useState<string>(gmpeOptions[0]);
+  const [backgroundSeismicity, setBackgroundSeismicity] = useState<string>(bgSeismisityOptions[0]);
+  const [filteredData, setFilteredData] = useState<XY[]>([]);
+  const data = useLazyLoadQuery<InversionSolutionHazardTabQuery>(inversionSolutionHazardTabQuery, { id });
 
-  // Default coordinates set to Masterton station
-  const nz_centre: LatLngExpression = [-40.946, 174.167];
-  const zoom = 5;
-
-  const provider_url = 'https://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}';
-  const provider_attibution =
-    'Tiles &copy; Esri &mdash; Sources: GEBCO, NOAA, CHS, OSU, UNH, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri';
+  useEffect(() => {
+    const pgaValue = PGA === 'PGA' ? '0.0' : PGA;
+    const xy = filterData(data, location, pgaValue, forecastTime, gmpe, backgroundSeismicity);
+    setFilteredData(xy);
+  }, [location, PGA, forecastTime, gmpe, backgroundSeismicity]);
 
   return (
     <>
@@ -55,16 +43,53 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
         <Card>
           <Typography variant="h5" gutterBottom>
             <strong>Hazard:</strong>
-            {/*{data?.node?.hazard_table?.name}*/}
+            <ControlsBar>
+              <SelectControl label="Location" options={locationOptions} setOptions={setLocation} />
+              <SelectControl label="PGA/SA period" options={pgaPeriodOptions} setOptions={setPGA} />
+              <SelectControl label="Forecast Timespan" options={forecastTimeSpanOptions} setOptions={setForecastTime} />
+              <SelectControl
+                label="Background Seismicity"
+                options={bgSeismisityOptions}
+                setOptions={setBackgroundSeismicity}
+              />
+              <SelectControl label="Background Motion Model" options={gmpeOptions} setOptions={setGmpe} />
+            </ControlsBar>
           </Typography>
-          <Map center={nz_centre} zoom={zoom} scrollWheelZoom={false} style={{ height: '700px' }}>
-            <TileLayer attribution={provider_attibution} url={provider_url} />
-            {/*<Marker position={position}>
-              <Popup>
-                A pretty CSS3 popup. <br /> Easily customizable.
-              </Popup>
-            </Marker>*/}
-          </Map>
+          <Box style={{ width: '100%', padding: '1rem' }}>
+            <XYChart
+              height={700}
+              width={1200}
+              xScale={{ type: 'log', domain: [1e-3, 10] }}
+              yScale={{ type: 'log', domain: [1e-13, 2.0] }}
+            >
+              <AnimatedAxis orientation="bottom" label="Ground Motion (g)" />
+              <AnimatedAxis orientation="left" label="Annual Frequency of Exceedance" />
+              <AnimatedLineSeries
+                dataKey="hazard plot"
+                data={filteredData}
+                xAccessor={(d) => d.x}
+                yAccessor={(d) => d.y}
+              />
+              <Grid rows={true} columns={true} />
+              <Tooltip
+                snapTooltipToDatumX
+                snapTooltipToDatumY
+                showDatumGlyph
+                glyphStyle={{ fill: '#000' }}
+                renderTooltip={({ tooltipData }) => {
+                  const datum = tooltipData?.nearestDatum?.datum as XY;
+                  if (datum) {
+                    return (
+                      <>
+                        <Typography>x: {datum.x.toExponential()}</Typography>
+                        <Typography>y: {datum.y.toExponential()}</Typography>
+                      </>
+                    );
+                  }
+                }}
+              />
+            </XYChart>
+          </Box>
         </Card>
       </Box>
     </>
@@ -72,3 +97,24 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
 };
 
 export default InversionSolutionHazardTab;
+
+export const inversionSolutionHazardTabQuery = graphql`
+  query InversionSolutionHazardTabQuery($id: ID!) {
+    node(id: $id) {
+      ... on Table {
+        id
+        name
+        created
+        table_type
+        object_id
+        column_headers
+        column_types
+        rows
+        dimensions {
+          k
+          v
+        }
+      }
+    }
+  }
+`;
