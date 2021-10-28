@@ -15,7 +15,7 @@ import { GeneralTaskDetails } from '../../interfaces/diagnosticReport';
 import CommonModal from '../common/Modal/CommonModal';
 import { useShortcut } from '../../hooks/useShortcut';
 import MultiSelect from '../common/MultiSelect';
-import { mfdPlotOptions, namedFaultsOptions } from '../../constants/nameFaultsMfds';
+import { mfdPlotOptions, NamedFaultsOption, namedFaultsOptions } from '../../constants/nameFaultsMfds';
 
 const useStyles = makeStyles(() => ({
   filterContainer: {
@@ -79,6 +79,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   );
   const [showShare, setShowShare] = useState(false);
   const [sharableUrl, setSharableUrl] = useState<string>('');
+  const [namedFaultsSelection, setNamedFaultsSelection] = useState<NamedFaultsOption[]>([namedFaultsOptions[0]]);
 
   useEffect(() => {
     loadQuery({ id: ids });
@@ -94,13 +95,19 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
     setShowShare(true);
   };
 
-  const plotOptions: string[] = [];
+  const faultOptions: string[] = [];
 
   namedFaultsOptions.map((option) => {
-    plotOptions.push(option.displayName);
+    faultOptions.push(option.displayName);
   });
 
-  const [namedFaultsSelection, setNamedFaultsSelection] = useState<string[]>([plotOptions[0]]);
+  const handleNamedFaultsSelect = (selection: string[]) => {
+    const filtered = namedFaultsOptions.filter((option) => {
+      const result = selection.includes(option.displayName);
+      return result;
+    });
+    setNamedFaultsSelection(filtered);
+  };
 
   return (
     <>
@@ -121,7 +128,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
           </Button>
         </Tooltip>
         <DiagnosticReportControls viewOptions={viewOptions} setViewOption={setViewOptions} />
-        <MultiSelect name="Named Faults" options={plotOptions} setOptions={setNamedFaultsSelection} />
+        <MultiSelect name="Named Faults" options={faultOptions} setOptions={handleNamedFaultsSelect} />
         <Fab className={classes.rightAlignControl} color="primary" onClick={handleShare}>
           <ShareIcon />
         </Fab>
@@ -135,7 +142,12 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
         </Button>
       </div>
       {queryRef && !showList && (
-        <DiagnosticReportContainer sweepArgs={sweepArgs} viewOptions={viewOptions} queryRef={queryRef} />
+        <DiagnosticReportContainer
+          namedFaults={namedFaultsSelection}
+          sweepArgs={sweepArgs}
+          viewOptions={viewOptions}
+          queryRef={queryRef}
+        />
       )}
       <GeneralTaskDetailDrawer generalTaskDetails={generalTaskDetails} openDrawer={openDrawer} />
       <CommonModal

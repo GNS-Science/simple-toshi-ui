@@ -28,7 +28,7 @@ export const mfdPlotOptions: MfdPlotOptions = {
   },
 };
 
-interface NamedFaultsOption {
+export interface NamedFaultsOption {
   displayName: string;
   path: string;
 }

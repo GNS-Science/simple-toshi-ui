@@ -6,15 +6,18 @@ import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { InversionSolutionDiagnosticContainerQuery } from '../generalTask/__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
 import { validateSubtask } from '../../service/generalTask.service';
 import { inversionSolutionDiagnosticContainerQuery } from '../generalTask/InversionSolutionDiagnosticContainer';
+import { NamedFaultsOption } from '../../constants/nameFaultsMfds';
 
 interface DiagnosticReportViewProps {
   sweepArgs?: SweepArguments;
   viewOptions: string[];
+  namedFaults?: NamedFaultsOption[];
   queryRef: PreloadedQuery<InversionSolutionDiagnosticContainerQuery, Record<string, unknown>>;
 }
 
 const DiagnosticReportView: React.FC<DiagnosticReportViewProps> = ({
   sweepArgs,
+  namedFaults,
   viewOptions,
   queryRef,
 }: DiagnosticReportViewProps) => {
@@ -23,7 +26,9 @@ const DiagnosticReportView: React.FC<DiagnosticReportViewProps> = ({
     queryRef,
   );
   const validatedSubtasks = validateSubtask(data, sweepArgs ?? []);
-  return <DiagnosticReportCard viewOptions={viewOptions} automationTasks={validatedSubtasks} />;
+  return (
+    <DiagnosticReportCard namedFaults={namedFaults} viewOptions={viewOptions} automationTasks={validatedSubtasks} />
+  );
 };
 
 export default DiagnosticReportView;

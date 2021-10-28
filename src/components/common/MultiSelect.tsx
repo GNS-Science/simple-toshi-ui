@@ -1,9 +1,9 @@
 import { Checkbox, FormControl, Input, MenuItem, Select } from '@material-ui/core';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { useState } from 'react';
 
 interface MultiSelectProps {
   options: string[];
-  setOptions: Dispatch<SetStateAction<string[]>>;
+  setOptions: (selections: string[]) => void;
   name: string;
 }
 

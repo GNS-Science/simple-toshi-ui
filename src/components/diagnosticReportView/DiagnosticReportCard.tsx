@@ -8,6 +8,7 @@ import buildUrl from 'build-url-ts';
 import { ReportItem } from '../../interfaces/diagnosticReport';
 import FavouriteControls from '../common/FavouriteControls';
 import DiagnosticReportTabPanel from './DiagnosticReportTabPanel';
+import { NamedFaultsOption } from '../../constants/nameFaultsMfds';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -43,12 +44,14 @@ const useStyles = makeStyles(() => ({
 interface DiagnosticReportCardProps {
   automationTasks: ReportItem[];
   viewOptions: string[];
+  namedFaults?: NamedFaultsOption[];
   changeCurrentImage?: (index: number) => void;
 }
 
 const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   automationTasks,
   viewOptions,
+  namedFaults,
   changeCurrentImage,
 }: DiagnosticReportCardProps) => {
   const classes = useStyles();
