@@ -1,6 +1,20 @@
-import { Checkbox, FormControl, Input, MenuItem, Select } from '@material-ui/core';
+import { Checkbox, FormControl, Input, InputLabel, makeStyles, MenuItem, Select, Theme } from '@material-ui/core';
 import React, { useState } from 'react';
 
+const useStyles = makeStyles((theme: Theme) => ({
+  formControl: {
+    margin: theme.spacing(2),
+    minWidth: 200,
+    maxWidthg: 300,
+  },
+}));
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: 500,
+    },
+  },
+};
 interface MultiSelectProps {
   options: string[];
   setOptions: (selections: string[]) => void;
@@ -8,6 +22,8 @@ interface MultiSelectProps {
 }
 
 const MultiSelect: React.FC<MultiSelectProps> = ({ options, setOptions, name }: MultiSelectProps) => {
+  const classes = useStyles();
+
   const [selectedItems, setSelectedItems] = useState<string[]>([options[0]]);
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -17,13 +33,15 @@ const MultiSelect: React.FC<MultiSelectProps> = ({ options, setOptions, name }: 
 
   return (
     <>
-      <FormControl>
+      <FormControl className={classes.formControl}>
+        <InputLabel>{name}</InputLabel>
         <Select
           name={name}
           value={selectedItems}
           multiple
           onChange={handleChange}
           input={<Input />}
+          MenuProps={MenuProps}
           renderValue={(selected) => {
             const selectedArray = selected as string[];
             if (selectedArray.length === 1) {
