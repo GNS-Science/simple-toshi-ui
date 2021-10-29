@@ -1,32 +1,31 @@
-interface PlotOptions {
+export interface PlotOption {
   displayName: string;
   typePath: string;
   path: string;
 }
-type MfdPlotOptions = Record<string, PlotOptions>;
 
-export const mfdPlotOptions: MfdPlotOptions = {
-  nucleationCumulative: {
+export const mfdPlotOptions: PlotOption[] = [
+  {
     displayName: 'Nucleation Cumulative',
     typePath: 'nucleation_cumulative',
     path: '_cumulative_nucleation.png',
   },
-  nucleationIncremental: {
+  {
     displayName: 'Nucleation Incremental',
     typePath: 'nucleation_incremental',
     path: '_nucleation.png',
   },
-  participationCumulative: {
+  {
     displayName: 'Participation Cumulative',
     typePath: 'participation_cumulative',
     path: '_cumulative_participation.png',
   },
-  participationIncremental: {
+  {
     displayName: 'Participation Incremental',
     typePath: 'participation_incremental',
     path: '_participation.png',
   },
-};
+];
 
 export interface NamedFaultsOption {
   displayName: string;
@@ -36,134 +35,134 @@ export interface NamedFaultsOption {
 export const namedFaultsOptions: NamedFaultsOption[] = [
   {
     displayName: 'Alpine George to Jacksons',
-    path: 'Alpine_George_to_Jacksons_',
+    path: 'Alpine_George_to_Jacksons',
   },
   {
     displayName: 'Alpine Jacksons to Kaniere',
-    path: 'Alpine_Jacksons_to_Kaniere_',
+    path: 'Alpine_Jacksons_to_Kaniere',
   },
   {
     displayName: 'Alpine Kariere to Springs Junction',
-    path: 'Alpine_Kaniere_to_Springs_Junction_',
+    path: 'Alpine_Kaniere_to_Springs_Junction',
   },
   {
     displayName: 'Awanui',
-    path: 'Awanui_',
+    path: 'Awanui',
   },
   {
     displayName: 'Awatere',
-    path: 'Awatere_',
+    path: 'Awatere',
   },
   {
     displayName: 'Cape Egmont',
-    path: 'Cape_Egmont_',
+    path: 'Cape_Egmont',
   },
   {
     displayName: 'Dunstan',
-    path: 'Dunstan_',
+    path: 'Dunstan',
   },
   {
     displayName: 'Edgecumbe',
-    path: 'Edgecumbe_',
+    path: 'Edgecumbe',
   },
   {
     displayName: 'Flaxmore Waimea Tahunanui',
-    path: 'Flaxmore_Waimea_Tahunanui_',
+    path: 'Flaxmore_Waimea_Tahunanui',
   },
   {
     displayName: 'Fox Peak',
-    path: 'Fox_Peak_',
+    path: 'Fox_Peak',
   },
   {
     displayName: 'Greendale',
-    path: 'Greendale_',
+    path: 'Greendale',
   },
   {
     displayName: 'Hope',
-    path: 'Hope_',
+    path: 'Hope',
   },
   {
     displayName: 'Kaiapo',
-    path: 'Kaiapo_',
+    path: 'Kaiapo',
   },
   {
     displayName: 'Kekerengu',
-    path: 'Kekerengu_',
+    path: 'Kekerengu',
   },
   {
     displayName: 'Kerepehi',
-    path: 'Kerepehi_',
+    path: 'Kerepehi',
   },
   {
     displayName: 'Lees Valley',
-    path: 'Lees_Valley_',
+    path: 'Lees_Valley',
   },
   {
     displayName: 'Needles',
-    path: 'Needles_',
+    path: 'Needles',
   },
   {
     displayName: 'Ohariu',
-    path: 'Ohariu_',
+    path: 'Ohariu',
   },
   {
     displayName: 'Ostler',
-    path: 'Ostler_',
+    path: 'Ostler',
   },
   {
     displayName: 'Paeroa',
-    path: 'Paeroa_',
+    path: 'Paeroa',
   },
   {
     displayName: 'Porters Pass',
-    path: 'Porters_Pass_',
+    path: 'Porters_Pass',
   },
   {
     displayName: 'Poutu',
-    path: 'Poutu_',
+    path: 'Poutu',
   },
   {
     displayName: 'Te Tatua o Wairere',
-    path: 'Te_Tatua_o_Wairere_',
+    path: 'Te_Tatua_o_Wairere',
   },
   {
     displayName: 'Titri',
-    path: 'Titri_',
+    path: 'Titri',
   },
   {
     displayName: 'Waihi',
-    path: 'Waihi_',
+    path: 'Waihi',
   },
   {
     displayName: 'Wairarapa',
-    path: 'Wairarapa_',
+    path: 'Wairarapa',
   },
   {
     displayName: 'Wairau',
-    path: 'Wairau_',
+    path: 'Wairau',
   },
   {
     displayName: 'Wairoa North',
-    path: 'Wairoa_North_',
+    path: 'Wairoa_North',
   },
   {
     displayName: 'Wellington Pahiatua',
-    path: 'Wellington_Pahiatua_',
+    path: 'Wellington_Pahiatua',
   },
   {
     displayName: 'Wellington Wellington Hutt Valley',
-    path: 'Wellington_Wellington_Hutt_Valley_',
+    path: 'Wellington_Wellington_Hutt_Valley',
   },
   {
     displayName: 'Whanamoa',
-    path: 'Whangamoa_',
+    path: 'Whangamoa',
   },
   {
     displayName: 'White Creek',
-    path: 'White_Creek_',
+    path: 'White_Creek',
   },
   {
     displayName: 'Akatore',
-    path: '_Akatore_',
+    path: '_Akatore',
   },
 ];

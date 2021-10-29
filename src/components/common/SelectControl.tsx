@@ -19,11 +19,11 @@ const MenuProps = {
 
 interface SelectControlProps {
   options: string[];
-  setOptions: Dispatch<SetStateAction<string>>;
-  label: string;
+  setOptions: (selection: string) => void;
+  name: string;
 }
 
-const SelectControl: React.FC<SelectControlProps> = ({ options, setOptions, label }: SelectControlProps) => {
+const SelectControl: React.FC<SelectControlProps> = ({ options, setOptions, name }: SelectControlProps) => {
   const [selectedItems, setSelectedItems] = useState<string>(options[0]);
 
   const classes = useStyles();
@@ -37,11 +37,11 @@ const SelectControl: React.FC<SelectControlProps> = ({ options, setOptions, labe
   return (
     <>
       <FormControl className={classes.formControl}>
-        <InputLabel>{label}</InputLabel>
+        <InputLabel>{name}</InputLabel>
         <Select
           labelId={`report-hash-label`}
-          label={label}
-          name={label}
+          label={name}
+          name={name}
           value={selectedItems}
           onChange={handleChange}
           input={<Input />}
@@ -49,7 +49,6 @@ const SelectControl: React.FC<SelectControlProps> = ({ options, setOptions, labe
         >
           {options.map((opt) => (
             <MenuItem key={opt} value={opt}>
-              <Checkbox checked={selectedItems.indexOf(opt) > -1} />
               {opt}
             </MenuItem>
           ))}
