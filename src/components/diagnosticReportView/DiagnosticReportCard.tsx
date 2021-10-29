@@ -8,7 +8,7 @@ import buildUrl from 'build-url-ts';
 import { ReportItem } from '../../interfaces/diagnosticReport';
 import FavouriteControls from '../common/FavouriteControls';
 import DiagnosticReportTabPanel from './DiagnosticReportTabPanel';
-import { NamedFaultsOption } from '../../constants/nameFaultsMfds';
+import { NamedFaultsOption, PlotOption } from '../../constants/nameFaultsMfds';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -45,6 +45,7 @@ interface DiagnosticReportCardProps {
   automationTasks: ReportItem[];
   viewOptions: string[];
   namedFaults?: NamedFaultsOption[];
+  plotType?: PlotOption;
   changeCurrentImage?: (index: number) => void;
 }
 
@@ -52,6 +53,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   automationTasks,
   viewOptions,
   namedFaults,
+  plotType,
   changeCurrentImage,
 }: DiagnosticReportCardProps) => {
   const classes = useStyles();
@@ -67,7 +69,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
 
   const namedFaultsUrl = (id: string, typePath: string, faultPath: string, typeSuffix: string) => {
     return buildUrl(reportBaseUrl, {
-      path: `/DATA69/${id}/named_fault_mfds/${typePath}/${faultPath}${typeSuffix}`,
+      path: `/opensha/DATA/${id}/named_fault_mfds/${typePath}/${faultPath}${typeSuffix}`,
     });
   };
 
@@ -144,7 +146,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             />
           </div>
           <Tabs value={currentTab} onChange={handleTabChange}>
-            <Tab label="Reports" id="simple-tab-0" />
+            <Tab label="General" id="simple-tab-0" />
             <Tab label="Named Faults" id="simple-tab-1" />
           </Tabs>
           <DiagnosticReportTabPanel value={currentTab} index={0}>
@@ -160,7 +162,20 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             </div>
           </DiagnosticReportTabPanel>
           <DiagnosticReportTabPanel value={currentTab} index={1}>
-            <p>named faults tab</p>
+            <div className={classes.imageContainer}>
+              {namedFaults?.map((item) => (
+                <img
+                  key={item.path}
+                  className={classes.image}
+                  src={namedFaultsUrl(
+                    automationTasks[currentImage].inversion_solution.id,
+                    plotType?.typePath as string,
+                    item.path,
+                    plotType?.path as string,
+                  )}
+                />
+              ))}
+            </div>
           </DiagnosticReportTabPanel>
         </CardContent>
       </Card>
