@@ -2,9 +2,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useLocation, useParams, useHistory } from 'react-router-dom';
 import { graphql } from 'babel-plugin-relay/macro';
 import { useLazyLoadQuery } from 'react-relay/hooks';
-import { Typography, CircularProgress, Snackbar } from '@material-ui/core';
+import { Typography, CircularProgress, Snackbar, Button, Tooltip, Fab, makeStyles } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 import buildUrl from 'build-url-ts';
+import ShareIcon from '@material-ui/icons/Share';
 
 import ChildTaskTable from './ChildTaskTable';
 import { GeneralTaskChildrenTabQuery } from './__generated__/GeneralTaskChildrenTabQuery.graphql';
@@ -24,6 +25,34 @@ import {
 import { GeneralTaskQueryResponse } from '../../pages/__generated__/GeneralTaskQuery.graphql';
 import DialogAlert from '../common/DialogAlert';
 import LocalStorageContext from '../../contexts/localStorage';
+import { useShortcut } from '../../hooks/useShortcut';
+import GeneralTaskDetailDrawer from '../diagnosticReportView/GeneralTaskDetailDrawer';
+import SweepArgumentFilter from './SweepArgumentFilter';
+import CommonModal from '../common/Modal/CommonModal';
+
+const useStyles = makeStyles(() => ({
+  filterContainer: {
+    width: '100%',
+    display: 'flex',
+    flexWrap: 'wrap',
+    paddingLeft: 10,
+  },
+  hidden: {
+    display: 'none',
+  },
+  controlsContainer: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  control: {
+    margin: 10,
+  },
+  rightAlignControl: {
+    margin: 10,
+    position: 'absolute',
+    right: '2.5%',
+  },
+}));
 
 interface GeneralTaskChildrenTabProps {
   readonly sweepArgs?: SweepArguments;
@@ -34,17 +63,20 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   sweepArgs,
   generalTaskData,
 }: GeneralTaskChildrenTabProps) => {
+  const classes = useStyles();
   const { id } = useParams<GeneralTaskParams>();
   const { reportViewSelections, setReportViewSelections } = useContext(LocalStorageContext);
 
   const [showList, setShowList] = useState(true);
   const [showFilter, setShowFilter] = useState(false);
   const [filteredArguments, setFilteredArguments] = useState<FilteredArguments>({ data: [] });
-  const [filteredChildren, setFilteredChildren] = useState<ValidatedChildren>({ data: [] });
-  const [filteredChildrenIds, setFilteredChildrenIds] = useState<string[]>([]);
-  const [viewOptions, setViewOptions] = useState<string[]>([options[0].finalPath]);
   const [openAlert, setOpenAlert] = useState(false);
   const [openNotification, setOpenNotification] = useState(false);
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const [showShare, setShowShare] = useState(false);
+
+  const [filteredChildren, setFilteredChildren] = useState<ValidatedChildren>({ data: [] });
+  const [viewOptions, setViewOptions] = useState<string[]>([options[0].finalPath]);
 
   const data = useLazyLoadQuery<GeneralTaskChildrenTabQuery>(generalTaskChildrenTabQuery, { id });
   const childTasks = validateChildTasks(data);
@@ -69,22 +101,6 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     }
   }, []);
 
-  const getSharableUrl = (): string => {
-    const shareViewOptions: string[] = isClipBoard ? viewOptions : reportViewSelections;
-    const sharableState = {
-      filter: filteredArguments,
-      showList: showList,
-      showFilter: showFilter,
-      viewOptions: shareViewOptions,
-    };
-    const url = buildUrl(baseUrl, {
-      queryParams: {
-        clipBoard: btoa(JSON.stringify(sharableState)),
-      },
-    });
-    return url ?? '';
-  };
-
   const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
     const newFilteredArguments = updateFilteredArguments(
       filteredArguments,
@@ -102,15 +118,25 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     }
   };
 
-  useEffect(() => {
-    const ids = getChildTaskIdArray(filteredChildren);
-    ids && setFilteredChildrenIds(ids);
-  }, [filteredChildren]);
+  const getSharableUrl = (): string => {
+    const shareViewOptions: string[] = isClipBoard ? viewOptions : reportViewSelections;
+    const sharableState = {
+      filter: filteredArguments,
+      showList: showList,
+      showFilter: showFilter,
+      viewOptions: shareViewOptions,
+    };
+    const url = buildUrl(baseUrl, {
+      queryParams: {
+        clipBoard: btoa(JSON.stringify(sharableState)),
+      },
+    });
+    return url ?? '';
+  };
 
   const handleViewChange = () => {
     if (showList && filteredArguments.data.length === 0 && filteredChildren.data?.length === 0) {
       const ids = getChildTaskIdArray(childTasks);
-      ids && setFilteredChildrenIds(ids);
       if (ids.length === 0) {
         setOpenAlert(true);
       }
@@ -118,9 +144,14 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     setShowList((v) => !v);
   };
 
-  const handleClose = () => {
-    setOpenAlert(false);
+  const handleCloseNotification = () => {
+    setOpenNotification(false);
+    history.push(`/GeneralTask/${id}/ChildTasks`);
   };
+
+  useShortcut(handleViewChange, ['s']);
+  useShortcut(() => setShowFilter((v) => !v), ['f']);
+  useShortcut(() => setOpenDrawer((v) => !v), ['d']);
 
   if (!data?.node) {
     return (
@@ -129,11 +160,6 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
       </Typography>
     );
   }
-
-  const handleCloseNotification = () => {
-    setOpenNotification(false);
-    history.push(`/GeneralTask/${id}/ChildTasks`);
-  };
 
   return (
     <div>
@@ -151,28 +177,39 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
           open={openAlert}
           title="Cannot Query Reports"
           text={`Reports cannot be queried when the list of filtered child tasks is over ${maxLength}.`}
-          handleClose={handleClose}
+          handleClose={() => setOpenAlert(false)}
         />
       )}
+      <div className={classes.controlsContainer}>
+        <Tooltip title="use (f/F) to open/close filters">
+          <Button className={classes.control} variant="contained" onClick={() => setShowFilter((v) => !v)}>
+            <span>Filter&nbsp;{`${filteredChildren.data?.length ?? 0}/${childTasks.data?.length ?? 0}`}</span>
+          </Button>
+        </Tooltip>
+        <Tooltip title="use (s/S) to toggle between views">
+          <Button className={classes.control} variant="contained" onClick={handleViewChange}>
+            {showList ? 'Show Report' : 'Show List'}
+          </Button>
+        </Tooltip>
+        <Tooltip title="use (d/D) to open/close details">
+          <Button className={classes.control} variant="contained" onClick={() => setOpenDrawer((v) => !v)}>
+            Details
+          </Button>
+        </Tooltip>
+        <Fab className={classes.rightAlignControl} color="primary" onClick={() => setShowShare(true)}>
+          <ShareIcon />
+        </Fab>
+      </div>
+      <div className={showFilter ? classes.filterContainer : classes.hidden}>
+        {sweepArgs?.map((argument) => (
+          <SweepArgumentFilter key={`${argument?.k}-filter`} argument={argument} onChange={handleChange} />
+        ))}
+        <Button color="primary" variant="contained" onClick={applyFilter}>
+          Apply
+        </Button>
+      </div>
       <React.Suspense fallback={<CircularProgress />}>
-        <InversionSolutionDiagnosticContainer
-          generalTaskDetails={getGeneralTaskDetailsFromQueryResponse(generalTaskData)}
-          sweepArgs={sweepArgs}
-          ids={filteredChildrenIds}
-          filterCount={`${filteredChildren.data?.length ?? 0}/${childTasks.data?.length ?? 0}`}
-          showList={showList}
-          showFilter={showFilter}
-          setShowFilter={setShowFilter}
-          viewOptions={isClipBoard ? viewOptions : reportViewSelections}
-          setViewOptions={isClipBoard ? setViewOptions : setReportViewSelections}
-          onChange={handleChange}
-          applyFilter={applyFilter}
-          handleViewChange={handleViewChange}
-          getUrl={getSharableUrl}
-        />
-      </React.Suspense>
-      <React.Suspense fallback={<CircularProgress />}>
-        {showList && (
+        {showList ? (
           <div>
             {!!filteredChildren.data?.length ? (
               <ChildTaskTable data={filteredChildren} />
@@ -180,8 +217,26 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
               data?.node?.children?.edges?.length && <ChildTaskTable data={childTasks} />
             )}
           </div>
+        ) : (
+          <InversionSolutionDiagnosticContainer
+            sweepArgs={sweepArgs}
+            ids={getChildTaskIdArray(filteredChildren)}
+            viewOptions={isClipBoard ? viewOptions : reportViewSelections}
+            setViewOptions={isClipBoard ? setViewOptions : setReportViewSelections}
+          />
         )}
       </React.Suspense>
+      <GeneralTaskDetailDrawer
+        generalTaskDetails={getGeneralTaskDetailsFromQueryResponse(generalTaskData)}
+        openDrawer={openDrawer}
+      />
+      <CommonModal
+        input={false}
+        title="Share with this url"
+        openModal={showShare}
+        text={getSharableUrl()}
+        handleClose={() => setShowShare(false)}
+      />
     </div>
   );
 };
