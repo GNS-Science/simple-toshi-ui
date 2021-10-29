@@ -7,6 +7,10 @@ const LocalStorageContext = createContext<LocalStorageContextInterface>({
   setISFavourites: noop,
   reportViewSelections: [],
   setReportViewSelections: noop,
+  namedFaultsPlotType: '',
+  setNamedFaultsPlotType: noop,
+  namedFaultsLocations: [],
+  setNamedFaultsLocations: noop,
 });
 
 export default LocalStorageContext;

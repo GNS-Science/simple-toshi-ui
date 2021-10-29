@@ -143,6 +143,8 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
   //see https://github.com/rehooks/local-storage/issues/77 for more info
   const [ISFavourites, setISFavourites] = useLocalStorage<ISFavouritesInstance>('IS-Favourites');
   const [reportViewSelections, setReportViewSelections] = useLocalStorage<string[]>('report-view-selections', []);
+  const [namedFaultsPlotType, setNamedFaultsPlotType] = useLocalStorage<string>('named-faults-plot-type', '');
+  const [namedFaultsLocations, setNamedFaultsLocations] = useLocalStorage<string[]>('named-faults-locations', []);
   const LocalStorageProvider = LocalStorageContext.Provider;
 
   return (
@@ -155,6 +157,10 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
               setISFavourites,
               reportViewSelections,
               setReportViewSelections,
+              namedFaultsPlotType,
+              setNamedFaultsPlotType,
+              namedFaultsLocations,
+              setNamedFaultsLocations,
             }}
           >
             <MenuBar />
