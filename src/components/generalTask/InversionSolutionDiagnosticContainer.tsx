@@ -12,26 +12,9 @@ import { mfdPlotOptions, NamedFaultsOption, namedFaultsOptions, PlotOption } fro
 import SelectControl from '../common/SelectControl';
 
 const useStyles = makeStyles(() => ({
-  filterContainer: {
-    width: '100%',
-    display: 'flex',
-    flexWrap: 'wrap',
-    paddingLeft: 10,
-  },
-  hidden: {
-    display: 'none',
-  },
   controlsContainer: {
     display: 'flex',
     alignItems: 'center',
-  },
-  control: {
-    margin: 10,
-  },
-  rightAlignControl: {
-    margin: 10,
-    position: 'absolute',
-    right: '2.5%',
   },
 }));
 
