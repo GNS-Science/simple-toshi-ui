@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles, Paper, Table, TableBody, TableCell, TableHead, TableRow, withStyles } from '@material-ui/core';
 import { GeneralTaskKeyValueListPairs } from '../../interfaces/generaltask';
+import { renderArrayAsString } from '../../utils';
 
 const useStyles = makeStyles({
   root: {
@@ -29,16 +30,6 @@ export interface KeyValueListTableProps {
   readonly data?: GeneralTaskKeyValueListPairs;
 }
 
-const renderValues = (vals: readonly (string | null)[] | null | undefined): string | null => {
-  if (vals === null || vals === undefined) return '';
-  if (vals.length === 1) {
-    return vals[0];
-  } else {
-    const val_list = vals.reduce((x, accum) => accum + ', ' + x, '');
-    return val_list ? val_list.slice(0, -2) : '';
-  }
-};
-
 const KeyValueListTable: React.FC<KeyValueListTableProps> = ({ header, data }: KeyValueListTableProps) => {
   const classes = useStyles();
   return (
@@ -55,7 +46,7 @@ const KeyValueListTable: React.FC<KeyValueListTableProps> = ({ header, data }: K
           {data?.map((kv) => (
             <AlternatingRow key={kv?.k}>
               <TableCell className={classes.tableCell}>{kv?.k}</TableCell>
-              <TableCell className={classes.tableCell}>{renderValues(kv?.v)}</TableCell>
+              <TableCell className={classes.tableCell}>{renderArrayAsString(kv?.v)}</TableCell>
             </AlternatingRow>
           ))}
         </TableBody>
