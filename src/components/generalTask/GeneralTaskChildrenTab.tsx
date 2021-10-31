@@ -29,6 +29,7 @@ import { useShortcut } from '../../hooks/useShortcut';
 import GeneralTaskDetailDrawer from '../diagnosticReportView/GeneralTaskDetailDrawer';
 import SweepArgumentFilter from './SweepArgumentFilter';
 import CommonModal from '../common/Modal/CommonModal';
+import { mfdPlotOptions, namedFaultsOptions } from '../../constants/nameFaultsMfds';
 
 const useStyles = makeStyles(() => ({
   filterContainer: {
@@ -65,7 +66,18 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
 }: GeneralTaskChildrenTabProps) => {
   const classes = useStyles();
   const { id } = useParams<GeneralTaskParams>();
-  const { reportViewSelections, setReportViewSelections } = useContext(LocalStorageContext);
+  const {
+    localStorageGeneralViews,
+    setLocalStorageGeneralViews,
+    localStorageNamedFaultsView,
+    setLocalStorageNamedFaultsView,
+    localStorageNamedFaultsLocations,
+    setLocalStorageNamedFaultsLocations,
+  } = useContext(LocalStorageContext);
+
+  const [generalViews, setGeneralViews] = useState<string[]>([options[0].finalPath]);
+  const [namedFaultsView, setNamedFaultsView] = useState<string>(mfdPlotOptions[0].displayName);
+  const [namedFaultsLocations, setNamedFaultsLocations] = useState<string[]>([namedFaultsOptions[0].displayName]);
 
   const [showList, setShowList] = useState(true);
   const [showFilter, setShowFilter] = useState(false);
@@ -76,7 +88,6 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const [showShare, setShowShare] = useState(false);
 
   const [filteredChildren, setFilteredChildren] = useState<ValidatedChildren>({ data: [] });
-  const [viewOptions, setViewOptions] = useState<string[]>([options[0].finalPath]);
 
   const data = useLazyLoadQuery<GeneralTaskChildrenTabQuery>(generalTaskChildrenTabQuery, { id });
   const childTasks = validateChildTasks(data);
@@ -91,7 +102,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
         .then((res) => {
           setShowList(res.showList);
           setShowFilter(res.showFilter);
-          setViewOptions(res.viewOptions);
+          setGeneralViews(res.viewOptions);
           setFilteredArguments(res.filter);
           setFilteredChildren(applyChildTaskFilter(childTasks, res.filter));
         })
@@ -119,7 +130,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   };
 
   const getSharableUrl = (): string => {
-    const shareViewOptions: string[] = isClipBoard ? viewOptions : reportViewSelections;
+    const shareViewOptions: string[] = isClipBoard ? generalViews : localStorageGeneralViews;
     const sharableState = {
       filter: filteredArguments,
       showList: showList,
@@ -221,8 +232,12 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
           <InversionSolutionDiagnosticContainer
             sweepArgs={sweepArgs}
             ids={getChildTaskIdArray(filteredChildren)}
-            viewOptions={isClipBoard ? viewOptions : reportViewSelections}
-            setViewOptions={isClipBoard ? setViewOptions : setReportViewSelections}
+            generalViews={isClipBoard ? generalViews : localStorageGeneralViews}
+            setGeneralViews={isClipBoard ? setGeneralViews : setLocalStorageGeneralViews}
+            namedFaultsView={isClipBoard ? namedFaultsView : localStorageNamedFaultsView}
+            setNamedFaultsView={isClipBoard ? setNamedFaultsView : setLocalStorageNamedFaultsView}
+            namedFaultsLocations={isClipBoard ? namedFaultsLocations : localStorageNamedFaultsLocations}
+            setNamedFaultsLocations={isClipBoard ? setNamedFaultsLocations : setLocalStorageNamedFaultsLocations}
           />
         )}
       </React.Suspense>

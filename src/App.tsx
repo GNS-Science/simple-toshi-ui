@@ -142,9 +142,18 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
   //TODO - resolve @rehook/local-storage, version currently pinned to 2.4.0
   //see https://github.com/rehooks/local-storage/issues/77 for more info
   const [ISFavourites, setISFavourites] = useLocalStorage<ISFavouritesInstance>('IS-Favourites');
-  const [reportViewSelections, setReportViewSelections] = useLocalStorage<string[]>('report-view-selections', []);
-  const [namedFaultsPlotType, setNamedFaultsPlotType] = useLocalStorage<string>('named-faults-plot-type', '');
-  const [namedFaultsLocations, setNamedFaultsLocations] = useLocalStorage<string[]>('named-faults-locations', []);
+  const [localStorageGeneralViews, setLocalStorageGeneralViews] = useLocalStorage<string[]>(
+    'report-view-selections',
+    [],
+  );
+  const [localStorageNamedFaultsView, setLocalStorageNamedFaultsView] = useLocalStorage<string>(
+    'named-faults-plot-type',
+    '',
+  );
+  const [localStorageNamedFaultsLocations, setLocalStorageNamedFaultsLocations] = useLocalStorage<string[]>(
+    'named-faults-locations',
+    [],
+  );
   const LocalStorageProvider = LocalStorageContext.Provider;
 
   return (
@@ -155,12 +164,12 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
             value={{
               ISFavourites,
               setISFavourites,
-              reportViewSelections,
-              setReportViewSelections,
-              namedFaultsPlotType,
-              setNamedFaultsPlotType,
-              namedFaultsLocations,
-              setNamedFaultsLocations,
+              localStorageGeneralViews,
+              setLocalStorageGeneralViews,
+              localStorageNamedFaultsView,
+              setLocalStorageNamedFaultsView,
+              localStorageNamedFaultsLocations,
+              setLocalStorageNamedFaultsLocations,
             }}
           >
             <MenuBar />

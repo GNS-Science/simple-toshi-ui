@@ -20,7 +20,7 @@ import {
 import CommonModal from '../components/common/Modal/CommonModal';
 
 const MySolutions: React.FC = () => {
-  const { reportViewSelections, setReportViewSelections } = useContext(LocalStorageContext);
+  const { localStorageGeneralViews, setLocalStorageGeneralViews } = useContext(LocalStorageContext);
   const [showList, setShowList] = useState(true);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openSaveModal, setOpenSaveModal] = useState(false);
@@ -86,7 +86,10 @@ const MySolutions: React.FC = () => {
           </Tooltip>
         )}
         {!showList && (
-          <DiagnosticReportControls viewOptions={reportViewSelections} setViewOption={setReportViewSelections} />
+          <DiagnosticReportControls
+            viewOptions={localStorageGeneralViews}
+            setViewOption={setLocalStorageGeneralViews}
+          />
         )}
       </ControlsBar>
       <CommonModal
@@ -109,7 +112,7 @@ const MySolutions: React.FC = () => {
         <DiagnosticReportCard
           changeCurrentImage={handleChangeCurrentImage}
           automationTasks={reportItems}
-          viewOptions={reportViewSelections}
+          generalViews={localStorageGeneralViews}
         />
       )}
       {!showList && <GeneralTaskDetailDrawer generalTaskDetails={currentGeneralTask} openDrawer={openDrawer} />}
