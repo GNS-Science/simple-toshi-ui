@@ -231,6 +231,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
         ) : (
           <InversionSolutionDiagnosticContainer
             sweepArgs={sweepArgs}
+            modelType={data?.node?.model_type as string}
             ids={getChildTaskIdArray(filteredChildren)}
             generalViews={isClipBoard ? generalViews : localStorageGeneralViews}
             setGeneralViews={isClipBoard ? setGeneralViews : setLocalStorageGeneralViews}
@@ -263,6 +264,7 @@ const generalTaskChildrenTabQuery = graphql`
     node(id: $id) {
       ... on GeneralTask {
         id
+        model_type
         children {
           edges {
             node {

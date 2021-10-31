@@ -9,6 +9,7 @@ import DiagnosticReportCard from '../diagnosticReportView/DiagnosticReportCard';
 
 interface InversionSolutionDiagnosticContainerProps {
   readonly sweepArgs?: SweepArguments;
+  modelType: string;
   ids?: string[];
   generalViews: string[];
   setGeneralViews: (newViewOptions: string[]) => void;
@@ -20,6 +21,7 @@ interface InversionSolutionDiagnosticContainerProps {
 
 const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnosticContainerProps> = ({
   sweepArgs,
+  modelType,
   ids,
   generalViews,
   setGeneralViews,
@@ -36,6 +38,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   return (
     <>
       <DiagnosticReportCard
+        modelType={modelType}
         generalViews={generalViews}
         setGeneralViews={setGeneralViews}
         namedFaultsView={namedFaultsView}

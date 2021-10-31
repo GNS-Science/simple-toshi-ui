@@ -5,12 +5,14 @@
 import { ConcreteRequest } from "relay-runtime";
 export type EventResult = "FAILURE" | "PARTIAL" | "SUCCESS" | "UNDEFINED" | "%future added value";
 export type EventState = "DONE" | "SCHEDULED" | "STARTED" | "UNDEFINED" | "%future added value";
+export type ModelType = "CRUSTAL" | "SUBDUCTION" | "%future added value";
 export type GeneralTaskChildrenTabQueryVariables = {
     id: string;
 };
 export type GeneralTaskChildrenTabQueryResponse = {
     readonly node: {
         readonly id?: string;
+        readonly model_type?: ModelType | null;
         readonly children?: {
             readonly edges: ReadonlyArray<{
                 readonly node: {
@@ -61,6 +63,7 @@ query GeneralTaskChildrenTabQuery(
     __typename
     ... on GeneralTask {
       id
+      model_type
       children {
         edges {
           node {
@@ -131,38 +134,45 @@ v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "__typename",
+  "name": "model_type",
   "storageKey": null
 },
 v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "created",
+  "name": "__typename",
   "storageKey": null
 },
 v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "duration",
+  "name": "created",
   "storageKey": null
 },
 v6 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "state",
+  "name": "duration",
   "storageKey": null
 },
 v7 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "result",
+  "name": "state",
   "storageKey": null
 },
 v8 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "result",
+  "storageKey": null
+},
+v9 = {
   "alias": null,
   "args": null,
   "concreteType": "KeyValuePair",
@@ -187,22 +197,22 @@ v8 = {
   ],
   "storageKey": null
 },
-v9 = [
-  (v3/*: any*/),
-  (v2/*: any*/),
-  (v4/*: any*/),
-  (v5/*: any*/),
-  (v6/*: any*/),
-  (v7/*: any*/),
-  (v8/*: any*/)
-],
 v10 = [
-  (v2/*: any*/),
   (v4/*: any*/),
+  (v2/*: any*/),
   (v5/*: any*/),
   (v6/*: any*/),
   (v7/*: any*/),
-  (v8/*: any*/)
+  (v8/*: any*/),
+  (v9/*: any*/)
+],
+v11 = [
+  (v2/*: any*/),
+  (v5/*: any*/),
+  (v6/*: any*/),
+  (v7/*: any*/),
+  (v8/*: any*/),
+  (v9/*: any*/)
 ];
 return {
   "fragment": {
@@ -223,6 +233,7 @@ return {
             "kind": "InlineFragment",
             "selections": [
               (v2/*: any*/),
+              (v3/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -257,13 +268,13 @@ return {
                             "selections": [
                               {
                                 "kind": "InlineFragment",
-                                "selections": (v9/*: any*/),
+                                "selections": (v10/*: any*/),
                                 "type": "AutomationTask",
                                 "abstractKey": null
                               },
                               {
                                 "kind": "InlineFragment",
-                                "selections": (v9/*: any*/),
+                                "selections": (v10/*: any*/),
                                 "type": "RuptureGenerationTask",
                                 "abstractKey": null
                               }
@@ -304,11 +315,12 @@ return {
         "name": "node",
         "plural": false,
         "selections": [
-          (v3/*: any*/),
+          (v4/*: any*/),
           (v2/*: any*/),
           {
             "kind": "InlineFragment",
             "selections": [
+              (v3/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -341,16 +353,16 @@ return {
                             "name": "child",
                             "plural": false,
                             "selections": [
-                              (v3/*: any*/),
+                              (v4/*: any*/),
                               {
                                 "kind": "InlineFragment",
-                                "selections": (v10/*: any*/),
+                                "selections": (v11/*: any*/),
                                 "type": "AutomationTask",
                                 "abstractKey": null
                               },
                               {
                                 "kind": "InlineFragment",
-                                "selections": (v10/*: any*/),
+                                "selections": (v11/*: any*/),
                                 "type": "RuptureGenerationTask",
                                 "abstractKey": null
                               },
@@ -385,14 +397,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "6102e8d8b449a6ec53e78d65d93702ca",
+    "cacheID": "42183d436562b19443944f621f81c892",
     "id": null,
     "metadata": {},
     "name": "GeneralTaskChildrenTabQuery",
     "operationKind": "query",
-    "text": "query GeneralTaskChildrenTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on GeneralTask {\n      id\n      children {\n        edges {\n          node {\n            child {\n              __typename\n              ... on AutomationTask {\n                __typename\n                id\n                created\n                duration\n                state\n                result\n                arguments {\n                  k\n                  v\n                }\n              }\n              ... on RuptureGenerationTask {\n                __typename\n                id\n                created\n                duration\n                state\n                result\n                arguments {\n                  k\n                  v\n                }\n              }\n              ... on Node {\n                __isNode: __typename\n                id\n              }\n            }\n            id\n          }\n        }\n      }\n    }\n    id\n  }\n}\n"
+    "text": "query GeneralTaskChildrenTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on GeneralTask {\n      id\n      model_type\n      children {\n        edges {\n          node {\n            child {\n              __typename\n              ... on AutomationTask {\n                __typename\n                id\n                created\n                duration\n                state\n                result\n                arguments {\n                  k\n                  v\n                }\n              }\n              ... on RuptureGenerationTask {\n                __typename\n                id\n                created\n                duration\n                state\n                result\n                arguments {\n                  k\n                  v\n                }\n              }\n              ... on Node {\n                __isNode: __typename\n                id\n              }\n            }\n            id\n          }\n        }\n      }\n    }\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'dec7bd31319c83790e5fe0a4fa452613';
+(node as any).hash = 'd39c6d0d7add7f24d5eaed91f6d2697f';
 export default node;

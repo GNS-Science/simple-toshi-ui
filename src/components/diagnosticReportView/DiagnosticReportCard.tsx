@@ -45,6 +45,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface DiagnosticReportCardProps {
+  modelType?: string;
   automationTasks: ReportItem[];
   generalViews: string[];
   setGeneralViews?: (selection: string[]) => void;
@@ -56,6 +57,7 @@ interface DiagnosticReportCardProps {
 }
 
 const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
+  modelType,
   automationTasks,
   generalViews,
   setGeneralViews,
@@ -183,7 +185,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
           </div>
           <Tabs value={currentTab} onChange={handleTabChange}>
             <Tab label="General" id="simple-tab-0" />
-            <Tab label="Named Faults" id="simple-tab-1" />
+            <Tab label="Named Faults" id="simple-tab-1" disabled={modelType !== 'CRUSTAL'} />
           </Tabs>
           <DiagnosticReportTabPanel value={currentTab} index={0}>
             {setGeneralViews && <DiagnosticReportControls viewOptions={generalViews} setViewOption={setGeneralViews} />}
