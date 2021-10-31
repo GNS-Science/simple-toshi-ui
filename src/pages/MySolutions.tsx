@@ -20,14 +20,23 @@ import {
 import CommonModal from '../components/common/Modal/CommonModal';
 
 const MySolutions: React.FC = () => {
-  const { localStorageGeneralViews, setLocalStorageGeneralViews } = useContext(LocalStorageContext);
+  const {
+    ISFavourites,
+    setISFavourites,
+    localStorageGeneralViews,
+    setLocalStorageGeneralViews,
+    localStorageNamedFaultsView,
+    setLocalStorageNamedFaultsView,
+    localStorageNamedFaultsLocations,
+    setLocalStorageNamedFaultsLocations,
+  } = useContext(LocalStorageContext);
+
   const [showList, setShowList] = useState(true);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openSaveModal, setOpenSaveModal] = useState(false);
   const [openLoadModal, setOpenLoadModal] = useState(false);
   const [currentImage, setCurrentImage] = useState<number>(0);
 
-  const { ISFavourites, setISFavourites } = useContext(LocalStorageContext);
   const id = getMySolutionIdsArray(ISFavourites);
   const data = useLazyLoadQuery<MySolutionsQuery>(mySolutionsQuery, { id });
   const listItems = validateListItems(data);
@@ -85,12 +94,6 @@ const MySolutions: React.FC = () => {
             </Button>
           </Tooltip>
         )}
-        {!showList && (
-          <DiagnosticReportControls
-            viewOptions={localStorageGeneralViews}
-            setViewOption={setLocalStorageGeneralViews}
-          />
-        )}
       </ControlsBar>
       <CommonModal
         input={false}
@@ -113,6 +116,7 @@ const MySolutions: React.FC = () => {
           changeCurrentImage={handleChangeCurrentImage}
           automationTasks={reportItems}
           generalViews={localStorageGeneralViews}
+          setGeneralViews={setLocalStorageGeneralViews}
         />
       )}
       {!showList && <GeneralTaskDetailDrawer generalTaskDetails={currentGeneralTask} openDrawer={openDrawer} />}

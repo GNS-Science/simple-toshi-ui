@@ -48,7 +48,7 @@ interface DiagnosticReportCardProps {
   modelType?: string;
   automationTasks: ReportItem[];
   generalViews: string[];
-  setGeneralViews?: (selection: string[]) => void;
+  setGeneralViews: (selection: string[]) => void;
   namedFaultsView?: string;
   setNamedFaultsView?: (selection: string) => void;
   namedFaultsLocations?: string[];
@@ -188,7 +188,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             <Tab label="Named Faults" id="simple-tab-1" disabled={modelType !== 'CRUSTAL'} />
           </Tabs>
           <DiagnosticReportTabPanel value={currentTab} index={0}>
-            {setGeneralViews && <DiagnosticReportControls viewOptions={generalViews} setViewOption={setGeneralViews} />}
+            <DiagnosticReportControls viewOptions={generalViews} setViewOption={setGeneralViews} />
             <div className={classes.imageContainer}>
               {generalViews.map((path) => (
                 <img
