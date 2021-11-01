@@ -54,6 +54,8 @@ interface DiagnosticReportCardProps {
   namedFaultsLocations: string[];
   setNamedFaultsLocations: (selection: string[]) => void;
   changeCurrentImage?: (index: number) => void;
+  reportTab?: number;
+  setReportTab?: (tab: number) => void;
 }
 
 const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
@@ -66,19 +68,29 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   namedFaultsLocations,
   setNamedFaultsLocations,
   changeCurrentImage,
+  reportTab,
+  setReportTab,
 }: DiagnosticReportCardProps) => {
   const classes = useStyles();
   const [currentImage, setCurrentImage] = useState<number>(0);
   const [currentTab, setCurrentTab] = useState<number>(0);
   const reportBaseUrl = process.env.REACT_APP_REPORTS_URL;
 
+  useEffect(() => {
+    if (reportTab === 1) setCurrentTab(1);
+  }, []);
+
+  useEffect(() => {
+    setReportTab && setReportTab(currentTab);
+  }, [currentTab]);
+
   const reportUrl = (path: string, id: string) => {
     return buildUrl(reportBaseUrl, {
       path: `/opensha/DATA/${id}/solution_report/resources/${path}`,
     });
   };
-  const [namedFaultsSelection, setNamedFaultsSelection] = useState<NamedFaultsOption[]>([namedFaultsOptions[0]]);
 
+  const [namedFaultsSelection, setNamedFaultsSelection] = useState<NamedFaultsOption[]>([namedFaultsOptions[0]]);
   const [mfdPlotSelection, setMfdPlotSelection] = useState<PlotOption>(mfdPlotOptions[0]);
 
   useEffect(() => {

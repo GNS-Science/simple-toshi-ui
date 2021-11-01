@@ -78,6 +78,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const [generalViews, setGeneralViews] = useState<string[]>([options[0].finalPath]);
   const [namedFaultsView, setNamedFaultsView] = useState<string>(mfdPlotOptions[0].displayName);
   const [namedFaultsLocations, setNamedFaultsLocations] = useState<string[]>([namedFaultsOptions[0].displayName]);
+  const [reportTab, setReportTab] = useState<number>(0);
 
   const [showList, setShowList] = useState(true);
   const [showFilter, setShowFilter] = useState(false);
@@ -107,6 +108,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
           setFilteredChildren(applyChildTaskFilter(childTasks, res.filter));
           setNamedFaultsView(res.namedFaultsView);
           setNamedFaultsLocations(res.namedFaultsLocations);
+          setReportTab(res.reportTab);
         })
         .catch(() => {
           setOpenNotification(true);
@@ -142,6 +144,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
       generalViews: generalViewsOption,
       namedFaultsView: namedFaultsViewOption,
       namedFaultsLocations: namedFaultsLocationsOption,
+      reportTab,
     };
     const url = buildUrl(baseUrl, {
       queryParams: {
@@ -245,6 +248,8 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
             setNamedFaultsView={isClipBoard ? setNamedFaultsView : setLocalStorageNamedFaultsView}
             namedFaultsLocations={isClipBoard ? namedFaultsLocations : localStorageNamedFaultsLocations}
             setNamedFaultsLocations={isClipBoard ? setNamedFaultsLocations : setLocalStorageNamedFaultsLocations}
+            reportTab={reportTab}
+            setReportTab={setReportTab}
           />
         )}
       </React.Suspense>

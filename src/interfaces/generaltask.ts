@@ -92,4 +92,5 @@ export interface ClipBoardObject {
   generalViews: string[];
   namedFaultsView: string;
   namedFaultsLocations: string[];
+  reportTab: number;
 }

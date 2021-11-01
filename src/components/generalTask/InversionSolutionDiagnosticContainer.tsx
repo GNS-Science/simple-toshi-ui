@@ -17,6 +17,8 @@ interface InversionSolutionDiagnosticContainerProps {
   setNamedFaultsView: (view: string) => void;
   namedFaultsLocations: string[];
   setNamedFaultsLocations: (locations: string[]) => void;
+  reportTab: number;
+  setReportTab: (tab: number) => void;
 }
 
 const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnosticContainerProps> = ({
@@ -29,6 +31,8 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   setNamedFaultsView,
   namedFaultsLocations,
   setNamedFaultsLocations,
+  reportTab,
+  setReportTab,
 }: InversionSolutionDiagnosticContainerProps) => {
   const data = useLazyLoadQuery<InversionSolutionDiagnosticContainerQuery>(inversionSolutionDiagnosticContainerQuery, {
     id: ids,
@@ -46,6 +50,8 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
         namedFaultsLocations={namedFaultsLocations}
         setNamedFaultsLocations={setNamedFaultsLocations}
         automationTasks={validatedSubtasks}
+        reportTab={reportTab}
+        setReportTab={setReportTab}
       />
     </>
   );
