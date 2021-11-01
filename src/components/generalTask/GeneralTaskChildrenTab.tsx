@@ -82,18 +82,19 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
 
   const [showList, setShowList] = useState(true);
   const [showFilter, setShowFilter] = useState(false);
-  const [filteredArguments, setFilteredArguments] = useState<FilteredArguments>({ data: [] });
   const [openAlert, setOpenAlert] = useState(false);
   const [openNotification, setOpenNotification] = useState(false);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [showShare, setShowShare] = useState(false);
 
+  const [filteredArguments, setFilteredArguments] = useState<FilteredArguments>({ data: [] });
   const [filteredChildren, setFilteredChildren] = useState<ValidatedChildren>({ data: [] });
 
   const data = useLazyLoadQuery<GeneralTaskChildrenTabQuery>(generalTaskChildrenTabQuery, { id });
   const childTasks = validateChildTasks(data);
   const search = useLocation().search;
   const history = useHistory();
+
   const baseUrl = `${process.env.REACT_APP_ROOT_PATH}/GeneralTask/${id}/ChildTasks`;
   const isClipBoard: boolean = determineClipBoard(search);
 
@@ -137,6 +138,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     const generalViewsOption: string[] = isClipBoard ? generalViews : localStorageGeneralViews;
     const namedFaultsViewOption: string = isClipBoard ? namedFaultsView : localStorageNamedFaultsView;
     const namedFaultsLocationsOption: string[] = isClipBoard ? namedFaultsLocations : localStorageNamedFaultsLocations;
+
     const sharableState = {
       filter: filteredArguments,
       showList: showList,
@@ -183,23 +185,6 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
 
   return (
     <div>
-      <Snackbar
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={openNotification}
-        onClose={handleCloseNotification}
-      >
-        <MuiAlert variant="filled" severity="warning">
-          Sorry, this URL is invalid. The clipBoard state cannot be applied.
-        </MuiAlert>
-      </Snackbar>
-      {openAlert && (
-        <DialogAlert
-          open={openAlert}
-          title="Cannot Query Reports"
-          text={`Reports cannot be queried when the list of filtered child tasks is over ${maxLength}.`}
-          handleClose={() => setOpenAlert(false)}
-        />
-      )}
       <div className={classes.controlsContainer}>
         <Tooltip title="use (f/F) to open/close filters">
           <Button className={classes.control} variant="contained" onClick={() => setShowFilter((v) => !v)}>
@@ -270,6 +255,21 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
         openModal={showShare}
         text={getSharableUrl()}
         handleClose={() => setShowShare(false)}
+      />
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={openNotification}
+        onClose={handleCloseNotification}
+      >
+        <MuiAlert variant="filled" severity="warning">
+          Sorry, this URL is invalid. The clipBoard state cannot be applied.
+        </MuiAlert>
+      </Snackbar>
+      <DialogAlert
+        open={openAlert}
+        title="Cannot Query Reports"
+        text={`Reports cannot be queried when the list of filtered child tasks is over ${maxLength}.`}
+        handleClose={() => setOpenAlert(false)}
       />
     </div>
   );

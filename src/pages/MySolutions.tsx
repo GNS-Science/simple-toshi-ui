@@ -3,7 +3,6 @@ import { useLazyLoadQuery } from 'react-relay';
 import { Button, ButtonGroup, Tooltip, Typography } from '@material-ui/core';
 import { graphql } from 'babel-plugin-relay/macro';
 
-import DiagnosticReportControls from '../components/diagnosticReportView/DiagnosticReportControls';
 import GeneralTaskDetailDrawer from '../components/diagnosticReportView/GeneralTaskDetailDrawer';
 import DiagnosticReportCard from '../components/diagnosticReportView/DiagnosticReportCard';
 import MySolutionsList from '../components/mySolutions/MySolutionsList';
