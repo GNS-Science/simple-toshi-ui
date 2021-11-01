@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { createMockEnvironment, MockPayloadGenerator, RelayMockEnvironment } from 'relay-test-utils';
-import InversionSolution from '../components/inversionSolution/InversionSolution';
+import InversionSolution from '../pages/InversionSolution';
 import ReactRouter from 'react-router';
 import { RelayEnvironmentProvider } from 'react-relay/hooks';
 import { cleanup, render } from '@testing-library/react';
