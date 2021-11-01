@@ -89,8 +89,8 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       path: `/opensha/DATA/${id}/solution_report/resources/${path}`,
     });
   };
-  const [namedFaultsSelection, setNamedFaultsSelection] = useState<NamedFaultsOption[]>([namedFaultsOptions[0]]);
 
+  const [namedFaultsSelection, setNamedFaultsSelection] = useState<NamedFaultsOption[]>([namedFaultsOptions[0]]);
   const [mfdPlotSelection, setMfdPlotSelection] = useState<PlotOption>(mfdPlotOptions[0]);
 
   useEffect(() => {
