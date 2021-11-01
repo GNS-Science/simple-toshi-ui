@@ -89,6 +89,22 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       path: `/opensha/DATA/${id}/solution_report/resources/${path}`,
     });
   };
+  const [namedFaultsSelection, setNamedFaultsSelection] = useState<NamedFaultsOption[]>([namedFaultsOptions[0]]);
+
+  const [mfdPlotSelection, setMfdPlotSelection] = useState<PlotOption>(mfdPlotOptions[0]);
+
+  useEffect(() => {
+    const filtered = namedFaultsOptions.filter((option) => {
+      const result = namedFaultsLocations?.includes(option.displayName);
+      return result;
+    });
+    setNamedFaultsSelection(filtered);
+    mfdPlotOptions.map((option) => {
+      if (namedFaultsView === option.displayName) {
+        setMfdPlotSelection(option);
+      }
+    });
+  }, [namedFaultsView, namedFaultsLocations]);
 
   const [namedFaultsSelection, setNamedFaultsSelection] = useState<NamedFaultsOption[]>([namedFaultsOptions[0]]);
   const [mfdPlotSelection, setMfdPlotSelection] = useState<PlotOption>(mfdPlotOptions[0]);
