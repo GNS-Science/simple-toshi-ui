@@ -102,9 +102,11 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
         .then((res) => {
           setShowList(res.showList);
           setShowFilter(res.showFilter);
-          setGeneralViews(res.viewOptions);
+          setGeneralViews(res.generalViews);
           setFilteredArguments(res.filter);
           setFilteredChildren(applyChildTaskFilter(childTasks, res.filter));
+          setNamedFaultsView(res.namedFaultsView);
+          setNamedFaultsLocations(res.namedFaultsLocations);
         })
         .catch(() => {
           setOpenNotification(true);
@@ -130,12 +132,16 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   };
 
   const getSharableUrl = (): string => {
-    const shareViewOptions: string[] = isClipBoard ? generalViews : localStorageGeneralViews;
+    const generalViewsOption: string[] = isClipBoard ? generalViews : localStorageGeneralViews;
+    const namedFaultsViewOption: string = isClipBoard ? namedFaultsView : localStorageNamedFaultsView;
+    const namedFaultsLocationsOption: string[] = isClipBoard ? namedFaultsLocations : localStorageNamedFaultsLocations;
     const sharableState = {
       filter: filteredArguments,
       showList: showList,
       showFilter: showFilter,
-      viewOptions: shareViewOptions,
+      generalViews: generalViewsOption,
+      namedFaultsView: namedFaultsViewOption,
+      namedFaultsLocations: namedFaultsLocationsOption,
     };
     const url = buildUrl(baseUrl, {
       queryParams: {

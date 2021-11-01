@@ -89,5 +89,7 @@ export interface ClipBoardObject {
   filter: FilteredArguments;
   showList: boolean;
   showFilter: boolean;
-  viewOptions: string[];
+  generalViews: string[];
+  namedFaultsView: string;
+  namedFaultsLocations: string[];
 }
