@@ -203,7 +203,12 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
       <div className={classes.controlsContainer}>
         <Tooltip title="use (f/F) to open/close filters">
           <Button className={classes.control} variant="contained" onClick={() => setShowFilter((v) => !v)}>
-            <span>Filter&nbsp;{`${filteredChildren.data?.length ?? 0}/${childTasks.data?.length ?? 0}`}</span>
+            <span>
+              Filter&nbsp;
+              {`${filteredArguments.data.length ? filteredChildren.data?.length ?? 0 : childTasks.data?.length ?? 0}/${
+                childTasks.data?.length ?? 0
+              }`}
+            </span>
           </Button>
         </Tooltip>
         <Tooltip title="use (s/S) to toggle between views">
@@ -241,7 +246,9 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
           <InversionSolutionDiagnosticContainer
             sweepArgs={sweepArgs}
             modelType={data?.node?.model_type as string}
-            ids={getChildTaskIdArray(filteredChildren)}
+            ids={
+              filteredChildren.data?.length ? getChildTaskIdArray(filteredChildren) : getChildTaskIdArray(childTasks)
+            }
             generalViews={isClipBoard ? generalViews : localStorageGeneralViews}
             setGeneralViews={isClipBoard ? setGeneralViews : setLocalStorageGeneralViews}
             namedFaultsView={isClipBoard ? namedFaultsView : localStorageNamedFaultsView}
