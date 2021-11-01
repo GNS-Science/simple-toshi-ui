@@ -265,12 +265,14 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
           Sorry, this URL is invalid. The clipBoard state cannot be applied.
         </MuiAlert>
       </Snackbar>
-      <DialogAlert
-        open={openAlert}
-        title="Cannot Query Reports"
-        text={`Reports cannot be queried when the list of filtered child tasks is over ${maxLength}.`}
-        handleClose={() => setOpenAlert(false)}
-      />
+      {openAlert && (
+        <DialogAlert
+          open={openAlert}
+          title="Cannot Query Reports"
+          text={`Reports cannot be queried when the list of filtered child tasks is over ${maxLength}.`}
+          handleClose={() => setOpenAlert(false)}
+        />
+      )}
     </div>
   );
 };
