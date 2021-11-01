@@ -45,14 +45,14 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface DiagnosticReportCardProps {
-  modelType?: string;
+  modelType: string;
   automationTasks: ReportItem[];
   generalViews: string[];
   setGeneralViews: (selection: string[]) => void;
-  namedFaultsView?: string;
-  setNamedFaultsView?: (selection: string) => void;
-  namedFaultsLocations?: string[];
-  setNamedFaultsLocations?: (selection: string[]) => void;
+  namedFaultsView: string;
+  setNamedFaultsView: (selection: string) => void;
+  namedFaultsLocations: string[];
+  setNamedFaultsLocations: (selection: string[]) => void;
   changeCurrentImage?: (index: number) => void;
 }
 
@@ -77,6 +77,22 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       path: `/opensha/DATA/${id}/solution_report/resources/${path}`,
     });
   };
+  const [namedFaultsSelection, setNamedFaultsSelection] = useState<NamedFaultsOption[]>([namedFaultsOptions[0]]);
+
+  const [mfdPlotSelection, setMfdPlotSelection] = useState<PlotOption>(mfdPlotOptions[0]);
+
+  useEffect(() => {
+    const filtered = namedFaultsOptions.filter((option) => {
+      const result = namedFaultsLocations?.includes(option.displayName);
+      return result;
+    });
+    setNamedFaultsSelection(filtered);
+    mfdPlotOptions.map((option) => {
+      if (namedFaultsView === option.displayName) {
+        setMfdPlotSelection(option);
+      }
+    });
+  }, [namedFaultsView, namedFaultsLocations]);
 
   const namedFaultsUrl = (id: string, typePath: string, faultPath: string, typeSuffix: string) => {
     return buildUrl(reportBaseUrl, {
@@ -127,22 +143,6 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   mfdPlotOptions.map((option) => {
     mfdPlot.push(option.displayName);
   });
-  const [namedFaultsSelection, setNamedFaultsSelection] = useState<NamedFaultsOption[]>([namedFaultsOptions[0]]);
-
-  const [mfdPlotSelection, setMfdPlotSelection] = useState<PlotOption>(mfdPlotOptions[0]);
-
-  useEffect(() => {
-    const filtered = namedFaultsOptions.filter((option) => {
-      const result = namedFaultsLocations?.includes(option.displayName);
-      return result;
-    });
-    setNamedFaultsSelection(filtered);
-    mfdPlotOptions.map((option) => {
-      if (namedFaultsView === option.displayName) {
-        setMfdPlotSelection(option);
-      }
-    });
-  }, [namedFaultsView, namedFaultsLocations]);
 
   return (
     <>
@@ -201,12 +201,8 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             </div>
           </DiagnosticReportTabPanel>
           <DiagnosticReportTabPanel value={currentTab} index={1}>
-            {setNamedFaultsLocations && (
-              <MultiSelect name="Named Faults" options={faultOptions} setOptions={setNamedFaultsLocations} />
-            )}
-            {setNamedFaultsView && (
-              <SelectControl name="Mfd Plot Views" options={mfdPlot} setOptions={setNamedFaultsView} />
-            )}
+            <MultiSelect name="Named Faults" options={faultOptions} setOptions={setNamedFaultsLocations} />
+            <SelectControl name="Mfd Plot Views" options={mfdPlot} setOptions={setNamedFaultsView} />
             <div className={classes.imageContainer}>
               {namedFaultsSelection?.map((item) => (
                 <img

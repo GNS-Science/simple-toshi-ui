@@ -113,10 +113,15 @@ const MySolutions: React.FC = () => {
         <MySolutionsList solutionsList={listItems} />
       ) : (
         <DiagnosticReportCard
+          modelType={currentGeneralTask.model_type}
           changeCurrentImage={handleChangeCurrentImage}
           automationTasks={reportItems}
           generalViews={localStorageGeneralViews}
           setGeneralViews={setLocalStorageGeneralViews}
+          namedFaultsView={localStorageNamedFaultsView}
+          setNamedFaultsView={setLocalStorageNamedFaultsView}
+          namedFaultsLocations={localStorageNamedFaultsLocations}
+          setNamedFaultsLocations={setLocalStorageNamedFaultsLocations}
         />
       )}
       {!showList && <GeneralTaskDetailDrawer generalTaskDetails={currentGeneralTask} openDrawer={openDrawer} />}
