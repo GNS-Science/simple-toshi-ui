@@ -113,6 +113,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
           setFilteredChildren(applyChildTaskFilter(childTasks, res.filter));
           setNamedFaultsView(res.namedFaultsView);
           setNamedFaultsLocations(res.namedFaultsLocations);
+          setRegionalViews(res.regionalViews);
           setReportTab(res.reportTab);
         })
         .catch(() => {
@@ -142,6 +143,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     const generalViewsOption: string[] = isClipBoard ? generalViews : localStorageGeneralViews;
     const namedFaultsViewOption: string = isClipBoard ? namedFaultsView : localStorageNamedFaultsView;
     const namedFaultsLocationsOption: string[] = isClipBoard ? namedFaultsLocations : localStorageNamedFaultsLocations;
+    const regionalViewsOption: string[] = isClipBoard ? regionalViews : localStorageRegionalViews;
 
     const sharableState = {
       filter: filteredArguments,
@@ -150,6 +152,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
       generalViews: generalViewsOption,
       namedFaultsView: namedFaultsViewOption,
       namedFaultsLocations: namedFaultsLocationsOption,
+      regionalViews: regionalViewsOption,
       reportTab,
     };
     const url = buildUrl(baseUrl, {
