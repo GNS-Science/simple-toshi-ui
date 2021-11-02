@@ -25,7 +25,7 @@ import FileDetail from './components/FileDetail';
 import Search from './components/Search';
 import GeneralTask from './pages/GeneralTask';
 import MenuBar from './components/MenuBar';
-import InversionSolution from './components/inversionSolution/InversionSolution';
+import InversionSolution from './pages/InversionSolution';
 
 /* preview views (with no test coverage...) */
 import Preview from './components/Preview';
@@ -142,7 +142,18 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
   //TODO - resolve @rehook/local-storage, version currently pinned to 2.4.0
   //see https://github.com/rehooks/local-storage/issues/77 for more info
   const [ISFavourites, setISFavourites] = useLocalStorage<ISFavouritesInstance>('IS-Favourites');
-  const [reportViewSelections, setReportViewSelections] = useLocalStorage<string[]>('report-view-selections', []);
+  const [localStorageGeneralViews, setLocalStorageGeneralViews] = useLocalStorage<string[]>(
+    'report-view-selections',
+    [],
+  );
+  const [localStorageNamedFaultsView, setLocalStorageNamedFaultsView] = useLocalStorage<string>(
+    'named-faults-plot-type',
+    '',
+  );
+  const [localStorageNamedFaultsLocations, setLocalStorageNamedFaultsLocations] = useLocalStorage<string[]>(
+    'named-faults-locations',
+    [],
+  );
   const LocalStorageProvider = LocalStorageContext.Provider;
 
   return (
@@ -153,8 +164,12 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
             value={{
               ISFavourites,
               setISFavourites,
-              reportViewSelections,
-              setReportViewSelections,
+              localStorageGeneralViews,
+              setLocalStorageGeneralViews,
+              localStorageNamedFaultsView,
+              setLocalStorageNamedFaultsView,
+              localStorageNamedFaultsLocations,
+              setLocalStorageNamedFaultsLocations,
             }}
           >
             <MenuBar />
@@ -172,7 +187,7 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
                 <Route path="/Search">
                   <Search />
                 </Route>
-                <Route path="/GeneralTask/:id">
+                <Route path="/GeneralTask/:id/:tabName?/:clipBoard?">
                   <GeneralTask />
                 </Route>
                 <Route path="/AutomationTask/:id">

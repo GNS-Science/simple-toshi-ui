@@ -5,6 +5,7 @@ const useStyles = makeStyles(() => ({
   controlsContainer: {
     display: 'flex',
     alignItems: 'center',
+    flexWrap: 'wrap',
   },
   control: {
     margin: 10,

@@ -1,12 +1,31 @@
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@material-ui/core';
 import React from 'react';
-interface AlertProps {
+import { useHistory } from 'react-router';
+interface DialogAlertProps {
   open: boolean;
   title: string;
   text: string;
   handleClose: () => void;
 }
-const Alert: React.FC<AlertProps> = ({ open, title, text, handleClose }: AlertProps) => {
+const DialogAlert: React.FC<DialogAlertProps> = ({ open, title, text, handleClose }: DialogAlertProps) => {
+  const history = useHistory();
+
+  React.useEffect(() => {
+    const searchParams = new URLSearchParams(history.location.search);
+    searchParams.set('modal', 'true');
+    history.push({
+      pathname: history.location.pathname,
+      search: searchParams.toString(),
+    });
+    return () => {
+      searchParams.delete('modal');
+      history.push({
+        pathname: history.location.pathname,
+        search: searchParams.toString(),
+      });
+    };
+  }, []);
+
   return (
     <>
       <Dialog
@@ -29,4 +48,4 @@ const Alert: React.FC<AlertProps> = ({ open, title, text, handleClose }: AlertPr
   );
 };
 
-export default Alert;
+export default DialogAlert;

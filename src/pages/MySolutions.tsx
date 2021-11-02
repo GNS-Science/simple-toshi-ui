@@ -3,7 +3,6 @@ import { useLazyLoadQuery } from 'react-relay';
 import { Button, ButtonGroup, Tooltip, Typography } from '@material-ui/core';
 import { graphql } from 'babel-plugin-relay/macro';
 
-import DiagnosticReportControls from '../components/diagnosticReportView/DiagnosticReportControls';
 import GeneralTaskDetailDrawer from '../components/diagnosticReportView/GeneralTaskDetailDrawer';
 import DiagnosticReportCard from '../components/diagnosticReportView/DiagnosticReportCard';
 import MySolutionsList from '../components/mySolutions/MySolutionsList';
@@ -11,24 +10,32 @@ import ControlsBar from '../components/common/ControlsBar';
 import LocalStorageContext from '../contexts/localStorage';
 import { GeneralTaskDetails } from '../interfaces/diagnosticReport';
 import { MySolutionsQuery } from './__generated__/MySolutionsQuery.graphql';
-import { diagnosticReportViewOptions as options } from '../constants/diagnosticReport';
 import {
   getGeneralTaskDetails,
   getMySolutionIdsArray,
   getReportItems,
   validateListItems,
 } from '../service/mySolution.service';
-import ImportExportModal from '../components/common/ImportExportModal';
+import CommonModal from '../components/common/Modal/CommonModal';
 
 const MySolutions: React.FC = () => {
+  const {
+    ISFavourites,
+    setISFavourites,
+    localStorageGeneralViews,
+    setLocalStorageGeneralViews,
+    localStorageNamedFaultsView,
+    setLocalStorageNamedFaultsView,
+    localStorageNamedFaultsLocations,
+    setLocalStorageNamedFaultsLocations,
+  } = useContext(LocalStorageContext);
+
   const [showList, setShowList] = useState(true);
-  const [viewOptions, setViewOptions] = useState<string[]>([options[0].finalPath]);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openSaveModal, setOpenSaveModal] = useState(false);
   const [openLoadModal, setOpenLoadModal] = useState(false);
   const [currentImage, setCurrentImage] = useState<number>(0);
 
-  const { ISFavourites, setISFavourites } = useContext(LocalStorageContext);
   const id = getMySolutionIdsArray(ISFavourites);
   const data = useLazyLoadQuery<MySolutionsQuery>(mySolutionsQuery, { id });
   const listItems = validateListItems(data);
@@ -86,16 +93,15 @@ const MySolutions: React.FC = () => {
             </Button>
           </Tooltip>
         )}
-        {!showList && <DiagnosticReportControls setViewOption={setViewOptions} />}
       </ControlsBar>
-      <ImportExportModal
+      <CommonModal
         input={false}
         openModal={openSaveModal}
         title="EXPORT JSON"
         text={JSON.stringify(ISFavourites)}
         handleClose={() => setOpenSaveModal(false)}
       />
-      <ImportExportModal
+      <CommonModal
         input={true}
         openModal={openLoadModal}
         title="IMPORT JSON"
@@ -106,9 +112,15 @@ const MySolutions: React.FC = () => {
         <MySolutionsList solutionsList={listItems} />
       ) : (
         <DiagnosticReportCard
+          modelType={currentGeneralTask.model_type}
           changeCurrentImage={handleChangeCurrentImage}
           automationTasks={reportItems}
-          viewOptions={viewOptions}
+          generalViews={localStorageGeneralViews}
+          setGeneralViews={setLocalStorageGeneralViews}
+          namedFaultsView={localStorageNamedFaultsView}
+          setNamedFaultsView={setLocalStorageNamedFaultsView}
+          namedFaultsLocations={localStorageNamedFaultsLocations}
+          setNamedFaultsLocations={setLocalStorageNamedFaultsLocations}
         />
       )}
       {!showList && <GeneralTaskDetailDrawer generalTaskDetails={currentGeneralTask} openDrawer={openDrawer} />}
