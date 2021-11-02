@@ -60,6 +60,7 @@ const RegionalMfdView: React.FC<RegionalMfdViewProps> = ({
     <>
       <MultiSelect
         name="Regional Solution MFD"
+        selected={regionalViews}
         options={regionalSolutionMfdDisplayNames}
         setOptions={setRegionalViews}
       />

@@ -74,7 +74,12 @@ const NamedFaultsView: React.FC<NamedFaultsViewProps> = ({
 
   return (
     <>
-      <MultiSelect name="Named Faults" options={faultOptions} setOptions={setNamedFaultsLocations} />
+      <MultiSelect
+        name="Named Faults"
+        selected={namedFaultsLocations}
+        options={faultOptions}
+        setOptions={setNamedFaultsLocations}
+      />
       <SelectControl name="Mfd Plot Views" options={mfdPlot} setOptions={setNamedFaultsView} />
       <div className={classes.imageContainer}>
         {namedFaultsSelection?.map((item) => (

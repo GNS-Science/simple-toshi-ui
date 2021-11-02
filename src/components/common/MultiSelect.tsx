@@ -1,5 +1,5 @@
 import { Checkbox, FormControl, Input, InputLabel, makeStyles, MenuItem, Select, Theme } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const useStyles = makeStyles((theme: Theme) => ({
   formControl: {
@@ -17,14 +17,19 @@ const MenuProps = {
 };
 interface MultiSelectProps {
   options: string[];
+  selected: string[];
   setOptions: (selections: string[]) => void;
   name: string;
 }
 
-const MultiSelect: React.FC<MultiSelectProps> = ({ options, setOptions, name }: MultiSelectProps) => {
+const MultiSelect: React.FC<MultiSelectProps> = ({ options, selected, setOptions, name }: MultiSelectProps) => {
   const classes = useStyles();
 
   const [selectedItems, setSelectedItems] = useState<string[]>([options[0]]);
+
+  useEffect(() => {
+    if (selected.length) setSelectedItems(selected);
+  }, []);
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setSelectedItems(event.target.value as string[]);
