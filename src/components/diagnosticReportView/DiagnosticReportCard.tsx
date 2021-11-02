@@ -9,9 +9,9 @@ import { ReportItem } from '../../interfaces/diagnosticReport';
 import FavouriteControls from '../common/FavouriteControls';
 import DiagnosticReportTabPanel from './DiagnosticReportTabPanel';
 import { mfdPlotOptions, NamedFaultsOption, namedFaultsOptions, PlotOption } from '../../constants/nameFaultsMfds';
-import DiagnosticReportControls from './DiagnosticReportControls';
 import SelectControl from '../common/SelectControl';
 import MultiSelect from '../common/MultiSelect';
+import GeneralView from './GeneralView';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -83,12 +83,6 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   useEffect(() => {
     setReportTab && setReportTab(currentTab);
   }, [currentTab]);
-
-  const reportUrl = (path: string, id: string) => {
-    return buildUrl(reportBaseUrl, {
-      path: `/opensha/DATA/${id}/solution_report/resources/${path}`,
-    });
-  };
 
   const [namedFaultsSelection, setNamedFaultsSelection] = useState<NamedFaultsOption[]>([namedFaultsOptions[0]]);
   const [mfdPlotSelection, setMfdPlotSelection] = useState<PlotOption>(mfdPlotOptions[0]);
@@ -216,17 +210,11 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             <Tab label="Named Faults" id="simple-tab-1" disabled={modelType !== 'CRUSTAL'} />
           </Tabs>
           <DiagnosticReportTabPanel value={currentTab} index={0}>
-            <DiagnosticReportControls viewOptions={generalViews} setViewOption={setGeneralViews} />
-            <div className={classes.imageContainer}>
-              {generalViews.map((path) => (
-                <img
-                  key={path}
-                  className={classes.image}
-                  src={reportUrl(path, automationTasks[currentImage].inversion_solution.id)}
-                  alt={path}
-                />
-              ))}
-            </div>
+            <GeneralView
+              id={automationTasks[currentImage].inversion_solution.id}
+              generalViews={generalViews}
+              setGeneralViews={setGeneralViews}
+            />
           </DiagnosticReportTabPanel>
           <DiagnosticReportTabPanel value={currentTab} index={1}>
             <MultiSelect name="Named Faults" options={faultOptions} setOptions={setNamedFaultsLocations} />
