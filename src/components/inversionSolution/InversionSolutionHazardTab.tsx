@@ -44,15 +44,15 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
           <Typography variant="h5" gutterBottom>
             <strong>Hazard:</strong>
             <ControlsBar>
-              <SelectControl label="Location" options={locationOptions} setOptions={setLocation} />
-              <SelectControl label="PGA/SA period" options={pgaPeriodOptions} setOptions={setPGA} />
-              <SelectControl label="Forecast Timespan" options={forecastTimeSpanOptions} setOptions={setForecastTime} />
+              <SelectControl name="Location" options={locationOptions} setOptions={setLocation} />
+              <SelectControl name="PGA/SA period" options={pgaPeriodOptions} setOptions={setPGA} />
+              <SelectControl name="Forecast Timespan" options={forecastTimeSpanOptions} setOptions={setForecastTime} />
               <SelectControl
-                label="Background Seismicity"
+                name="Background Seismicity"
                 options={bgSeismisityOptions}
                 setOptions={setBackgroundSeismicity}
               />
-              <SelectControl label="Background Motion Model" options={gmpeOptions} setOptions={setGmpe} />
+              <SelectControl name="Background Motion Model" options={gmpeOptions} setOptions={setGmpe} />
             </ControlsBar>
           </Typography>
           <Box style={{ width: '100%', padding: '1rem' }}>

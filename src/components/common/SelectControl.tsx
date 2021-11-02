@@ -1,5 +1,5 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
-import { Checkbox, FormControl, Input, InputLabel, makeStyles, MenuItem, Select, Theme } from '@material-ui/core';
+import React, { useState } from 'react';
+import { FormControl, Input, InputLabel, makeStyles, MenuItem, Select, Theme } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) => ({
   formControl: {
@@ -7,36 +7,23 @@ const useStyles = makeStyles((theme: Theme) => ({
     minWidth: 200,
     maxWidth: 300,
   },
-  hidden: {
-    visibility: 'hidden',
-  },
-  chips: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  chip: {
-    margin: 2,
-  },
 }));
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
 const MenuProps = {
   PaperProps: {
     style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
+      maxHeight: 500,
     },
   },
 };
 
 interface SelectControlProps {
   options: string[];
-  setOptions: Dispatch<SetStateAction<string>>;
-  label: string;
+  setOptions: (selection: string) => void;
+  name: string;
 }
 
-const SelectControl: React.FC<SelectControlProps> = ({ options, setOptions, label }: SelectControlProps) => {
+const SelectControl: React.FC<SelectControlProps> = ({ options, setOptions, name }: SelectControlProps) => {
   const [selectedItems, setSelectedItems] = useState<string>(options[0]);
 
   const classes = useStyles();
@@ -50,11 +37,11 @@ const SelectControl: React.FC<SelectControlProps> = ({ options, setOptions, labe
   return (
     <>
       <FormControl className={classes.formControl}>
-        <InputLabel>{label}</InputLabel>
+        <InputLabel>{name}</InputLabel>
         <Select
           labelId={`report-hash-label`}
-          label={label}
-          name={label}
+          label={name}
+          name={name}
           value={selectedItems}
           onChange={handleChange}
           input={<Input />}
@@ -62,7 +49,6 @@ const SelectControl: React.FC<SelectControlProps> = ({ options, setOptions, labe
         >
           {options.map((opt) => (
             <MenuItem key={opt} value={opt}>
-              <Checkbox checked={selectedItems.indexOf(opt) > -1} />
               {opt}
             </MenuItem>
           ))}

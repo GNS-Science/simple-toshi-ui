@@ -3,7 +3,6 @@ import { useLazyLoadQuery } from 'react-relay';
 import { Button, ButtonGroup, Tooltip, Typography } from '@material-ui/core';
 import { graphql } from 'babel-plugin-relay/macro';
 
-import DiagnosticReportControls from '../components/diagnosticReportView/DiagnosticReportControls';
 import GeneralTaskDetailDrawer from '../components/diagnosticReportView/GeneralTaskDetailDrawer';
 import DiagnosticReportCard from '../components/diagnosticReportView/DiagnosticReportCard';
 import MySolutionsList from '../components/mySolutions/MySolutionsList';
@@ -20,14 +19,23 @@ import {
 import CommonModal from '../components/common/Modal/CommonModal';
 
 const MySolutions: React.FC = () => {
-  const { reportViewSelections, setReportViewSelections } = useContext(LocalStorageContext);
+  const {
+    ISFavourites,
+    setISFavourites,
+    localStorageGeneralViews,
+    setLocalStorageGeneralViews,
+    localStorageNamedFaultsView,
+    setLocalStorageNamedFaultsView,
+    localStorageNamedFaultsLocations,
+    setLocalStorageNamedFaultsLocations,
+  } = useContext(LocalStorageContext);
+
   const [showList, setShowList] = useState(true);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openSaveModal, setOpenSaveModal] = useState(false);
   const [openLoadModal, setOpenLoadModal] = useState(false);
   const [currentImage, setCurrentImage] = useState<number>(0);
 
-  const { ISFavourites, setISFavourites } = useContext(LocalStorageContext);
   const id = getMySolutionIdsArray(ISFavourites);
   const data = useLazyLoadQuery<MySolutionsQuery>(mySolutionsQuery, { id });
   const listItems = validateListItems(data);
@@ -85,9 +93,6 @@ const MySolutions: React.FC = () => {
             </Button>
           </Tooltip>
         )}
-        {!showList && (
-          <DiagnosticReportControls viewOptions={reportViewSelections} setViewOption={setReportViewSelections} />
-        )}
       </ControlsBar>
       <CommonModal
         input={false}
@@ -107,9 +112,15 @@ const MySolutions: React.FC = () => {
         <MySolutionsList solutionsList={listItems} />
       ) : (
         <DiagnosticReportCard
+          modelType={currentGeneralTask.model_type}
           changeCurrentImage={handleChangeCurrentImage}
           automationTasks={reportItems}
-          viewOptions={reportViewSelections}
+          generalViews={localStorageGeneralViews}
+          setGeneralViews={setLocalStorageGeneralViews}
+          namedFaultsView={localStorageNamedFaultsView}
+          setNamedFaultsView={setLocalStorageNamedFaultsView}
+          namedFaultsLocations={localStorageNamedFaultsLocations}
+          setNamedFaultsLocations={setLocalStorageNamedFaultsLocations}
         />
       )}
       {!showList && <GeneralTaskDetailDrawer generalTaskDetails={currentGeneralTask} openDrawer={openDrawer} />}

@@ -12,26 +12,15 @@ const useStyles = makeStyles((theme: Theme) => ({
   hidden: {
     visibility: 'hidden',
   },
-  chips: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  chip: {
-    margin: 2,
-  },
 }));
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
 const MenuProps = {
   PaperProps: {
     style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
+      maxHeight: 500,
     },
   },
 };
-
 interface DiagnosticReportControlsProps {
   viewOptions: string[];
   setViewOption: (newViewOptions: string[]) => void;
