@@ -1,5 +1,6 @@
 import { InversionSolutionHazardTabQueryResponse } from '../components/inversionSolution/__generated__/InversionSolutionHazardTabQuery.graphql';
 import { XY } from '../interfaces/common';
+import { HazardTableOptions } from '../interfaces/inversionSolutions';
 
 const minXBound = parseFloat(process.env.REACT_APP_MIN_X_BOUND ?? '0');
 
@@ -20,16 +21,17 @@ export const filterData = (
   const xy: XY[] = [];
   const rows = data?.node?.rows;
   const filtered = rows?.filter((item) => {
-    if (item) {
-      return (
-        item?.includes(location) &&
-        item?.includes(pgaValue) &&
-        item?.includes(forecastTime) &&
-        item?.includes(gmpe) &&
-        item?.includes(backgroundSeismisity)
-      );
-    }
+    if (
+      item &&
+      item[0] === forecastTime &&
+      item[1] === backgroundSeismisity &&
+      item[2] === pgaValue &&
+      item[3] === gmpe &&
+      item[4] === location
+    )
+      return true;
   });
+
   filtered?.map((item) => {
     if (item) {
       const slicedArray = item.slice(7, 9);
@@ -40,5 +42,34 @@ export const filterData = (
       xy.push(object);
     }
   });
+
   return minDataFilter(xy);
+};
+
+export const getHazardTableOptions = (data: InversionSolutionHazardTabQueryResponse): HazardTableOptions => {
+  const rows = data?.node?.rows;
+
+  const forecastTimes = new Set<string>();
+  const bgSeismicity = new Set<string>();
+  const pga = new Set<string>();
+  const gmpe = new Set<string>();
+  const locations = new Set<string>();
+
+  rows?.map((row) => {
+    if (row && row !== null) {
+      row[0] !== null && forecastTimes.add(row[0] as string);
+      row[1] !== null && bgSeismicity.add(row[1] as string);
+      row[2] !== null && pga.add(row[2] === '0.0' ? 'PGA' : (row[2] as string));
+      row[3] !== null && gmpe.add(row[3] as string);
+      row[4] !== null && locations.add(row[4] as string);
+    }
+  });
+
+  return {
+    forecastTime: Array.from(forecastTimes),
+    backgroundSeismicity: Array.from(bgSeismicity),
+    PGA: Array.from(pga),
+    gmpe: Array.from(gmpe),
+    location: Array.from(locations),
+  };
 };
