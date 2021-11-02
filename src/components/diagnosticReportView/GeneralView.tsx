@@ -54,7 +54,12 @@ const GeneralView: React.FC<GeneralViewProps> = ({ id, generalViews, setGeneralV
 
   return (
     <>
-      <MultiSelect name="Reports" options={generalViewDisplayNames} setOptions={setGeneralViews} />
+      <MultiSelect
+        name="Reports"
+        selected={generalViews}
+        options={generalViewDisplayNames}
+        setOptions={setGeneralViews}
+      />
       <div className={classes.imageContainer}>
         {generalViewSelections.map((option) => (
           <img
