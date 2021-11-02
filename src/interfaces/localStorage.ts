@@ -3,6 +3,8 @@ export interface LocalStorageContextInterface {
   setISFavourites: (newValue: ISFavouritesInstance) => void;
   reportViewSelections: string[];
   setReportViewSelections: (newValue: string[]) => void;
+  localStorageRegionalView: string[];
+  setLocalStorageRegionalView: (newValue: string[]) => void;
 }
 
 export type ISFavouritesInstance = Record<string, ISFavouriteValue> | null;
