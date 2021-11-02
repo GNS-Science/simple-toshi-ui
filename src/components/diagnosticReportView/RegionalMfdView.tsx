@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core';
 import buildUrl from 'build-url-ts';
 import React from 'react';
-import { RegionalSolutionMfdOption } from '../../constants/regionalSolutionMfd';
+import { RegionalSolutionMfdOption, regionalSolutionMfdOptions } from '../../constants/regionalSolutionMfd';
 
 const useStyles = makeStyles(() => ({
   image: {
@@ -27,6 +27,12 @@ const RegionalMfdView: React.FC<RegionalMfdViewProps> = ({ id, viewOptions }: Re
       path: `/opensha/DATA/${id}/solution_report/resources/${finalPath}`,
     });
   };
+
+  const regionalSolutionMfdDisplayNames: string[] = [];
+
+  regionalSolutionMfdOptions.map((option) => {
+    regionalSolutionMfdDisplayNames.push(option.displayName);
+  });
 
   return (
     <>
