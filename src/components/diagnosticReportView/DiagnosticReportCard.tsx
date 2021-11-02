@@ -9,6 +9,7 @@ import FavouriteControls from '../common/FavouriteControls';
 import DiagnosticReportTabPanel from './DiagnosticReportTabPanel';
 import GeneralView from './GeneralView';
 import NamedFaultsView from './NamedFaultsView';
+import RegionalMfdView from './RegionalMfdView';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -37,6 +38,8 @@ interface DiagnosticReportCardProps {
   setNamedFaultsView: (selection: string) => void;
   namedFaultsLocations: string[];
   setNamedFaultsLocations: (selection: string[]) => void;
+  regionalViews: string[];
+  setRegionalViews: (views: string[]) => void;
   changeCurrentImage?: (index: number) => void;
   reportTab?: number;
   setReportTab?: (tab: number) => void;
@@ -51,6 +54,8 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   setNamedFaultsView,
   namedFaultsLocations,
   setNamedFaultsLocations,
+  regionalViews,
+  setRegionalViews,
   changeCurrentImage,
   reportTab,
   setReportTab,
@@ -60,7 +65,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   const [currentTab, setCurrentTab] = useState<number>(0);
 
   useEffect(() => {
-    if (reportTab === 1) setCurrentTab(1);
+    if (reportTab !== 0) setCurrentTab(reportTab ?? 0);
   }, []);
 
   useEffect(() => {
@@ -142,6 +147,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
           <Tabs value={currentTab} onChange={handleTabChange}>
             <Tab label="General" id="simple-tab-0" />
             <Tab label="Named Faults" id="simple-tab-1" disabled={modelType !== 'CRUSTAL'} />
+            <Tab label="Regional Solutions" id="simple-tab-2" disabled={modelType !== 'CRUSTAL'} />
           </Tabs>
           <DiagnosticReportTabPanel value={currentTab} index={0}>
             <GeneralView
@@ -157,6 +163,13 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
               setNamedFaultsView={setNamedFaultsView}
               namedFaultsLocations={namedFaultsLocations}
               setNamedFaultsLocations={setNamedFaultsLocations}
+            />
+          </DiagnosticReportTabPanel>
+          <DiagnosticReportTabPanel value={currentTab} index={2}>
+            <RegionalMfdView
+              id={automationTasks[currentImage].inversion_solution.id}
+              regionalViews={regionalViews}
+              setRegionalViews={setRegionalViews}
             />
           </DiagnosticReportTabPanel>
         </CardContent>

@@ -38,6 +38,9 @@ import AutomationTask from './components/AutomationTask';
 import LocalStorageContext from './contexts/localStorage';
 import { ISFavouritesInstance } from './interfaces/localStorage';
 import MySolutions from './pages/MySolutions';
+import { regionalSolutionMfdOptions } from './constants/regionalSolutionMfd';
+import { diagnosticReportViewOptions } from './constants/diagnosticReport';
+import { mfdPlotOptions, namedFaultsOptions } from './constants/nameFaultsMfds';
 
 const useStyles = makeStyles({
   root: {
@@ -142,18 +145,19 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
   //TODO - resolve @rehook/local-storage, version currently pinned to 2.4.0
   //see https://github.com/rehooks/local-storage/issues/77 for more info
   const [ISFavourites, setISFavourites] = useLocalStorage<ISFavouritesInstance>('IS-Favourites');
-  const [localStorageRegionalView, setLocalStorageRegionalView] = useLocalStorage<string[]>('regional-views', []);
-  const [localStorageGeneralViews, setLocalStorageGeneralViews] = useLocalStorage<string[]>(
-    'report-view-selections',
-    [],
-  );
+  const [localStorageRegionalViews, setLocalStorageRegionalViews] = useLocalStorage<string[]>('regional-views', [
+    regionalSolutionMfdOptions[0].displayName,
+  ]);
+  const [localStorageGeneralViews, setLocalStorageGeneralViews] = useLocalStorage<string[]>('report-view-selections', [
+    diagnosticReportViewOptions[0].displayName,
+  ]);
   const [localStorageNamedFaultsView, setLocalStorageNamedFaultsView] = useLocalStorage<string>(
     'named-faults-plot-type',
-    '',
+    mfdPlotOptions[0].displayName,
   );
   const [localStorageNamedFaultsLocations, setLocalStorageNamedFaultsLocations] = useLocalStorage<string[]>(
     'named-faults-locations',
-    [],
+    [namedFaultsOptions[0].displayName],
   );
   const LocalStorageProvider = LocalStorageContext.Provider;
 
@@ -165,8 +169,8 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
             value={{
               ISFavourites,
               setISFavourites,
-              localStorageRegionalView,
-              setLocalStorageRegionalView,
+              localStorageRegionalViews,
+              setLocalStorageRegionalViews,
               localStorageGeneralViews,
               setLocalStorageGeneralViews,
               localStorageNamedFaultsView,
