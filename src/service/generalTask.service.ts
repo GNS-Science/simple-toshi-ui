@@ -10,7 +10,7 @@ export const sweepsList = (
   arg_lists: GeneralTaskKeyValueListPairs,
   sweeps: readonly (string | null)[],
 ): GeneralTaskKeyValueListPairs => {
-  if (arg_lists) return arg_lists.filter((el) => sweeps.includes(el ? el.k : ''));
+  if (arg_lists.length) return arg_lists.filter((el) => sweeps.includes(el ? el.k : ''));
   return [];
 };
 
@@ -88,7 +88,7 @@ export const validateChildTasks = (data: GeneralTaskChildrenTabQueryResponse): V
 export const getChildTaskIdArray = (filteredChildren: ValidatedChildren): string[] => {
   const idArray: string[] = [];
 
-  if (filteredChildren.data && filteredChildren.data.length <= maxLength) {
+  if (filteredChildren.data?.length && filteredChildren.data.length <= maxLength) {
     filteredChildren.data?.map((task) => {
       idArray.push(task.id);
     });

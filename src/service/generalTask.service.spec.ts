@@ -319,6 +319,14 @@ describe('For getChildTaskIdArray function', () => {
     const result = generalTaskService.getChildTaskIdArray(childTasks);
     expect(result).toEqual(['1111']);
   });
+
+  it('should return empty array if FilteredChildren has not data', () => {
+    const childTasks: ValidatedChildren = {
+      data: [],
+    };
+    const result = generalTaskService.getChildTaskIdArray(childTasks);
+    expect(result).toEqual([]);
+  });
 });
 
 test('For applyChildTaskFilterFunction', () => {
