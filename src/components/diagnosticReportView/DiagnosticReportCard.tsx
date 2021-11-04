@@ -3,15 +3,13 @@ import { Link } from 'react-router-dom';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import { Card, CardContent, IconButton, makeStyles, Tooltip, Typography, Tabs, Tab } from '@material-ui/core';
-import buildUrl from 'build-url-ts';
 
 import { ReportItem } from '../../interfaces/diagnosticReport';
 import FavouriteControls from '../common/FavouriteControls';
 import DiagnosticReportTabPanel from './DiagnosticReportTabPanel';
-import { mfdPlotOptions, NamedFaultsOption, namedFaultsOptions, PlotOption } from '../../constants/nameFaultsMfds';
-import DiagnosticReportControls from './DiagnosticReportControls';
-import SelectControl from '../common/SelectControl';
-import MultiSelect from '../common/MultiSelect';
+import GeneralView from './GeneralView';
+import NamedFaultsView from './NamedFaultsView';
+import RegionalMfdView from './RegionalMfdView';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -29,19 +27,6 @@ const useStyles = makeStyles(() => ({
     paddingLeft: 70,
     paddingRight: 70,
   },
-  imageContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-  },
-  image: {
-    padding: '5px',
-    maxHeight: '80vh',
-    width: '25%',
-    objectFit: 'contain',
-    flexGrow: 3,
-    flexShrink: 4,
-  },
 }));
 
 interface DiagnosticReportCardProps {
@@ -53,6 +38,8 @@ interface DiagnosticReportCardProps {
   setNamedFaultsView: (selection: string) => void;
   namedFaultsLocations: string[];
   setNamedFaultsLocations: (selection: string[]) => void;
+  regionalViews: string[];
+  setRegionalViews: (views: string[]) => void;
   changeCurrentImage?: (index: number) => void;
   reportTab?: number;
   setReportTab?: (tab: number) => void;
@@ -67,6 +54,8 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   setNamedFaultsView,
   namedFaultsLocations,
   setNamedFaultsLocations,
+  regionalViews,
+  setRegionalViews,
   changeCurrentImage,
   reportTab,
   setReportTab,
@@ -74,43 +63,14 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   const classes = useStyles();
   const [currentImage, setCurrentImage] = useState<number>(0);
   const [currentTab, setCurrentTab] = useState<number>(0);
-  const reportBaseUrl = process.env.REACT_APP_REPORTS_URL;
 
   useEffect(() => {
-    if (reportTab === 1) setCurrentTab(1);
+    if (reportTab !== 0) setCurrentTab(reportTab ?? 0);
   }, []);
 
   useEffect(() => {
     setReportTab && setReportTab(currentTab);
   }, [currentTab]);
-
-  const reportUrl = (path: string, id: string) => {
-    return buildUrl(reportBaseUrl, {
-      path: `/opensha/DATA/${id}/solution_report/resources/${path}`,
-    });
-  };
-
-  const [namedFaultsSelection, setNamedFaultsSelection] = useState<NamedFaultsOption[]>([namedFaultsOptions[0]]);
-  const [mfdPlotSelection, setMfdPlotSelection] = useState<PlotOption>(mfdPlotOptions[0]);
-
-  useEffect(() => {
-    const filtered = namedFaultsOptions.filter((option) => {
-      const result = namedFaultsLocations?.includes(option.displayName);
-      return result;
-    });
-    setNamedFaultsSelection(filtered);
-    mfdPlotOptions.map((option) => {
-      if (namedFaultsView === option.displayName) {
-        setMfdPlotSelection(option);
-      }
-    });
-  }, [namedFaultsView, namedFaultsLocations]);
-
-  const namedFaultsUrl = (id: string, typePath: string, faultPath: string, typeSuffix: string) => {
-    return buildUrl(reportBaseUrl, {
-      path: `/opensha/DATA/${id}/named_fault_mfds/${typePath}/${faultPath}${typeSuffix}`,
-    });
-  };
 
   const nextImage = () => {
     if (currentImage < automationTasks.length - 1) {
@@ -144,17 +104,6 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   if (!automationTasks[currentImage]) {
     return <Typography> There are no valid reports to show. </Typography>;
   }
-  const faultOptions: string[] = [];
-
-  namedFaultsOptions.map((option) => {
-    faultOptions.push(option.displayName);
-  });
-
-  const mfdPlot: string[] = [];
-
-  mfdPlotOptions.map((option) => {
-    mfdPlot.push(option.displayName);
-  });
 
   return (
     <>
@@ -198,37 +147,30 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
           <Tabs value={currentTab} onChange={handleTabChange}>
             <Tab label="General" id="simple-tab-0" />
             <Tab label="Named Faults" id="simple-tab-1" disabled={modelType !== 'CRUSTAL'} />
+            <Tab label="Regional Solutions" id="simple-tab-2" disabled={modelType !== 'CRUSTAL'} />
           </Tabs>
           <DiagnosticReportTabPanel value={currentTab} index={0}>
-            <DiagnosticReportControls viewOptions={generalViews} setViewOption={setGeneralViews} />
-            <div className={classes.imageContainer}>
-              {generalViews.map((path) => (
-                <img
-                  key={path}
-                  className={classes.image}
-                  src={reportUrl(path, automationTasks[currentImage].inversion_solution.id)}
-                  alt={path}
-                />
-              ))}
-            </div>
+            <GeneralView
+              id={automationTasks[currentImage].inversion_solution.id}
+              generalViews={generalViews}
+              setGeneralViews={setGeneralViews}
+            />
           </DiagnosticReportTabPanel>
           <DiagnosticReportTabPanel value={currentTab} index={1}>
-            <MultiSelect name="Named Faults" options={faultOptions} setOptions={setNamedFaultsLocations} />
-            <SelectControl name="Mfd Plot Views" options={mfdPlot} setOptions={setNamedFaultsView} />
-            <div className={classes.imageContainer}>
-              {namedFaultsSelection?.map((item) => (
-                <img
-                  key={item.path}
-                  className={classes.image}
-                  src={namedFaultsUrl(
-                    automationTasks[currentImage].inversion_solution.id,
-                    mfdPlotSelection.typePath as string,
-                    item.path,
-                    mfdPlotSelection?.path as string,
-                  )}
-                />
-              ))}
-            </div>
+            <NamedFaultsView
+              id={automationTasks[currentImage].inversion_solution.id}
+              namedFaultsView={namedFaultsView}
+              setNamedFaultsView={setNamedFaultsView}
+              namedFaultsLocations={namedFaultsLocations}
+              setNamedFaultsLocations={setNamedFaultsLocations}
+            />
+          </DiagnosticReportTabPanel>
+          <DiagnosticReportTabPanel value={currentTab} index={2}>
+            <RegionalMfdView
+              id={automationTasks[currentImage].inversion_solution.id}
+              regionalViews={regionalViews}
+              setRegionalViews={setRegionalViews}
+            />
           </DiagnosticReportTabPanel>
         </CardContent>
       </Card>
