@@ -2,19 +2,12 @@ import { Typography, Box, Card } from '@material-ui/core';
 import { graphql } from 'babel-plugin-relay/macro';
 import React, { useEffect, useState } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
-import {
-  bgSeismisityOptions,
-  forecastTimeSpanOptions,
-  gmpeOptions,
-  locationOptions,
-  pgaPeriodOptions,
-} from '../../constants/inversionSolutionHazardTab';
 import ControlsBar from '../common/ControlsBar';
 import SelectControl from '../common/SelectControl';
 import { InversionSolutionHazardTabQuery } from './__generated__/InversionSolutionHazardTabQuery.graphql';
 import { AnimatedAxis, AnimatedLineSeries, Grid, Tooltip, XYChart } from '@visx/xychart';
 import { XY } from '../../interfaces/common';
-import { filterData } from '../../service/inversionSolution.service';
+import { filterData, getHazardTableOptions } from '../../service/inversionSolution.service';
 
 interface InversionSolutionHazardTabProps {
   id: string;
@@ -23,13 +16,16 @@ interface InversionSolutionHazardTabProps {
 const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
   id,
 }: InversionSolutionHazardTabProps) => {
-  const [location, setLocation] = useState<string>(locationOptions[0]);
-  const [PGA, setPGA] = useState<string>(pgaPeriodOptions[0]);
-  const [forecastTime, setForecastTime] = useState<string>(forecastTimeSpanOptions[0]);
-  const [gmpe, setGmpe] = useState<string>(gmpeOptions[0]);
-  const [backgroundSeismicity, setBackgroundSeismicity] = useState<string>(bgSeismisityOptions[0]);
-  const [filteredData, setFilteredData] = useState<XY[]>([]);
   const data = useLazyLoadQuery<InversionSolutionHazardTabQuery>(inversionSolutionHazardTabQuery, { id });
+  const options = getHazardTableOptions(data);
+
+  const [location, setLocation] = useState<string>(options.location[0]);
+  const [PGA, setPGA] = useState<string>(options.PGA[0]);
+  const [forecastTime, setForecastTime] = useState<string>(options.forecastTime[0]);
+  const [gmpe, setGmpe] = useState<string>(options.gmpe[0]);
+  const [backgroundSeismicity, setBackgroundSeismicity] = useState<string>(options.backgroundSeismicity[0]);
+
+  const [filteredData, setFilteredData] = useState<XY[]>([]);
 
   useEffect(() => {
     const pgaValue = PGA === 'PGA' ? '0.0' : PGA;
@@ -44,15 +40,15 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
           <Typography variant="h5" gutterBottom>
             <strong>Hazard:</strong>
             <ControlsBar>
-              <SelectControl name="Location" options={locationOptions} setOptions={setLocation} />
-              <SelectControl name="PGA/SA period" options={pgaPeriodOptions} setOptions={setPGA} />
-              <SelectControl name="Forecast Timespan" options={forecastTimeSpanOptions} setOptions={setForecastTime} />
+              <SelectControl name="Location" options={options.location} setOptions={setLocation} />
+              <SelectControl name="PGA/SA period" options={options.PGA} setOptions={setPGA} />
+              <SelectControl name="Forecast Timespan" options={options.forecastTime} setOptions={setForecastTime} />
               <SelectControl
                 name="Background Seismicity"
-                options={bgSeismisityOptions}
+                options={options.backgroundSeismicity}
                 setOptions={setBackgroundSeismicity}
               />
-              <SelectControl name="Background Motion Model" options={gmpeOptions} setOptions={setGmpe} />
+              <SelectControl name="Background Motion Model" options={options.gmpe} setOptions={setGmpe} />
             </ControlsBar>
           </Typography>
           <Box style={{ width: '100%', padding: '1rem' }}>
