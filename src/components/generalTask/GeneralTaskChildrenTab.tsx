@@ -30,6 +30,7 @@ import GeneralTaskDetailDrawer from '../diagnosticReportView/GeneralTaskDetailDr
 import SweepArgumentFilter from './SweepArgumentFilter';
 import CommonModal from '../common/Modal/CommonModal';
 import { mfdPlotOptions, namedFaultsOptions } from '../../constants/nameFaultsMfds';
+import { regionalSolutionMfdOptions } from '../../constants/regionalSolutionMfd';
 
 const useStyles = makeStyles(() => ({
   filterContainer: {
@@ -73,11 +74,14 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     setLocalStorageNamedFaultsView,
     localStorageNamedFaultsLocations,
     setLocalStorageNamedFaultsLocations,
+    localStorageRegionalViews,
+    setLocalStorageRegionalViews,
   } = useContext(LocalStorageContext);
 
-  const [generalViews, setGeneralViews] = useState<string[]>([options[0].finalPath]);
+  const [generalViews, setGeneralViews] = useState<string[]>([options[0].displayName]);
   const [namedFaultsView, setNamedFaultsView] = useState<string>(mfdPlotOptions[0].displayName);
   const [namedFaultsLocations, setNamedFaultsLocations] = useState<string[]>([namedFaultsOptions[0].displayName]);
+  const [regionalViews, setRegionalViews] = useState<string[]>([regionalSolutionMfdOptions[0].displayName]);
   const [reportTab, setReportTab] = useState<number>(0);
 
   const [showList, setShowList] = useState(true);
@@ -109,6 +113,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
           setFilteredChildren(applyChildTaskFilter(childTasks, res.filter));
           setNamedFaultsView(res.namedFaultsView);
           setNamedFaultsLocations(res.namedFaultsLocations);
+          setRegionalViews(res.regionalViews);
           setReportTab(res.reportTab);
         })
         .catch(() => {
@@ -138,6 +143,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     const generalViewsOption: string[] = isClipBoard ? generalViews : localStorageGeneralViews;
     const namedFaultsViewOption: string = isClipBoard ? namedFaultsView : localStorageNamedFaultsView;
     const namedFaultsLocationsOption: string[] = isClipBoard ? namedFaultsLocations : localStorageNamedFaultsLocations;
+    const regionalViewsOption: string[] = isClipBoard ? regionalViews : localStorageRegionalViews;
 
     const sharableState = {
       filter: filteredArguments,
@@ -146,6 +152,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
       generalViews: generalViewsOption,
       namedFaultsView: namedFaultsViewOption,
       namedFaultsLocations: namedFaultsLocationsOption,
+      regionalViews: regionalViewsOption,
       reportTab,
     };
     const url = buildUrl(baseUrl, {
@@ -240,6 +247,8 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
             setNamedFaultsView={isClipBoard ? setNamedFaultsView : setLocalStorageNamedFaultsView}
             namedFaultsLocations={isClipBoard ? namedFaultsLocations : localStorageNamedFaultsLocations}
             setNamedFaultsLocations={isClipBoard ? setNamedFaultsLocations : setLocalStorageNamedFaultsLocations}
+            regionalViews={isClipBoard ? regionalViews : localStorageRegionalViews}
+            setRegionalViews={isClipBoard ? setRegionalViews : setLocalStorageRegionalViews}
             reportTab={reportTab}
             setReportTab={setReportTab}
           />
