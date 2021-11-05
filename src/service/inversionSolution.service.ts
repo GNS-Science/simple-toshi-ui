@@ -56,12 +56,12 @@ export const getHazardTableOptions = (data: InversionSolutionHazardTabQueryRespo
   const locations = new Set<string>();
 
   rows?.map((row) => {
-    if (row && row !== null) {
-      row[0] !== null && forecastTimes.add(row[0] as string);
-      row[1] !== null && bgSeismicity.add(row[1] as string);
-      row[2] !== null && pga.add(row[2] === '0.0' ? 'PGA' : (row[2] as string));
-      row[3] !== null && gmpe.add(row[3] as string);
-      row[4] !== null && locations.add(row[4] as string);
+    if (row) {
+      row[0] !== null && forecastTimes.add(row[0]);
+      row[1] !== null && bgSeismicity.add(row[1]);
+      row[2] !== null && pga.add(row[2] === '0.0' ? 'PGA' : row[2]);
+      row[3] !== null && gmpe.add(row[3]);
+      row[4] !== null && locations.add(row[4]);
     }
   });
 
