@@ -8,6 +8,7 @@ import { InversionSolutionHazardTabQuery } from './__generated__/InversionSoluti
 import { AnimatedAxis, AnimatedLineSeries, Grid, Tooltip, XYChart } from '@visx/xychart';
 import { XY } from '../../interfaces/common';
 import { filterData, getHazardTableOptions } from '../../service/inversionSolution.service';
+import MultiSelect from '../common/MultiSelect';
 
 interface InversionSolutionHazardTabProps {
   id: string;
@@ -20,7 +21,7 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
   const options = getHazardTableOptions(data);
 
   const [location, setLocation] = useState<string>(options.location[0]);
-  const [PGA, setPGA] = useState<string>(options.PGA[0]);
+  const [PGA, setPGA] = useState<string[]>([options.PGA[0]]);
   const [forecastTime, setForecastTime] = useState<string>(options.forecastTime[0]);
   const [gmpe, setGmpe] = useState<string>(options.gmpe[0]);
   const [backgroundSeismicity, setBackgroundSeismicity] = useState<string>(options.backgroundSeismicity[0]);
@@ -28,10 +29,17 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
   const [filteredData, setFilteredData] = useState<XY[]>([]);
 
   useEffect(() => {
-    const pgaValue = PGA === 'PGA' ? '0.0' : PGA;
-    const xy = filterData(data, location, pgaValue, forecastTime, gmpe, backgroundSeismicity);
-    setFilteredData(xy);
+    if (PGA.includes('PGA')) {
+      const index = PGA.indexOf('PGA');
+      PGA[index] = '0.0';
+    }
+    // const xy = filterData(data, location, PGA, forecastTime, gmpe, backgroundSeismicity);
+    // setFilteredData(xy);
   }, [location, PGA, forecastTime, gmpe, backgroundSeismicity]);
+
+  const handleSetPGA = (selections: string[]) => {
+    setPGA(selections);
+  };
 
   return (
     <>
@@ -40,9 +48,9 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
           <Typography variant="h5" gutterBottom>
             <strong>Hazard:</strong>
             <ControlsBar>
-              <SelectControl name="Location" options={options.location} setOptions={setLocation} />
-              <SelectControl name="PGA/SA period" options={options.PGA} setOptions={setPGA} />
-              <SelectControl name="Forecast Timespan" options={options.forecastTime} setOptions={setForecastTime} />
+              <SelectControl name="Location" options={locationOptions} setOptions={setLocation} />
+              <MultiSelect name="PGA/SA Period" options={pgaPeriodOptions} setOptions={handleSetPGA} />
+              <SelectControl name="Forecast Timespan" options={forecastTimeSpanOptions} setOptions={setForecastTime} />
               <SelectControl
                 name="Background Seismicity"
                 options={options.backgroundSeismicity}
