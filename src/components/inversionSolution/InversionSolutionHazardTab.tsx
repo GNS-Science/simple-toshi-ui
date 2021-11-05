@@ -1,7 +1,7 @@
-import { Typography, Box, Card } from '@material-ui/core';
-import { graphql } from 'babel-plugin-relay/macro';
 import React, { useEffect, useState } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
+import { Typography, Box, Card } from '@material-ui/core';
+import { graphql } from 'babel-plugin-relay/macro';
 import ControlsBar from '../common/ControlsBar';
 import SelectControl from '../common/SelectControl';
 import { InversionSolutionHazardTabQuery } from './__generated__/InversionSolutionHazardTabQuery.graphql';
@@ -26,15 +26,21 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
   const [gmpe, setGmpe] = useState<string>(options.gmpe[0]);
   const [backgroundSeismicity, setBackgroundSeismicity] = useState<string>(options.backgroundSeismicity[0]);
 
-  const [filteredData, setFilteredData] = useState<XY[]>([]);
+  const [filteredData, setFilteredData] = useState<HazardTableFilteredData>({});
 
   useEffect(() => {
-    if (PGA.includes('PGA')) {
-      const index = PGA.indexOf('PGA');
-      PGA[index] = '0.0';
+    const filtered: HazardTableFilteredData = {};
+    const pgaValues: string[] = [...PGA];
+    if (pgaValues.includes('PGA')) {
+      const index = pgaValues.indexOf('PGA');
+      pgaValues[index] = '0.0';
     }
-    // const xy = filterData(data, location, PGA, forecastTime, gmpe, backgroundSeismicity);
-    // setFilteredData(xy);
+
+    pgaValues.map((pgaValue) => {
+      const xy = filterData(data, location, pgaValue, forecastTime, gmpe, backgroundSeismicity);
+      pgaValue === '0.0' ? (filtered['PGA'] = xy) : (filtered[pgaValue] = xy);
+    });
+    setFilteredData(filtered);
   }, [location, PGA, forecastTime, gmpe, backgroundSeismicity]);
 
   const handleSetPGA = (selections: string[]) => {
@@ -68,12 +74,17 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
             >
               <AnimatedAxis orientation="bottom" label="Ground Motion (g)" />
               <AnimatedAxis orientation="left" label="Annual Frequency of Exceedance" />
-              <AnimatedLineSeries
-                dataKey="hazard plot"
-                data={filteredData}
-                xAccessor={(d) => d.x}
-                yAccessor={(d) => d.y}
-              />
+              {Object.keys(filteredData).map((key) => {
+                return (
+                  <AnimatedLineSeries
+                    key={key}
+                    dataKey={key}
+                    data={filteredData[key]}
+                    xAccessor={(d) => d.x}
+                    yAccessor={(d) => d.y}
+                  />
+                );
+              })}
               <Grid rows={true} columns={true} />
               <Tooltip
                 snapTooltipToDatumX
