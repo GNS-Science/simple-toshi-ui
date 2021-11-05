@@ -5,6 +5,8 @@ import { LocalStorageContextInterface } from '../interfaces/localStorage';
 const LocalStorageContext = createContext<LocalStorageContextInterface>({
   ISFavourites: {},
   setISFavourites: noop,
+  localStorageRegionalViews: [],
+  setLocalStorageRegionalViews: noop,
   localStorageGeneralViews: [],
   setLocalStorageGeneralViews: noop,
   localStorageNamedFaultsView: '',
