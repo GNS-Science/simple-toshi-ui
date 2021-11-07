@@ -10,7 +10,7 @@ const useStyles = makeStyles(() => ({
     filter: 'invert(88%) sepia(0%) saturate(1246%) hue-rotate(152deg) brightness(99%) contrast(97%)',
   },
   iconSelected: {
-    height: 42,
+    height: 35,
     filter: 'invert(48%) sepia(27%) saturate(2609%) hue-rotate(189deg) brightness(104%) contrast(102%)',
   },
 }));
