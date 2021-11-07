@@ -54,9 +54,9 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
           <Typography variant="h5" gutterBottom>
             <strong>Hazard:</strong>
             <ControlsBar>
-              <SelectControl name="Location" options={locationOptions} setOptions={setLocation} />
-              <MultiSelect name="PGA/SA Period" options={pgaPeriodOptions} setOptions={handleSetPGA} />
-              <SelectControl name="Forecast Timespan" options={forecastTimeSpanOptions} setOptions={setForecastTime} />
+              <SelectControl name="Location" options={options.location} setOptions={setLocation} />
+              <MultiSelect name="PGA/SA Period" selected={[]} options={options.PGA} setOptions={handleSetPGA} />
+              <SelectControl name="Forecast Timespan" options={options.forecastTime} setOptions={setForecastTime} />
               <SelectControl
                 name="Background Seismicity"
                 options={options.backgroundSeismicity}
@@ -87,15 +87,32 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
               })}
               <Grid rows={true} columns={true} />
               <Tooltip
+                showHorizontalCrosshair
+                showVerticalCrosshair
                 snapTooltipToDatumX
                 snapTooltipToDatumY
                 showDatumGlyph
                 glyphStyle={{ fill: '#000' }}
-                renderTooltip={({ tooltipData }) => {
+                renderTooltip={({ tooltipData, colorScale }) => {
                   const datum = tooltipData?.nearestDatum?.datum as XY;
+                  const key = tooltipData?.nearestDatum?.key as string;
                   if (datum) {
                     return (
                       <>
+                        <Typography>
+                          <span
+                            style={{
+                              background: colorScale && colorScale(key as string),
+                              width: 8,
+                              height: 8,
+                              display: 'inline-block',
+                              marginRight: 4,
+                              borderRadius: 8,
+                            }}
+                          />
+                          &nbsp;&nbsp;&nbsp;
+                          {key}
+                        </Typography>
                         <Typography>x: {datum.x.toExponential()}</Typography>
                         <Typography>y: {datum.y.toExponential()}</Typography>
                       </>
