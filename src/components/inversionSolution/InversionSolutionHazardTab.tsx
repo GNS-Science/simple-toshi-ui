@@ -11,9 +11,11 @@ import { filterData, getHazardTableOptions } from '../../service/inversionSoluti
 import MultiSelect from '../common/MultiSelect';
 
 import { Group } from '@visx/group';
-import { scaleLog, scaleLinear } from '@visx/scale';
+import { scaleLog } from '@visx/scale';
 import { AxisLeft, AxisBottom } from '@visx/axis';
 import { GridRows, GridColumns } from '@visx/grid';
+import { LinePath } from '@visx/shape';
+import { curveNatural, curveBasis } from '@visx/curve';
 
 interface InversionSolutionHazardTabProps {
   id: string;
@@ -62,20 +64,28 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
   const xMax = width - marginLeft - marginRight;
   const yMax = height - marginTop - marginBottom;
 
-  const xScale = {
-    scale: scaleLog<number>({
-      domain: [1e-3, 10],
-      range: [0, xMax],
-      round: true,
-    }),
-  };
+  const xScale = scaleLog<number>({
+    domain: [1e-3, 10],
+    range: [0, xMax],
+  });
 
-  const yScale = {
-    scale: scaleLog<number>({
-      domain: [1e-13, 2.0],
-      range: [yMax, 0],
-      round: true,
-    }),
+  const yScale = scaleLog<number>({
+    domain: [1e-13, 2.0],
+    range: [yMax, 0],
+  });
+
+  const renderLines = () => {
+    Object.keys(filteredData).map((key) => (
+      <LinePath
+        key={key}
+        data={filteredData[key]}
+        curve={curveNatural}
+        x={(d) => xScale(d.x)}
+        y={(d) => yScale(d.y)}
+        stroke="#222"
+        strokeWidth={1.5}
+      />
+    ));
   };
 
   return (
@@ -155,18 +165,47 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
             <svg width={width} height={height}>
               <rect x={0} y={0} width={width} height={height} fill={'white'} />
               <Group left={marginLeft} top={marginTop}>
-                <GridRows scale={yScale.scale} width={xMax} height={yMax} stroke="#e0e0e0" />
-                <GridColumns scale={xScale.scale} width={xMax} height={yMax} stroke="#e0e0e0" />
-                <AxisLeft scale={yScale.scale} />
+                <GridRows scale={yScale} width={xMax} height={yMax} stroke="#e0e0e0" />
+                <GridColumns scale={xScale} width={xMax} height={yMax} stroke="#e0e0e0" />
+                <AxisLeft scale={yScale} />
                 <text y={25} x={-230} transform="rotate(-90)" fontSize={15}>
                   Annual Frequency of Exceedance
                 </text>
-                <AxisBottom top={yMax} scale={xScale.scale} />
+                <AxisBottom top={yMax} scale={xScale} />
                 <text y={780} x={20} fontSize={15}>
                   Ground Motion (g)
                 </text>
+                {/* <LinePath<XY>
+                  // key={key}
+                  data={filteredData['PGA']}
+                  curve={curveNatural}
+                  x={(d) => xScale(d.x)}
+                  y={(d) => yScale(d.y)}
+                  stroke="#222"
+                  strokeWidth={1.5}
+                />
+                <LinePath<XY>
+                  data={filteredData['0.1']}
+                  curve={curveNatural}
+                  x={(d) => xScale(d.x)}
+                  y={(d) => yScale(d.y)}
+                  stroke="#222"
+                  strokeWidth={1.5}
+                /> */}
+                {Object.keys(filteredData).map((key) => {
+                  return (
+                    <LinePath<XY>
+                      key={key}
+                      data={filteredData[key]}
+                      curve={curveNatural}
+                      x={(d) => xScale(d.x)}
+                      y={(d) => yScale(d.y)}
+                      stroke="#222"
+                      strokeWidth={1.5}
+                    />
+                  );
+                })}
               </Group>
-              <Group></Group>
             </svg>
           </Box>
         </Card>
