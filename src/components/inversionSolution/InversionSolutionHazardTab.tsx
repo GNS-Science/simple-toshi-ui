@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
 import { Typography, Box, Card } from '@material-ui/core';
 import { graphql } from 'babel-plugin-relay/macro';
 import ControlsBar from '../common/ControlsBar';
 import SelectControl from '../common/SelectControl';
 import { InversionSolutionHazardTabQuery } from './__generated__/InversionSolutionHazardTabQuery.graphql';
-import { AnimatedAxis, AnimatedLineSeries, Grid, Tooltip, XYChart } from '@visx/xychart';
 import { XY } from '../../interfaces/common';
 import { filterData, getHazardTableOptions } from '../../service/inversionSolution.service';
 import MultiSelect from '../common/MultiSelect';
@@ -15,8 +14,18 @@ import { scaleLog } from '@visx/scale';
 import { AxisLeft, AxisBottom } from '@visx/axis';
 import { GridRows, GridColumns } from '@visx/grid';
 import { LinePath } from '@visx/shape';
-import { curveNatural, curveBasis } from '@visx/curve';
+import { curveNatural } from '@visx/curve';
+import { TooltipWithBounds, useTooltip, defaultStyles } from '@visx/tooltip';
+import { localPoint } from '@visx/event';
 
+const tooltipStyles = {
+  ...defaultStyles,
+  backgroundColor: 'white',
+  color: 'black',
+  width: 152,
+  height: 72,
+  padding: 12,
+};
 interface InversionSolutionHazardTabProps {
   id: string;
 }
@@ -35,6 +44,7 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
 
   const [filteredData, setFilteredData] = useState<HazardTableFilteredData>({});
 
+  //filter data when on select control change
   useEffect(() => {
     const filtered: HazardTableFilteredData = {};
     const pgaValues: string[] = [...PGA];
@@ -50,10 +60,9 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
     setFilteredData(filtered);
   }, [location, PGA, forecastTime, gmpe, backgroundSeismicity]);
 
-  const handleSetPGA = (selections: string[]) => {
-    setPGA(selections);
-  };
-
+  //initialise sizes for chart
+  const tooltipWidth = 152;
+  const tooltipHeight = 72;
   const width = 1400;
   const height = 1000;
   const marginLeft = 100;
@@ -61,9 +70,48 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
   const marginTop = 100;
   const marginBottom = 100;
 
+  const innerWidth = width - marginLeft - marginRight;
+  const innerHeight = width - marginTop - marginBottom;
   const xMax = width - marginLeft - marginRight;
   const yMax = height - marginTop - marginBottom;
 
+  type TooltipData = XY;
+
+  //initialise tooltip utils
+  const {
+    showTooltip,
+    tooltipOpen,
+    tooltipData,
+    tooltipLeft = 0,
+    tooltipTop = 0,
+  } = useTooltip<TooltipData>({
+    tooltipOpen: true,
+    tooltipLeft: tooltipWidth / 3,
+    tooltipTop: tooltipHeight / 3,
+  });
+
+  //tooltip handler
+  //need to be able to find the data point on the path from x and y values
+  const handleTooltip = useCallback(
+    (event: React.TouchEvent<SVGRectElement> | React.MouseEvent<SVGRectElement>) => {
+      const { x } = localPoint(event) || { x: 0 };
+      const { y } = localPoint(event) || { y: 0 };
+      console.log(x, y);
+      showTooltip({
+        tooltipData: { x: 1, y: 1 },
+        tooltipLeft: width - marginLeft - x,
+        tooltipTop: height - marginTop - y,
+      });
+    },
+    [showTooltip],
+  );
+
+  //handleSetPGA for multi select component
+  const handleSetPGA = (selections: string[]) => {
+    setPGA(selections);
+  };
+
+  //configure x and y scales
   const xScale = scaleLog<number>({
     domain: [1e-3, 10],
     range: [0, xMax],
@@ -73,20 +121,6 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
     domain: [1e-13, 2.0],
     range: [yMax, 0],
   });
-
-  const renderLines = () => {
-    Object.keys(filteredData).map((key) => (
-      <LinePath
-        key={key}
-        data={filteredData[key]}
-        curve={curveNatural}
-        x={(d) => xScale(d.x)}
-        y={(d) => yScale(d.y)}
-        stroke="#222"
-        strokeWidth={1.5}
-      />
-    ));
-  };
 
   const colors = ['#FE1100', '#73d629', '#ffd700', '#7fe5f0', '#003366', '#ff7f50', '#047806', '#4ca3dd'];
 
@@ -109,63 +143,8 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
             </ControlsBar>
           </Typography>
           <Box style={{ width: '100%', padding: '1rem' }}>
-            {/* <XYChart
-              height={700}
-              width={1200}
-              xScale={{ type: 'log', domain: [1e-3, 10] }}
-              yScale={{ type: 'log', domain: [1e-13, 2.0] }}
-            >
-              <AnimatedAxis orientation="bottom" label="Ground Motion (g)" />
-              <AnimatedAxis orientation="left" label="Annual Frequency of Exceedance" />
-              {Object.keys(filteredData).map((key) => {
-                return (
-                  <AnimatedLineSeries
-                    key={key}
-                    dataKey={key}
-                    data={filteredData[key]}
-                    xAccessor={(d) => d.x}
-                    yAccessor={(d) => d.y}
-                  />
-                );
-              })}
-              <Grid rows={true} columns={true} />
-              <Tooltip
-                showHorizontalCrosshair
-                showVerticalCrosshair
-                snapTooltipToDatumX
-                snapTooltipToDatumY
-                showDatumGlyph
-                glyphStyle={{ fill: '#000' }}
-                renderTooltip={({ tooltipData, colorScale }) => {
-                  const datum = tooltipData?.nearestDatum?.datum as XY;
-                  const key = tooltipData?.nearestDatum?.key as string;
-                  if (datum) {
-                    return (
-                      <>
-                        <Typography>
-                          <span
-                            style={{
-                              background: colorScale && colorScale(key as string),
-                              width: 8,
-                              height: 8,
-                              display: 'inline-block',
-                              marginRight: 4,
-                              borderRadius: 8,
-                            }}
-                          />
-                          &nbsp;&nbsp;&nbsp;
-                          {key}
-                        </Typography>
-                        <Typography>x: {datum.x.toExponential()}</Typography>
-                        <Typography>y: {datum.y.toExponential()}</Typography>
-                      </>
-                    );
-                  }
-                }}
-              />
-            </XYChart> */}
             <svg width={width} height={height}>
-              <rect x={0} y={0} width={width} height={height} fill={'white'} />
+              <rect x={0} y={0} width={width} height={height} fill={'white'} onMouseMove={handleTooltip} />
               <Group left={marginLeft} top={marginTop}>
                 <GridRows scale={yScale} width={xMax} height={yMax} stroke="#e0e0e0" />
                 <GridColumns scale={xScale} width={xMax} height={yMax} stroke="#e0e0e0" />
@@ -178,7 +157,6 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
                   Ground Motion (g)
                 </text>
                 {Object.keys(filteredData).map((key, i) => {
-                  console.log(filteredData[key]);
                   return (
                     <LinePath<XY>
                       key={key}
@@ -191,6 +169,15 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
                     />
                   );
                 })}
+                {tooltipOpen && (
+                  <>
+                    <Typography>lol</Typography>
+                    <TooltipWithBounds key={Math.random()} left={tooltipLeft} top={tooltipTop} style={tooltipStyles}>
+                      <Typography>x: {tooltipData?.x}</Typography>
+                      <Typography>y: {tooltipData?.y}</Typography>
+                    </TooltipWithBounds>
+                  </>
+                )}
               </Group>
             </svg>
           </Box>
