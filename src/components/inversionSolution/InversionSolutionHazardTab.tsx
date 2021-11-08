@@ -10,6 +10,11 @@ import { XY } from '../../interfaces/common';
 import { filterData, getHazardTableOptions } from '../../service/inversionSolution.service';
 import MultiSelect from '../common/MultiSelect';
 
+import { Group } from '@visx/group';
+import { scaleLog, scaleLinear } from '@visx/scale';
+import { AxisLeft, AxisBottom } from '@visx/axis';
+import { GridRows, GridColumns } from '@visx/grid';
+
 interface InversionSolutionHazardTabProps {
   id: string;
 }
@@ -47,6 +52,32 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
     setPGA(selections);
   };
 
+  const width = 1400;
+  const height = 1000;
+  const marginLeft = 100;
+  const marginRight = 100;
+  const marginTop = 100;
+  const marginBottom = 100;
+
+  const xMax = width - marginLeft - marginRight;
+  const yMax = height - marginTop - marginBottom;
+
+  const xScale = {
+    scale: scaleLog<number>({
+      domain: [1e-3, 10],
+      range: [0, xMax],
+      round: true,
+    }),
+  };
+
+  const yScale = {
+    scale: scaleLinear<number>({
+      domain: [1e-13, 2.0],
+      range: [yMax, 0],
+      round: true,
+    }),
+  };
+
   return (
     <>
       <Box>
@@ -66,7 +97,7 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
             </ControlsBar>
           </Typography>
           <Box style={{ width: '100%', padding: '1rem' }}>
-            <XYChart
+            {/* <XYChart
               height={700}
               width={1200}
               xScale={{ type: 'log', domain: [1e-3, 10] }}
@@ -120,7 +151,17 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
                   }
                 }}
               />
-            </XYChart>
+            </XYChart> */}
+            <svg width={width} height={height}>
+              <rect x={0} y={0} width={width} height={height} fill={'white'} />
+              <Group left={marginLeft} top={marginTop}>
+                <GridRows scale={yScale.scale} width={xMax} height={yMax} stroke="#e0e0e0" />
+                <GridColumns scale={xScale.scale} width={xMax} height={yMax} stroke="#e0e0e0" />
+                <AxisLeft scale={yScale.scale} />
+                <AxisBottom top={yMax} scale={xScale.scale} />
+              </Group>
+              <Group></Group>
+            </svg>
           </Box>
         </Card>
       </Box>
