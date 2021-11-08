@@ -71,7 +71,7 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
   };
 
   const yScale = {
-    scale: scaleLinear<number>({
+    scale: scaleLog<number>({
       domain: [1e-13, 2.0],
       range: [yMax, 0],
       round: true,
@@ -158,7 +158,13 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
                 <GridRows scale={yScale.scale} width={xMax} height={yMax} stroke="#e0e0e0" />
                 <GridColumns scale={xScale.scale} width={xMax} height={yMax} stroke="#e0e0e0" />
                 <AxisLeft scale={yScale.scale} />
+                <text y={25} x={-230} transform="rotate(-90)" fontSize={15}>
+                  Annual Frequency of Exceedance
+                </text>
                 <AxisBottom top={yMax} scale={xScale.scale} />
+                <text y={780} x={20} fontSize={15}>
+                  Ground Motion (g)
+                </text>
               </Group>
               <Group></Group>
             </svg>
