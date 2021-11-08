@@ -88,6 +88,8 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
     ));
   };
 
+  const colors = ['#FE1100', '#73d629', '#ffd700', '#7fe5f0', '#003366', '#ff7f50', '#047806', '#4ca3dd'];
+
   return (
     <>
       <Box>
@@ -175,24 +177,8 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
                 <text y={780} x={20} fontSize={15}>
                   Ground Motion (g)
                 </text>
-                {/* <LinePath<XY>
-                  // key={key}
-                  data={filteredData['PGA']}
-                  curve={curveNatural}
-                  x={(d) => xScale(d.x)}
-                  y={(d) => yScale(d.y)}
-                  stroke="#222"
-                  strokeWidth={1.5}
-                />
-                <LinePath<XY>
-                  data={filteredData['0.1']}
-                  curve={curveNatural}
-                  x={(d) => xScale(d.x)}
-                  y={(d) => yScale(d.y)}
-                  stroke="#222"
-                  strokeWidth={1.5}
-                /> */}
-                {Object.keys(filteredData).map((key) => {
+                {Object.keys(filteredData).map((key, i) => {
+                  console.log(filteredData[key]);
                   return (
                     <LinePath<XY>
                       key={key}
@@ -200,8 +186,8 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
                       curve={curveNatural}
                       x={(d) => xScale(d.x)}
                       y={(d) => yScale(d.y)}
-                      stroke="#222"
-                      strokeWidth={1.5}
+                      stroke={colors[i]}
+                      strokeWidth={2.5}
                     />
                   );
                 })}
