@@ -3,10 +3,11 @@ import { XY, XYCurve } from '../interfaces/common';
 import { HazardTableOptions } from '../interfaces/inversionSolutions';
 
 const minXBound = parseFloat(process.env.REACT_APP_MIN_X_BOUND ?? '0');
+const minYBound = 1e-13;
 
 export const minDataFilter = (data: XY[]): XY[] => {
   return data.filter((xy) => {
-    return xy.x >= minXBound;
+    return xy.x >= minXBound && xy.y >= minYBound;
   });
 };
 

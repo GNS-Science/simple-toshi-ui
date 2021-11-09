@@ -15,18 +15,8 @@ import { AxisLeft, AxisBottom } from '@visx/axis';
 import { GridRows, GridColumns } from '@visx/grid';
 import { LinePath } from '@visx/shape';
 import { curveNatural } from '@visx/curve';
-import { TooltipWithBounds, useTooltip, defaultStyles } from '@visx/tooltip';
-import { localPoint } from '@visx/event';
 import { LegendItem, LegendLabel, LegendOrdinal } from '@visx/legend';
 
-const tooltipStyles = {
-  ...defaultStyles,
-  backgroundColor: 'white',
-  color: 'black',
-  width: 152,
-  height: 72,
-  padding: 12,
-};
 interface InversionSolutionHazardTabProps {
   id: string;
 }
@@ -62,8 +52,6 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
   }, [location, PGA, forecastTime, gmpe, backgroundSeismicity]);
 
   //initialise sizes for chart
-  // const tooltipWidth = 152;
-  // const tooltipHeight = 72;
   const width = 1400;
   const height = 1000;
   const marginLeft = 100;
@@ -71,49 +59,8 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
   const marginTop = 100;
   const marginBottom = 100;
 
-  // const innerWidth = width - marginLeft - marginRight;
-  // const innerHeight = width - marginTop - marginBottom;
   const xMax = width - marginLeft - marginRight;
   const yMax = height - marginTop - marginBottom;
-
-  // type TooltipData = XY;
-
-  //initialise tooltip utils
-  // const {
-  //   showTooltip,
-  //   tooltipOpen,
-  //   tooltipData,
-  //   tooltipLeft = 0,
-  //   tooltipTop = 0,
-  // } = useTooltip<TooltipData>({
-  //   tooltipOpen: true,
-  //   tooltipLeft: tooltipWidth / 3,
-  //   tooltipTop: tooltipHeight / 3,
-  // });
-
-  //tooltip hndler
-  //need to be able to find the data point on the path from x and y values
-  // const handleTooltip = useCallback(
-  //   (event: React.TouchEvent<SVGRectElement> | React.MouseEvent<SVGRectElement>) => {
-  //     const { x } = localPoint(event) || { x: 0 };
-  //     const { y } = localPoint(event) || { y: 0 };
-
-  //     console.log(xScale.invert(x), yScale.invert(y));
-
-  // const bisectData = bisector(function (d) {
-  //   return d.x;
-  // }).left;
-
-  // const index = bisectDate(data, x);
-
-  //     showTooltip({
-  //       tooltipData: { x: 1, y: 1 },
-  //       tooltipLeft: width - marginLeft - x,
-  //       tooltipTop: height - marginTop - y,
-  //     });
-  //   },
-  //   [showTooltip],
-  // );
 
   //handleSetPGA for multi select component
   const handleSetPGA = (selections: string[]) => {
@@ -183,15 +130,6 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
                     />
                   );
                 })}
-                {/* {tooltipOpen && (
-                  <>
-                    <Typography>lol</Typography>
-                    <TooltipWithBounds key={Math.random()} left={tooltipLeft} top={tooltipTop} style={tooltipStyles}>
-                      <Typography>x: {tooltipData?.x}</Typography>
-                      <Typography>y: {tooltipData?.y}</Typography>
-                    </TooltipWithBounds>
-                  </>
-                )} */}
               </Group>
             </svg>
             <div style={{ width: 100, height: 100, position: 'absolute', top: 1000, left: 350, display: 'flex' }}>
