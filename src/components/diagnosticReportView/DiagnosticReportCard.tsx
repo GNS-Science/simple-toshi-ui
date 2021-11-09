@@ -145,9 +145,9 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             />
           </div>
           <Tabs value={currentTab} onChange={handleTabChange}>
-            <Tab label="General" id="simple-tab-0" />
-            <Tab label="Named Faults" id="simple-tab-1" disabled={modelType !== 'CRUSTAL'} />
-            <Tab label="Regional Solutions" id="simple-tab-2" disabled={modelType !== 'CRUSTAL'} />
+            <Tab label="General" id="simple-tab-0" disableFocusRipple />
+            <Tab label="Named Faults" id="simple-tab-1" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
+            <Tab label="Regional Solutions" id="simple-tab-2" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
           </Tabs>
           <DiagnosticReportTabPanel value={currentTab} index={0}>
             <GeneralView
