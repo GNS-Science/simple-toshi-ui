@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
 import { Typography, Box, Card } from '@material-ui/core';
 import { graphql } from 'babel-plugin-relay/macro';
