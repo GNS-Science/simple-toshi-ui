@@ -10,13 +10,14 @@ import { filterData, getHazardTableOptions } from '../../service/inversionSoluti
 import MultiSelect from '../common/MultiSelect';
 
 import { Group } from '@visx/group';
-import { scaleLog } from '@visx/scale';
+import { scaleLog, scaleOrdinal } from '@visx/scale';
 import { AxisLeft, AxisBottom } from '@visx/axis';
 import { GridRows, GridColumns } from '@visx/grid';
 import { LinePath } from '@visx/shape';
 import { curveNatural } from '@visx/curve';
 import { TooltipWithBounds, useTooltip, defaultStyles } from '@visx/tooltip';
 import { localPoint } from '@visx/event';
+import { LegendItem, LegendLabel, LegendOrdinal } from '@visx/legend';
 
 const tooltipStyles = {
   ...defaultStyles,
@@ -61,8 +62,8 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
   }, [location, PGA, forecastTime, gmpe, backgroundSeismicity]);
 
   //initialise sizes for chart
-  const tooltipWidth = 152;
-  const tooltipHeight = 72;
+  // const tooltipWidth = 152;
+  // const tooltipHeight = 72;
   const width = 1400;
   const height = 1000;
   const marginLeft = 100;
@@ -70,41 +71,49 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
   const marginTop = 100;
   const marginBottom = 100;
 
-  const innerWidth = width - marginLeft - marginRight;
-  const innerHeight = width - marginTop - marginBottom;
+  // const innerWidth = width - marginLeft - marginRight;
+  // const innerHeight = width - marginTop - marginBottom;
   const xMax = width - marginLeft - marginRight;
   const yMax = height - marginTop - marginBottom;
 
-  type TooltipData = XY;
+  // type TooltipData = XY;
 
   //initialise tooltip utils
-  const {
-    showTooltip,
-    tooltipOpen,
-    tooltipData,
-    tooltipLeft = 0,
-    tooltipTop = 0,
-  } = useTooltip<TooltipData>({
-    tooltipOpen: true,
-    tooltipLeft: tooltipWidth / 3,
-    tooltipTop: tooltipHeight / 3,
-  });
+  // const {
+  //   showTooltip,
+  //   tooltipOpen,
+  //   tooltipData,
+  //   tooltipLeft = 0,
+  //   tooltipTop = 0,
+  // } = useTooltip<TooltipData>({
+  //   tooltipOpen: true,
+  //   tooltipLeft: tooltipWidth / 3,
+  //   tooltipTop: tooltipHeight / 3,
+  // });
 
-  //tooltip handler
+  //tooltip hndler
   //need to be able to find the data point on the path from x and y values
-  const handleTooltip = useCallback(
-    (event: React.TouchEvent<SVGRectElement> | React.MouseEvent<SVGRectElement>) => {
-      const { x } = localPoint(event) || { x: 0 };
-      const { y } = localPoint(event) || { y: 0 };
-      console.log(x, y);
-      showTooltip({
-        tooltipData: { x: 1, y: 1 },
-        tooltipLeft: width - marginLeft - x,
-        tooltipTop: height - marginTop - y,
-      });
-    },
-    [showTooltip],
-  );
+  // const handleTooltip = useCallback(
+  //   (event: React.TouchEvent<SVGRectElement> | React.MouseEvent<SVGRectElement>) => {
+  //     const { x } = localPoint(event) || { x: 0 };
+  //     const { y } = localPoint(event) || { y: 0 };
+
+  //     console.log(xScale.invert(x), yScale.invert(y));
+
+  // const bisectData = bisector(function (d) {
+  //   return d.x;
+  // }).left;
+
+  // const index = bisectDate(data, x);
+
+  //     showTooltip({
+  //       tooltipData: { x: 1, y: 1 },
+  //       tooltipLeft: width - marginLeft - x,
+  //       tooltipTop: height - marginTop - y,
+  //     });
+  //   },
+  //   [showTooltip],
+  // );
 
   //handleSetPGA for multi select component
   const handleSetPGA = (selections: string[]) => {
@@ -123,6 +132,11 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
   });
 
   const colors = ['#FE1100', '#73d629', '#ffd700', '#7fe5f0', '#003366', '#ff7f50', '#047806', '#4ca3dd'];
+
+  const ordinalColorScale = scaleOrdinal({
+    domain: [...PGA],
+    range: colors,
+  });
 
   return (
     <>
@@ -144,7 +158,7 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
           </Typography>
           <Box style={{ width: '100%', padding: '1rem' }}>
             <svg width={width} height={height}>
-              <rect x={0} y={0} width={width} height={height} fill={'white'} onMouseMove={handleTooltip} />
+              <rect x={0} y={0} width={width} height={height} fill={'white'} />
               <Group left={marginLeft} top={marginTop}>
                 <GridRows scale={yScale} width={xMax} height={yMax} stroke="#e0e0e0" />
                 <GridColumns scale={xScale} width={xMax} height={yMax} stroke="#e0e0e0" />
@@ -169,7 +183,7 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
                     />
                   );
                 })}
-                {tooltipOpen && (
+                {/* {tooltipOpen && (
                   <>
                     <Typography>lol</Typography>
                     <TooltipWithBounds key={Math.random()} left={tooltipLeft} top={tooltipTop} style={tooltipStyles}>
@@ -177,9 +191,27 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
                       <Typography>y: {tooltipData?.y}</Typography>
                     </TooltipWithBounds>
                   </>
-                )}
+                )} */}
               </Group>
             </svg>
+            <div style={{ width: 100, height: 100, position: 'absolute', top: 1000, left: 350, display: 'flex' }}>
+              <LegendOrdinal scale={ordinalColorScale} labelFormat={(label) => `${label}`}>
+                {(labels) => (
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    {labels.map((label, i) => (
+                      <LegendItem key={`legend-quantile-${i}`} margin="0 5px">
+                        <svg width={15} height={15}>
+                          <rect fill={label.value} width={15} height={15} />
+                        </svg>
+                        <LegendLabel align="left" margin="0 0 0 4px">
+                          {label.text}
+                        </LegendLabel>
+                      </LegendItem>
+                    ))}
+                  </div>
+                )}
+              </LegendOrdinal>
+            </div>
           </Box>
         </Card>
       </Box>
