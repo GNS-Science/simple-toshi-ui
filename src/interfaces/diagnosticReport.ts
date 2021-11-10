@@ -1,9 +1,12 @@
+import { IStables } from './generaltask';
+
 export type ReportItem = {
   __typename: 'AutomationTask';
   id: string;
   inversion_solution: {
     id: string;
     meta: ValidatedSubtaskMeta;
+    tables?: IStables;
   };
 };
 
