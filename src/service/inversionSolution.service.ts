@@ -1,5 +1,5 @@
 import { InversionSolutionHazardTabQueryResponse } from '../components/inversionSolution/__generated__/InversionSolutionHazardTabQuery.graphql';
-import { XY, XYCurve } from '../interfaces/common';
+import { XY } from '../interfaces/common';
 import { HazardTableOptions } from '../interfaces/inversionSolutions';
 
 const minXBound = parseFloat(process.env.REACT_APP_MIN_X_BOUND ?? '0');
