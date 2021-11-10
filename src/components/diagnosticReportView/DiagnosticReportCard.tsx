@@ -74,6 +74,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   const classes = useStyles();
   const [currentImage, setCurrentImage] = useState<number>(0);
   const [currentTab, setCurrentTab] = useState<number>(0);
+  const [hazardId, setHazardId] = useState<string>('');
 
   useEffect(() => {
     if (reportTab !== 0) setCurrentTab(reportTab ?? 0);
@@ -82,6 +83,15 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   useEffect(() => {
     setReportTab && setReportTab(currentTab);
   }, [currentTab]);
+
+  useEffect(() => {
+    if (automationTasks[currentImage].inversion_solution.tables) {
+      const hazardTable = automationTasks[currentImage].inversion_solution.tables?.find(
+        (table) => table?.table_type === 'HAZARD_SITES',
+      );
+      hazardTable && setHazardId(hazardTable?.table_id as string);
+    }
+  }, [currentImage]);
 
   const nextImage = () => {
     if (currentImage < automationTasks.length - 1) {
@@ -186,7 +196,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
           </DiagnosticReportTabPanel>
           <DiagnosticReportTabPanel value={currentTab} index={3}>
             <React.Suspense fallback={<CircularProgress />}>
-              <InversionSolutionHazardTab id={'1234'} />
+              <InversionSolutionHazardTab id={hazardId} />
             </React.Suspense>
           </DiagnosticReportTabPanel>
         </CardContent>
