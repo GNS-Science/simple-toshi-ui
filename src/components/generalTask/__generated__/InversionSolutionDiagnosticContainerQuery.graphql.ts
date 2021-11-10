@@ -3,6 +3,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+export type TableType = "GENERAL" | "HAZARD_GRIDDED" | "HAZARD_SITES" | "MFD_CURVES" | "%future added value";
 export type TaskSubType = "HAZARD" | "INVERSION" | "REPORT" | "RUPTURE_SET" | "%future added value";
 export type InversionSolutionDiagnosticContainerQueryVariables = {
     id?: Array<string> | null;
@@ -22,6 +23,10 @@ export type InversionSolutionDiagnosticContainerQueryResponse = {
                         readonly meta: ReadonlyArray<{
                             readonly k: string | null;
                             readonly v: string | null;
+                        } | null> | null;
+                        readonly tables: ReadonlyArray<{
+                            readonly table_id: string | null;
+                            readonly table_type: TableType | null;
                         } | null> | null;
                     } | null;
                 } | {
@@ -59,6 +64,10 @@ query InversionSolutionDiagnosticContainerQuery(
               meta {
                 k
                 v
+              }
+              tables {
+                table_id
+                table_type
               }
             }
           }
@@ -156,6 +165,31 @@ v4 = {
               "args": null,
               "kind": "ScalarField",
               "name": "v",
+              "storageKey": null
+            }
+          ],
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": "LabelledTableRelation",
+          "kind": "LinkedField",
+          "name": "tables",
+          "plural": true,
+          "selections": [
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "table_id",
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "table_type",
               "storageKey": null
             }
           ],
@@ -288,14 +322,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "3f337c8c4dde77ce99810633c80d645a",
+    "cacheID": "de9bcb6219aec80fc9a622eb08c23589",
     "id": null,
     "metadata": {},
     "name": "InversionSolutionDiagnosticContainerQuery",
     "operationKind": "query",
-    "text": "query InversionSolutionDiagnosticContainerQuery(\n  $id: [ID!]\n) {\n  nodes(id_in: $id) {\n    result {\n      edges {\n        node {\n          __typename\n          ... on AutomationTask {\n            created\n            task_type\n            id\n            inversion_solution {\n              id\n              file_name\n              meta {\n                k\n                v\n              }\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query InversionSolutionDiagnosticContainerQuery(\n  $id: [ID!]\n) {\n  nodes(id_in: $id) {\n    result {\n      edges {\n        node {\n          __typename\n          ... on AutomationTask {\n            created\n            task_type\n            id\n            inversion_solution {\n              id\n              file_name\n              meta {\n                k\n                v\n              }\n              tables {\n                table_id\n                table_type\n              }\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '6da4064849d40df93e861d3a554c5ebe';
+(node as any).hash = 'c1f737f84a5d766592e85b94fab9b2aa';
 export default node;
