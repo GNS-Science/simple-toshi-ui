@@ -16,6 +16,7 @@ import { GridRows, GridColumns } from '@visx/grid';
 import { LinePath } from '@visx/shape';
 import { curveNatural } from '@visx/curve';
 import { LegendItem, LegendLabel, LegendOrdinal } from '@visx/legend';
+import { HazardTableFilteredData } from '../../interfaces/inversionSolutions';
 
 interface InversionSolutionHazardTabProps {
   id: string;
