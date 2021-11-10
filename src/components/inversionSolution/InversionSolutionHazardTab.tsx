@@ -37,20 +37,17 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
     <>
       <Box>
         <Card>
-          <Typography variant="h5" gutterBottom>
-            <strong>Hazard:</strong>
-            <ControlsBar>
-              <SelectControl name="Location" options={options.location} setOptions={setLocation} />
-              <SelectControl name="PGA/SA period" options={options.PGA} setOptions={setPGA} />
-              <SelectControl name="Forecast Timespan" options={options.forecastTime} setOptions={setForecastTime} />
-              <SelectControl
-                name="Background Seismicity"
-                options={options.backgroundSeismicity}
-                setOptions={setBackgroundSeismicity}
-              />
-              <SelectControl name="Background Motion Model" options={options.gmpe} setOptions={setGmpe} />
-            </ControlsBar>
-          </Typography>
+          <ControlsBar>
+            <SelectControl name="Location" options={options.location} setOptions={setLocation} />
+            <SelectControl name="PGA/SA period" options={options.PGA} setOptions={setPGA} />
+            <SelectControl name="Forecast Timespan" options={options.forecastTime} setOptions={setForecastTime} />
+            <SelectControl
+              name="Background Seismicity"
+              options={options.backgroundSeismicity}
+              setOptions={setBackgroundSeismicity}
+            />
+            <SelectControl name="Background Motion Model" options={options.gmpe} setOptions={setGmpe} />
+          </ControlsBar>
           <Box style={{ width: '100%', padding: '1rem' }}>
             <XYChart
               height={700}
