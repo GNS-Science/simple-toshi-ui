@@ -9,14 +9,10 @@ import { XY } from '../../interfaces/common';
 import { filterData, getHazardTableOptions } from '../../service/inversionSolution.service';
 import MultiSelect from '../common/MultiSelect';
 
-import { Group } from '@visx/group';
-import { scaleLog, scaleOrdinal } from '@visx/scale';
-import { AxisLeft, AxisBottom } from '@visx/axis';
-import { GridRows, GridColumns } from '@visx/grid';
-import { LinePath } from '@visx/shape';
-import { curveNatural } from '@visx/curve';
-import { LegendItem, LegendLabel, LegendOrdinal } from '@visx/legend';
+import { scaleOrdinal } from '@visx/scale';
+import { LegendOrdinal } from '@visx/legend';
 import { HazardTableFilteredData } from '../../interfaces/inversionSolutions';
+import { AnimatedAxis, AnimatedLineSeries, Grid, Tooltip, XYChart } from '@visx/xychart';
 
 interface InversionSolutionHazardTabProps {
   id: string;
@@ -36,7 +32,6 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
 
   const [filteredData, setFilteredData] = useState<HazardTableFilteredData>({});
 
-  //filter data when on select control change
   useEffect(() => {
     const filtered: HazardTableFilteredData = {};
     const pgaValues: string[] = [...PGA];
@@ -52,7 +47,6 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
     setFilteredData(filtered);
   }, [location, PGA, forecastTime, gmpe, backgroundSeismicity]);
 
-  //initialise sizes for chart
   const width = 1400;
   const height = 1000;
   const marginLeft = 100;
@@ -63,21 +57,9 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
   const xMax = width - marginLeft - marginRight;
   const yMax = height - marginTop - marginBottom;
 
-  //handleSetPGA for multi select component
   const handleSetPGA = (selections: string[]) => {
     setPGA(selections);
   };
-
-  //configure x and y scales
-  const xScale = scaleLog<number>({
-    domain: [1e-3, 10],
-    range: [0, xMax],
-  });
-
-  const yScale = scaleLog<number>({
-    domain: [1e-13, 2.0],
-    range: [yMax, 0],
-  });
 
   const colors = ['#FE1100', '#73d629', '#ffd700', '#7fe5f0', '#003366', '#ff7f50', '#047806', '#4ca3dd'];
 
@@ -105,51 +87,64 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
             </ControlsBar>
           </Typography>
           <Box style={{ width: '100%', padding: '1rem' }}>
-            <svg width={width} height={height}>
-              <rect x={0} y={0} width={width} height={height} fill={'white'} />
-              <Group left={marginLeft} top={marginTop}>
-                <GridRows scale={yScale} width={xMax} height={yMax} stroke="#e0e0e0" />
-                <GridColumns scale={xScale} width={xMax} height={yMax} stroke="#e0e0e0" />
-                <AxisLeft scale={yScale} />
-                <text y={25} x={-230} transform="rotate(-90)" fontSize={15}>
-                  Annual Frequency of Exceedance
-                </text>
-                <AxisBottom top={yMax} scale={xScale} />
-                <text y={780} x={20} fontSize={15}>
-                  Ground Motion (g)
-                </text>
-                {Object.keys(filteredData).map((key, i) => {
-                  return (
-                    <LinePath<XY>
-                      key={key}
-                      data={filteredData[key]}
-                      curve={curveNatural}
-                      x={(d) => xScale(d.x)}
-                      y={(d) => yScale(d.y)}
-                      stroke={colors[i]}
-                      strokeWidth={2.5}
-                    />
-                  );
-                })}
-              </Group>
-            </svg>
-            <div style={{ width: 100, height: 100, position: 'absolute', top: 1000, left: 350, display: 'flex' }}>
-              <LegendOrdinal scale={ordinalColorScale} labelFormat={(label) => `${label}`}>
-                {(labels) => (
-                  <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    {labels.map((label, i) => (
-                      <LegendItem key={`legend-quantile-${i}`} margin="0 5px">
-                        <svg width={15} height={15}>
-                          <rect fill={label.value} width={15} height={15} />
-                        </svg>
-                        <LegendLabel align="left" margin="0 0 0 4px">
-                          {label.text}
-                        </LegendLabel>
-                      </LegendItem>
-                    ))}
-                  </div>
-                )}
-              </LegendOrdinal>
+            <XYChart
+              height={yMax}
+              width={xMax}
+              xScale={{ type: 'log', domain: [1e-3, 10] }}
+              yScale={{ type: 'log', domain: [1e-13, 2.0] }}
+            >
+              <AnimatedAxis orientation="bottom" label="Ground Motion (g)" />
+              <AnimatedAxis orientation="left" label="Annual Frequency of Exceedance" />
+              {Object.keys(filteredData).map((key, index) => {
+                return (
+                  <AnimatedLineSeries
+                    key={key}
+                    dataKey={key}
+                    data={filteredData[key]}
+                    xAccessor={(d: XY) => d?.x}
+                    yAccessor={(d: XY) => d?.y}
+                    stroke={colors[index]}
+                  />
+                );
+              })}
+              <Grid rows={true} columns={true} lineStyle={{ opacity: '90%' }} />
+              <Tooltip
+                showHorizontalCrosshair
+                showVerticalCrosshair
+                snapTooltipToDatumX
+                snapTooltipToDatumY
+                showDatumGlyph
+                glyphStyle={{ fill: '#000' }}
+                renderTooltip={({ tooltipData, colorScale }) => {
+                  const datum = tooltipData?.nearestDatum?.datum as XY;
+                  const key = tooltipData?.nearestDatum?.key as string;
+                  if (datum) {
+                    return (
+                      <>
+                        <Typography>
+                          <span
+                            style={{
+                              background: colorScale && colorScale(key as string),
+                              width: 8,
+                              height: 8,
+                              display: 'inline-block',
+                              marginRight: 4,
+                              borderRadius: 8,
+                            }}
+                          />
+                          &nbsp;&nbsp;&nbsp;
+                          {key === 'PGA' ? key : key + 's'}
+                        </Typography>
+                        <Typography>x: {datum.x.toExponential()}</Typography>
+                        <Typography>y: {datum.y.toExponential()}</Typography>
+                      </>
+                    );
+                  }
+                }}
+              />
+            </XYChart>
+            <div style={{ width: 100, height: 100, position: 'absolute', top: 400, left: 1300, display: 'flex' }}>
+              <LegendOrdinal direction="column" scale={ordinalColorScale} shape="line" />
             </div>
           </Box>
         </Card>
