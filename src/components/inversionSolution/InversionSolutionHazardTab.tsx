@@ -79,70 +79,72 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
             </Typography>
             <Typography>PGA/SA Periods: {PGA.join(', ')} </Typography>
             <Typography>{`Model: ${gmpe}, Background: ${backgroundSeismicity}, Forecast: ${forecastTime} years.`}</Typography>
-            <XYChart
-              height={700}
-              width={900}
-              xScale={{ type: 'log', domain: [1e-3, 10] }}
-              yScale={{ type: 'log', domain: [1e-13, 2.0] }}
-            >
-              <AnimatedAxis orientation="bottom" />
-              <AnimatedAxis orientation="left" />
-              <text y={11} x={-500} transform="rotate(-90)" fontSize={15}>
-                Annual Frequency of Exceedance
-              </text>
-              <text y={685} x={350} fontSize={15}>
-                Ground Motion (g)
-              </text>
-              {Object.keys(filteredData).map((key, index) => {
-                return (
-                  <AnimatedLineSeries
-                    key={key}
-                    dataKey={key}
-                    data={filteredData[key]}
-                    xAccessor={(d: XY) => d?.x}
-                    yAccessor={(d: XY) => d?.y}
-                    stroke={colors[index]}
-                  />
-                );
-              })}
-              <Grid rows={true} columns={true} lineStyle={{ opacity: '90%' }} />
-              <Tooltip
-                showHorizontalCrosshair
-                showVerticalCrosshair
-                snapTooltipToDatumX
-                snapTooltipToDatumY
-                showDatumGlyph
-                glyphStyle={{ fill: '#000' }}
-                renderTooltip={({ tooltipData, colorScale }) => {
-                  const datum = tooltipData?.nearestDatum?.datum as XY;
-                  const key = tooltipData?.nearestDatum?.key as string;
-                  if (datum) {
-                    return (
-                      <>
-                        <Typography>
-                          <span
-                            style={{
-                              background: colorScale && colorScale(key as string),
-                              width: 8,
-                              height: 8,
-                              display: 'inline-block',
-                              marginRight: 4,
-                              borderRadius: 8,
-                            }}
-                          />
-                          &nbsp;&nbsp;&nbsp;
-                          {key === 'PGA' ? key : key + 's'}
-                        </Typography>
-                        <Typography>x: {datum.x.toExponential()}</Typography>
-                        <Typography>y: {datum.y.toExponential()}</Typography>
-                      </>
-                    );
-                  }
-                }}
-              />
-            </XYChart>
-            <div style={{ width: 100, height: 100, position: 'absolute', top: 450, left: 1000, display: 'flex' }}>
-              <LegendOrdinal direction="column" scale={ordinalColorScale} shape="line" style={{ fontSize: '15px' }} />
+            <div style={{ position: 'relative', width: '100%' }}>
+              <XYChart
+                height={700}
+                width={900}
+                xScale={{ type: 'log', domain: [1e-3, 10] }}
+                yScale={{ type: 'log', domain: [1e-13, 2.0] }}
+              >
+                <AnimatedAxis orientation="bottom" />
+                <AnimatedAxis orientation="left" />
+                <text y={11} x={-500} transform="rotate(-90)" fontSize={15}>
+                  Annual Frequency of Exceedance
+                </text>
+                <text y={685} x={350} fontSize={15}>
+                  Ground Motion (g)
+                </text>
+                {Object.keys(filteredData).map((key, index) => {
+                  return (
+                    <AnimatedLineSeries
+                      key={key}
+                      dataKey={key}
+                      data={filteredData[key]}
+                      xAccessor={(d: XY) => d?.x}
+                      yAccessor={(d: XY) => d?.y}
+                      stroke={colors[index]}
+                    />
+                  );
+                })}
+                <Grid rows={true} columns={true} lineStyle={{ opacity: '90%' }} />
+                <Tooltip
+                  showHorizontalCrosshair
+                  showVerticalCrosshair
+                  snapTooltipToDatumX
+                  snapTooltipToDatumY
+                  showDatumGlyph
+                  glyphStyle={{ fill: '#000' }}
+                  renderTooltip={({ tooltipData, colorScale }) => {
+                    const datum = tooltipData?.nearestDatum?.datum as XY;
+                    const key = tooltipData?.nearestDatum?.key as string;
+                    if (datum) {
+                      return (
+                        <>
+                          <Typography>
+                            <span
+                              style={{
+                                background: colorScale && colorScale(key as string),
+                                width: 8,
+                                height: 8,
+                                display: 'inline-block',
+                                marginRight: 4,
+                                borderRadius: 8,
+                              }}
+                            />
+                            &nbsp;&nbsp;&nbsp;
+                            {key === 'PGA' ? key : key + 's'}
+                          </Typography>
+                          <Typography>x: {datum.x.toExponential()}</Typography>
+                          <Typography>y: {datum.y.toExponential()}</Typography>
+                        </>
+                      );
+                    }
+                  }}
+                />
+              </XYChart>
+              <div style={{ width: 100, height: 100, position: 'absolute', top: 50, left: 790, display: 'flex' }}>
+                <LegendOrdinal direction="column" scale={ordinalColorScale} shape="line" style={{ fontSize: '15px' }} />
+              </div>
             </div>
           </Box>
         </Card>
