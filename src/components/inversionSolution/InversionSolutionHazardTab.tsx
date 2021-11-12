@@ -47,16 +47,6 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
     setFilteredData(filtered);
   }, [location, PGA, forecastTime, gmpe, backgroundSeismicity]);
 
-  const width = 1400;
-  const height = 1000;
-  const marginLeft = 100;
-  const marginRight = 100;
-  const marginTop = 100;
-  const marginBottom = 100;
-
-  const xMax = width - marginLeft - marginRight;
-  const yMax = height - marginTop - marginBottom;
-
   const handleSetPGA = (selections: string[]) => {
     setPGA(selections);
   };
@@ -88,8 +78,8 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
           </Typography>
           <Box style={{ width: '100%', padding: '1rem' }}>
             <XYChart
-              height={yMax}
-              width={xMax}
+              height={700}
+              width={900}
               xScale={{ type: 'log', domain: [1e-3, 10] }}
               yScale={{ type: 'log', domain: [1e-13, 2.0] }}
             >
@@ -143,7 +133,7 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
                 }}
               />
             </XYChart>
-            <div style={{ width: 100, height: 100, position: 'absolute', top: 400, left: 1300, display: 'flex' }}>
+            <div style={{ width: 100, height: 100, position: 'absolute', top: 400, left: 1000, display: 'flex' }}>
               <LegendOrdinal direction="column" scale={ordinalColorScale} shape="line" />
             </div>
           </Box>
