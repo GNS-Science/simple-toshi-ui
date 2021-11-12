@@ -83,8 +83,14 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
               xScale={{ type: 'log', domain: [1e-3, 10] }}
               yScale={{ type: 'log', domain: [1e-13, 2.0] }}
             >
-              <AnimatedAxis orientation="bottom" label="Ground Motion (g)" />
-              <AnimatedAxis orientation="left" label="Annual Frequency of Exceedance" />
+              <AnimatedAxis orientation="bottom" />
+              <AnimatedAxis orientation="left" />
+              <text y={11} x={-500} transform="rotate(-90)" fontSize={15}>
+                Annual Frequency of Exceedance
+              </text>
+              <text y={685} x={350} fontSize={15}>
+                Ground Motion (g)
+              </text>
               {Object.keys(filteredData).map((key, index) => {
                 return (
                   <AnimatedLineSeries
