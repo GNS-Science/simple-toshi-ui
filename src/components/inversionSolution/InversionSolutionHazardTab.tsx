@@ -62,21 +62,23 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
     <>
       <Box>
         <Card>
-          <Typography variant="h5" gutterBottom>
-            <strong>Hazard:</strong>
-            <ControlsBar>
-              <SelectControl name="Location" options={options.location} setOptions={setLocation} />
-              <MultiSelect name="PGA/SA Period" selected={[]} options={options.PGA} setOptions={handleSetPGA} />
-              <SelectControl name="Forecast Timespan" options={options.forecastTime} setOptions={setForecastTime} />
-              <SelectControl
-                name="Background Seismicity"
-                options={options.backgroundSeismicity}
-                setOptions={setBackgroundSeismicity}
-              />
-              <SelectControl name="Background Motion Model" options={options.gmpe} setOptions={setGmpe} />
-            </ControlsBar>
-          </Typography>
+          <ControlsBar>
+            <SelectControl name="Location" options={options.location} setOptions={setLocation} />
+            <MultiSelect name="PGA/SA Period" selected={[]} options={options.PGA} setOptions={handleSetPGA} />
+            <SelectControl name="Forecast Timespan" options={options.forecastTime} setOptions={setForecastTime} />
+            <SelectControl
+              name="Background Seismicity"
+              options={options.backgroundSeismicity}
+              setOptions={setBackgroundSeismicity}
+            />
+            <SelectControl name="Background Motion Model" options={options.gmpe} setOptions={setGmpe} />
+          </ControlsBar>
           <Box style={{ width: '100%', padding: '1rem' }}>
+            <Typography variant="h5" gutterBottom>
+              <strong>{`${location} hazard (opensha)`}</strong>
+            </Typography>
+            <Typography>PGA/SA Periods: {PGA.join(', ')} </Typography>
+            <Typography>{`Model: ${gmpe}, Background: ${backgroundSeismicity}, Forecast: ${forecastTime} years.`}</Typography>
             <XYChart
               height={700}
               width={900}
@@ -139,7 +141,7 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
                 }}
               />
             </XYChart>
-            <div style={{ width: 100, height: 100, position: 'absolute', top: 400, left: 1000, display: 'flex' }}>
+            <div style={{ width: 100, height: 100, position: 'absolute', top: 450, left: 1000, display: 'flex' }}>
               <LegendOrdinal direction="column" scale={ordinalColorScale} shape="line" style={{ fontSize: '15px' }} />
             </div>
           </Box>
