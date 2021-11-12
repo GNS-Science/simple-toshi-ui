@@ -140,7 +140,7 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
               />
             </XYChart>
             <div style={{ width: 100, height: 100, position: 'absolute', top: 400, left: 1000, display: 'flex' }}>
-              <LegendOrdinal direction="column" scale={ordinalColorScale} shape="line" />
+              <LegendOrdinal direction="column" scale={ordinalColorScale} shape="line" style={{ fontSize: '15px' }} />
             </div>
           </Box>
         </Card>
