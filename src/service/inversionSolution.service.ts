@@ -21,12 +21,14 @@ export const filterData = (
 ): XY[] => {
   const xy: XY[] = [];
   const rows = data?.node?.rows;
+  const pga = pgaValue.replace('s', '');
+
   const filtered = rows?.filter((item) => {
     if (
       item &&
       item[0] === forecastTime &&
       item[1] === backgroundSeismisity &&
-      item[2] === pgaValue &&
+      item[2] === pga &&
       item[3] === gmpe &&
       item[4] === location
     )
