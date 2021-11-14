@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
-import { Typography, Box, Card } from '@material-ui/core';
+import { Typography, Box, Card, Snackbar } from '@material-ui/core';
 import { graphql } from 'babel-plugin-relay/macro';
 import ControlsBar from '../common/ControlsBar';
 import SelectControl from '../common/SelectControl';
@@ -8,6 +8,7 @@ import { InversionSolutionHazardTabQuery } from './__generated__/InversionSoluti
 import { XY } from '../../interfaces/common';
 import { filterData, getHazardTableOptions } from '../../service/inversionSolution.service';
 import MultiSelect from '../common/MultiSelect';
+import MuiAlert from '@material-ui/lab/Alert';
 
 import { scaleOrdinal } from '@visx/scale';
 import { LegendOrdinal } from '@visx/legend';
@@ -31,6 +32,7 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
   const [backgroundSeismicity, setBackgroundSeismicity] = useState<string>(options.backgroundSeismicity[0]);
 
   const [filteredData, setFilteredData] = useState<HazardTableFilteredData>({});
+  const [openNotification, setOpenNotification] = useState<boolean>(false);
 
   useEffect(() => {
     const filtered: HazardTableFilteredData = {};
@@ -48,6 +50,10 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
   }, [location, PGA, forecastTime, gmpe, backgroundSeismicity]);
 
   const handleSetPGA = (selections: string[]) => {
+    if (selections.length > 8) {
+      return setOpenNotification(true);
+    }
+
     if (selections.includes('PGA')) {
       const i = selections.indexOf('PGA');
       selections[i] = '0.0';
@@ -164,6 +170,15 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
           </Box>
         </Card>
       </Box>
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={openNotification}
+        onClose={() => setOpenNotification(false)}
+      >
+        <MuiAlert variant="filled" severity="warning">
+          Sorry, we cannot show more than 8 curves in one chart.
+        </MuiAlert>
+      </Snackbar>
     </>
   );
 };
