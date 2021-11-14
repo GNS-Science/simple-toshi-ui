@@ -48,7 +48,22 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
   }, [location, PGA, forecastTime, gmpe, backgroundSeismicity]);
 
   const handleSetPGA = (selections: string[]) => {
-    setPGA(selections);
+    if (selections.includes('PGA')) {
+      const i = selections.indexOf('PGA');
+      selections[i] = '0.0';
+    }
+
+    const sorted = selections.sort((a: string, b: string): number => {
+      const result = parseFloat(a) - parseFloat(b);
+      return result;
+    });
+
+    if (sorted.includes('0.0')) {
+      const i = sorted.indexOf('0.0');
+      sorted[i] = 'PGA';
+    }
+
+    setPGA(sorted);
   };
 
   const colors = ['#FE1100', '#73d629', '#ffd700', '#7fe5f0', '#003366', '#ff7f50', '#047806', '#4ca3dd'];
