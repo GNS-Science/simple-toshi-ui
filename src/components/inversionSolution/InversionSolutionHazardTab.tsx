@@ -129,7 +129,7 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
                   snapTooltipToDatumY
                   showDatumGlyph
                   glyphStyle={{ fill: '#000' }}
-                  renderTooltip={({ tooltipData, colorScale }) => {
+                  renderTooltip={({ tooltipData }) => {
                     const datum = tooltipData?.nearestDatum?.datum as XY;
                     const key = tooltipData?.nearestDatum?.key as string;
                     if (datum) {
@@ -138,7 +138,7 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
                           <Typography>
                             <span
                               style={{
-                                background: colorScale && colorScale(key as string),
+                                background: ordinalColorScale(key as string),
                                 width: 8,
                                 height: 8,
                                 display: 'inline-block',
