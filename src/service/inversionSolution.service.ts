@@ -66,10 +66,16 @@ export const getHazardTableOptions = (data: InversionSolutionHazardTabQueryRespo
     }
   });
 
+  const pgaArray = Array.from(pga);
+  const pgaWithSeconds: string[] = [];
+  pgaArray.map((value) => {
+    value === 'PGA' ? pgaWithSeconds.push('PGA') : pgaWithSeconds.push(`${value}s`);
+  });
+
   return {
     forecastTime: Array.from(forecastTimes),
     backgroundSeismicity: Array.from(bgSeismicity),
-    PGA: Array.from(pga),
+    PGA: pgaWithSeconds,
     gmpe: Array.from(gmpe),
     location: Array.from(locations),
   };
