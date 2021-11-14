@@ -121,7 +121,7 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
                     />
                   );
                 })}
-                <Grid rows={true} columns={true} lineStyle={{ opacity: '90%' }} />
+                <Grid rows columns lineStyle={{ opacity: '90%' }} />
                 <Tooltip
                   showHorizontalCrosshair
                   showVerticalCrosshair
