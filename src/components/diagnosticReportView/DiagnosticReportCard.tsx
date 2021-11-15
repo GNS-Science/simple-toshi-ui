@@ -169,7 +169,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             <Tab label="General" id="simple-tab-0" disableFocusRipple />
             <Tab label="Named Faults" id="simple-tab-1" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
             <Tab label="Regional Solutions" id="simple-tab-2" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
-            <Tab label="Hazard Table" id="simple-tab-2" />
+            <Tab label="Hazard Table" id="simple-tab-2" disabled={!hazardId.length} disableFocusRipple />
           </Tabs>
           <DiagnosticReportTabPanel value={currentTab} index={0}>
             <GeneralView
@@ -195,9 +195,11 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             />
           </DiagnosticReportTabPanel>
           <DiagnosticReportTabPanel value={currentTab} index={3}>
-            <React.Suspense fallback={<CircularProgress />}>
-              <InversionSolutionHazardTab id={hazardId} />
-            </React.Suspense>
+            {hazardId && (
+              <React.Suspense fallback={<CircularProgress />}>
+                <InversionSolutionHazardTab id={hazardId} />
+              </React.Suspense>
+            )}
           </DiagnosticReportTabPanel>
         </CardContent>
       </Card>
