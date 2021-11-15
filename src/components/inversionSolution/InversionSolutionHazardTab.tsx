@@ -152,7 +152,7 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
                               }}
                             />
                             &nbsp;&nbsp;&nbsp;
-                            {key === 'PGA' ? key : key + 's'}
+                            {key}
                           </Typography>
                           <Typography>x: {datum.x.toExponential()}</Typography>
                           <Typography>y: {datum.y.toExponential()}</Typography>
