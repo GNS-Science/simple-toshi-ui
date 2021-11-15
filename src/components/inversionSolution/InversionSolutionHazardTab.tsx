@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
 import { Typography, Box, Card, Snackbar } from '@material-ui/core';
 import { graphql } from 'babel-plugin-relay/macro';
-import ControlsBar from '../common/ControlsBar';
 import SelectControl from '../common/SelectControl';
 import { InversionSolutionHazardTabQuery } from './__generated__/InversionSolutionHazardTabQuery.graphql';
 import { XY } from '../../interfaces/common';
