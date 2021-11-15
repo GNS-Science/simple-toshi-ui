@@ -14,6 +14,7 @@ import { scaleOrdinal } from '@visx/scale';
 import { LegendOrdinal } from '@visx/legend';
 import { HazardTableFilteredData } from '../../interfaces/inversionSolutions';
 import { AnimatedAxis, AnimatedLineSeries, Grid, Tooltip, XYChart } from '@visx/xychart';
+import { toProperCase } from '../../utils';
 
 interface InversionSolutionHazardTabProps {
   id: string;
@@ -99,7 +100,9 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
               <strong>{`${location} hazard (opensha)`}</strong>
             </Typography>
             <Typography>PGA/SA Periods: {PGA.join(', ')} </Typography>
-            <Typography>{`Model: ${gmpe}, Background: ${backgroundSeismicity}, Forecast: ${forecastTime} years.`}</Typography>
+            <Typography>{`Model: ${gmpe}, Background: ${toProperCase(
+              backgroundSeismicity,
+            )}d, Forecast: ${forecastTime} years.`}</Typography>
             <div style={{ position: 'relative', width: '100%' }}>
               <XYChart
                 height={700}

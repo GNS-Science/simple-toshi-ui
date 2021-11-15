@@ -13,3 +13,9 @@ export const renderArrayAsString = (vals: readonly (string | null)[] | null | un
     return val_list ? val_list.slice(0, -2) : '';
   }
 };
+
+export const toProperCase = (str: string): string => {
+  const lowerCase = str.toLowerCase();
+  const properCase = lowerCase.charAt(0).toUpperCase() + lowerCase.slice(1);
+  return properCase;
+};
