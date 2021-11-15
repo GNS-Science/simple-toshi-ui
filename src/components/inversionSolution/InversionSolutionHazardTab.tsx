@@ -96,13 +96,6 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
             <SelectControl name="Background Motion Model" options={options.gmpe} setOptions={setGmpe} />
           </ControlsBar>
           <Box style={{ width: '100%', padding: '1rem' }}>
-            <Typography variant="h5" gutterBottom>
-              <strong>{`${location} hazard (opensha)`}</strong>
-            </Typography>
-            <Typography>PGA/SA Periods: {PGA.join(', ')} </Typography>
-            <Typography>{`Model: ${gmpe}, Background: ${toProperCase(
-              backgroundSeismicity,
-            )}d, Forecast: ${forecastTime} years.`}</Typography>
             <div style={{ position: 'relative', width: '100%' }}>
               <XYChart
                 height={700}
@@ -110,6 +103,12 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
                 xScale={{ type: 'log', domain: [1e-3, 10] }}
                 yScale={{ type: 'log', domain: [1e-13, 2.0] }}
               >
+                <text y={23} x={20} fontSize={20} fontWeight="bold">{`${location} hazard (opensha)`}</text>
+                <text y={42} x={20} fontSize={15}>
+                  {`PGA/SA Period: ${PGA.join(', ')}. Model: ${gmpe}. Background: ${toProperCase(
+                    backgroundSeismicity,
+                  )}d. Forecast: ${forecastTime} years.`}
+                </text>
                 <AnimatedAxis orientation="bottom" />
                 <AnimatedAxis orientation="left" />
                 <text y={11} x={-500} transform="rotate(-90)" fontSize={15}>
