@@ -81,10 +81,10 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
     setPGA(sorted);
   };
 
-  const colors = ['#FE1100', '#73d629', '#ffd700', '#7fe5f0', '#003366', '#ff7f50', '#047806', '#4ca3dd'];
+  const colors = ['#FE1100', '#73d629', '#ffd700', '#7fe5f0', '#003366', '#ff7f50', '#047806', '#4ca3dd', '#000000'];
 
   const ordinalColorScale = scaleOrdinal({
-    domain: [...PGA],
+    domain: POE === 'None' ? [...PGA] : [...PGA, POE],
     range: colors,
   });
 
@@ -144,7 +144,13 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
                   );
                 })}
                 {POE !== 'None' && (
-                  <AnimatedLineSeries dataKey="poe" data={POEdata} xAccessor={(d) => d.x} yAccessor={(d) => d.y} />
+                  <AnimatedLineSeries
+                    dataKey={POE}
+                    data={POEdata}
+                    xAccessor={(d) => d.x}
+                    yAccessor={(d) => d.y}
+                    stroke={colors[PGA.length]}
+                  />
                 )}
                 <Grid rows columns lineStyle={{ opacity: '90%' }} />
                 <Tooltip
