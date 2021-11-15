@@ -30,6 +30,8 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
   const [forecastTime, setForecastTime] = useState<string>(options.forecastTime[0]);
   const [gmpe, setGmpe] = useState<string>(options.gmpe[0]);
   const [backgroundSeismicity, setBackgroundSeismicity] = useState<string>(options.backgroundSeismicity[0]);
+  const [POE, setPOE] = useState<string>('None');
+  const [POEdata, setPOEdata] = useState<XY[]>([]);
 
   const [filteredData, setFilteredData] = useState<HazardTableFilteredData>({});
   const [openNotification, setOpenNotification] = useState<boolean>(false);
@@ -48,6 +50,13 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
     });
     setFilteredData(filtered);
   }, [location, PGA, forecastTime, gmpe, backgroundSeismicity]);
+
+  useEffect(() => {
+    if (POE !== 'None') {
+      const data = getPoE();
+      setPOEdata(data);
+    }
+  }, [POE]);
 
   const handleSetPGA = (selections: string[]) => {
     if (selections.length > 8) {
@@ -79,6 +88,14 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
     range: colors,
   });
 
+  const getPoE = () => {
+    const yValue = POE === '2%' ? 1 / 475 : 1 / 2475;
+    return [
+      { x: 1e-3, y: yValue },
+      { x: 10, y: yValue },
+    ];
+  };
+
   return (
     <>
       <Box>
@@ -93,6 +110,7 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
               setOptions={setBackgroundSeismicity}
             />
             <SelectControl name="Background Motion Model" options={options.gmpe} setOptions={setGmpe} />
+            <SelectControl name="Probability of Exceedence" options={['None', '2%', '10%']} setOptions={setPOE} />
           </ControlsBar>
           <Box style={{ width: '100%', padding: '1rem' }}>
             <Typography variant="h5" gutterBottom>
@@ -127,6 +145,9 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
                     />
                   );
                 })}
+                {POE !== 'None' && (
+                  <AnimatedLineSeries dataKey="poe" data={POEdata} xAccessor={(d) => d.x} yAccessor={(d) => d.y} />
+                )}
                 <Grid rows columns lineStyle={{ opacity: '90%' }} />
                 <Tooltip
                   showHorizontalCrosshair
