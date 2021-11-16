@@ -163,7 +163,7 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
                   renderTooltip={({ tooltipData }) => {
                     const datum = tooltipData?.nearestDatum?.datum as XY;
                     const key = tooltipData?.nearestDatum?.key as string;
-                    if (datum) {
+                    if (key !== '2%' && key !== '10%' && datum) {
                       return (
                         <>
                           <Typography>
