@@ -14,7 +14,6 @@ import { scaleOrdinal } from '@visx/scale';
 import { LegendOrdinal } from '@visx/legend';
 import { HazardTableFilteredData } from '../../interfaces/inversionSolutions';
 import { AnimatedAxis, AnimatedLineSeries, Grid, Tooltip, XYChart } from '@visx/xychart';
-import { geoPath } from 'd3';
 
 interface InversionSolutionHazardTabProps {
   id: string;
@@ -166,7 +165,7 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
                   renderTooltip={({ tooltipData }) => {
                     const datum = tooltipData?.nearestDatum?.datum as XY;
                     const key = tooltipData?.nearestDatum?.key as string;
-                    if (datum) {
+                    if (key !== '2%' && key !== '10%' && datum) {
                       return (
                         <>
                           <Typography>
