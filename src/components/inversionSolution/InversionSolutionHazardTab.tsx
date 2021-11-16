@@ -5,7 +5,7 @@ import { graphql } from 'babel-plugin-relay/macro';
 import SelectControl from '../common/SelectControl';
 import { InversionSolutionHazardTabQuery } from './__generated__/InversionSolutionHazardTabQuery.graphql';
 import { XY } from '../../interfaces/common';
-import { filterData, getHazardTableOptions } from '../../service/inversionSolution.service';
+import { filterMultipleCurves, getHazardTableOptions } from '../../service/inversionSolution.service';
 import MultiSelect from '../common/MultiSelect';
 import MuiAlert from '@material-ui/lab/Alert';
 
@@ -37,18 +37,8 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
   const [openNotification, setOpenNotification] = useState<boolean>(false);
 
   useEffect(() => {
-    const filtered: HazardTableFilteredData = {};
-    const pgaValues: string[] = [...PGA];
-    if (pgaValues.includes('PGA')) {
-      const index = pgaValues.indexOf('PGA');
-      pgaValues[index] = '0.0';
-    }
-
-    pgaValues.map((pgaValue) => {
-      const xy = filterData(data, location, pgaValue, forecastTime, gmpe, backgroundSeismicity);
-      pgaValue === '0.0' ? (filtered['PGA'] = xy) : (filtered[pgaValue] = xy);
-    });
-    setFilteredData(filtered);
+    const filteredCurves = filterMultipleCurves(PGA, data, location, forecastTime, gmpe, backgroundSeismicity);
+    setFilteredData(filteredCurves);
   }, [location, PGA, forecastTime, gmpe, backgroundSeismicity]);
 
   useEffect(() => {
@@ -89,7 +79,7 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
   });
 
   const getPoE = () => {
-    const yValue = POE === '2%' ? 1 / 475 : 1 / 2475;
+    const yValue = POE === '2%' ? 1 / 2475 : 1 / 475;
     return [
       { x: 1e-3, y: yValue },
       { x: 10, y: yValue },
