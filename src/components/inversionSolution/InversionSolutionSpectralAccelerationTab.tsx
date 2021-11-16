@@ -29,6 +29,7 @@ const InversionSolutionSpectralAccelerationTab: React.FC<InversionSolutionSpectr
   const [forecastTime, setForecastTime] = useState<string>(options.forecastTime[0]);
   const [gmpe, setGmpe] = useState<string>(options.gmpe[0]);
   const [backgroundSeismicity, setBackgroundSeismicity] = useState<string>(options.backgroundSeismicity[0]);
+  const [POE, setPOE] = useState<string>('2%');
 
   const [filteredData, setFilteredData] = useState<HazardTableFilteredData>({});
 
@@ -66,6 +67,7 @@ const InversionSolutionSpectralAccelerationTab: React.FC<InversionSolutionSpectr
               setOptions={setBackgroundSeismicity}
             />
             <SelectControl name="Background Motion Model" options={options.gmpe} setOptions={setGmpe} />
+            <SelectControl name="Probability of Exceedence" options={['2%', '10%']} setOptions={setPOE} />
             <div style={{ position: 'relative', width: '100%' }}>
               <XYChart
                 height={700}
