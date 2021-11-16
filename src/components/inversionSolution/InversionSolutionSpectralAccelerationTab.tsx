@@ -3,13 +3,16 @@ import { AnimatedAxis, AnimatedLineSeries, XYChart } from '@visx/xychart';
 import React, { useEffect, useState } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
 import { graphql } from 'babel-plugin-relay/macro';
-import { filterData, getHazardTableOptions } from '../../service/inversionSolution.service';
+import {
+  filterMultipleCurves,
+  getHazardTableOptions,
+  getSpectralAccelerationData,
+} from '../../service/inversionSolution.service';
 import { InversionSolutionSpectralAccelerationTabQuery } from './__generated__/InversionSolutionSpectralAccelerationTabQuery.graphql';
 import { XY } from '../../interfaces/common';
 import { curveLinear } from '@visx/curve';
 import { Tooltip } from '@visx/xychart';
 import SelectControl from '../common/SelectControl';
-import { HazardTableFilteredData } from '../../interfaces/inversionSolutions';
 
 interface InversionSolutionSpectralAccelerationTabProps {
   id: string;
@@ -31,28 +34,14 @@ const InversionSolutionSpectralAccelerationTab: React.FC<InversionSolutionSpectr
   const [backgroundSeismicity, setBackgroundSeismicity] = useState<string>(options.backgroundSeismicity[0]);
   const [POE, setPOE] = useState<string>('2%');
 
-  const [filteredData, setFilteredData] = useState<HazardTableFilteredData>({});
+  const [dataSet, setDataSet] = useState<XY[]>([]);
 
   useEffect(() => {
-    const filtered: HazardTableFilteredData = {};
-    options.PGA.map((value) => {
-      const dataSet = filterData(
-        data,
-        location,
-        value === 'PGA' ? '0.0' : value,
-        forecastTime,
-        gmpe,
-        backgroundSeismicity,
-      );
-      filtered[value] = dataSet;
-    });
-    setFilteredData(filtered);
-  }, [location, forecastTime, gmpe, backgroundSeismicity]);
-
-  const dataSet: XY[] = [];
-  options.PGA.map((value) => {
-    dataSet.push({ x: value === 'PGA' ? 0 : parseFloat(value), y: 1 });
-  });
+    const xValue = POE === '2%' ? 1 / 2475 : 1 / 475;
+    const filteredCurves = filterMultipleCurves(options.PGA, data, location, forecastTime, gmpe, backgroundSeismicity);
+    const plotData = getSpectralAccelerationData(options.PGA, xValue, filteredCurves);
+    setDataSet(plotData);
+  }, [location, forecastTime, gmpe, backgroundSeismicity, POE]);
 
   return (
     <>
@@ -72,8 +61,8 @@ const InversionSolutionSpectralAccelerationTab: React.FC<InversionSolutionSpectr
               <XYChart
                 height={700}
                 width={900}
-                xScale={{ type: 'linear', domain: [0, 10] }}
-                yScale={{ type: 'linear', domain: [1e-3, 10] }}
+                xScale={{ type: 'linear', domain: [-1, 10] }}
+                yScale={{ type: 'linear', domain: [0, 6] }}
               >
                 <AnimatedLineSeries
                   dataKey="hello"
@@ -93,7 +82,6 @@ const InversionSolutionSpectralAccelerationTab: React.FC<InversionSolutionSpectr
                   glyphStyle={{ fill: '#000' }}
                   renderTooltip={({ tooltipData }) => {
                     const datum = tooltipData?.nearestDatum?.datum as XY;
-                    const key = tooltipData?.nearestDatum?.key as string;
                     if (datum) {
                       return (
                         <>
