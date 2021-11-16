@@ -14,6 +14,7 @@ import RuptureSetDiags from '../components/RuptureSetDiags';
 import { InversionSolutionQuery } from './__generated__/InversionSolutionQuery.graphql';
 import { InversionSolutionDetailTabQuery } from '../components/inversionSolution/__generated__/InversionSolutionDetailTabQuery.graphql';
 import DiagnosticReportTab from '../components/inversionSolution/DiagnosticReportTab';
+import InversionSolutionSpectralAccelerationTab from '../components/inversionSolution/InversionSolutionSpectralAccelerationTab';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -96,6 +97,14 @@ const InversionSolution: React.FC = () => {
             </React.Suspense>
           </Box>
         );
+      case 'InversionSolutionSpectralAccelerationTab':
+        return (
+          <Box className={classes.tabPanel}>
+            <React.Suspense fallback={<CircularProgress />}>
+              {hazardTableId && <InversionSolutionSpectralAccelerationTab id={hazardTableId} />}
+            </React.Suspense>
+          </Box>
+        );
       case 'RuptureSetDiagnosticsTab':
         return (
           <Box className={classes.tabPanel}>
@@ -135,6 +144,13 @@ const InversionSolution: React.FC = () => {
             <Tab label="Rupture Diags" id="ruptureSetTab" value="RuptureSetDiagnosticsTab" className={classes.tab} />
           )}
           {hazardTableId && <Tab label="Hazard" value="InversionSolutionHazardTab" className={classes.tab} />}
+          {hazardTableId && (
+            <Tab
+              label="Spectral Acceleration plot"
+              value="InversionSolutionSpectralAccelerationTab"
+              className={classes.tab}
+            />
+          )}
         </Tabs>
         {renderTab()}
       </Box>
