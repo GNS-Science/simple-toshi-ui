@@ -145,11 +145,7 @@ const InversionSolution: React.FC = () => {
             <Tab label="Rupture Diags" id="ruptureSetTab" value="RuptureSetDiagnosticsTab" className={classes.tab} />
           )}
           {hazardTableId && (
-            <Tab
-              label="Spectral Acceleration plot"
-              value="InversionSolutionSpectralAccelerationTab"
-              className={classes.tab}
-            />
+            <Tab label="UH spectrum" value="InversionSolutionSpectralAccelerationTab" className={classes.tab} />
           )}
         </Tabs>
         {renderTab()}
