@@ -85,7 +85,7 @@ const InversionSolutionSpectralAccelerationTab: React.FC<InversionSolutionSpectr
                     if (datum) {
                       return (
                         <>
-                          <Typography>x: {datum.x}</Typography>
+                          <Typography>x: {datum.x}s</Typography>
                           <Typography>y: {datum.y.toExponential()}</Typography>
                         </>
                       );
