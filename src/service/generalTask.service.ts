@@ -47,10 +47,9 @@ export const validateSubtask = (
   subtasks?.map((subtask) => {
     if (
       subtask &&
-      subtask !== null &&
       subtask.__typename === 'AutomationTask' &&
-      subtask.inversion_solution !== null &&
-      subtask.inversion_solution.meta !== null
+      subtask.inversion_solution &&
+      subtask.inversion_solution.meta
     ) {
       const newSubtask: ValidatedSubtask = {
         __typename: 'AutomationTask',
@@ -59,6 +58,7 @@ export const validateSubtask = (
         inversion_solution: {
           id: subtask.inversion_solution.id,
           meta: [],
+          tables: subtask.inversion_solution.tables,
         },
       };
       subtask.inversion_solution.meta.map((kv) => {

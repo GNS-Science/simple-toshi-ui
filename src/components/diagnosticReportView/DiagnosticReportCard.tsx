@@ -2,7 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import { Card, CardContent, IconButton, makeStyles, Tooltip, Typography, Tabs, Tab } from '@material-ui/core';
+import {
+  Card,
+  CardContent,
+  IconButton,
+  makeStyles,
+  Tooltip,
+  Typography,
+  Tabs,
+  Tab,
+  CircularProgress,
+} from '@material-ui/core';
 
 import { ReportItem } from '../../interfaces/diagnosticReport';
 import FavouriteControls from '../common/FavouriteControls';
@@ -10,6 +20,7 @@ import DiagnosticReportTabPanel from './DiagnosticReportTabPanel';
 import GeneralView from './GeneralView';
 import NamedFaultsView from './NamedFaultsView';
 import RegionalMfdView from './RegionalMfdView';
+import InversionSolutionHazardTab from '../inversionSolution/InversionSolutionHazardTab';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -63,6 +74,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   const classes = useStyles();
   const [currentImage, setCurrentImage] = useState<number>(0);
   const [currentTab, setCurrentTab] = useState<number>(0);
+  const [hazardId, setHazardId] = useState<string>('');
 
   useEffect(() => {
     if (reportTab !== 0) setCurrentTab(reportTab ?? 0);
@@ -71,6 +83,15 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   useEffect(() => {
     setReportTab && setReportTab(currentTab);
   }, [currentTab]);
+
+  useEffect(() => {
+    if (automationTasks[currentImage].inversion_solution.tables) {
+      const hazardTable = automationTasks[currentImage].inversion_solution.tables?.find(
+        (table) => table?.table_type === 'HAZARD_SITES',
+      );
+      hazardTable && setHazardId(hazardTable?.table_id as string);
+    }
+  }, [currentImage]);
 
   const nextImage = () => {
     if (currentImage < automationTasks.length - 1) {
@@ -148,6 +169,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             <Tab label="General" id="simple-tab-0" disableFocusRipple />
             <Tab label="Named Faults" id="simple-tab-1" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
             <Tab label="Regional Solutions" id="simple-tab-2" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
+            <Tab label="Hazard Table" id="simple-tab-2" disabled={!hazardId.length} disableFocusRipple />
           </Tabs>
           <DiagnosticReportTabPanel value={currentTab} index={0}>
             <GeneralView
@@ -171,6 +193,13 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
               regionalViews={regionalViews}
               setRegionalViews={setRegionalViews}
             />
+          </DiagnosticReportTabPanel>
+          <DiagnosticReportTabPanel value={currentTab} index={3}>
+            {hazardId && (
+              <React.Suspense fallback={<CircularProgress />}>
+                <InversionSolutionHazardTab id={hazardId} />
+              </React.Suspense>
+            )}
           </DiagnosticReportTabPanel>
         </CardContent>
       </Card>

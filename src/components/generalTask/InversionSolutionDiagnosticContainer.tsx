@@ -83,6 +83,10 @@ export const inversionSolutionDiagnosticContainerQuery = graphql`
                   k
                   v
                 }
+                tables {
+                  table_id
+                  table_type
+                }
               }
             }
           }

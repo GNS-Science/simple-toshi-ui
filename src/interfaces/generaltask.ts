@@ -1,4 +1,5 @@
 import { EventResult, EventState } from '../components/generalTask/__generated__/GeneralTaskChildrenTabQuery.graphql';
+import { TableType } from '../components/generalTask/__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
 
 export interface GeneralTaskParams {
   id: string;
@@ -82,8 +83,14 @@ export type ValidatedSubtask = {
       readonly k: string | null;
       readonly v: string | null;
     } | null>;
+    tables: IStables;
   };
 };
+
+export type IStables = ReadonlyArray<{
+  readonly table_id: string | null;
+  readonly table_type: TableType | null;
+} | null> | null;
 
 export interface ClipBoardObject {
   filter: FilteredArguments;
