@@ -65,7 +65,7 @@ const InversionSolutionSpectralAccelerationTab: React.FC<InversionSolutionSpectr
                 yScale={{ type: 'linear', domain: [0, 6] }}
               >
                 <AnimatedLineSeries
-                  dataKey="hello"
+                  dataKey="Spectral Acceleration"
                   data={dataSet}
                   xAccessor={(d) => d.x}
                   yAccessor={(d) => d.y}
