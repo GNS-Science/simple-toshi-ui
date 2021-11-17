@@ -13,6 +13,7 @@ import { XY } from '../../interfaces/common';
 import { curveLinear } from '@visx/curve';
 import { Tooltip } from '@visx/xychart';
 import SelectControl from '../common/SelectControl';
+import { toProperCase } from '../../utils';
 
 interface InversionSolutionSpectralAccelerationTabProps {
   id: string;
@@ -45,18 +46,18 @@ const InversionSolutionSpectralAccelerationTab: React.FC<InversionSolutionSpectr
 
   return (
     <>
+      <SelectControl name="Location" options={options.location} setOptions={setLocation} />
+      <SelectControl name="Forecast Timespan" options={options.forecastTime} setOptions={setForecastTime} />
+      <SelectControl
+        name="Background Seismicity"
+        options={options.backgroundSeismicity}
+        setOptions={setBackgroundSeismicity}
+      />
+      <SelectControl name="Background Motion Model" options={options.gmpe} setOptions={setGmpe} />
+      <SelectControl name="Probability of Exceedence" options={['2%', '10%']} setOptions={setPOE} />
       <Box>
         <Card>
-          <Box>
-            <SelectControl name="Location" options={options.location} setOptions={setLocation} />
-            <SelectControl name="Forecast Timespan" options={options.forecastTime} setOptions={setForecastTime} />
-            <SelectControl
-              name="Background Seismicity"
-              options={options.backgroundSeismicity}
-              setOptions={setBackgroundSeismicity}
-            />
-            <SelectControl name="Background Motion Model" options={options.gmpe} setOptions={setGmpe} />
-            <SelectControl name="Probability of Exceedence" options={['2%', '10%']} setOptions={setPOE} />
+          <Box style={{ width: '100%', padding: '1rem' }}>
             <div style={{ position: 'relative', width: '100%' }}>
               <XYChart
                 height={700}
@@ -64,6 +65,17 @@ const InversionSolutionSpectralAccelerationTab: React.FC<InversionSolutionSpectr
                 xScale={{ type: 'linear', domain: [-1, 10] }}
                 yScale={{ type: 'linear', domain: [0, 6] }}
               >
+                <text
+                  y={23}
+                  x={20}
+                  fontSize={20}
+                  fontWeight="bold"
+                >{`${location} Uniform Hazard Spectrum (opensha)`}</text>
+                <text y={42} x={20} fontSize={15}>
+                  {` Model: ${gmpe}. Background: ${toProperCase(
+                    backgroundSeismicity,
+                  )}d. Forecast: ${forecastTime} years.  POE: ${POE}`}
+                </text>
                 <AnimatedLineSeries
                   dataKey="Spectral Acceleration"
                   data={dataSet}
@@ -73,6 +85,12 @@ const InversionSolutionSpectralAccelerationTab: React.FC<InversionSolutionSpectr
                 />
                 <AnimatedAxis orientation="bottom" />
                 <AnimatedAxis orientation="left" />
+                <text y={11} x={-500} transform="rotate(-90)" fontSize={15}>
+                  Ground Motion (g)
+                </text>
+                <text y={685} x={350} fontSize={15}>
+                  Spectral Period (s)
+                </text>
                 <Tooltip
                   showHorizontalCrosshair
                   showVerticalCrosshair
