@@ -83,14 +83,8 @@ const InversionSolutionSpectralAccelerationTab: React.FC<InversionSolutionSpectr
                   yAccessor={(d) => d.y}
                   curve={curveLinear}
                 />
-                <AnimatedAxis orientation="bottom" />
-                <AnimatedAxis orientation="left" />
-                <text y={11} x={-500} transform="rotate(-90)" fontSize={15}>
-                  Ground Motion (g)
-                </text>
-                <text y={685} x={350} fontSize={15}>
-                  Spectral Period (s)
-                </text>
+                <AnimatedAxis label="Spectral Period (s)" orientation="bottom" />
+                <AnimatedAxis label="Ground Motion (g)" orientation="left" />
                 <Tooltip
                   showHorizontalCrosshair
                   showVerticalCrosshair
