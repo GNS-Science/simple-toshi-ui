@@ -47,7 +47,6 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
   useLayoutEffect(() => {
     if (targetRef.current) {
       setContainerWidth(targetRef.current.offsetWidth as number);
-      console.log(targetRef.current.offsetWidth);
     }
   }, []);
 
