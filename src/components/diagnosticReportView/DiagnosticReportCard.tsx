@@ -20,7 +20,7 @@ import DiagnosticReportTabPanel from './DiagnosticReportTabPanel';
 import GeneralView from './GeneralView';
 import NamedFaultsView from './NamedFaultsView';
 import RegionalMfdView from './RegionalMfdView';
-import InversionSolutionHazardTab from '../inversionSolution/InversionSolutionHazardTab';
+import InversionSolutionHazardCharts from '../inversionSolution/InversionSolutionHazardCharts';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -169,7 +169,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             <Tab label="General" id="simple-tab-0" disableFocusRipple />
             <Tab label="Named Faults" id="simple-tab-1" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
             <Tab label="Regional Solutions" id="simple-tab-2" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
-            <Tab label="Hazard Table" id="simple-tab-2" disabled={!hazardId.length} disableFocusRipple />
+            <Tab label="Hazard Charts" id="simple-tab-3" disabled={!hazardId.length} disableFocusRipple />
           </Tabs>
           <DiagnosticReportTabPanel value={currentTab} index={0}>
             <GeneralView
@@ -197,7 +197,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
           <DiagnosticReportTabPanel value={currentTab} index={3}>
             {hazardId && (
               <React.Suspense fallback={<CircularProgress />}>
-                <InversionSolutionHazardTab id={hazardId} />
+                <InversionSolutionHazardCharts id={hazardId} />
               </React.Suspense>
             )}
           </DiagnosticReportTabPanel>
