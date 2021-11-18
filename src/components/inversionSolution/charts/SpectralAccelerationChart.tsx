@@ -1,4 +1,4 @@
-import { Box, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { curveLinear } from '@visx/curve';
 import { AnimatedAxis, AnimatedLineSeries, Tooltip, XYChart } from '@visx/xychart';
 import React from 'react';
