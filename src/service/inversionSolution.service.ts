@@ -21,12 +21,14 @@ export const filterData = (
 ): XY[] => {
   const xy: XY[] = [];
   const rows = data?.node?.rows;
+  const pga = pgaValue.replace('s', '');
+
   const filtered = rows?.filter((item) => {
     if (
       item &&
       item[0] === forecastTime &&
       item[1] === backgroundSeismisity &&
-      item[2] === pgaValue &&
+      item[2] === pga &&
       item[3] === gmpe &&
       item[4] === location
     )
@@ -66,10 +68,16 @@ export const getHazardTableOptions = (data: InversionSolutionHazardTabQueryRespo
     }
   });
 
+  const pgaArray = Array.from(pga);
+  const pgaWithSeconds: string[] = [];
+  pgaArray.map((value) => {
+    value === 'PGA' ? pgaWithSeconds.push('PGA') : pgaWithSeconds.push(`${value}s`);
+  });
+
   return {
     forecastTime: Array.from(forecastTimes),
     backgroundSeismicity: Array.from(bgSeismicity),
-    PGA: Array.from(pga),
+    PGA: pgaWithSeconds,
     gmpe: Array.from(gmpe),
     location: Array.from(locations),
   };

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
 import { Typography, Box, Card, Snackbar } from '@material-ui/core';
 import { graphql } from 'babel-plugin-relay/macro';
-import ControlsBar from '../common/ControlsBar';
 import SelectControl from '../common/SelectControl';
 import { InversionSolutionHazardTabQuery } from './__generated__/InversionSolutionHazardTabQuery.graphql';
 import { XY } from '../../interfaces/common';
@@ -14,6 +13,7 @@ import { scaleOrdinal } from '@visx/scale';
 import { LegendOrdinal } from '@visx/legend';
 import { HazardTableFilteredData } from '../../interfaces/inversionSolutions';
 import { AnimatedAxis, AnimatedLineSeries, Grid, Tooltip, XYChart } from '@visx/xychart';
+import { toProperCase } from '../../utils';
 
 interface InversionSolutionHazardTabProps {
   id: string;
@@ -81,25 +81,18 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
 
   return (
     <>
+      <SelectControl name="Location" options={options.location} setOptions={setLocation} />
+      <MultiSelect name="PGA/SA Period" selected={[]} options={options.PGA} setOptions={handleSetPGA} />
+      <SelectControl name="Forecast Timespan" options={options.forecastTime} setOptions={setForecastTime} />
+      <SelectControl
+        name="Background Seismicity"
+        options={options.backgroundSeismicity}
+        setOptions={setBackgroundSeismicity}
+      />
+      <SelectControl name="Background Motion Model" options={options.gmpe} setOptions={setGmpe} />
       <Box>
         <Card>
-          <ControlsBar>
-            <SelectControl name="Location" options={options.location} setOptions={setLocation} />
-            <MultiSelect name="PGA/SA Period" selected={[]} options={options.PGA} setOptions={handleSetPGA} />
-            <SelectControl name="Forecast Timespan" options={options.forecastTime} setOptions={setForecastTime} />
-            <SelectControl
-              name="Background Seismicity"
-              options={options.backgroundSeismicity}
-              setOptions={setBackgroundSeismicity}
-            />
-            <SelectControl name="Background Motion Model" options={options.gmpe} setOptions={setGmpe} />
-          </ControlsBar>
           <Box style={{ width: '100%', padding: '1rem' }}>
-            <Typography variant="h5" gutterBottom>
-              <strong>{`${location} hazard (opensha)`}</strong>
-            </Typography>
-            <Typography>PGA/SA Periods: {PGA.join(', ')} </Typography>
-            <Typography>{`Model: ${gmpe}, Background: ${backgroundSeismicity}, Forecast: ${forecastTime} years.`}</Typography>
             <div style={{ position: 'relative', width: '100%' }}>
               <XYChart
                 height={700}
@@ -107,6 +100,12 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
                 xScale={{ type: 'log', domain: [1e-3, 10] }}
                 yScale={{ type: 'log', domain: [1e-13, 2.0] }}
               >
+                <text y={23} x={20} fontSize={20} fontWeight="bold">{`${location} hazard (opensha)`}</text>
+                <text y={42} x={20} fontSize={15}>
+                  {`PGA/SA Period: ${PGA.join(', ')}. Model: ${gmpe}. Background: ${toProperCase(
+                    backgroundSeismicity,
+                  )}d. Forecast: ${forecastTime} years.`}
+                </text>
                 <AnimatedAxis orientation="bottom" />
                 <AnimatedAxis orientation="left" />
                 <text y={11} x={-500} transform="rotate(-90)" fontSize={15}>
@@ -153,7 +152,7 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
                               }}
                             />
                             &nbsp;&nbsp;&nbsp;
-                            {key === 'PGA' ? key : key + 's'}
+                            {key}
                           </Typography>
                           <Typography>x: {datum.x.toExponential()}</Typography>
                           <Typography>y: {datum.y.toExponential()}</Typography>
@@ -163,7 +162,7 @@ const InversionSolutionHazardTab: React.FC<InversionSolutionHazardTabProps> = ({
                   }}
                 />
               </XYChart>
-              <div style={{ width: 100, height: 100, position: 'absolute', top: 50, left: 790, display: 'flex' }}>
+              <div style={{ width: 100, height: 100, position: 'absolute', top: 50, left: 780, display: 'flex' }}>
                 <LegendOrdinal direction="column" scale={ordinalColorScale} shape="line" style={{ fontSize: '15px' }} />
               </div>
             </div>
