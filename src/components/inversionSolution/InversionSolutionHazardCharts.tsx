@@ -51,25 +51,31 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
   }, []);
 
   useEffect(() => {
-    const xValue = POE === '2%' ? 1 / 2475 : 1 / 475;
     const filteredCurves = filterMultipleCurves(PGA, data, location, forecastTime, gmpe, backgroundSeismicity);
     setFilteredData(filteredCurves);
 
-    const allCurves = filterMultipleCurves(options.PGA, data, location, forecastTime, gmpe, backgroundSeismicity);
-    const plotData = getSpectralAccelerationData(options.PGA, xValue, allCurves);
-    setSAdata(plotData);
+    const SAplot = getSAdata();
+    setSAdata(SAplot);
   }, [location, PGA, forecastTime, gmpe, backgroundSeismicity]);
 
   useEffect(() => {
     if (POE !== 'None') {
       const data = getPoE();
       setPOEdata(data);
+      const SAplot = getSAdata();
+      setSAdata(SAplot);
       setShowUHSA(true);
     }
     if (POE === 'None') {
       setShowUHSA(false);
     }
   }, [POE]);
+
+  const getSAdata = (): XY[] => {
+    const xValue = POE === '2%' ? 1 / 2475 : 1 / 475;
+    const allCurves = filterMultipleCurves(options.PGA, data, location, forecastTime, gmpe, backgroundSeismicity);
+    return getSpectralAccelerationData(options.PGA, xValue, allCurves);
+  };
 
   const handleSetPGA = (selections: string[]) => {
     if (selections.length > 8) {
@@ -103,9 +109,13 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
   };
 
   const getHazardCurvesSubHeading = (): string => {
-    return `PGA/SA Period: ${PGA.join(', ')}. Model: ${gmpe}. Background: ${toProperCase(
+    return `Model: ${gmpe}. Background: ${toProperCase(backgroundSeismicity)}d. Forecast: ${forecastTime} years.`;
+  };
+
+  const getSACurveSubHeading = (): string => {
+    return ` Model: ${gmpe}. Background: ${toProperCase(
       backgroundSeismicity,
-    )}d. Forecast: ${forecastTime} years.`;
+    )}d. Forecast: ${forecastTime} years.  POE: ${POE}`;
   };
 
   return (
@@ -134,7 +144,13 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
               location={location}
             />
             {showUHSA && (
-              <SpectralAccelerationChart height={(containerWidth / 2) * 0.7} width={containerWidth / 2} data={SAdata} />
+              <SpectralAccelerationChart
+                height={(containerWidth / 2) * 0.7}
+                width={containerWidth / 2}
+                data={SAdata}
+                subHeading={getSACurveSubHeading()}
+                location={location}
+              />
             )}
           </div>
         </Card>

@@ -49,28 +49,6 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
           </text>
           <AnimatedAxis label="Ground Motion (g)" orientation="bottom" />
           <AnimatedAxis label="Annual Frequency of Exceedance" orientation="left" />
-          {Object.keys(data).map((key, index) => {
-            return (
-              <AnimatedLineSeries
-                key={key}
-                dataKey={key}
-                data={data[key]}
-                xAccessor={(d: XY) => d?.x}
-                yAccessor={(d: XY) => d?.y}
-                stroke={colors[index]}
-              />
-            );
-          })}
-          {POE !== 'None' && (
-            <AnimatedLineSeries
-              dataKey={POE}
-              data={POEdata}
-              xAccessor={(d) => d.x}
-              yAccessor={(d) => d.y}
-              stroke={colors[PGA.length]}
-            />
-          )}
-          <Grid rows columns lineStyle={{ opacity: '90%' }} />
           <Tooltip
             showHorizontalCrosshair
             showVerticalCrosshair
@@ -105,8 +83,30 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
               }
             }}
           />
+          <Grid rows columns lineStyle={{ opacity: '90%' }} numTicks={10} />
+          {Object.keys(data).map((key, index) => {
+            return (
+              <AnimatedLineSeries
+                key={key}
+                dataKey={key}
+                data={data[key]}
+                xAccessor={(d: XY) => d?.x}
+                yAccessor={(d: XY) => d?.y}
+                stroke={colors[index]}
+              />
+            );
+          })}
+          {POE !== 'None' && (
+            <AnimatedLineSeries
+              dataKey={POE}
+              data={POEdata}
+              xAccessor={(d) => d.x}
+              yAccessor={(d) => d.y}
+              stroke={colors[PGA.length]}
+            />
+          )}
         </XYChart>
-        <div style={{ width: 100, height: 100, position: 'absolute', top: 50, left: width * 0.85, display: 'flex' }}>
+        <div style={{ width: 100, height: 100, position: 'absolute', top: height * 0.45, left: 70, display: 'flex' }}>
           <LegendOrdinal direction="column" scale={ordinalColorScale} shape="line" style={{ fontSize: '15px' }} />
         </div>
       </div>

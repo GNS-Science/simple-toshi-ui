@@ -1,6 +1,6 @@
 import { Typography } from '@material-ui/core';
 import { curveLinear } from '@visx/curve';
-import { AnimatedAxis, AnimatedLineSeries, Tooltip, XYChart } from '@visx/xychart';
+import { AnimatedAxis, AnimatedLineSeries, Grid, Tooltip, XYChart } from '@visx/xychart';
 import React from 'react';
 import { XY } from '../../../interfaces/common';
 
@@ -8,12 +8,16 @@ interface SpectralAccelerationChartProps {
   height: number;
   width: number;
   data: XY[];
+  subHeading: string;
+  location: string;
 }
 
 const SpectralAccelerationChart: React.FC<SpectralAccelerationChartProps> = ({
   height,
   width,
   data,
+  subHeading,
+  location,
 }: SpectralAccelerationChartProps) => {
   return (
     <>
@@ -24,15 +28,12 @@ const SpectralAccelerationChart: React.FC<SpectralAccelerationChartProps> = ({
           xScale={{ type: 'linear', domain: [-1, 10] }}
           yScale={{ type: 'linear', domain: [0, 6] }}
         >
-          <AnimatedLineSeries
-            dataKey="Spectral Acceleration"
-            data={data}
-            xAccessor={(d) => d.x}
-            yAccessor={(d) => d.y}
-            curve={curveLinear}
-          />
           <AnimatedAxis label="Spectral Period (s)" orientation="bottom" />
           <AnimatedAxis label="Ground Motion (g)" orientation="left" />
+          <text y={23} x={20} fontSize={20} fontWeight="bold">{` ${location} Uniform Hazard Spectrum (opensha)`}</text>
+          <text y={42} x={20} fontSize={15}>
+            {subHeading}
+          </text>
           <Tooltip
             showHorizontalCrosshair
             showVerticalCrosshair
@@ -51,6 +52,14 @@ const SpectralAccelerationChart: React.FC<SpectralAccelerationChartProps> = ({
                 );
               }
             }}
+          />
+          <Grid rows columns lineStyle={{ opacity: '90%' }} numTicks={6} />
+          <AnimatedLineSeries
+            dataKey="Spectral Acceleration"
+            data={data}
+            xAccessor={(d) => d.x}
+            yAccessor={(d) => d.y}
+            curve={curveLinear}
           />
         </XYChart>
       </div>
