@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
-import { Box, Card, Snackbar } from '@material-ui/core';
+import { Box, Button, Card, Snackbar } from '@material-ui/core';
 import { graphql } from 'babel-plugin-relay/macro';
 import SelectControl from '../common/SelectControl';
 import { XY } from '../../interfaces/common';
@@ -17,6 +17,7 @@ import { toProperCase } from '../../utils';
 import { InversionSolutionHazardChartsQuery } from './__generated__/InversionSolutionHazardChartsQuery.graphql';
 import HazardCurves from './charts/HazardCurves';
 import SpectralAccelerationChart from './charts/SpectralAccelerationChart';
+import { useReactToPrint } from 'react-to-print';
 
 interface InversionSolutionHazardChartsProps {
   id: string;
@@ -118,6 +119,10 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
     )}d. Forecast: ${forecastTime} years.  POE: ${POE}`;
   };
 
+  const handlePrint = useReactToPrint({
+    content: () => targetRef.current,
+  });
+
   return (
     <>
       <SelectControl name="Location" options={options.location} setOptions={setLocation} />
@@ -130,6 +135,9 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
       />
       <SelectControl name="Background Motion Model" options={options.gmpe} setOptions={setGmpe} />
       <SelectControl name="Probability of Exceedence" options={['None', '2%', '10%']} setOptions={setPOE} />
+      <Button variant="contained" onClick={handlePrint}>
+        Print
+      </Button>
       <Box>
         <Card>
           <div style={{ width: '100%', padding: '1rem', display: 'flex' }} ref={targetRef}>
