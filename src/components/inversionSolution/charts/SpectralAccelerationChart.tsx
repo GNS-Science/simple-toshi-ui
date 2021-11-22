@@ -32,12 +32,22 @@ const SpectralAccelerationChart: React.FC<SpectralAccelerationChartProps> = ({
           <AnimatedAxis label="Spectral Period (s)" orientation="bottom" />
           <AnimatedAxis label="Ground Motion (g)" orientation="left" />
           <text
-            y={23}
-            x={20}
+            y={20}
+            x={'50%'}
+            alignmentBaseline="middle"
+            dominantBaseline="middle"
+            textAnchor="middle"
             fontSize={parentWidth * 0.035}
             fontWeight="bold"
           >{` ${location} Uniform Hazard Spectrum (opensha)`}</text>
-          <text y={42} x={20} fontSize={parentWidth * 0.025}>
+          <text
+            y={parentWidth * 0.035 + 20}
+            x={'50%'}
+            alignmentBaseline="middle"
+            dominantBaseline="middle"
+            textAnchor="middle"
+            fontSize={parentWidth * 0.025}
+          >
             {subHeading}
           </text>
           <Tooltip

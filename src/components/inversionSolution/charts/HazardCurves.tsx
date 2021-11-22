@@ -53,8 +53,23 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
           xScale={{ type: 'log', domain: [1e-3, 10] }}
           yScale={{ type: 'log', domain: [1e-13, 2.0] }}
         >
-          <text y={23} x={20} fontSize={width * 0.035} fontWeight="bold">{`${location} hazard (opensha)`}</text>
-          <text y={42} x={20} fontSize={width * 0.025}>
+          <text
+            y={23}
+            x={'50%'}
+            alignmentBaseline="middle"
+            dominantBaseline="middle"
+            textAnchor="middle"
+            fontSize={width * 0.035}
+            fontWeight="bold"
+          >{`${location} hazard (opensha)`}</text>
+          <text
+            y={parentWidth * 0.035 + 20}
+            x={'50%'}
+            alignmentBaseline="middle"
+            dominantBaseline="middle"
+            textAnchor="middle"
+            fontSize={width * 0.025}
+          >
             {subHeading}
           </text>
           <AnimatedAxis label="Ground Motion (g)" orientation="bottom" />
