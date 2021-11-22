@@ -1,4 +1,4 @@
-import { InversionSolutionHazardTabQueryResponse } from '../components/inversionSolution/__generated__/InversionSolutionHazardTabQuery.graphql';
+import { InversionSolutionHazardChartsQueryResponse } from '../components/inversionSolution/__generated__/InversionSolutionHazardChartsQuery.graphql';
 import { XY } from '../interfaces/common';
 import { HazardTableFilteredData, HazardTableOptions } from '../interfaces/inversionSolutions';
 import * as mathjs from 'mathjs';
@@ -13,7 +13,7 @@ export const minDataFilter = (data: XY[]): XY[] => {
 };
 
 export const filterData = (
-  data: InversionSolutionHazardTabQueryResponse,
+  data: InversionSolutionHazardChartsQueryResponse,
   location: string,
   pgaValue: string,
   forecastTime: string,
@@ -52,7 +52,7 @@ export const filterData = (
 
 export const filterMultipleCurves = (
   pgaValues: string[],
-  data: InversionSolutionHazardTabQueryResponse,
+  data: InversionSolutionHazardChartsQueryResponse,
   location: string,
   forecastTime: string,
   gmpe: string,
@@ -69,7 +69,7 @@ export const filterMultipleCurves = (
   return filteredCurves;
 };
 
-export const getHazardTableOptions = (data: InversionSolutionHazardTabQueryResponse): HazardTableOptions => {
+export const getHazardTableOptions = (data: InversionSolutionHazardChartsQueryResponse): HazardTableOptions => {
   const rows = data?.node?.rows;
 
   const forecastTimes = new Set<string>();
