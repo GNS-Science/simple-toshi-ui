@@ -30,7 +30,7 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
   const colors = ['#FE1100', '#73d629', '#ffd700', '#7fe5f0', '#003366', '#ff7f50', '#047806', '#4ca3dd', '#000000'];
 
   const ordinalColorScale = scaleOrdinal({
-    domain: POE === 'None' ? [...PGA] : [...PGA, POE],
+    domain: POE === 'None' ? [...PGA] : [...PGA, `POE ${POE}`],
     range: colors,
   });
 
