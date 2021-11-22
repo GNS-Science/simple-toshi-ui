@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
@@ -12,6 +12,7 @@ import {
   Tabs,
   Tab,
   CircularProgress,
+  Button,
 } from '@material-ui/core';
 
 import { ReportItem } from '../../interfaces/diagnosticReport';
