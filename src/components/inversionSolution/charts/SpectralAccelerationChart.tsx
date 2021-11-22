@@ -5,16 +5,17 @@ import React from 'react';
 import { XY } from '../../../interfaces/common';
 
 interface SpectralAccelerationChartProps {
-  height: number;
-  width: number;
+  parentWidth: number;
+  parentRef: HTMLDivElement | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  resizeParent: (state: any) => void;
   data: XY[];
   subHeading: string;
   location: string;
 }
 
 const SpectralAccelerationChart: React.FC<SpectralAccelerationChartProps> = ({
-  height,
-  width,
+  parentWidth,
   data,
   subHeading,
   location,
@@ -23,15 +24,20 @@ const SpectralAccelerationChart: React.FC<SpectralAccelerationChartProps> = ({
     <>
       <div style={{ position: 'relative', width: '100%' }}>
         <XYChart
-          height={height}
-          width={width}
+          height={parentWidth * 0.75}
+          width={parentWidth}
           xScale={{ type: 'linear', domain: [-1, 10] }}
           yScale={{ type: 'linear', domain: [0, 6] }}
         >
           <AnimatedAxis label="Spectral Period (s)" orientation="bottom" />
           <AnimatedAxis label="Ground Motion (g)" orientation="left" />
-          <text y={23} x={20} fontSize={20} fontWeight="bold">{` ${location} Uniform Hazard Spectrum (opensha)`}</text>
-          <text y={42} x={20} fontSize={15}>
+          <text
+            y={23}
+            x={20}
+            fontSize={parentWidth * 0.035}
+            fontWeight="bold"
+          >{` ${location} Uniform Hazard Spectrum (opensha)`}</text>
+          <text y={42} x={20} fontSize={parentWidth * 0.025}>
             {subHeading}
           </text>
           <Tooltip

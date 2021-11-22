@@ -2,13 +2,15 @@ import { Typography } from '@material-ui/core';
 import { LegendOrdinal } from '@visx/legend';
 import { scaleOrdinal } from '@visx/scale';
 import { AnimatedAxis, AnimatedLineSeries, Grid, Tooltip, XYChart } from '@visx/xychart';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { XY } from '../../../interfaces/common';
 import { HazardTableFilteredData } from '../../../interfaces/inversionSolutions';
 
 interface HazardCurvesProps {
-  height: number;
-  width: number;
+  parentWidth: number;
+  parentRef: HTMLDivElement | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  resizeParent: (state: any) => void;
   data: HazardTableFilteredData;
   POE: string;
   PGA: string[];
@@ -18,8 +20,7 @@ interface HazardCurvesProps {
 }
 
 const HazardCurves: React.FC<HazardCurvesProps> = ({
-  height,
-  width,
+  parentWidth,
   data,
   POE,
   PGA,
@@ -28,6 +29,15 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
   location,
 }: HazardCurvesProps) => {
   const colors = ['#FE1100', '#73d629', '#ffd700', '#7fe5f0', '#003366', '#ff7f50', '#047806', '#4ca3dd', '#000000'];
+  const [width, setWidth] = useState<number>(0);
+
+  useEffect(() => {
+    if (parentWidth <= 350) {
+      setWidth(350);
+    } else {
+      setWidth(parentWidth);
+    }
+  }, [parentWidth]);
 
   const ordinalColorScale = scaleOrdinal({
     domain: POE === 'None' ? [...PGA] : [...PGA, `POE ${POE}`],
@@ -38,13 +48,13 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
     <>
       <div style={{ position: 'relative', width: '100%' }}>
         <XYChart
-          height={height}
+          height={width * 0.75}
           width={width}
           xScale={{ type: 'log', domain: [1e-3, 10] }}
           yScale={{ type: 'log', domain: [1e-13, 2.0] }}
         >
-          <text y={23} x={20} fontSize={20} fontWeight="bold">{`${location} hazard (opensha)`}</text>
-          <text y={42} x={20} fontSize={15}>
+          <text y={23} x={20} fontSize={width * 0.035} fontWeight="bold">{`${location} hazard (opensha)`}</text>
+          <text y={42} x={20} fontSize={width * 0.025}>
             {subHeading}
           </text>
           <AnimatedAxis label="Ground Motion (g)" orientation="bottom" />
@@ -106,8 +116,14 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
             />
           )}
         </XYChart>
-        <div style={{ width: 100, height: 100, position: 'absolute', top: height * 0.45, left: 70, display: 'flex' }}>
-          <LegendOrdinal direction="column" scale={ordinalColorScale} shape="line" style={{ fontSize: '15px' }} />
+        <div style={{ width: 100, height: 100, position: 'absolute', top: width * 0.3, left: 70, display: 'flex' }}>
+          <LegendOrdinal
+            direction="column"
+            scale={ordinalColorScale}
+            shape="line"
+            style={{ fontSize: width * 0.02 }}
+            shapeHeight={width * 0.02}
+          />
         </div>
       </div>
     </>

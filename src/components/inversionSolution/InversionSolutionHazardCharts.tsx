@@ -17,6 +17,7 @@ import { toProperCase } from '../../utils';
 import { InversionSolutionHazardChartsQuery } from './__generated__/InversionSolutionHazardChartsQuery.graphql';
 import HazardCurves from './charts/HazardCurves';
 import SpectralAccelerationChart from './charts/SpectralAccelerationChart';
+import { ParentSize } from '@visx/responsive';
 
 interface InversionSolutionHazardChartsProps {
   id: string;
@@ -133,25 +134,39 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
       <Box>
         <Card>
           <div style={{ width: '100%', padding: '1rem', display: 'flex' }} ref={targetRef}>
-            <HazardCurves
-              height={(containerWidth / 2) * 0.7}
-              width={containerWidth / 2}
-              data={filteredData}
-              POE={POE}
-              PGA={PGA}
-              POEdata={POEdata}
-              subHeading={getHazardCurvesSubHeading()}
-              location={location}
-            />
-            {showUHSA && (
-              <SpectralAccelerationChart
-                height={(containerWidth / 2) * 0.7}
-                width={containerWidth / 2}
-                data={SAdata}
-                subHeading={getSACurveSubHeading()}
-                location={location}
-              />
-            )}
+            <div style={{ width: '50%' }}>
+              <ParentSize>
+                {(parent) => (
+                  <HazardCurves
+                    parentWidth={parent.width}
+                    parentRef={parent.ref}
+                    resizeParent={parent.resize}
+                    data={filteredData}
+                    POE={POE}
+                    PGA={PGA}
+                    POEdata={POEdata}
+                    subHeading={getHazardCurvesSubHeading()}
+                    location={location}
+                  />
+                )}
+              </ParentSize>
+            </div>
+            <div style={{ width: '50%' }}>
+              {showUHSA && (
+                <ParentSize>
+                  {(parent) => (
+                    <SpectralAccelerationChart
+                      parentWidth={parent.width}
+                      parentRef={parent.ref}
+                      resizeParent={parent.resize}
+                      data={SAdata}
+                      subHeading={getSACurveSubHeading()}
+                      location={location}
+                    />
+                  )}
+                </ParentSize>
+              )}
+            </div>
           </div>
         </Card>
       </Box>
