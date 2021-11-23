@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
 import { Box, Card, Snackbar } from '@material-ui/core';
 import { graphql } from 'babel-plugin-relay/macro';
@@ -41,15 +41,8 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
 
   const [filteredData, setFilteredData] = useState<HazardTableFilteredData>({});
   const [openNotification, setOpenNotification] = useState<boolean>(false);
-  const [containerWidth, setContainerWidth] = useState<number>(700);
 
   const [showUHSA, setShowUHSA] = useState<boolean>(false);
-
-  useLayoutEffect(() => {
-    if (targetRef.current) {
-      setContainerWidth(targetRef.current.offsetWidth as number);
-    }
-  }, []);
 
   useEffect(() => {
     const filteredCurves = filterMultipleCurves(PGA, data, location, forecastTime, gmpe, backgroundSeismicity);

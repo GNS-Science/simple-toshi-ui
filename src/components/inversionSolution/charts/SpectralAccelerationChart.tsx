@@ -29,8 +29,6 @@ const SpectralAccelerationChart: React.FC<SpectralAccelerationChartProps> = ({
           xScale={{ type: 'linear', domain: [-1, 10] }}
           yScale={{ type: 'linear', domain: [0, 6] }}
         >
-          <AnimatedAxis label="Spectral Period (s)" orientation="bottom" />
-          <AnimatedAxis label="Ground Motion (g)" orientation="left" />
           <text
             y={20}
             x={'50%'}
@@ -50,6 +48,8 @@ const SpectralAccelerationChart: React.FC<SpectralAccelerationChartProps> = ({
           >
             {subHeading}
           </text>
+          <AnimatedAxis label="Spectral Period (s)" orientation="bottom" />
+          <AnimatedAxis label="Ground Motion (g)" orientation="left" />
           <Tooltip
             showHorizontalCrosshair
             showVerticalCrosshair
