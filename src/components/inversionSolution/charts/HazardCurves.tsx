@@ -61,7 +61,7 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
             textAnchor="middle"
             fontSize={width * 0.035}
             fontWeight="bold"
-          >{`${location} hazard (opensha)`}</text>
+          >{`${location} Hazard (opensha)`}</text>
           <text
             y={parentWidth * 0.035 + 20}
             x={'50%'}

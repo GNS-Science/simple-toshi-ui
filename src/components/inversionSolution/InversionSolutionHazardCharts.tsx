@@ -103,13 +103,13 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
   };
 
   const getHazardCurvesSubHeading = (): string => {
-    return `Model: ${gmpe}. Background: ${toProperCase(backgroundSeismicity)}d. Forecast: ${forecastTime} years.`;
+    return `Model: ${gmpe}. Background: ${toProperCase(backgroundSeismicity)}d. Time-span: ${forecastTime} years.`;
   };
 
   const getSACurveSubHeading = (): string => {
     return ` Model: ${gmpe}. Background: ${toProperCase(
       backgroundSeismicity,
-    )}d. Forecast: ${forecastTime} years.  POE: ${POE}`;
+    )}d. Time-span: ${forecastTime} years.  POE: ${POE}`;
   };
 
   return (
