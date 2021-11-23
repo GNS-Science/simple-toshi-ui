@@ -32,12 +32,21 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
 }: HazardCurvesProps) => {
   const colors = ['#000000', '#FE1100', '#73d629', '#ffd700', '#7fe5f0', '#003366', '#ff7f50', '#047806', '#4ca3dd'];
   const [width, setWidth] = useState<number>(0);
+  const [currentColors, setCurrentColors] = useState<string[]>([]);
 
   const curveColors: Record<string, string> = {};
 
   PGAoptions.map((value, index) => {
     curveColors[value] = colors[index];
   });
+
+  useEffect(() => {
+    const currentColorsArray: string[] = [];
+    PGA.map((value) => {
+      currentColorsArray.push(curveColors[value]);
+    });
+    setCurrentColors(currentColorsArray);
+  }, [PGA]);
 
   useEffect(() => {
     if (parentWidth <= 350) {
@@ -49,7 +58,7 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
 
   const ordinalColorScale = scaleOrdinal({
     domain: POE === 'None' ? [...PGA] : [...PGA, `POE ${POE}`],
-    range: colors,
+    range: POE === 'None' ? [...currentColors] : [...currentColors, '#777777'],
   });
 
   return (
