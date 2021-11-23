@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
-import { Box, Button, Card, Fab, makeStyles, Snackbar } from '@material-ui/core';
+import { Box, Button, Card, Snackbar } from '@material-ui/core';
 import { graphql } from 'babel-plugin-relay/macro';
 import SelectControl from '../common/SelectControl';
 import { XY } from '../../interfaces/common';
@@ -11,7 +11,6 @@ import {
 } from '../../service/inversionSolution.service';
 import MultiSelect from '../common/MultiSelect';
 import MuiAlert from '@material-ui/lab/Alert';
-import PrintIcon from '@material-ui/icons/Print';
 
 import { HazardTableFilteredData } from '../../interfaces/inversionSolutions';
 import { toProperCase } from '../../utils';
@@ -20,14 +19,6 @@ import HazardCurves from './charts/HazardCurves';
 import SpectralAccelerationChart from './charts/SpectralAccelerationChart';
 import { useReactToPrint } from 'react-to-print';
 
-const useStyles = makeStyles(() => ({
-  rightAlignControl: {
-    margin: 10,
-    position: 'absolute',
-    right: '16%',
-  },
-}));
-
 interface InversionSolutionHazardChartsProps {
   id: string;
 }
@@ -35,7 +26,6 @@ interface InversionSolutionHazardChartsProps {
 const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps> = ({
   id,
 }: InversionSolutionHazardChartsProps) => {
-  const classes = useStyles();
   const targetRef = useRef<HTMLDivElement>(null);
   const data = useLazyLoadQuery<InversionSolutionHazardChartsQuery>(inversionSolutionHazardChartsQuery, { id });
   const options = getHazardTableOptions(data);
