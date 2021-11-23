@@ -127,7 +127,7 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
       <Box>
         <Card>
           <div style={{ width: '100%', padding: '1rem', display: 'flex' }} ref={targetRef}>
-            <div style={{ width: '50%' }}>
+            <div style={{ width: '50%', minWidth: 350 }}>
               <ParentSize>
                 {(parent) => (
                   <HazardCurves
@@ -145,7 +145,7 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
                 )}
               </ParentSize>
             </div>
-            <div style={{ width: '50%' }}>
+            <div style={{ width: '50%', minWidth: 350 }}>
               {showUHSA && (
                 <ParentSize>
                   {(parent) => (
