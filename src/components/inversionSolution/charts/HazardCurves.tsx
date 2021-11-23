@@ -14,6 +14,7 @@ interface HazardCurvesProps {
   data: HazardTableFilteredData;
   POE: string;
   PGA: string[];
+  PGAoptions: string[];
   POEdata: XY[];
   subHeading: string;
   location: string;
@@ -24,12 +25,19 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
   data,
   POE,
   PGA,
+  PGAoptions,
   POEdata,
   subHeading,
   location,
 }: HazardCurvesProps) => {
-  const colors = ['#FE1100', '#73d629', '#ffd700', '#7fe5f0', '#003366', '#ff7f50', '#047806', '#4ca3dd', '#000000'];
+  const colors = ['#000000', '#FE1100', '#73d629', '#ffd700', '#7fe5f0', '#003366', '#ff7f50', '#047806', '#4ca3dd'];
   const [width, setWidth] = useState<number>(0);
+
+  const curveColors: Record<string, string> = {};
+
+  PGAoptions.map((value, index) => {
+    curveColors[value] = colors[index];
+  });
 
   useEffect(() => {
     if (parentWidth <= 350) {
@@ -109,7 +117,7 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
             }}
           />
           <Grid rows columns lineStyle={{ opacity: '90%' }} numTicks={10} />
-          {Object.keys(data).map((key, index) => {
+          {Object.keys(data).map((key) => {
             return (
               <AnimatedLineSeries
                 key={key}
@@ -117,7 +125,7 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
                 data={data[key]}
                 xAccessor={(d: XY) => d?.x}
                 yAccessor={(d: XY) => d?.y}
-                stroke={colors[index]}
+                stroke={curveColors[key]}
               />
             );
           })}

@@ -137,6 +137,7 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
                     data={filteredData}
                     POE={POE}
                     PGA={PGA}
+                    PGAoptions={options.PGA}
                     POEdata={POEdata}
                     subHeading={getHazardCurvesSubHeading()}
                     location={location}
