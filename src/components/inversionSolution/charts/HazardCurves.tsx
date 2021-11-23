@@ -57,8 +57,8 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
   }, [parentWidth]);
 
   const ordinalColorScale = scaleOrdinal({
-    domain: POE === 'None' ? [...PGA] : [...PGA, `POE ${POE}`],
-    range: POE === 'None' ? [...currentColors] : [...currentColors, '#777777'],
+    domain: POE === 'None' ? [...PGA] : [...PGA, `PoE ${POE}`],
+    range: POE === 'None' ? [...currentColors] : [...currentColors, '#989C9C'],
   });
 
   return (
@@ -144,7 +144,7 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
               data={POEdata}
               xAccessor={(d) => d.x}
               yAccessor={(d) => d.y}
-              stroke={colors[PGA.length]}
+              stroke={'#989C9C'}
             />
           )}
         </XYChart>
