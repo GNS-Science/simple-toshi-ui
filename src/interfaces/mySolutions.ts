@@ -1,3 +1,4 @@
+import { TableType } from '../components/generalTask/__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
 import { ModelType } from '../pages/__generated__/MySolutionsQuery.graphql';
 
 export interface SolutionItem {
@@ -27,6 +28,10 @@ export interface SolutionItem {
     readonly meta: ReadonlyArray<{
       readonly k: string | null;
       readonly v: string | null;
+    } | null> | null;
+    readonly tables: ReadonlyArray<{
+      readonly table_id: string | null;
+      readonly table_type: TableType | null;
     } | null> | null;
   } | null;
 }

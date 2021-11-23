@@ -170,6 +170,10 @@ export const mySolutionsQuery = graphql`
                   k
                   v
                 }
+                tables {
+                  table_id
+                  table_type
+                }
               }
             }
           }

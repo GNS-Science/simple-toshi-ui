@@ -1,6 +1,7 @@
-import { InversionSolutionHazardTabQueryResponse } from '../components/inversionSolution/__generated__/InversionSolutionHazardTabQuery.graphql';
+import { InversionSolutionHazardChartsQueryResponse } from '../components/inversionSolution/__generated__/InversionSolutionHazardChartsQuery.graphql';
 import { XY } from '../interfaces/common';
-import { HazardTableOptions } from '../interfaces/inversionSolutions';
+import { HazardTableFilteredData, HazardTableOptions } from '../interfaces/inversionSolutions';
+import * as mathjs from 'mathjs';
 
 const minXBound = parseFloat(process.env.REACT_APP_MIN_X_BOUND ?? '0');
 const minYBound = 1e-13;
@@ -12,7 +13,7 @@ export const minDataFilter = (data: XY[]): XY[] => {
 };
 
 export const filterData = (
-  data: InversionSolutionHazardTabQueryResponse,
+  data: InversionSolutionHazardChartsQueryResponse,
   location: string,
   pgaValue: string,
   forecastTime: string,
@@ -49,7 +50,26 @@ export const filterData = (
   return minDataFilter(xy);
 };
 
-export const getHazardTableOptions = (data: InversionSolutionHazardTabQueryResponse): HazardTableOptions => {
+export const filterMultipleCurves = (
+  pgaValues: string[],
+  data: InversionSolutionHazardChartsQueryResponse,
+  location: string,
+  forecastTime: string,
+  gmpe: string,
+  backgroundSeismicity: string,
+): HazardTableFilteredData => {
+  const filteredCurves: HazardTableFilteredData = {};
+
+  pgaValues.map((pgaValue) => {
+    const pga = pgaValue === 'PGA' ? '0.0' : pgaValue;
+    const curve = filterData(data, location, pga, forecastTime, gmpe, backgroundSeismicity);
+    filteredCurves[pgaValue] = curve;
+  });
+
+  return filteredCurves;
+};
+
+export const getHazardTableOptions = (data: InversionSolutionHazardChartsQueryResponse): HazardTableOptions => {
   const rows = data?.node?.rows;
 
   const forecastTimes = new Set<string>();
@@ -81,4 +101,32 @@ export const getHazardTableOptions = (data: InversionSolutionHazardTabQueryRespo
     gmpe: Array.from(gmpe),
     location: Array.from(locations),
   };
+};
+
+export const getSpectralAccelerationData = (
+  pgaValues: string[],
+  xValue: number,
+  filteredCurves: HazardTableFilteredData,
+): XY[] => {
+  const dataSet: XY[] = [];
+
+  pgaValues.map((value) => {
+    let p1: number[] = [];
+    let p2: number[] = [];
+    const p3 = [Math.log(2e-3), Math.log(xValue)];
+    const p4 = [Math.log(10), Math.log(xValue)];
+
+    filteredCurves[value].find((xy, i) => {
+      if (xy.y <= xValue) {
+        p1 = [Math.log(xy.x), Math.log(xy.y)];
+        p2 = [Math.log(filteredCurves[value][i - 1].x), Math.log(filteredCurves[value][i - 1].y)];
+        return true;
+      }
+    });
+    const point = mathjs.intersect(p1, p2, p3, p4);
+    const result = [Math.exp(point[0] as number), mathjs.exp(mathjs.exp(point[1] as number))];
+    dataSet.push({ x: value === 'PGA' ? 0 : parseFloat(value), y: result[0] });
+  });
+
+  return dataSet;
 };

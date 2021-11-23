@@ -20,7 +20,7 @@ import DiagnosticReportTabPanel from './DiagnosticReportTabPanel';
 import GeneralView from './GeneralView';
 import NamedFaultsView from './NamedFaultsView';
 import RegionalMfdView from './RegionalMfdView';
-import InversionSolutionHazardTab from '../inversionSolution/InversionSolutionHazardTab';
+import InversionSolutionHazardCharts from '../inversionSolution/InversionSolutionHazardCharts';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -126,6 +126,53 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
     return <Typography> There are no valid reports to show. </Typography>;
   }
 
+  const renderTab = () => {
+    switch (currentTab) {
+      default:
+        return (
+          <DiagnosticReportTabPanel value={currentTab} index={0}>
+            <GeneralView
+              id={automationTasks[currentImage].inversion_solution.id}
+              generalViews={generalViews}
+              setGeneralViews={setGeneralViews}
+            />
+          </DiagnosticReportTabPanel>
+        );
+      case 1:
+        return (
+          <DiagnosticReportTabPanel value={currentTab} index={1}>
+            <NamedFaultsView
+              id={automationTasks[currentImage].inversion_solution.id}
+              namedFaultsView={namedFaultsView}
+              setNamedFaultsView={setNamedFaultsView}
+              namedFaultsLocations={namedFaultsLocations}
+              setNamedFaultsLocations={setNamedFaultsLocations}
+            />
+          </DiagnosticReportTabPanel>
+        );
+      case 2:
+        return (
+          <DiagnosticReportTabPanel value={currentTab} index={2}>
+            <RegionalMfdView
+              id={automationTasks[currentImage].inversion_solution.id}
+              regionalViews={regionalViews}
+              setRegionalViews={setRegionalViews}
+            />
+          </DiagnosticReportTabPanel>
+        );
+      case 3:
+        return (
+          <DiagnosticReportTabPanel value={currentTab} index={3}>
+            {hazardId && (
+              <React.Suspense fallback={<CircularProgress />}>
+                <InversionSolutionHazardCharts id={hazardId} />
+              </React.Suspense>
+            )}
+          </DiagnosticReportTabPanel>
+        );
+    }
+  };
+
   return (
     <>
       <Card className={classes.root}>
@@ -169,38 +216,9 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             <Tab label="General" id="simple-tab-0" disableFocusRipple />
             <Tab label="Named Faults" id="simple-tab-1" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
             <Tab label="Regional Solutions" id="simple-tab-2" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
-            <Tab label="Hazard Table" id="simple-tab-2" disabled={!hazardId.length} disableFocusRipple />
+            <Tab label="Hazard Charts" id="simple-tab-3" disabled={!hazardId.length} disableFocusRipple />
           </Tabs>
-          <DiagnosticReportTabPanel value={currentTab} index={0}>
-            <GeneralView
-              id={automationTasks[currentImage].inversion_solution.id}
-              generalViews={generalViews}
-              setGeneralViews={setGeneralViews}
-            />
-          </DiagnosticReportTabPanel>
-          <DiagnosticReportTabPanel value={currentTab} index={1}>
-            <NamedFaultsView
-              id={automationTasks[currentImage].inversion_solution.id}
-              namedFaultsView={namedFaultsView}
-              setNamedFaultsView={setNamedFaultsView}
-              namedFaultsLocations={namedFaultsLocations}
-              setNamedFaultsLocations={setNamedFaultsLocations}
-            />
-          </DiagnosticReportTabPanel>
-          <DiagnosticReportTabPanel value={currentTab} index={2}>
-            <RegionalMfdView
-              id={automationTasks[currentImage].inversion_solution.id}
-              regionalViews={regionalViews}
-              setRegionalViews={setRegionalViews}
-            />
-          </DiagnosticReportTabPanel>
-          <DiagnosticReportTabPanel value={currentTab} index={3}>
-            {hazardId && (
-              <React.Suspense fallback={<CircularProgress />}>
-                <InversionSolutionHazardTab id={hazardId} />
-              </React.Suspense>
-            )}
-          </DiagnosticReportTabPanel>
+          {renderTab()}
         </CardContent>
       </Card>
     </>
