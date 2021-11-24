@@ -5,9 +5,10 @@ import Typography from '@material-ui/core/Typography';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import Slide from '@material-ui/core/Slide';
 import MenuIcon from '@material-ui/icons/Menu';
-import { IconButton, Menu, MenuItem, Theme } from '@material-ui/core';
+import { Menu, MenuItem, Theme } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/styles';
+import { IconButton } from '@mui/material';
 
 const useStyles = makeStyles((theme: Theme) => ({
   appBar: {
@@ -32,7 +33,7 @@ const MenuBar: React.FC = () => {
     <Slide appear={false} direction="down" in={!trigger}>
       <AppBar className={classes.appBar} position="sticky">
         <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="menu" onClick={handleClick}>
+          <IconButton edge="start" color="inherit" aria-label="menu" onClick={handleClick} size="large">
             <MenuIcon />
           </IconButton>
           <Menu

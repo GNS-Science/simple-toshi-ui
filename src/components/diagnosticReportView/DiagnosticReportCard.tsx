@@ -2,17 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import {
-  Card,
-  CardContent,
-  IconButton,
-  makeStyles,
-  Tooltip,
-  Typography,
-  Tabs,
-  Tab,
-  CircularProgress,
-} from '@material-ui/core';
+import { Card, CardContent, makeStyles, Tooltip, Typography, Tabs, Tab, CircularProgress } from '@material-ui/core';
+import { IconButton } from '@mui/material';
 
 import { ReportItem } from '../../interfaces/diagnosticReport';
 import FavouriteControls from '../common/FavouriteControls';
@@ -190,7 +181,13 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
           </Typography>
           <div className={classes.buttonContainer}>
             <Tooltip title="use (<,) (>.) or arrow keys to navigate">
-              <IconButton className={classes.button} color="primary" onClick={prevImage} disabled={currentImage === 0}>
+              <IconButton
+                className={classes.button}
+                color="primary"
+                onClick={prevImage}
+                disabled={currentImage === 0}
+                size="large"
+              >
                 <ArrowBackIosIcon />
               </IconButton>
             </Tooltip>
@@ -203,6 +200,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
                 color="primary"
                 onClick={nextImage}
                 disabled={currentImage === automationTasks.length - 1}
+                size="large"
               >
                 <ArrowForwardIosIcon />
               </IconButton>

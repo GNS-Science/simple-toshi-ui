@@ -1,4 +1,5 @@
-import { IconButton, makeStyles, Modal, Theme, Tooltip } from '@material-ui/core';
+import { makeStyles, Modal, Theme, Tooltip } from '@material-ui/core';
+import { IconButton } from '@mui/material';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import React from 'react';
 import LoadInsert from './LoadInsert';
@@ -51,7 +52,7 @@ const CommonModal: React.FC<CommonModalProps> = ({
             {title}{' '}
             {!input && (
               <Tooltip title="copy to clipboard">
-                <IconButton onClick={() => navigator.clipboard.writeText(text ?? '')}>
+                <IconButton onClick={() => navigator.clipboard.writeText(text ?? '')} size="large">
                   <FileCopyIcon />
                 </IconButton>
               </Tooltip>
