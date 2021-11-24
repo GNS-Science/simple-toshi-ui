@@ -2,11 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { ThemeProvider } from '@material-ui/core/styles';
+import { ThemeProvider, Theme } from '@material-ui/core/styles';
 import App from './App';
 import theme from './theme';
 
 import reportWebVitals from './reportWebVitals';
+
+declare module '@material-ui/styles/defaultTheme' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface DefaultTheme extends Theme {}
+}
 
 ReactDOM.render(
   <ThemeProvider theme={theme}>

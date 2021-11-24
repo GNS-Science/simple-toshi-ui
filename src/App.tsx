@@ -32,7 +32,12 @@ import Home, { homeQuery } from './pages/Home';
 import { HomeQuery } from './pages/__generated__/HomeQuery.graphql';
 import Loading from './components/common/Loading';
 import theme from './theme';
-import { ThemeProvider } from '@material-ui/core';
+import { ThemeProvider, Theme } from '@material-ui/core';
+
+declare module '@material-ui/styles/defaultTheme' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface DefaultTheme extends Theme {}
+}
 
 // Immediately load the query as our app starts. For a real app, we'd move this
 // into our routing configuration, preloading data as we transition to new routes.
