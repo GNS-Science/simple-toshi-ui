@@ -31,7 +31,6 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
   location,
 }: HazardCurvesProps) => {
   const colors = ['#000000', '#FE1100', '#73d629', '#ffd700', '#7fe5f0', '#003366', '#ff7f50', '#047806', '#4ca3dd'];
-  const [width, setWidth] = useState<number>(0);
   const [currentColors, setCurrentColors] = useState<string[]>([]);
 
   const curveColors: Record<string, string> = {};
@@ -48,14 +47,6 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
     setCurrentColors(currentColorsArray);
   }, [PGA]);
 
-  useEffect(() => {
-    if (parentWidth <= 350) {
-      setWidth(350);
-    } else {
-      setWidth(parentWidth);
-    }
-  }, [parentWidth]);
-
   const ordinalColorScale = scaleOrdinal({
     domain: POE === 'None' ? [...PGA] : [...PGA, `PoE ${POE}`],
     range: POE === 'None' ? [...currentColors] : [...currentColors, '#989C9C'],
@@ -65,8 +56,8 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
     <>
       <div style={{ position: 'relative', width: '100%' }}>
         <XYChart
-          height={width * 0.75}
-          width={width}
+          height={parentWidth * 0.75}
+          width={parentWidth}
           xScale={{ type: 'log', domain: [1e-3, 10] }}
           yScale={{ type: 'log', domain: [1e-13, 2.0] }}
         >
@@ -76,7 +67,7 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
             alignmentBaseline="middle"
             dominantBaseline="middle"
             textAnchor="middle"
-            fontSize={width * 0.035}
+            fontSize={parentWidth * 0.035 > 24 ? 24 : parentWidth * 0.035}
             fontWeight="bold"
           >{`${location} Hazard (opensha)`}</text>
           <text
@@ -85,7 +76,7 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
             alignmentBaseline="middle"
             dominantBaseline="middle"
             textAnchor="middle"
-            fontSize={width * 0.025}
+            fontSize={parentWidth * 0.025 > 17 ? 17 : parentWidth * 0.025}
           >
             {subHeading}
           </text>
@@ -148,13 +139,15 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
             />
           )}
         </XYChart>
-        <div style={{ width: 100, height: 100, position: 'absolute', top: width * 0.3, left: 70, display: 'flex' }}>
+        <div
+          style={{ width: 100, height: 100, position: 'absolute', top: parentWidth * 0.3, left: 70, display: 'flex' }}
+        >
           <LegendOrdinal
             direction="column"
             scale={ordinalColorScale}
             shape="line"
-            style={{ fontSize: width * 0.02 }}
-            shapeHeight={width * 0.02}
+            style={{ fontSize: parentWidth * 0.02 }}
+            shapeHeight={parentWidth * 0.02}
           />
         </div>
       </div>

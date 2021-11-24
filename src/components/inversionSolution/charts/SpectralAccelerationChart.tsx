@@ -35,7 +35,7 @@ const SpectralAccelerationChart: React.FC<SpectralAccelerationChartProps> = ({
             alignmentBaseline="middle"
             dominantBaseline="middle"
             textAnchor="middle"
-            fontSize={parentWidth * 0.035}
+            fontSize={parentWidth * 0.035 > 24 ? 24 : parentWidth * 0.035}
             fontWeight="bold"
           >{` ${location} Uniform Hazard Spectrum (opensha)`}</text>
           <text
@@ -44,7 +44,7 @@ const SpectralAccelerationChart: React.FC<SpectralAccelerationChartProps> = ({
             alignmentBaseline="middle"
             dominantBaseline="middle"
             textAnchor="middle"
-            fontSize={parentWidth * 0.025}
+            fontSize={parentWidth * 0.025 > 17 ? 17 : parentWidth * 0.025}
           >
             {subHeading}
           </text>
