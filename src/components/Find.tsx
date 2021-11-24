@@ -54,7 +54,7 @@ const Root = styled('div')(({ theme }) => ({
 
   [`& .${classes.inputInput}`]: {
     padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     width: '100%',
     height: '35px',
     boxShadow: theme.shadows[5],

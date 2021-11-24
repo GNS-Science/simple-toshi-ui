@@ -16,7 +16,7 @@ const classes = {
 
 const StyledCard = styled(Card)(({ theme }) => ({
   [`&.${classes.root}`]: {
-    margin: `${theme.spacing(2)}px 0px`,
+    margin: `${theme.spacing(2)} 0px`,
     padding: theme.spacing(1),
   },
 
