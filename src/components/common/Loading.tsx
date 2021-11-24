@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Container } from '@material-ui/core';
+import { Box, CircularProgress, Container } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React from 'react';
 

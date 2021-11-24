@@ -3,9 +3,9 @@ import { styled } from '@mui/material/styles';
 import { graphql } from 'babel-plugin-relay/macro';
 import { useParams } from 'react-router-dom';
 import { useLazyLoadQuery } from 'react-relay/hooks';
-import { Typography, CircularProgress, Theme, Tabs, Tab, Box } from '@material-ui/core';
+import { Typography, CircularProgress, Theme, Tabs, Tab, Box } from '@mui/material';
 
-import makeStyles from '@material-ui/styles/makeStyles';
+import makeStyles from '@mui/styles/makeStyles';
 
 import { GeneralTaskQuery } from './__generated__/GeneralTaskQuery.graphql';
 import GeneralTaskChildrenTab from '../components/generalTask/GeneralTaskChildrenTab';

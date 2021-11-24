@@ -1,8 +1,8 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
 import logo from '../logo.svg';
-import { Box, Button, Card, CardActions, CardContent, Typography } from '@material-ui/core';
-import makeStyles from '@material-ui/styles/makeStyles';
+import { Box, Button, Card, CardActions, CardContent, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { HomeQuery } from './__generated__/HomeQuery.graphql';
 import { graphql } from 'babel-plugin-relay/macro';

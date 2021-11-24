@@ -2,7 +2,7 @@ import { LatLngExpression } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Map, TileLayer } from 'react-leaflet';
 import React from 'react';
-import { Typography, Box, Card, FormControl, MenuItem, Select, Slider } from '@material-ui/core';
+import { Typography, Box, Card, FormControl, MenuItem, Select, Slider } from '@mui/material';
 import HeatmapLayer from 'react-leaflet-heatmap-layer';
 
 const generateHazardData = () => {

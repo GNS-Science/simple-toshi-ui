@@ -1,6 +1,6 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
-import { Grid, List, ListItem, ListItemText } from '@material-ui/core';
+import { Grid, List, ListItem, ListItemText } from '@mui/material';
 import { format, formatDuration, intervalToDuration, secondsToMilliseconds } from 'date-fns';
 
 const PREFIX = 'InfoTable';

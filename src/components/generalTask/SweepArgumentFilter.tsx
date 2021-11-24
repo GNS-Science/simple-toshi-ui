@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { useLocation } from 'react-router-dom';
-import { Checkbox, FormControl, Input, InputLabel, ListItemText, MenuItem, Select } from '@material-ui/core';
-import makeStyles from '@material-ui/styles/makeStyles';
+import {
+  Checkbox,
+  FormControl,
+  Input,
+  InputLabel,
+  ListItemText,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from '@mui/material';
 import { SweepArgument } from '../../interfaces/generaltask';
 import { determineClipBoard, getClipBoardObject } from '../../service/generalTask.service';
 import { pluralCompare } from '../../service/generalTask.service';
@@ -34,7 +42,7 @@ const MenuProps = {
 
 interface SweepArgumentFilterProps {
   argument: SweepArgument;
-  onChange: (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => void;
+  onChange: (event: SelectChangeEvent<string[]>) => void;
 }
 
 const SweepArgumentFilter: React.FC<SweepArgumentFilterProps> = ({ argument, onChange }: SweepArgumentFilterProps) => {
@@ -43,7 +51,7 @@ const SweepArgumentFilter: React.FC<SweepArgumentFilterProps> = ({ argument, onC
   const search = useLocation().search;
   const isClipBoard: boolean = determineClipBoard(search);
 
-  const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
+  const handleChange = (event: SelectChangeEvent<string[]>) => {
     onChange(event);
     setSelectedItems(event.target.value as string[]);
   };

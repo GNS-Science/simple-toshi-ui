@@ -10,9 +10,9 @@ import {
   Container,
   InputBase,
   Typography,
-} from '@material-ui/core';
+} from '@mui/material';
 
-import SearchIcon from '@material-ui/icons/Search';
+import SearchIcon from '@mui/icons-material/Search';
 import { graphql } from 'babel-plugin-relay/macro';
 import { useQueryLoader } from 'react-relay/hooks';
 import { SearchQuery } from './__generated__/SearchQuery.graphql';

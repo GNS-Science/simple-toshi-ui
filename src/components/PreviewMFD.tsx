@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import React, { useRef, useEffect } from 'react';
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import { d0, onlyRate } from './PreviewMFD_data';
 
 function PreviewMFD(props: { width: number; height: number; bar_width: number }): React.ReactElement {

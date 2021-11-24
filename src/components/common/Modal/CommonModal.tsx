@@ -1,7 +1,7 @@
-import { Modal, Tooltip } from '@material-ui/core';
+import { Modal, Tooltip } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { IconButton } from '@mui/material';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
 import React from 'react';
 import LoadInsert from './LoadInsert';
 import ShareInsert from './ShareInsert';

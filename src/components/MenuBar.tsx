@@ -1,12 +1,12 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import useScrollTrigger from '@material-ui/core/useScrollTrigger';
-import Slide from '@material-ui/core/Slide';
-import MenuIcon from '@material-ui/icons/Menu';
-import { Menu, MenuItem } from '@material-ui/core';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import useScrollTrigger from '@mui/material/useScrollTrigger';
+import Slide from '@mui/material/Slide';
+import MenuIcon from '@mui/icons-material/Menu';
+import { Menu, MenuItem } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { IconButton } from '@mui/material';
 
@@ -48,7 +48,6 @@ const MenuBar: React.FC = () => {
             onClose={handleClose}
             anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
             transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-            getContentAnchorEl={null}
           >
             <MenuItem component={Link} to="/Search" onClick={handleClose}>
               Search

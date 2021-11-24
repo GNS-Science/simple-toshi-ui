@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
-import { Card, Grid, List, ListItem, Tooltip, Typography } from '@material-ui/core';
-import makeStyles from '@material-ui/styles/makeStyles';
+import { Card, Grid, List, ListItem, Tooltip, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import ReactMarkdown from 'react-markdown';

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import { Card, CardContent, Tooltip, Typography, Tabs, Tab, CircularProgress } from '@material-ui/core';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { Card, CardContent, Tooltip, Typography, Tabs, Tab, CircularProgress } from '@mui/material';
 import { IconButton } from '@mui/material';
 
 import { ReportItem } from '../../interfaces/diagnosticReport';

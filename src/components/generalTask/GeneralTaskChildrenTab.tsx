@@ -3,10 +3,10 @@ import { styled } from '@mui/material/styles';
 import { useLocation, useParams, useHistory } from 'react-router-dom';
 import { graphql } from 'babel-plugin-relay/macro';
 import { useLazyLoadQuery } from 'react-relay/hooks';
-import { Typography, CircularProgress, Snackbar, Button, Tooltip, Fab } from '@material-ui/core';
+import { Typography, CircularProgress, Snackbar, Button, Tooltip, Fab, SelectChangeEvent } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import buildUrl from 'build-url-ts';
-import ShareIcon from '@material-ui/icons/Share';
+import ShareIcon from '@mui/icons-material/Share';
 
 import ChildTaskTable from './ChildTaskTable';
 import { GeneralTaskChildrenTabQuery } from './__generated__/GeneralTaskChildrenTabQuery.graphql';
@@ -136,7 +136,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     }
   }, []);
 
-  const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
+  const handleChange = (event: SelectChangeEvent<string[]>) => {
     const newFilteredArguments = updateFilteredArguments(
       filteredArguments,
       event.target.value as string[],

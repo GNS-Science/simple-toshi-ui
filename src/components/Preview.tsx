@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { styled } from '@material-ui/core/styles';
-import { Button, Card, CardContent, Container, Typography } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Button, Card, CardContent, Container, Typography } from '@mui/material';
 
 const PREFIX = 'Preview';
 

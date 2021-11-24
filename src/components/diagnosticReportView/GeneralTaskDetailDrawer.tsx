@@ -1,8 +1,8 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
 import ReactMarkdown from 'react-markdown';
-import { Accordion, AccordionDetails, AccordionSummary, Divider, Drawer, Toolbar, Typography } from '@material-ui/core';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { Accordion, AccordionDetails, AccordionSummary, Divider, Drawer, Toolbar, Typography } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import { GeneralTaskDetails } from '../../interfaces/diagnosticReport';
 import KeyValueListTable from '../common/KeyValueListTable';

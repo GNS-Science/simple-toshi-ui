@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Tab, Tabs, Typography } from '@material-ui/core';
+import { Box, CircularProgress, Tab, Tabs, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { graphql } from 'babel-plugin-relay/macro';
 import React from 'react';

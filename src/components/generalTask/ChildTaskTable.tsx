@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
-import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
+import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 
 import { formatDuration, intervalToDuration, secondsToMilliseconds, format } from 'date-fns';
 import FavouriteStatus from '../common/FavouriteStatus';

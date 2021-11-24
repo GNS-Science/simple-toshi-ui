@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
-import { Box, Card, Snackbar } from '@material-ui/core';
+import { Box, Card, Snackbar } from '@mui/material';
 import { graphql } from 'babel-plugin-relay/macro';
 import SelectControl from '../common/SelectControl';
 import { XY } from '../../interfaces/common';

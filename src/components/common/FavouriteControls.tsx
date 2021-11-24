@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
-import { Button, Tooltip } from '@material-ui/core';
+import { Button, Tooltip } from '@mui/material';
 
 import LocalStorageContext from '../../contexts/localStorage';
 import _ from 'lodash';

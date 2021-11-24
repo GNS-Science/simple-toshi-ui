@@ -1,9 +1,9 @@
 import React from 'react';
-import { styled } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import { Typography } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import { Typography } from '@mui/material';
 
 import buildUrl from 'build-url-ts';
 

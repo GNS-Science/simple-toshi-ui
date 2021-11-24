@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
-import { Button, ButtonGroup, Tooltip, Typography } from '@material-ui/core';
+import { Button, ButtonGroup, Tooltip, Typography } from '@mui/material';
 import { graphql } from 'babel-plugin-relay/macro';
 
 import GeneralTaskDetailDrawer from '../components/diagnosticReportView/GeneralTaskDetailDrawer';

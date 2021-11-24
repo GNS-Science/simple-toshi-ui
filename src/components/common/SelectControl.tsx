@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
-import { FormControl, Input, InputLabel, MenuItem, Select } from '@material-ui/core';
+import { FormControl, Input, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 
 const PREFIX = 'SelectControl';
 
@@ -34,7 +34,7 @@ interface SelectControlProps {
 const SelectControl: React.FC<SelectControlProps> = ({ options, setOptions, name }: SelectControlProps) => {
   const [selectedItems, setSelectedItems] = useState<string>(options[0]);
 
-  const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
+  const handleChange = (event: SelectChangeEvent<string>) => {
     const value = (event.target.value as string) || '';
     setSelectedItems(value);
     setOptions(value);

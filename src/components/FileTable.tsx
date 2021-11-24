@@ -1,6 +1,6 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
-import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
+import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import TruncateText from './TruncateText';
 import { FileRole } from './__generated__/RuptureGenerationTaskQuery.graphql';
 import { Link } from 'react-router-dom';

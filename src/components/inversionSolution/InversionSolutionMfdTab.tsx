@@ -1,6 +1,6 @@
 import { graphql } from 'babel-plugin-relay/macro';
 import React from 'react';
-import { Box, Typography } from '@material-ui/core';
+import { Box, Typography } from '@mui/material';
 import { useLazyLoadQuery } from 'react-relay';
 
 import { magRateData, IMagRate } from '../PreviewMFD_data';

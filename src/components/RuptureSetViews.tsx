@@ -1,5 +1,5 @@
 import React from 'react';
-import { styled } from '@material-ui/core/styles';
+import { styled } from '@mui/material/styles';
 // prettier-ignore
 import {
   Box,
@@ -7,7 +7,7 @@ import {
   CardContent,
   CardMedia,
   Typography,
-} from '@material-ui/core';
+} from '@mui/material';
 
 import buildUrl from 'build-url-ts';
 import PreviewMFD from '../components/PreviewMFD';

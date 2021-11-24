@@ -3,7 +3,7 @@ import './App.css';
 
 import { Environment, loadQuery, RelayEnvironmentProvider } from 'react-relay/hooks';
 import RelayEnvironment from './RelayEnvironment';
-import { Container } from '@material-ui/core';
+import { Container } from '@mui/material';
 import { useLocalStorage } from '@rehooks/local-storage';
 
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
@@ -32,9 +32,9 @@ import Home, { homeQuery } from './pages/Home';
 import { HomeQuery } from './pages/__generated__/HomeQuery.graphql';
 import Loading from './components/common/Loading';
 import theme from './theme';
-import { ThemeProvider, Theme } from '@material-ui/core';
+import { ThemeProvider, Theme } from '@mui/material';
 
-declare module '@material-ui/styles/defaultTheme' {
+declare module '@mui/styles/defaultTheme' {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface DefaultTheme extends Theme {}
 }

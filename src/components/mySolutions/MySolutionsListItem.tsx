@@ -1,4 +1,4 @@
-import { Card, CardContent, Grid, List, ListItem, Typography } from '@material-ui/core';
+import { Card, CardContent, Grid, List, ListItem, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
