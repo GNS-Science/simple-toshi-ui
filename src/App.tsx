@@ -1,22 +1,9 @@
 import React from 'react';
 import './App.css';
-import logo from './logo.svg';
 
-import { graphql } from 'babel-plugin-relay/macro';
-import { Environment, loadQuery, PreloadedQuery, RelayEnvironmentProvider, usePreloadedQuery } from 'react-relay/hooks';
+import { Environment, loadQuery, RelayEnvironmentProvider } from 'react-relay/hooks';
 import RelayEnvironment from './RelayEnvironment';
-import { AppStrongMotionStationQuery } from './__generated__/AppStrongMotionStationQuery.graphql';
-import { makeStyles } from '@material-ui/core/styles';
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CircularProgress,
-  Container,
-  Typography,
-} from '@material-ui/core';
+import { Container } from '@material-ui/core';
 import { useLocalStorage } from '@rehooks/local-storage';
 
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
