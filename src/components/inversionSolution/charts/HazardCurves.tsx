@@ -32,6 +32,13 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
 }: HazardCurvesProps) => {
   const colors = ['#000000', '#FE1100', '#73d629', '#ffd700', '#7fe5f0', '#003366', '#ff7f50', '#047806', '#4ca3dd'];
   const [currentColors, setCurrentColors] = useState<string[]>([]);
+  const [headingSize, setHeadingSize] = useState<number>(0);
+  const [subHeadingSize, setSubHeadingSize] = useState<number>(0);
+
+  useEffect(() => {
+    parentWidth * 0.035 >= 24 ? setHeadingSize(24) : setHeadingSize(parentWidth * 0.035);
+    parentWidth * 0.025 >= 15 ? setSubHeadingSize(15) : setSubHeadingSize(parentWidth * 0.025);
+  }, [parentWidth]);
 
   const curveColors: Record<string, string> = {};
 
@@ -62,21 +69,21 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
           yScale={{ type: 'log', domain: [1e-13, 2.0] }}
         >
           <text
-            y={23}
+            y={18}
             x={'50%'}
             alignmentBaseline="middle"
             dominantBaseline="middle"
             textAnchor="middle"
-            fontSize={parentWidth * 0.035 > 24 ? 24 : parentWidth * 0.035}
+            fontSize={headingSize}
             fontWeight="bold"
           >{`${location} Hazard (opensha)`}</text>
           <text
-            y={parentWidth * 0.035 + 20}
+            y={headingSize + 18}
             x={'50%'}
             alignmentBaseline="middle"
             dominantBaseline="middle"
             textAnchor="middle"
-            fontSize={parentWidth * 0.025 > 17 ? 17 : parentWidth * 0.025}
+            fontSize={subHeadingSize}
           >
             {subHeading}
           </text>

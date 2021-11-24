@@ -1,7 +1,7 @@
 import { Typography } from '@material-ui/core';
 import { curveLinear } from '@visx/curve';
 import { AnimatedAxis, AnimatedLineSeries, Grid, Tooltip, XYChart } from '@visx/xychart';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { XY } from '../../../interfaces/common';
 
 interface SpectralAccelerationChartProps {
@@ -20,6 +20,14 @@ const SpectralAccelerationChart: React.FC<SpectralAccelerationChartProps> = ({
   subHeading,
   location,
 }: SpectralAccelerationChartProps) => {
+  const [headingSize, setHeadingSize] = useState<number>(0);
+  const [subHeadingSize, setSubHeadingSize] = useState<number>(0);
+
+  useEffect(() => {
+    parentWidth * 0.035 >= 24 ? setHeadingSize(24) : setHeadingSize(parentWidth * 0.035);
+    parentWidth * 0.025 >= 15 ? setSubHeadingSize(15) : setSubHeadingSize(parentWidth * 0.025);
+  }, [parentWidth]);
+
   return (
     <>
       <div style={{ position: 'relative', width: '100%' }}>
@@ -30,21 +38,22 @@ const SpectralAccelerationChart: React.FC<SpectralAccelerationChartProps> = ({
           yScale={{ type: 'linear', domain: [0, 6] }}
         >
           <text
-            y={20}
+            y={18}
             x={'50%'}
             alignmentBaseline="middle"
             dominantBaseline="middle"
             textAnchor="middle"
-            fontSize={parentWidth * 0.035 > 24 ? 24 : parentWidth * 0.035}
+            fontSize={headingSize}
             fontWeight="bold"
           >{` ${location} Uniform Hazard Spectrum (opensha)`}</text>
           <text
-            y={parentWidth * 0.035 + 20}
+            y={headingSize + 18}
             x={'50%'}
             alignmentBaseline="middle"
             dominantBaseline="middle"
             textAnchor="middle"
-            fontSize={parentWidth * 0.025 > 17 ? 17 : parentWidth * 0.025}
+            fontSize={subHeadingSize}
+            style={{ margin: 10 }}
           >
             {subHeading}
           </text>
