@@ -1,26 +1,38 @@
 import React from 'react';
+import { styled } from '@mui/material/styles';
 import ReactMarkdown from 'react-markdown';
 import { Accordion, AccordionDetails, AccordionSummary, Divider, Drawer, Toolbar, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { GeneralTaskDetails } from '../../interfaces/diagnosticReport';
 import KeyValueListTable from '../common/KeyValueListTable';
 import { sweepsList } from '../../service/generalTask.service';
 
-const useStyles = makeStyles(() => ({
-  drawer: {
+const PREFIX = 'GeneralTaskDetailDrawer';
+
+const classes = {
+  drawer: `${PREFIX}-drawer`,
+  drawerPaper: `${PREFIX}-drawerPaper`,
+  detailsContainer: `${PREFIX}-detailsContainer`,
+  argumentsContainer: `${PREFIX}-argumentsContainer`,
+};
+
+const StyledDrawer = styled(Drawer)(() => ({
+  [`& .${classes.drawer}`]: {
     width: '25vw',
     padding: 10,
   },
-  drawerPaper: {
+
+  [`& .${classes.drawerPaper}`]: {
     width: '25vw',
     padding: 10,
   },
-  detailsContainer: {
+
+  [`& .${classes.detailsContainer}`]: {
     paddingTop: 20,
   },
-  argumentsContainer: {
+
+  [`& .${classes.argumentsContainer}`]: {
     paddingTop: 20,
   },
 }));
@@ -33,11 +45,10 @@ const GeneralTaskDetailDrawer: React.FC<GeneralTaskDetailDrawerProps> = ({
   openDrawer,
   generalTaskDetails,
 }: GeneralTaskDetailDrawerProps) => {
-  const classes = useStyles();
   const sweepArguments = sweepsList(generalTaskDetails.argument_lists ?? [], generalTaskDetails.swept_arguments);
 
   return (
-    <Drawer anchor={'right'} variant="persistent" classes={{ paper: classes.drawerPaper }} open={openDrawer}>
+    <StyledDrawer anchor={'right'} variant="persistent" classes={{ paper: classes.drawerPaper }} open={openDrawer}>
       <Toolbar />{' '}
       <Typography variant="h5" gutterBottom>
         General Task: {generalTaskDetails.title}
@@ -95,7 +106,7 @@ const GeneralTaskDetailDrawer: React.FC<GeneralTaskDetailDrawerProps> = ({
           </Accordion>
         </div>
       </div>
-    </Drawer>
+    </StyledDrawer>
   );
 };
 

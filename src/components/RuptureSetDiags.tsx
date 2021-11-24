@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { styled } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -7,20 +7,30 @@ import { Typography } from '@material-ui/core';
 
 import buildUrl from 'build-url-ts';
 
-const reportBaseUrl = 'http://nzshm22-static-reports.s3-website-ap-southeast-2.amazonaws.com/opensha/DATA';
+const PREFIX = 'RuptureSetDiags';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
+const classes = {
+  root: `${PREFIX}-root`,
+  cardContent: `${PREFIX}-cardContent`,
+  media: `${PREFIX}-media`,
+};
+
+const StyledCard = styled(Card)(({ theme }) => ({
+  [`&.${classes.root}`]: {
     padding: theme.spacing(0),
   },
-  cardContent: {
+
+  [`& .${classes.cardContent}`]: {
     paddingTop: 0,
   },
-  media: {
+
+  [`& .${classes.media}`]: {
     height: 600,
     padding: theme.spacing(0),
   },
 }));
+
+const reportBaseUrl = 'http://nzshm22-static-reports.s3-website-ap-southeast-2.amazonaws.com/opensha/DATA';
 
 interface RuptureSetDiagsProps {
   fileId: string;
@@ -28,8 +38,6 @@ interface RuptureSetDiagsProps {
 }
 
 const RuptureSetDiags: React.FC<RuptureSetDiagsProps> = ({ fileId, metaAsString }: RuptureSetDiagsProps) => {
-  const classes = useStyles();
-
   const hash = 'subsection-count';
 
   const reportUrl = buildUrl(reportBaseUrl, {
@@ -38,7 +46,7 @@ const RuptureSetDiags: React.FC<RuptureSetDiagsProps> = ({ fileId, metaAsString 
   });
 
   return (
-    <Card className={classes.root}>
+    <StyledCard className={classes.root}>
       <CardContent className={classes.cardContent}>
         <Typography gutterBottom variant="h5" component="h2">
           Rupture Set Diagnostics Report {`${fileId}`}
@@ -48,7 +56,7 @@ const RuptureSetDiags: React.FC<RuptureSetDiagsProps> = ({ fileId, metaAsString 
         </Typography>
       </CardContent>
       <CardMedia className={classes.media} src={reportUrl} title="DiagnosticsReport" component="iframe" />
-    </Card>
+    </StyledCard>
   );
 };
 

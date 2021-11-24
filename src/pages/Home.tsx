@@ -1,33 +1,35 @@
 import React from 'react';
+import { styled } from '@mui/material/styles';
 import logo from '../logo.svg';
-import { Box, Button, Card, CardActions, CardContent, makeStyles, Typography } from '@material-ui/core';
+import { Box, Button, Card, CardActions, CardContent, Typography } from '@material-ui/core';
+import makeStyles from '@material-ui/styles/makeStyles';
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { HomeQuery } from './__generated__/HomeQuery.graphql';
 import { graphql } from 'babel-plugin-relay/macro';
 
-// Inner component that reads the preloaded query results via `usePreloadedQuery()`.
-// This works as follows:
-// - If the query has completed, it returns the results of the query.
-// - If the query is still pending, it "suspends" (indicates to React that the
-//   component isn't ready to render yet). This will show the nearest <Suspense>
-//   fallback.
-// - If the query failed, it throws the failure error. For simplicity we aren't
-//   handling the failure case here.
+const PREFIX = 'Home';
 
-const useStyles = makeStyles({
-  root: {
+const classes = {
+  root: `${PREFIX}-root`,
+  bullet: `${PREFIX}-bullet`,
+  title: `${PREFIX}-title`,
+  pos: `${PREFIX}-pos`,
+};
+
+const Root = styled('div')({
+  [`& .${classes.root}`]: {
     minWidth: 275,
   },
-  bullet: {
+  [`& .${classes.bullet}`]: {
     display: 'inline-block',
     margin: '0 2px',
     transform: 'scale(0.8)',
   },
 
-  title: {
+  [`& .${classes.title}`]: {
     fontSize: 14,
   },
-  pos: {
+  [`& .${classes.pos}`]: {
     marginBottom: 12,
   },
 });
@@ -39,15 +41,13 @@ interface HomeProps {
 const Home: React.FC<HomeProps> = ({ preloadedQuery }: HomeProps) => {
   const data = usePreloadedQuery<HomeQuery>(homeQuery, preloadedQuery);
 
-  const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
 
   return (
-    <>
+    <Root>
       <Box my={4} textAlign="center">
         <img src={logo} className="App-logo" alt="logo" />
       </Box>
-
       <Card className={classes.root}>
         <CardContent>
           <Typography className={classes.title} color="textSecondary" gutterBottom>
@@ -74,7 +74,7 @@ const Home: React.FC<HomeProps> = ({ preloadedQuery }: HomeProps) => {
           <Button size="small">Learn More</Button>
         </CardActions>
       </Card>
-    </>
+    </Root>
   );
 };
 

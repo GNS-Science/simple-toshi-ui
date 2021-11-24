@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { styled } from '@mui/material/styles';
 import { graphql } from 'babel-plugin-relay/macro';
 import { useParams } from 'react-router-dom';
 import { useLazyLoadQuery } from 'react-relay/hooks';
-import { Typography, CircularProgress, makeStyles, Theme, Tabs, Tab, Box } from '@material-ui/core';
+import { Typography, CircularProgress, Theme, Tabs, Tab, Box } from '@material-ui/core';
+
+import makeStyles from '@material-ui/styles/makeStyles';
 
 import { GeneralTaskQuery } from './__generated__/GeneralTaskQuery.graphql';
 import GeneralTaskChildrenTab from '../components/generalTask/GeneralTaskChildrenTab';
@@ -11,21 +14,29 @@ import TabPanel from '../components/common/TabPanel';
 import { sweepsList } from '../service/generalTask.service';
 import { GeneralTaskParams } from '../interfaces/generaltask';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
+const PREFIX = 'GeneralTask';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  tab: `${PREFIX}-tab`,
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classes.root}`]: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
     display: 'flex',
     padding: 0,
   },
-  tab: {
+
+  [`& .${classes.tab}`]: {
     width: '20%',
     borderRight: `1px solid ${theme.palette.divider}`,
   },
 }));
 
 const GeneralTask: React.FC = () => {
-  const classes = useStyles();
   const { id, tabName } = useParams<GeneralTaskParams>();
   const data = useLazyLoadQuery<GeneralTaskQuery>(generalTaskQuery, { id });
   const baseUrl = `/GeneralTask/${id}`;
@@ -56,7 +67,7 @@ const GeneralTask: React.FC = () => {
   const argumentLists = data?.node?.argument_lists ?? [];
 
   return (
-    <>
+    <Root>
       <Typography variant="h5" gutterBottom>
         General Task: {data?.node?.title}
       </Typography>
@@ -74,7 +85,7 @@ const GeneralTask: React.FC = () => {
           </React.Suspense>
         </TabPanel>
       </Box>
-    </>
+    </Root>
   );
 };
 

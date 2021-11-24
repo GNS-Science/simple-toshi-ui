@@ -1,59 +1,74 @@
 import React from 'react';
+import { styled } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
-import { makeStyles, Paper, Table, TableBody, TableCell, TableHead, TableRow, withStyles } from '@material-ui/core';
+import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 
 import { formatDuration, intervalToDuration, secondsToMilliseconds, format } from 'date-fns';
 import FavouriteStatus from '../common/FavouriteStatus';
 import { ValidatedChildren } from '../../interfaces/generaltask';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
+const PREFIX = 'ChildTaskTable';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  root2: `${PREFIX}-root2`,
+  table: `${PREFIX}-table`,
+  tableCell: `${PREFIX}-tableCell`,
+  success: `${PREFIX}-success`,
+  failure: `${PREFIX}-failure`,
+  warning: `${PREFIX}-warning`,
+};
+
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  [`& .${classes.root2}`]: {
     marginTop: '40px',
     marginBottom: '40px',
   },
-  table: {
+
+  [`& .${classes.table}`]: {
     tableLayout: 'fixed',
     wordWrap: 'break-word',
     paddingLeft: '15%',
     paddingRight: '15%',
   },
-  tableCell: {
+
+  [`& .${classes.tableCell}`]: {
     borderBottom: 'none',
   },
-  success: {
+
+  [`& .${classes.success}`]: {
     color: theme.palette.success.main,
   },
-  failure: {
+
+  [`& .${classes.failure}`]: {
     color: theme.palette.error.main,
   },
-  warning: {
+
+  [`& .${classes.warning}`]: {
     color: theme.palette.warning.main,
   },
 }));
 
-const AlternatingRow = withStyles((theme) => ({
-  root: {
-    '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.grey[100],
-    },
-  },
-}))(TableRow);
+const AlternatingRow = TableRow;
 
 export interface ChildTaskTableProps {
   data?: ValidatedChildren;
 }
 
 const ChildTaskTable: React.FC<ChildTaskTableProps> = ({ data }: ChildTaskTableProps) => {
-  const classes = useStyles();
   return (
-    <Paper className={classes.root}>
+    <StyledPaper className={classes.root}>
       <Table stickyHeader size="small" className={classes.table}>
         <colgroup>
           <col style={{ width: '35%' }} />
           <col style={{ width: '25%' }} />
         </colgroup>
         <TableHead>
-          <AlternatingRow>
+          <AlternatingRow
+            classes={{
+              root: classes.root,
+            }}
+          >
             <TableCell>Created</TableCell>
             <TableCell>Duration</TableCell>
             <TableCell>Result</TableCell>
@@ -73,7 +88,12 @@ const ChildTaskTable: React.FC<ChildTaskTableProps> = ({ data }: ChildTaskTableP
             ?.map((e) => {
               if (e?.__typename === 'RuptureGenerationTask') {
                 return (
-                  <AlternatingRow key={e?.id}>
+                  <AlternatingRow
+                    key={e?.id}
+                    classes={{
+                      root: classes.root,
+                    }}
+                  >
                     <TableCell className={classes.tableCell}>
                       {e?.created ? format(new Date(e?.created as string), 'PPPppp') : ''}
                     </TableCell>
@@ -100,7 +120,12 @@ const ChildTaskTable: React.FC<ChildTaskTableProps> = ({ data }: ChildTaskTableP
                 );
               } else if (e?.__typename === 'AutomationTask') {
                 return (
-                  <AlternatingRow key={e?.id}>
+                  <AlternatingRow
+                    key={e?.id}
+                    classes={{
+                      root: classes.root,
+                    }}
+                  >
                     <TableCell className={classes.tableCell}>
                       {e?.created ? format(new Date(e?.created as string), 'PPPppp') : ''}
                     </TableCell>
@@ -133,7 +158,7 @@ const ChildTaskTable: React.FC<ChildTaskTableProps> = ({ data }: ChildTaskTableP
             })}
         </TableBody>
       </Table>
-    </Paper>
+    </StyledPaper>
   );
 };
 

@@ -1,7 +1,37 @@
 import React from 'react';
-import { Card, makeStyles, Typography } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Card, Typography } from '@material-ui/core';
+import makeStyles from '@material-ui/styles/makeStyles';
 import { Link } from 'react-router-dom';
 import { format, formatDuration, intervalToDuration, secondsToMilliseconds } from 'date-fns';
+
+const PREFIX = 'MiniRuptureGenerationTask';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  success: `${PREFIX}-success`,
+  failure: `${PREFIX}-failure`,
+  warning: `${PREFIX}-warning`,
+};
+
+const StyledCard = styled(Card)(({ theme }) => ({
+  [`&.${classes.root}`]: {
+    margin: `${theme.spacing(2)}px 0px`,
+    padding: theme.spacing(1),
+  },
+
+  [`& .${classes.success}`]: {
+    color: theme.palette.success.main,
+  },
+
+  [`& .${classes.failure}`]: {
+    color: theme.palette.error.main,
+  },
+
+  [`& .${classes.warning}`]: {
+    color: theme.palette.warning.main,
+  },
+}));
 
 interface MiniRuptureGenerationTaskProps {
   id?: string;
@@ -11,21 +41,6 @@ interface MiniRuptureGenerationTaskProps {
   result?: string | null;
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    margin: `${theme.spacing(2)}px 0px`,
-    padding: theme.spacing(1),
-  },
-  success: {
-    color: theme.palette.success.main,
-  },
-  failure: {
-    color: theme.palette.error.main,
-  },
-  warning: {
-    color: theme.palette.warning.main,
-  },
-}));
 const MiniRuptureGenerationTask: React.FC<MiniRuptureGenerationTaskProps> = ({
   id,
   created,
@@ -33,7 +48,6 @@ const MiniRuptureGenerationTask: React.FC<MiniRuptureGenerationTaskProps> = ({
   state,
   result,
 }: MiniRuptureGenerationTaskProps) => {
-  const classes = useStyles();
   const durationInterval = duration
     ? formatDuration(
         intervalToDuration({
@@ -45,7 +59,7 @@ const MiniRuptureGenerationTask: React.FC<MiniRuptureGenerationTaskProps> = ({
 
   const formattedDate = created ? format(new Date(created), 'PPPppp') : '';
   return (
-    <Card className={classes.root}>
+    <StyledCard className={classes.root}>
       <Typography>
         <strong>Type: </strong> Rupture Generation Task
       </Typography>
@@ -66,7 +80,7 @@ const MiniRuptureGenerationTask: React.FC<MiniRuptureGenerationTaskProps> = ({
       <Typography>
         <Link to={`/RuptureGenerationTask/${id}`}>[more]</Link>
       </Typography>
-    </Card>
+    </StyledCard>
   );
 };
 

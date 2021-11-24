@@ -1,8 +1,16 @@
 import React, { useState } from 'react';
-import { FormControl, Input, InputLabel, makeStyles, MenuItem, Select, Theme } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { FormControl, Input, InputLabel, MenuItem, Select } from '@material-ui/core';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  formControl: {
+const PREFIX = 'SelectControl';
+
+const classes = {
+  formControl: `${PREFIX}-formControl`,
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classes.formControl}`]: {
     margin: theme.spacing(2),
     minWidth: 200,
     maxWidth: 300,
@@ -26,8 +34,6 @@ interface SelectControlProps {
 const SelectControl: React.FC<SelectControlProps> = ({ options, setOptions, name }: SelectControlProps) => {
   const [selectedItems, setSelectedItems] = useState<string>(options[0]);
 
-  const classes = useStyles();
-
   const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
     const value = (event.target.value as string) || '';
     setSelectedItems(value);
@@ -35,7 +41,7 @@ const SelectControl: React.FC<SelectControlProps> = ({ options, setOptions, name
   };
 
   return (
-    <>
+    <Root>
       <FormControl className={classes.formControl}>
         <InputLabel>{name}</InputLabel>
         <Select
@@ -54,7 +60,7 @@ const SelectControl: React.FC<SelectControlProps> = ({ options, setOptions, name
           ))}
         </Select>
       </FormControl>
-    </>
+    </Root>
   );
 };
 

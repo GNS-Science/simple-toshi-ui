@@ -1,8 +1,15 @@
-import { Box, CircularProgress, Container, makeStyles } from '@material-ui/core';
+import { Box, CircularProgress, Container } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 
-const useStyles = makeStyles(() => ({
-  progress: {
+const PREFIX = 'Loading';
+
+const classes = {
+  progress: `${PREFIX}-progress`,
+};
+
+const StyledContainer = styled(Container)(() => ({
+  [`& .${classes.progress}`]: {
     verticalAlign: 'middle',
     display: 'flex',
     justifyContent: 'center',
@@ -10,13 +17,12 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Loading: React.FC = () => {
-  const classes = useStyles();
   return (
-    <Container maxWidth="md" style={{ paddingTop: '40px', wordWrap: 'break-word' }}>
+    <StyledContainer maxWidth="md" style={{ paddingTop: '40px', wordWrap: 'break-word' }}>
       <Box className={classes.progress} width="100%" height="100%">
         <CircularProgress />
       </Box>
-    </Container>
+    </StyledContainer>
   );
 };
 

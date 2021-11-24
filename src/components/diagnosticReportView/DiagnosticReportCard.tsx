@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import { Card, CardContent, makeStyles, Tooltip, Typography, Tabs, Tab, CircularProgress } from '@material-ui/core';
+import { Card, CardContent, Tooltip, Typography, Tabs, Tab, CircularProgress } from '@material-ui/core';
 import { IconButton } from '@mui/material';
 
 import { ReportItem } from '../../interfaces/diagnosticReport';
@@ -13,11 +14,21 @@ import NamedFaultsView from './NamedFaultsView';
 import RegionalMfdView from './RegionalMfdView';
 import InversionSolutionHazardCharts from '../inversionSolution/InversionSolutionHazardCharts';
 
-const useStyles = makeStyles(() => ({
-  root: {
+const PREFIX = 'DiagnosticReportCard';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  buttonContainer: `${PREFIX}-buttonContainer`,
+  button: `${PREFIX}-button`,
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')(() => ({
+  [`& .${classes.root}`]: {
     flexGrow: 1,
   },
-  buttonContainer: {
+
+  [`& .${classes.buttonContainer}`]: {
     paddingLeft: '25%',
     paddingRight: '25%',
     width: '100%',
@@ -25,7 +36,8 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  button: {
+
+  [`& .${classes.button}`]: {
     paddingLeft: 70,
     paddingRight: 70,
   },
@@ -62,7 +74,6 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   reportTab,
   setReportTab,
 }: DiagnosticReportCardProps) => {
-  const classes = useStyles();
   const [currentImage, setCurrentImage] = useState<number>(0);
   const [currentTab, setCurrentTab] = useState<number>(0);
   const [hazardId, setHazardId] = useState<string>('');
@@ -165,7 +176,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   };
 
   return (
-    <>
+    <Root>
       <Card className={classes.root}>
         <CardContent>
           <h4>
@@ -219,7 +230,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
           {renderTab()}
         </CardContent>
       </Card>
-    </>
+    </Root>
   );
 };
 

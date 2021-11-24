@@ -1,13 +1,22 @@
-import { Checkbox, FormControl, Input, InputLabel, makeStyles, MenuItem, Select, Theme } from '@material-ui/core';
+import { Checkbox, FormControl, Input, InputLabel, MenuItem, Select } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  formControl: {
+const PREFIX = 'MultiSelect';
+
+const classes = {
+  formControl: `${PREFIX}-formControl`,
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classes.formControl}`]: {
     margin: theme.spacing(2),
     minWidth: 200,
     maxWidthg: 300,
   },
 }));
+
 const MenuProps = {
   PaperProps: {
     style: {
@@ -23,8 +32,6 @@ interface MultiSelectProps {
 }
 
 const MultiSelect: React.FC<MultiSelectProps> = ({ options, selected, setOptions, name }: MultiSelectProps) => {
-  const classes = useStyles();
-
   const [selectedItems, setSelectedItems] = useState<string[]>([options[0]]);
 
   useEffect(() => {
@@ -37,7 +44,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({ options, selected, setOptions
   };
 
   return (
-    <>
+    <Root>
       <FormControl className={classes.formControl}>
         <InputLabel>{name}</InputLabel>
         <Select
@@ -63,7 +70,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({ options, selected, setOptions
           ))}
         </Select>
       </FormControl>
-    </>
+    </Root>
   );
 };
 

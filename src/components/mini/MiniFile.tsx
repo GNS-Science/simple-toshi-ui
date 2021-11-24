@@ -1,8 +1,23 @@
 import React from 'react';
-import { Card, makeStyles, Typography } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Card, Typography } from '@material-ui/core';
+import makeStyles from '@material-ui/styles/makeStyles';
 import { Link } from 'react-router-dom';
 import TruncateText from '../TruncateText';
 import { formatBytes } from '../FileDetail';
+
+const PREFIX = 'MiniFile';
+
+const classes = {
+  root: `${PREFIX}-root`,
+};
+
+const StyledCard = styled(Card)(({ theme }) => ({
+  [`&.${classes.root}`]: {
+    margin: `${theme.spacing(2)}px 0px`,
+    padding: theme.spacing(1),
+  },
+}));
 
 interface MiniFileProps {
   id?: string;
@@ -11,17 +26,9 @@ interface MiniFileProps {
   file_name?: string | null;
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    margin: `${theme.spacing(2)}px 0px`,
-    padding: theme.spacing(1),
-  },
-}));
-
 const MiniFile: React.FC<MiniFileProps> = ({ id, __typename, file_size, file_name }: MiniFileProps) => {
-  const classes = useStyles();
   return (
-    <Card className={classes.root}>
+    <StyledCard className={classes.root}>
       <Typography>
         <strong>Type: </strong> {__typename}
       </Typography>
@@ -38,7 +45,7 @@ const MiniFile: React.FC<MiniFileProps> = ({ id, __typename, file_size, file_nam
           <Link to={`/FileDetail/${id}`}>[more]</Link>
         )}
       </Typography>
-    </Card>
+    </StyledCard>
   );
 };
 

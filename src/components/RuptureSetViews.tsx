@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { styled } from '@material-ui/core/styles';
 // prettier-ignore
 import {
   Box,
@@ -12,22 +12,30 @@ import {
 import buildUrl from 'build-url-ts';
 import PreviewMFD from '../components/PreviewMFD';
 
-const reportBaseUrl = 'http://nzshm22-static-reports.s3-website-ap-southeast-2.amazonaws.com/opensha/DATA';
+const PREFIX = 'RuptureSetDiags';
 
-const useStyles = makeStyles({
-  root: {
+const classes = {
+  root: `${PREFIX}-root`,
+  content: `${PREFIX}-content`,
+  media: `${PREFIX}-media`,
+};
+
+const StyledBox = styled(Box)({
+  [`& .${classes.root}`]: {
     maxWidth: 520,
     display: 'flex',
   },
-  content: {
+  [`& .${classes.content}`]: {
     flex: '1 1 auto',
   },
-  media: {
+  [`& .${classes.media}`]: {
     height: 350, // as an example I am modifying width and height
     width: '100%',
     //marginLeft: '5%',
   },
 });
+
+const reportBaseUrl = 'http://nzshm22-static-reports.s3-website-ap-southeast-2.amazonaws.com/opensha/DATA';
 
 // const indexMap: Record<string, string> = {
 //   RmlsZTo3ODYuMGRiR1hT: 'DATA6/RmlsZTo3ODYuMGRiR1hT/',
@@ -46,10 +54,8 @@ const view1Url = buildUrl(reportBaseUrl, {
   path: '/' + file_id + '/DiagnosticsReport/' + view1,
 });
 const RuptureSetDiags: React.FC = () => {
-  const classes = useStyles();
-
   return (
-    <Box>
+    <StyledBox>
       <Typography gutterBottom variant="h5" component="h5">
         Rupture Set Views {file_id}
       </Typography>
@@ -74,7 +80,7 @@ const RuptureSetDiags: React.FC = () => {
           <CardMedia className={classes.media} image={view1Url} />
         </CardContent>
       </Card>
-    </Box>
+    </StyledBox>
   );
 };
 

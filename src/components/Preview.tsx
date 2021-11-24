@@ -1,34 +1,33 @@
 import React from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
-// prettier-ignore
-import {
-  Button,
-  Card,
-  CardContent,
-  Container,
-  Typography,
-} from '@material-ui/core';
+import { styled } from '@material-ui/core/styles';
+import { Button, Card, CardContent, Container, Typography } from '@material-ui/core';
 
-const useStyles = makeStyles({
-  root: {
+const PREFIX = 'Preview';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  bullet: `${PREFIX}-bullet`,
+  pos: `${PREFIX}-pos`,
+};
+
+const StyledContainer = styled(Container)({
+  [`& .${classes.root}`]: {
     minWidth: 275,
   },
-  bullet: {
+  [`& .${classes.bullet}`]: {
     display: 'inline-block',
     margin: '0 2px',
     transform: 'scale(0.8)',
   },
-  pos: {
+  [`& .${classes.pos}`]: {
     marginBottom: 3,
   },
 });
 
 function Preview(): React.ReactElement {
-  const classes = useStyles();
-
   return (
-    <Container>
+    <StyledContainer>
       <Typography color="textPrimary" variant="h4" gutterBottom>
         Preview features
       </Typography>
@@ -101,7 +100,7 @@ function Preview(): React.ReactElement {
           </Typography>
         </CardContent>
       </Card>
-    </Container>
+    </StyledContainer>
   );
 }
 

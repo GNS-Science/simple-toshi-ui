@@ -1,7 +1,12 @@
-import { makeStyles } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+const PREFIX = 'ShareInsert';
 
-const useStyles = makeStyles(() => ({
-  textContainer: {
+const classes = {
+  textContainer: `${PREFIX}-textContainer`,
+};
+
+const Root = styled('div')(() => ({
+  [`& .${classes.textContainer}`]: {
     backgroundColor: '#d5d5d5',
     padding: 30,
     borderRadius: 5,
@@ -14,13 +19,12 @@ interface ShareInsertProps {
 }
 
 const ShareInsert: React.FC<ShareInsertProps> = ({ text }: ShareInsertProps) => {
-  const classes = useStyles();
   return (
-    <>
+    <Root>
       <div className={classes.textContainer}>
         <p id="simple-modal-description">{text}</p>
       </div>
-    </>
+    </Root>
   );
 };
 

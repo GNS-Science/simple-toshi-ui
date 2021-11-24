@@ -1,17 +1,27 @@
-import { makeStyles, Modal, Theme, Tooltip } from '@material-ui/core';
+import { Modal, Tooltip } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
 import { IconButton } from '@mui/material';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import React from 'react';
 import LoadInsert from './LoadInsert';
 import ShareInsert from './ShareInsert';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  modal: {
+const PREFIX = 'CommonModal';
+
+const classes = {
+  modal: `${PREFIX}-modal`,
+  paper: `${PREFIX}-paper`,
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classes.modal}`]: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  paper: {
+
+  [`& .${classes.paper}`]: {
     position: 'absolute',
     width: 1000,
     backgroundColor: theme.palette.background.paper,
@@ -36,10 +46,8 @@ const CommonModal: React.FC<CommonModalProps> = ({
   handleClose,
   handleImport,
 }: CommonModalProps) => {
-  const classes = useStyles();
-
   return (
-    <>
+    <Root>
       <Modal
         open={openModal}
         onClose={handleClose}
@@ -61,7 +69,7 @@ const CommonModal: React.FC<CommonModalProps> = ({
           {input && handleImport ? <LoadInsert handleImport={handleImport} /> : <ShareInsert text={text as string} />}
         </div>
       </Modal>
-    </>
+    </Root>
   );
 };
 

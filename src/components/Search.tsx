@@ -1,14 +1,14 @@
 import React from 'react';
+import { styled } from '@mui/material/styles';
 // prettier-ignore
 import {
-  Box, 
+  Box,
   Button,
   Card,
   CardContent,
   CircularProgress,
   Container,
-  InputBase, 
-  makeStyles,
+  InputBase,
   Typography,
 } from '@material-ui/core';
 
@@ -18,8 +18,21 @@ import { useQueryLoader } from 'react-relay/hooks';
 import { SearchQuery } from './__generated__/SearchQuery.graphql';
 import SearchResult from './SearchResult';
 
-const useStyles = makeStyles((theme) => ({
-  search: {
+const PREFIX = 'Search';
+
+const classes = {
+  search: `${PREFIX}-search`,
+  searchIcon: `${PREFIX}-searchIcon`,
+  searchButton: `${PREFIX}-searchButton`,
+  inputInput: `${PREFIX}-inputInput`,
+  inputRoot: `${PREFIX}-inputRoot`,
+  root: `${PREFIX}-root`,
+  pos: `${PREFIX}-pos`,
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classes.search}`]: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
     marginRight: theme.spacing(2),
@@ -27,7 +40,8 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     marginBottom: theme.spacing(2),
   },
-  searchIcon: {
+
+  [`& .${classes.searchIcon}`]: {
     padding: theme.spacing(0, 2),
     height: '100%',
     position: 'absolute',
@@ -36,7 +50,8 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  searchButton: {
+
+  [`& .${classes.searchButton}`]: {
     padding: theme.spacing(0, 2),
     height: '100%',
     position: 'absolute',
@@ -46,7 +61,8 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 99,
     right: 0,
   },
-  inputInput: {
+
+  [`& .${classes.inputInput}`]: {
     padding: theme.spacing(1, 1, 1, 0),
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     width: '100%',
@@ -57,13 +73,16 @@ const useStyles = makeStyles((theme) => ({
     },
     borderRadius: '12px',
   },
-  inputRoot: {
+
+  [`& .${classes.inputRoot}`]: {
     width: '100%',
   },
-  root: {
+
+  [`& .${classes.root}`]: {
     minWidth: 275,
   },
-  pos: {
+
+  [`& .${classes.pos}`]: {
     marginBottom: 3,
   },
 }));
@@ -118,7 +137,6 @@ export const searchQuery = graphql`
 `;
 
 const Search: React.FC = () => {
-  const classes = useStyles();
   const [queryRef, loadQuery] = useQueryLoader<SearchQuery>(searchQuery);
   const [queryInput, setQueryInput] = React.useState('');
   const handleSearch = () => {
@@ -126,7 +144,7 @@ const Search: React.FC = () => {
   };
 
   return (
-    <>
+    <Root>
       <Box className={classes.search}>
         <Box className={classes.searchIcon}>
           <SearchIcon />
@@ -209,7 +227,7 @@ const Search: React.FC = () => {
           </Card>
         </Container>
       )}
-    </>
+    </Root>
   );
 };
 

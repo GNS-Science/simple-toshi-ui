@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import { useLocation, useParams, useHistory } from 'react-router-dom';
 import { graphql } from 'babel-plugin-relay/macro';
 import { useLazyLoadQuery } from 'react-relay/hooks';
-import { Typography, CircularProgress, Snackbar, Button, Tooltip, Fab, makeStyles } from '@material-ui/core';
+import { Typography, CircularProgress, Snackbar, Button, Tooltip, Fab } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 import buildUrl from 'build-url-ts';
 import ShareIcon from '@material-ui/icons/Share';
@@ -32,24 +33,38 @@ import CommonModal from '../common/Modal/CommonModal';
 import { mfdPlotOptions, namedFaultsOptions } from '../../constants/nameFaultsMfds';
 import { regionalSolutionMfdOptions } from '../../constants/regionalSolutionMfd';
 
-const useStyles = makeStyles(() => ({
-  filterContainer: {
+const PREFIX = 'GeneralTaskChildrenTab';
+
+const classes = {
+  filterContainer: `${PREFIX}-filterContainer`,
+  hidden: `${PREFIX}-hidden`,
+  controlsContainer: `${PREFIX}-controlsContainer`,
+  control: `${PREFIX}-control`,
+  rightAlignControl: `${PREFIX}-rightAlignControl`,
+};
+
+const Root = styled('div')(() => ({
+  [`& .${classes.filterContainer}`]: {
     width: '100%',
     display: 'flex',
     flexWrap: 'wrap',
     paddingLeft: 10,
   },
-  hidden: {
+
+  [`& .${classes.hidden}`]: {
     display: 'none',
   },
-  controlsContainer: {
+
+  [`& .${classes.controlsContainer}`]: {
     display: 'flex',
     alignItems: 'center',
   },
-  control: {
+
+  [`& .${classes.control}`]: {
     margin: 10,
   },
-  rightAlignControl: {
+
+  [`& .${classes.rightAlignControl}`]: {
     margin: 10,
     position: 'absolute',
     right: '2.5%',
@@ -65,7 +80,6 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   sweepArgs,
   generalTaskData,
 }: GeneralTaskChildrenTabProps) => {
-  const classes = useStyles();
   const { id } = useParams<GeneralTaskParams>();
   const {
     localStorageGeneralViews,
@@ -191,7 +205,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   }
 
   return (
-    <div>
+    <Root>
       <div className={classes.controlsContainer}>
         <Tooltip title="use (f/F) to open/close filters">
           <Button className={classes.control} variant="contained" onClick={() => setShowFilter((v) => !v)}>
@@ -282,7 +296,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
           handleClose={() => setOpenAlert(false)}
         />
       )}
-    </div>
+    </Root>
   );
 };
 

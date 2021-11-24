@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import { useLocation } from 'react-router-dom';
-import {
-  Checkbox,
-  FormControl,
-  Input,
-  InputLabel,
-  ListItemText,
-  makeStyles,
-  MenuItem,
-  Select,
-} from '@material-ui/core';
+import { Checkbox, FormControl, Input, InputLabel, ListItemText, MenuItem, Select } from '@material-ui/core';
+import makeStyles from '@material-ui/styles/makeStyles';
 import { SweepArgument } from '../../interfaces/generaltask';
 import { determineClipBoard, getClipBoardObject } from '../../service/generalTask.service';
 import { pluralCompare } from '../../service/generalTask.service';
 
-const useStyles = makeStyles((theme) => ({
-  formControl: {
+const PREFIX = 'SweepArgumentFilter';
+
+const classes = {
+  formControl: `${PREFIX}-formControl`,
+};
+
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classes.formControl}`]: {
     margin: theme.spacing(0.7),
     minWidth: 260,
     maxWidth: 300,
@@ -40,7 +39,7 @@ interface SweepArgumentFilterProps {
 
 const SweepArgumentFilter: React.FC<SweepArgumentFilterProps> = ({ argument, onChange }: SweepArgumentFilterProps) => {
   const [seletedItems, setSelectedItems] = useState<string[]>([]);
-  const classes = useStyles();
+
   const search = useLocation().search;
   const isClipBoard: boolean = determineClipBoard(search);
 
@@ -68,7 +67,7 @@ const SweepArgumentFilter: React.FC<SweepArgumentFilterProps> = ({ argument, onC
   }, []);
 
   return (
-    <div>
+    <Root>
       <FormControl className={classes.formControl}>
         <InputLabel id={`${argument?.k}-label)`}>{argument?.k}</InputLabel>
         <Select
@@ -90,7 +89,7 @@ const SweepArgumentFilter: React.FC<SweepArgumentFilterProps> = ({ argument, onC
           ))}
         </Select>
       </FormControl>
-    </div>
+    </Root>
   );
 };
 
