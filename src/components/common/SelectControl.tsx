@@ -42,7 +42,7 @@ const SelectControl: React.FC<SelectControlProps> = ({ options, setOptions, name
 
   return (
     <Root>
-      <FormControl className={classes.formControl}>
+      <FormControl className={classes.formControl} variant="standard">
         <InputLabel>{name}</InputLabel>
         <Select
           labelId={`report-hash-label`}
@@ -52,6 +52,7 @@ const SelectControl: React.FC<SelectControlProps> = ({ options, setOptions, name
           onChange={handleChange}
           input={<Input />}
           MenuProps={MenuProps}
+          variant="standard"
         >
           {options.map((opt) => (
             <MenuItem key={opt} value={opt}>

@@ -45,7 +45,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({ options, selected, setOptions
 
   return (
     <Root>
-      <FormControl className={classes.formControl}>
+      <FormControl className={classes.formControl} variant="standard">
         <InputLabel>{name}</InputLabel>
         <Select
           name={name}
@@ -61,6 +61,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({ options, selected, setOptions
             }
             if (selectedArray.length >= 1) return 'Multiple selected';
           }}
+          variant="standard"
         >
           {options.map((opt) => (
             <MenuItem key={opt} value={opt}>

@@ -68,7 +68,7 @@ const SweepArgumentFilter: React.FC<SweepArgumentFilterProps> = ({ argument, onC
 
   return (
     <Root>
-      <FormControl className={classes.formControl}>
+      <FormControl className={classes.formControl} variant="standard">
         <InputLabel id={`${argument?.k}-label)`}>{argument?.k}</InputLabel>
         <Select
           labelId={`${argument?.k}-label`}
@@ -80,6 +80,7 @@ const SweepArgumentFilter: React.FC<SweepArgumentFilterProps> = ({ argument, onC
           renderValue={(selectedItems) => (selectedItems as string[]).join(', ')}
           input={<Input />}
           MenuProps={MenuProps}
+          variant="standard"
         >
           {argument?.v?.map((value) => (
             <MenuItem key={value} value={`${value}`}>
