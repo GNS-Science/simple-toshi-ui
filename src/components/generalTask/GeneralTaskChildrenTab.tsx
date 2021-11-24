@@ -4,7 +4,7 @@ import { useLocation, useParams, useHistory } from 'react-router-dom';
 import { graphql } from 'babel-plugin-relay/macro';
 import { useLazyLoadQuery } from 'react-relay/hooks';
 import { Typography, CircularProgress, Snackbar, Button, Tooltip, Fab } from '@material-ui/core';
-import MuiAlert from '@material-ui/lab/Alert';
+import Alert from '@mui/material/Alert';
 import buildUrl from 'build-url-ts';
 import ShareIcon from '@material-ui/icons/Share';
 
@@ -284,9 +284,9 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
         open={openNotification}
         onClose={handleCloseNotification}
       >
-        <MuiAlert variant="filled" severity="warning">
+        <Alert variant="filled" severity="warning">
           Sorry, this URL is invalid. The clipBoard state cannot be applied.
-        </MuiAlert>
+        </Alert>
       </Snackbar>
       {openAlert && (
         <DialogAlert

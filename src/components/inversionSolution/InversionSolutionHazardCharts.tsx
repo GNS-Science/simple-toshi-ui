@@ -10,7 +10,7 @@ import {
   getSpectralAccelerationData,
 } from '../../service/inversionSolution.service';
 import MultiSelect from '../common/MultiSelect';
-import MuiAlert from '@material-ui/lab/Alert';
+import Alert from '@mui/material/Alert';
 
 import { HazardTableFilteredData } from '../../interfaces/inversionSolutions';
 import { toProperCase } from '../../utils';
@@ -160,9 +160,9 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
         open={openNotification}
         onClose={() => setOpenNotification(false)}
       >
-        <MuiAlert variant="filled" severity="warning">
+        <Alert variant="filled" severity="warning">
           Sorry, we cannot show more than 8 curves in one chart.
-        </MuiAlert>
+        </Alert>
       </Snackbar>
     </>
   );
