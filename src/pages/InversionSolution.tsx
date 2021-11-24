@@ -3,9 +3,7 @@ import { styled } from '@mui/material/styles';
 import { useHistory, useParams } from 'react-router-dom';
 import { useLazyLoadQuery, useQueryLoader } from 'react-relay';
 import { graphql } from 'babel-plugin-relay/macro';
-import { Box, CircularProgress, Tab, Tabs, Theme, Typography } from '@mui/material';
-
-import makeStyles from '@mui/styles/makeStyles';
+import { Box, CircularProgress, Tab, Tabs, Typography } from '@mui/material';
 
 import FavouriteControls from '../components/common/FavouriteControls';
 import InversionSolutionDetailTab, {

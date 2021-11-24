@@ -1,7 +1,6 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
 import { Card, Typography } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import { Link } from 'react-router-dom';
 import TruncateText from '../TruncateText';
 import { formatBytes } from '../FileDetail';

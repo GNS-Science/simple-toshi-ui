@@ -1,6 +1,6 @@
 import { Checkbox, FormControl, Input, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const PREFIX = 'MultiSelect';
 
