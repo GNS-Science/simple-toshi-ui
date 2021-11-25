@@ -21,6 +21,7 @@ import GeneralView from './GeneralView';
 import NamedFaultsView from './NamedFaultsView';
 import RegionalMfdView from './RegionalMfdView';
 import InversionSolutionHazardCharts from '../inversionSolution/InversionSolutionHazardCharts';
+import ParentFaultView from './ParentFaultViews';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -150,9 +151,16 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             />
           </DiagnosticReportTabPanel>
         );
+
       case 2:
         return (
           <DiagnosticReportTabPanel value={currentTab} index={2}>
+            <ParentFaultView id={automationTasks[currentImage].inversion_solution.id} />
+          </DiagnosticReportTabPanel>
+        );
+      case 3:
+        return (
+          <DiagnosticReportTabPanel value={currentTab} index={3}>
             <RegionalMfdView
               id={automationTasks[currentImage].inversion_solution.id}
               regionalViews={regionalViews}
@@ -160,9 +168,9 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             />
           </DiagnosticReportTabPanel>
         );
-      case 3:
+      case 4:
         return (
-          <DiagnosticReportTabPanel value={currentTab} index={3}>
+          <DiagnosticReportTabPanel value={currentTab} index={4}>
             {hazardId && (
               <React.Suspense fallback={<CircularProgress />}>
                 <InversionSolutionHazardCharts id={hazardId} />
@@ -215,8 +223,9 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
           <Tabs value={currentTab} onChange={handleTabChange}>
             <Tab label="General" id="simple-tab-0" disableFocusRipple />
             <Tab label="Named Faults" id="simple-tab-1" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
-            <Tab label="Regional Solutions" id="simple-tab-2" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
-            <Tab label="Hazard Charts" id="simple-tab-3" disabled={!hazardId.length} disableFocusRipple />
+            <Tab label="Parent Fault" id="simple-etab-2" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
+            <Tab label="Regional Solutions" id="simple-tab-3" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
+            <Tab label="Hazard Charts" id="simple-tab-4" disabled={!hazardId.length} disableFocusRipple />
           </Tabs>
           {renderTab()}
         </CardContent>
