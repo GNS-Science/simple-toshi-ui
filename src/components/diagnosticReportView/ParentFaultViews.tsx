@@ -23,12 +23,20 @@ const useStyles = makeStyles(() => ({
 
 interface ParentFaultViewProps {
   id: string;
+  parentFaultViews: string[];
+  setParentFaultViews: (views: string[]) => void;
+  parentFault: string;
+  setParentFault: (fault: string) => void;
 }
 
-const ParentFaultView: React.FC<ParentFaultViewProps> = ({ id }: ParentFaultViewProps) => {
+const ParentFaultView: React.FC<ParentFaultViewProps> = ({
+  id,
+  parentFaultViews,
+  setParentFaultViews,
+  parentFault,
+  setParentFault,
+}: ParentFaultViewProps) => {
   const classes = useStyles();
-  const [views, setViews] = useState<string[]>([parentViewsOptions[0].displayName]);
-  const [parentFault, setParentFault] = useState<string>(parentFaultsOptions[0]);
   const [viewsSelctions, setViewsSelections] = useState<ParentViewsOption[]>([parentViewsOptions[0]]);
 
   const viewsOptions: string[] = [];
@@ -38,10 +46,10 @@ const ParentFaultView: React.FC<ParentFaultViewProps> = ({ id }: ParentFaultView
 
   useEffect(() => {
     const filtered = parentViewsOptions.filter((option) => {
-      return views.includes(option.displayName);
+      return parentFaultViews.includes(option.displayName);
     });
     setViewsSelections(filtered);
-  }, [views]);
+  }, [parentFaultViews]);
 
   const getUrl = (path: string) => {
     return buildUrl(process.env.REACT_APP_REPORTS_URL, {
@@ -51,7 +59,7 @@ const ParentFaultView: React.FC<ParentFaultViewProps> = ({ id }: ParentFaultView
 
   return (
     <>
-      <MultiSelect name="Views" selected={views} options={viewsOptions} setOptions={setViews} />
+      <MultiSelect name="Views" selected={parentFaultViews} options={viewsOptions} setOptions={setParentFaultViews} />
       <Autocomplete
         value={parentFault}
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
