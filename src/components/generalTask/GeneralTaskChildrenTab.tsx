@@ -113,7 +113,6 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     if (isClipBoard) {
       getClipBoardObject(search)
         .then((res) => {
-          console.log(res);
           setShowList(res.showList);
           setShowFilter(res.showFilter);
           setGeneralViews(res.generalViews);
@@ -131,11 +130,6 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
         });
     }
   }, []);
-
-  useEffect(() => {
-    console.log('parentFault', parentFault);
-    console.log('parentFaultViews', parentFaultViews);
-  }, [parentFault, parentFaultViews]);
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
     const newFilteredArguments = updateFilteredArguments(
