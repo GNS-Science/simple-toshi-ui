@@ -55,6 +55,10 @@ interface DiagnosticReportCardProps {
   changeCurrentImage?: (index: number) => void;
   reportTab?: number;
   setReportTab?: (tab: number) => void;
+  parentFaultViews: string[];
+  setParentFaultViews: (views: string[]) => void;
+  parentFault: string;
+  setParentFault: (fault: string) => void;
 }
 
 const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
@@ -71,6 +75,10 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   changeCurrentImage,
   reportTab,
   setReportTab,
+  parentFaultViews,
+  setParentFaultViews,
+  parentFault,
+  setParentFault,
 }: DiagnosticReportCardProps) => {
   const classes = useStyles();
   const [currentImage, setCurrentImage] = useState<number>(0);
@@ -155,7 +163,13 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       case 2:
         return (
           <DiagnosticReportTabPanel value={currentTab} index={2}>
-            <ParentFaultView id={automationTasks[currentImage].inversion_solution.id} />
+            <ParentFaultView
+              id={automationTasks[currentImage].inversion_solution.id}
+              parentFaultViews={parentFaultViews}
+              setParentFaultViews={setParentFaultViews}
+              parentFault={parentFault}
+              setParentFault={setParentFault}
+            />
           </DiagnosticReportTabPanel>
         );
       case 3:
