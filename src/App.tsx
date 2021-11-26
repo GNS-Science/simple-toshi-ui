@@ -41,7 +41,6 @@ import MySolutions from './pages/MySolutions';
 import { regionalSolutionMfdOptions } from './constants/regionalSolutionMfd';
 import { diagnosticReportViewOptions } from './constants/diagnosticReport';
 import { mfdPlotOptions, namedFaultsOptions } from './constants/nameFaultsMfds';
-import { parentPort } from 'worker_threads';
 import { parentFaultsOptions, parentViewsOptions } from './constants/parentFault';
 
 const useStyles = makeStyles({
