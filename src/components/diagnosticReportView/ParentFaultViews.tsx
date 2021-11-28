@@ -3,6 +3,7 @@ import { Autocomplete } from '@material-ui/lab';
 import buildUrl from 'build-url-ts';
 import React, { useEffect, useState } from 'react';
 import { parentFaultsOptions, ParentViewsOption, parentViewsOptions } from '../../constants/parentFault';
+import ControlsBar from '../common/ControlsBar';
 import MultiSelect from '../common/MultiSelect';
 
 const useStyles = makeStyles(() => ({
@@ -59,18 +60,20 @@ const ParentFaultView: React.FC<ParentFaultViewProps> = ({
 
   return (
     <>
-      <MultiSelect name="Views" selected={parentFaultViews} options={viewsOptions} setOptions={setParentFaultViews} />
-      <Autocomplete
-        value={parentFault}
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        onChange={(event: any, newValue: string | null) => {
-          setParentFault(newValue as string);
-        }}
-        id="controllable-states-demo"
-        options={parentFaultsOptions}
-        style={{ width: 300 }}
-        renderInput={(params) => <TextField {...params} label="Parent Faults" />}
-      />
+      <ControlsBar>
+        <MultiSelect name="Views" selected={parentFaultViews} options={viewsOptions} setOptions={setParentFaultViews} />
+        <Autocomplete
+          value={parentFault}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          onChange={(event: any, newValue: string | null) => {
+            setParentFault(newValue as string);
+          }}
+          id="controllable-states-demo"
+          options={parentFaultsOptions}
+          style={{ width: 300 }}
+          renderInput={(params) => <TextField {...params} label="Parent Faults" />}
+        />
+      </ControlsBar>
       <div className={classes.imageContainer}>
         {viewsSelctions.map((option) => (
           <img key={option.path} className={classes.image} src={getUrl(option.path)} alt={option.path} />
