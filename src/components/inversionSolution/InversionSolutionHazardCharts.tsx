@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
-import { Box, Card, Snackbar } from '@material-ui/core';
+import { Box, Button, Card, Snackbar } from '@material-ui/core';
 import { graphql } from 'babel-plugin-relay/macro';
 import SelectControl from '../common/SelectControl';
 import { XY } from '../../interfaces/common';
@@ -18,6 +18,7 @@ import { InversionSolutionHazardChartsQuery } from './__generated__/InversionSol
 import HazardCurves from './charts/HazardCurves';
 import SpectralAccelerationChart from './charts/SpectralAccelerationChart';
 import { ParentSize } from '@visx/responsive';
+import { useReactToPrint } from 'react-to-print';
 
 interface InversionSolutionHazardChartsProps {
   id: string;
@@ -112,6 +113,10 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
     )}d. Time-span: ${forecastTime} years.  PoE: ${POE}`;
   };
 
+  const handlePrint = useReactToPrint({
+    content: () => targetRef.current,
+  });
+
   return (
     <>
       <SelectControl name="Location" options={options.location} setOptions={setLocation} />
@@ -161,6 +166,11 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
                 </ParentSize>
               )}
             </div>
+          </div>
+          <div style={{ padding: 20 }}>
+            <Button variant="contained" onClick={handlePrint}>
+              Print Figures
+            </Button>
           </div>
         </Card>
       </Box>
