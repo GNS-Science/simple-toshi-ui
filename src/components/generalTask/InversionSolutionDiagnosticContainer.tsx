@@ -21,6 +21,10 @@ interface InversionSolutionDiagnosticContainerProps {
   setRegionalViews: (views: string[]) => void;
   reportTab: number;
   setReportTab: (tab: number) => void;
+  parentFaultViews: string[];
+  setParentFaultViews: (views: string[]) => void;
+  parentFault: string;
+  setParentFault: (fault: string) => void;
 }
 
 const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnosticContainerProps> = ({
@@ -37,6 +41,10 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   setRegionalViews,
   reportTab,
   setReportTab,
+  parentFaultViews,
+  setParentFaultViews,
+  parentFault,
+  setParentFault,
 }: InversionSolutionDiagnosticContainerProps) => {
   const data = useLazyLoadQuery<InversionSolutionDiagnosticContainerQuery>(inversionSolutionDiagnosticContainerQuery, {
     id: ids,
@@ -58,6 +66,10 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
         setRegionalViews={setRegionalViews}
         reportTab={reportTab}
         setReportTab={setReportTab}
+        parentFaultViews={parentFaultViews}
+        setParentFaultViews={setParentFaultViews}
+        parentFault={parentFault}
+        setParentFault={setParentFault}
       />
     </>
   );
@@ -82,6 +94,10 @@ export const inversionSolutionDiagnosticContainerQuery = graphql`
                 meta {
                   k
                   v
+                }
+                tables {
+                  table_id
+                  table_type
                 }
               }
             }

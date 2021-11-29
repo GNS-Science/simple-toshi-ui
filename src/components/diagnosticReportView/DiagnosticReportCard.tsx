@@ -2,7 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import { Card, CardContent, IconButton, makeStyles, Tooltip, Typography, Tabs, Tab } from '@material-ui/core';
+import {
+  Card,
+  CardContent,
+  IconButton,
+  makeStyles,
+  Tooltip,
+  Typography,
+  Tabs,
+  Tab,
+  CircularProgress,
+} from '@material-ui/core';
 
 import { ReportItem } from '../../interfaces/diagnosticReport';
 import FavouriteControls from '../common/FavouriteControls';
@@ -10,6 +20,8 @@ import DiagnosticReportTabPanel from './DiagnosticReportTabPanel';
 import GeneralView from './GeneralView';
 import NamedFaultsView from './NamedFaultsView';
 import RegionalMfdView from './RegionalMfdView';
+import InversionSolutionHazardCharts from '../inversionSolution/InversionSolutionHazardCharts';
+import ParentFaultView from './ParentFaultViews';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -43,6 +55,10 @@ interface DiagnosticReportCardProps {
   changeCurrentImage?: (index: number) => void;
   reportTab?: number;
   setReportTab?: (tab: number) => void;
+  parentFaultViews: string[];
+  setParentFaultViews: (views: string[]) => void;
+  parentFault: string;
+  setParentFault: (fault: string) => void;
 }
 
 const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
@@ -59,10 +75,15 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   changeCurrentImage,
   reportTab,
   setReportTab,
+  parentFaultViews,
+  setParentFaultViews,
+  parentFault,
+  setParentFault,
 }: DiagnosticReportCardProps) => {
   const classes = useStyles();
   const [currentImage, setCurrentImage] = useState<number>(0);
   const [currentTab, setCurrentTab] = useState<number>(0);
+  const [hazardId, setHazardId] = useState<string>('');
 
   useEffect(() => {
     if (reportTab !== 0) setCurrentTab(reportTab ?? 0);
@@ -71,6 +92,15 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   useEffect(() => {
     setReportTab && setReportTab(currentTab);
   }, [currentTab]);
+
+  useEffect(() => {
+    if (automationTasks[currentImage].inversion_solution.tables) {
+      const hazardTable = automationTasks[currentImage].inversion_solution.tables?.find(
+        (table) => table?.table_type === 'HAZARD_SITES',
+      );
+      hazardTable && setHazardId(hazardTable?.table_id as string);
+    }
+  }, [currentImage]);
 
   const nextImage = () => {
     if (currentImage < automationTasks.length - 1) {
@@ -104,6 +134,66 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   if (!automationTasks[currentImage]) {
     return <Typography> There are no valid reports to show. </Typography>;
   }
+
+  const renderTab = () => {
+    switch (currentTab) {
+      default:
+        return (
+          <DiagnosticReportTabPanel value={currentTab} index={0}>
+            <GeneralView
+              id={automationTasks[currentImage].inversion_solution.id}
+              generalViews={generalViews}
+              setGeneralViews={setGeneralViews}
+            />
+          </DiagnosticReportTabPanel>
+        );
+      case 1:
+        return (
+          <DiagnosticReportTabPanel value={currentTab} index={1}>
+            <RegionalMfdView
+              id={automationTasks[currentImage].inversion_solution.id}
+              regionalViews={regionalViews}
+              setRegionalViews={setRegionalViews}
+            />
+          </DiagnosticReportTabPanel>
+        );
+      case 2:
+        return (
+          <DiagnosticReportTabPanel value={currentTab} index={2}>
+            <NamedFaultsView
+              id={automationTasks[currentImage].inversion_solution.id}
+              namedFaultsView={namedFaultsView}
+              setNamedFaultsView={setNamedFaultsView}
+              namedFaultsLocations={namedFaultsLocations}
+              setNamedFaultsLocations={setNamedFaultsLocations}
+            />
+          </DiagnosticReportTabPanel>
+        );
+
+      case 3:
+        return (
+          <DiagnosticReportTabPanel value={currentTab} index={3}>
+            <ParentFaultView
+              id={automationTasks[currentImage].inversion_solution.id}
+              parentFaultViews={parentFaultViews}
+              setParentFaultViews={setParentFaultViews}
+              parentFault={parentFault}
+              setParentFault={setParentFault}
+            />
+          </DiagnosticReportTabPanel>
+        );
+      case 4:
+        return (
+          <DiagnosticReportTabPanel value={currentTab} index={4}>
+            {hazardId && (
+              <React.Suspense fallback={<CircularProgress />}>
+                <InversionSolutionHazardCharts id={hazardId} />
+              </React.Suspense>
+            )}
+          </DiagnosticReportTabPanel>
+        );
+    }
+  };
 
   return (
     <>
@@ -145,33 +235,13 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             />
           </div>
           <Tabs value={currentTab} onChange={handleTabChange}>
-            <Tab label="General" id="simple-tab-0" />
-            <Tab label="Named Faults" id="simple-tab-1" disabled={modelType !== 'CRUSTAL'} />
-            <Tab label="Regional Solutions" id="simple-tab-2" disabled={modelType !== 'CRUSTAL'} />
+            <Tab label="General" id="simple-tab-0" disableFocusRipple />
+            <Tab label="Regional Solutions" id="simple-tab-1" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
+            <Tab label="Named Faults" id="simple-tab-2" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
+            <Tab label="Parent Faults" id="simple-etab-3" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
+            <Tab label="Hazard Charts" id="simple-tab-4" disabled={!hazardId.length} disableFocusRipple />
           </Tabs>
-          <DiagnosticReportTabPanel value={currentTab} index={0}>
-            <GeneralView
-              id={automationTasks[currentImage].inversion_solution.id}
-              generalViews={generalViews}
-              setGeneralViews={setGeneralViews}
-            />
-          </DiagnosticReportTabPanel>
-          <DiagnosticReportTabPanel value={currentTab} index={1}>
-            <NamedFaultsView
-              id={automationTasks[currentImage].inversion_solution.id}
-              namedFaultsView={namedFaultsView}
-              setNamedFaultsView={setNamedFaultsView}
-              namedFaultsLocations={namedFaultsLocations}
-              setNamedFaultsLocations={setNamedFaultsLocations}
-            />
-          </DiagnosticReportTabPanel>
-          <DiagnosticReportTabPanel value={currentTab} index={2}>
-            <RegionalMfdView
-              id={automationTasks[currentImage].inversion_solution.id}
-              regionalViews={regionalViews}
-              setRegionalViews={setRegionalViews}
-            />
-          </DiagnosticReportTabPanel>
+          {renderTab()}
         </CardContent>
       </Card>
     </>

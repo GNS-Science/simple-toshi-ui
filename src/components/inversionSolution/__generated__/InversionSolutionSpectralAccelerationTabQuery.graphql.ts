@@ -5,10 +5,10 @@
 import { ConcreteRequest } from "relay-runtime";
 export type RowItemType = "boolean" | "double" | "integer" | "string" | "%future added value";
 export type TableType = "GENERAL" | "HAZARD_GRIDDED" | "HAZARD_SITES" | "MFD_CURVES" | "%future added value";
-export type InversionSolutionHazardTabQueryVariables = {
+export type InversionSolutionSpectralAccelerationTabQueryVariables = {
     id: string;
 };
-export type InversionSolutionHazardTabQueryResponse = {
+export type InversionSolutionSpectralAccelerationTabQueryResponse = {
     readonly node: {
         readonly id?: string;
         readonly name?: string | null;
@@ -24,15 +24,15 @@ export type InversionSolutionHazardTabQueryResponse = {
         } | null> | null;
     } | null;
 };
-export type InversionSolutionHazardTabQuery = {
-    readonly response: InversionSolutionHazardTabQueryResponse;
-    readonly variables: InversionSolutionHazardTabQueryVariables;
+export type InversionSolutionSpectralAccelerationTabQuery = {
+    readonly response: InversionSolutionSpectralAccelerationTabQueryResponse;
+    readonly variables: InversionSolutionSpectralAccelerationTabQueryVariables;
 };
 
 
 
 /*
-query InversionSolutionHazardTabQuery(
+query InversionSolutionSpectralAccelerationTabQuery(
   $id: ID!
 ) {
   node(id: $id) {
@@ -157,7 +157,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "InversionSolutionHazardTabQuery",
+    "name": "InversionSolutionSpectralAccelerationTabQuery",
     "selections": [
       {
         "alias": null,
@@ -194,7 +194,7 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "InversionSolutionHazardTabQuery",
+    "name": "InversionSolutionSpectralAccelerationTabQuery",
     "selections": [
       {
         "alias": null,
@@ -233,14 +233,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "5f7a6a2a70c2f770ec68302e7f849a1a",
+    "cacheID": "ad015d0b2d1b859b5afdc0ce2d587fa4",
     "id": null,
     "metadata": {},
-    "name": "InversionSolutionHazardTabQuery",
+    "name": "InversionSolutionSpectralAccelerationTabQuery",
     "operationKind": "query",
-    "text": "query InversionSolutionHazardTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on Table {\n      id\n      name\n      created\n      table_type\n      object_id\n      column_headers\n      column_types\n      rows\n      dimensions {\n        k\n        v\n      }\n    }\n    id\n  }\n}\n"
+    "text": "query InversionSolutionSpectralAccelerationTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on Table {\n      id\n      name\n      created\n      table_type\n      object_id\n      column_headers\n      column_types\n      rows\n      dimensions {\n        k\n        v\n      }\n    }\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'a013446f1925f50be6f297db810d7cde';
+(node as any).hash = '2b468cee28697e13bb5e45a242b068b2';
 export default node;

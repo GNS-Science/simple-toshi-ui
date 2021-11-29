@@ -46,6 +46,7 @@ export const getReportItems = (listItems: SolutionItem[]): ReportItem[] => {
       inversion_solution: {
         id: task.inversion_solution?.id as string,
         meta: [...metaFiltered],
+        tables: task.inversion_solution?.tables,
       },
     };
     reportItems.push(validatedTask);

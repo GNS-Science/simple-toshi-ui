@@ -4,6 +4,7 @@
 
 import { ConcreteRequest } from "relay-runtime";
 export type ModelType = "CRUSTAL" | "SUBDUCTION" | "%future added value";
+export type TableType = "GENERAL" | "HAZARD_GRIDDED" | "HAZARD_SITES" | "MFD_CURVES" | "%future added value";
 export type MySolutionsQueryVariables = {
     id?: Array<string> | null;
 };
@@ -38,6 +39,10 @@ export type MySolutionsQueryResponse = {
                         readonly meta: ReadonlyArray<{
                             readonly k: string | null;
                             readonly v: string | null;
+                        } | null> | null;
+                        readonly tables: ReadonlyArray<{
+                            readonly table_id: string | null;
+                            readonly table_type: TableType | null;
                         } | null> | null;
                     } | null;
                 } | {
@@ -92,6 +97,10 @@ query MySolutionsQuery(
               meta {
                 k
                 v
+              }
+              tables {
+                table_id
+                table_type
               }
             }
           }
@@ -232,6 +241,31 @@ v6 = {
       "name": "meta",
       "plural": true,
       "selections": (v4/*: any*/),
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "LabelledTableRelation",
+      "kind": "LinkedField",
+      "name": "tables",
+      "plural": true,
+      "selections": [
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "table_id",
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "table_type",
+          "storageKey": null
+        }
+      ],
       "storageKey": null
     }
   ],
@@ -442,14 +476,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "b28d6e827fefb3fa03720202eedc81fb",
+    "cacheID": "ac722725338a02adbbd64d3f3be24ddb",
     "id": null,
     "metadata": {},
     "name": "MySolutionsQuery",
     "operationKind": "query",
-    "text": "query MySolutionsQuery(\n  $id: [ID!]\n) {\n  nodes(id_in: $id) {\n    result {\n      edges {\n        node {\n          __typename\n          ... on AutomationTask {\n            id\n            parents {\n              edges {\n                node {\n                  parent {\n                    id\n                    created\n                    title\n                    description\n                    model_type\n                    swept_arguments\n                    notes\n                    argument_lists {\n                      k\n                      v\n                    }\n                  }\n                  id\n                }\n              }\n            }\n            inversion_solution {\n              id\n              meta {\n                k\n                v\n              }\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query MySolutionsQuery(\n  $id: [ID!]\n) {\n  nodes(id_in: $id) {\n    result {\n      edges {\n        node {\n          __typename\n          ... on AutomationTask {\n            id\n            parents {\n              edges {\n                node {\n                  parent {\n                    id\n                    created\n                    title\n                    description\n                    model_type\n                    swept_arguments\n                    notes\n                    argument_lists {\n                      k\n                      v\n                    }\n                  }\n                  id\n                }\n              }\n            }\n            inversion_solution {\n              id\n              meta {\n                k\n                v\n              }\n              tables {\n                table_id\n                table_type\n              }\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'b5f1f95e4470ff5d0048305bfe673f84';
+(node as any).hash = '389cae9cfa4513dfcfc8c5f51f4b0cd2';
 export default node;

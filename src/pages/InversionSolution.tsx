@@ -9,11 +9,11 @@ import InversionSolutionDetailTab, {
   inversionSolutionDetailTabQuery,
 } from '../components/inversionSolution/InversionSolutionDetailTab';
 import InversionSolutionMfdTab from '../components/inversionSolution/InversionSolutionMfdTab';
-import InversionSolutionHazardTab from '../components/inversionSolution/InversionSolutionHazardTab';
 import RuptureSetDiags from '../components/RuptureSetDiags';
 import { InversionSolutionQuery } from './__generated__/InversionSolutionQuery.graphql';
 import { InversionSolutionDetailTabQuery } from '../components/inversionSolution/__generated__/InversionSolutionDetailTabQuery.graphql';
 import DiagnosticReportTab from '../components/inversionSolution/DiagnosticReportTab';
+import InversionSolutionHazardCharts from '../components/inversionSolution/InversionSolutionHazardCharts';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -92,7 +92,7 @@ const InversionSolution: React.FC = () => {
         return (
           <Box className={classes.tabPanel}>
             <React.Suspense fallback={<CircularProgress />}>
-              {hazardTableId && <InversionSolutionHazardTab id={hazardTableId} />}
+              {hazardTableId && <InversionSolutionHazardCharts id={hazardTableId} />}
             </React.Suspense>
           </Box>
         );
@@ -130,11 +130,11 @@ const InversionSolution: React.FC = () => {
             className={classes.tab}
           />
           <Tab label="MFD plot" id="inversionSolutionMfdTab" value="InversionSolutionMfdTab" className={classes.tab} />
+          {hazardTableId && <Tab label="Hazard Curves" value="InversionSolutionHazardTab" className={classes.tab} />}
           <Tab label="Solution Diags" id="DiagnosticReportTab" value="DiagnosticReportTab" className={classes.tab} />
           {ruptureSetId && (
             <Tab label="Rupture Diags" id="ruptureSetTab" value="RuptureSetDiagnosticsTab" className={classes.tab} />
           )}
-          {hazardTableId && <Tab label="Hazard" value="InversionSolutionHazardTab" className={classes.tab} />}
         </Tabs>
         {renderTab()}
       </Box>

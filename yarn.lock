@@ -1180,6 +1180,13 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
+"@babel/runtime@^7.16.0":
+  version "7.16.3"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.16.3.tgz#b86f0db02a04187a3c17caa77de69840165d42d5"
+  integrity sha512-WBwekcqacdY2e9AF/Q7WLFUWmdJGJTkbjqTjoMDgXkVZ3ZRUvOPsLb5KdwISoQVsbP+DQzVZW4Zhci0DvpbNTQ==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/template@^7.10.4", "@babel/template@^7.12.13", "@babel/template@^7.3.3":
   version "7.12.13"
   resolved "https://registry.npmjs.org/@babel/template/-/template-7.12.13.tgz"
@@ -1473,14 +1480,14 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@material-ui/core@^4.11.4":
-  version "4.11.4"
-  resolved "https://registry.npmjs.org/@material-ui/core/-/core-4.11.4.tgz"
-  integrity sha512-oqb+lJ2Dl9HXI9orc6/aN8ZIAMkeThufA5iZELf2LQeBn2NtjVilF5D2w7e9RpntAzDb4jK5DsVhkfOvFY/8fg==
+"@material-ui/core@^4.12.1":
+  version "4.12.3"
+  resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-4.12.3.tgz#80d665caf0f1f034e52355c5450c0e38b099d3ca"
+  integrity sha512-sdpgI/PL56QVsEJldwEe4FFaFTLUqN+rd7sSZiRCdx2E/C7z5yK0y/khAWVBH24tXwto7I1hCzNWfJGZIYJKnw==
   dependencies:
     "@babel/runtime" "^7.4.4"
     "@material-ui/styles" "^4.11.4"
-    "@material-ui/system" "^4.11.3"
+    "@material-ui/system" "^4.12.1"
     "@material-ui/types" "5.1.0"
     "@material-ui/utils" "^4.11.2"
     "@types/react-transition-group" "^4.2.0"
@@ -1531,10 +1538,10 @@
     jss-plugin-vendor-prefixer "^10.5.1"
     prop-types "^15.7.2"
 
-"@material-ui/system@^4.11.3":
-  version "4.11.3"
-  resolved "https://registry.npmjs.org/@material-ui/system/-/system-4.11.3.tgz"
-  integrity sha512-SY7otguNGol41Mu2Sg6KbBP1ZRFIbFLHGK81y4KYbsV2yIcaEPOmsCK6zwWlp+2yTV3J/VwT6oSBARtGIVdXPw==
+"@material-ui/system@^4.12.1":
+  version "4.12.1"
+  resolved "https://registry.yarnpkg.com/@material-ui/system/-/system-4.12.1.tgz#2dd96c243f8c0a331b2bb6d46efd7771a399707c"
+  integrity sha512-lUdzs4q9kEXZGhbN7BptyiS1rLNHe6kG9o8Y307HCvF4sQxbCgpL2qi+gUk+yI8a2DNk48gISEQxoxpgph0xIw==
   dependencies:
     "@babel/runtime" "^7.4.4"
     "@material-ui/utils" "^4.11.2"
@@ -2287,6 +2294,11 @@
   resolved "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.171.tgz"
   integrity sha512-7eQ2xYLLI/LsicL2nejW9Wyko3lcpN6O/z0ZLHrEQsg280zIdCv1t/0m6UtBjUHokCGBQ3gYTbHzDkZ1xOBwwg==
 
+"@types/lodash@^4.14.172":
+  version "4.14.176"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.176.tgz#641150fc1cda36fbfa329de603bbb175d7ee20c0"
+  integrity sha512-xZmuPTa3rlZoIbtDUyJKZQimJV3bxCmzMIO2c9Pz9afyDro6kr7R79GwcB6mRhuoPmV2p1Vb66WOJH7F886WKQ==
+
 "@types/mdast@^3.0.0":
   version "3.0.3"
   resolved "https://registry.npmjs.org/@types/mdast/-/mdast-3.0.3.tgz"
@@ -2628,6 +2640,20 @@
     classnames "^2.3.1"
     prop-types "^15.6.0"
 
+"@visx/axis@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@visx/axis/-/axis-2.3.0.tgz#e3bd8d17ac94d63d613fa406847f8e8cabc74935"
+  integrity sha512-oH6njBrUS9fETeNXB73M0pLsADeGenfqlmo7xSFMyXRJwYfMuoQwQoenNZmp6m6v9YU3kQ1g6XhweXcNYuYMYg==
+  dependencies:
+    "@types/react" "*"
+    "@visx/group" "2.1.0"
+    "@visx/point" "2.1.0"
+    "@visx/scale" "2.2.2"
+    "@visx/shape" "2.2.2"
+    "@visx/text" "2.3.0"
+    classnames "^2.3.1"
+    prop-types "^15.6.0"
+
 "@visx/bounds@1.7.0":
   version "1.7.0"
   resolved "https://registry.npmjs.org/@visx/bounds/-/bounds-1.7.0.tgz"
@@ -2637,10 +2663,27 @@
     "@types/react-dom" "*"
     prop-types "^15.5.10"
 
+"@visx/bounds@2.1.2":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@visx/bounds/-/bounds-2.1.2.tgz#aa46104d262bc703e73380c69aa5854e5492f77b"
+  integrity sha512-O80K6PkDH//6xVDP3rSdd+9GNtBUMJKgVXh1ZjW8tAj/rtRq+GiyE17sB3uqV+btNkg0oJiVsFpmoLI50beJDQ==
+  dependencies:
+    "@types/react" "*"
+    "@types/react-dom" "*"
+    prop-types "^15.5.10"
+
 "@visx/curve@1.7.0":
   version "1.7.0"
   resolved "https://registry.npmjs.org/@visx/curve/-/curve-1.7.0.tgz"
   integrity sha512-n0/SHM4YXjke+aEinhHFZPLMxWu3jbqtvqzfGJyibX8OmbDjavk9P+MHfGokUcw0xHy6Ch3YTuwbYuvVw5ny9A==
+  dependencies:
+    "@types/d3-shape" "^1.3.1"
+    d3-shape "^1.0.6"
+
+"@visx/curve@2.1.0", "@visx/curve@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@visx/curve/-/curve-2.1.0.tgz#f614bfe3db66df7db7382db7a75ced1506b94602"
+  integrity sha512-9b6JOnx91gmOQiSPhUOxdsvcnW88fgqfTPKoVgQxidMsD/I3wksixtwo8TR/vtEz2aHzzsEEhlv1qK7Y3yaSDw==
   dependencies:
     "@types/d3-shape" "^1.3.1"
     d3-shape "^1.0.6"
@@ -2661,6 +2704,14 @@
   dependencies:
     "@types/react" "*"
     "@visx/point" "1.7.0"
+
+"@visx/event@^2.1.2":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@visx/event/-/event-2.1.2.tgz#f714e705b8702e6bac2c11c4ae667535460e50c1"
+  integrity sha512-x3gAQ9DB4zDA6qqGpzlpGacGuOtmzFi/m5Zq7BJ0OJ7PjNfkIazCsznc9epCT/g9IIhwhs+UN/Ijww4YnFHqHw==
+  dependencies:
+    "@types/react" "*"
+    "@visx/point" "2.1.0"
 
 "@visx/glyph@1.17.1":
   version "1.17.1"
@@ -2688,10 +2739,33 @@
     classnames "^2.3.1"
     prop-types "^15.6.2"
 
+"@visx/grid@^2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@visx/grid/-/grid-2.2.2.tgz#8e99b5c5e93b4bb3a052f5b46a9c6459a483f5a6"
+  integrity sha512-YESxqSmBouB+Zg9kvw6WhQ9FYj3Fk5SA0h0n/2ozmjFRCqwgWL+f83Cn5jjyjRq3mwVNpA9zCzSKqMRyxadw4w==
+  dependencies:
+    "@types/react" "*"
+    "@visx/curve" "2.1.0"
+    "@visx/group" "2.1.0"
+    "@visx/point" "2.1.0"
+    "@visx/scale" "2.2.2"
+    "@visx/shape" "2.2.2"
+    classnames "^2.3.1"
+    prop-types "^15.6.2"
+
 "@visx/group@1.17.1":
   version "1.17.1"
   resolved "https://registry.npmjs.org/@visx/group/-/group-1.17.1.tgz"
   integrity sha512-g8pSqy8TXAisiOzypnVycDynEGlBhfxtVlwDmsbYB+XSFGEjnOheQSDohDI+ia7ek54Mw9uYe05tx5kP1hRMYw==
+  dependencies:
+    "@types/react" "*"
+    classnames "^2.3.1"
+    prop-types "^15.6.2"
+
+"@visx/group@2.1.0", "@visx/group@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@visx/group/-/group-2.1.0.tgz#65d4a72feb20dd09443f73cdc12ad5fb339792ef"
+  integrity sha512-bZKa54yVjGYPZZhzYHLz4AVlidSr4ET9B/xmSa7nnictMJWr7e/IuZThB/bMfDQlgdtvhcfTgs+ZluySc5SBUg==
   dependencies:
     "@types/react" "*"
     classnames "^2.3.1"
@@ -2712,6 +2786,11 @@
   version "1.7.0"
   resolved "https://registry.npmjs.org/@visx/point/-/point-1.7.0.tgz"
   integrity sha512-oaoY/HXYHhmpkkeKI4rBPmFtjHWtxSrIhZCVm1ipPoyQp3voJ8L6JD5eUIVmmaUCdUGUGwL1lFLnJiQ2p1Vlwg==
+
+"@visx/point@2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@visx/point/-/point-2.1.0.tgz#b3e263826f28b3a170d6604dea8ffa27a4b9ac3b"
+  integrity sha512-vVnfI7oqjjttkn05Xi/ooR0UqQRoGf68lyT3SOl0WPHvIQBGNh3XoVUBHDr15/NUkfErgK6TNlfXY763YncPWg==
 
 "@visx/react-spring@2.0.0-alpha.0":
   version "2.0.0-alpha.0"
@@ -2737,10 +2816,33 @@
     prop-types "^15.6.1"
     resize-observer-polyfill "1.5.1"
 
+"@visx/responsive@^2.4.1":
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/@visx/responsive/-/responsive-2.4.1.tgz#7f471c7d5d754adf101a23dc7a72f24ee2210672"
+  integrity sha512-x5zPUmmsdVX/QaeDj9rLg3mGtNuiomBWUvwBo5oQs2KOtAFiviHx0NpLfY09h+p5gvkmGfTM+8gHEtVtIwLXPg==
+  dependencies:
+    "@types/lodash" "^4.14.172"
+    "@types/react" "*"
+    lodash "^4.17.21"
+    prop-types "^15.6.1"
+    resize-observer-polyfill "1.5.1"
+
 "@visx/scale@1.14.0", "@visx/scale@^1.14.0":
   version "1.14.0"
   resolved "https://registry.npmjs.org/@visx/scale/-/scale-1.14.0.tgz"
   integrity sha512-ovbtEOF/d76uGMJ5UZlxdS3t2T8I6md+aIwOXBaq0HdjaCLbe7HLlMyHJKjak/sqBxLAiCGVnechTUpSkfgSQw==
+  dependencies:
+    "@types/d3-interpolate" "^1.3.1"
+    "@types/d3-scale" "^3.3.0"
+    "@types/d3-time" "^2.0.0"
+    d3-interpolate "^1.4.0"
+    d3-scale "^3.3.0"
+    d3-time "^2.1.1"
+
+"@visx/scale@2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@visx/scale/-/scale-2.2.2.tgz#b8eafabdcf92bb45ab196058fe184772ad80fd25"
+  integrity sha512-3aDySGUTpe6VykDQmF+g2nz5paFu9iSPTcCOEgkcru0/v5tmGzUdvivy8CkYbr87HN73V/Jc53lGm+kJUQcLBw==
   dependencies:
     "@types/d3-interpolate" "^1.3.1"
     "@types/d3-scale" "^3.3.0"
@@ -2767,6 +2869,24 @@
     lodash "^4.17.15"
     prop-types "^15.5.10"
 
+"@visx/shape@2.2.2", "@visx/shape@^2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@visx/shape/-/shape-2.2.2.tgz#1dd4576f49fa0bdb30783eb667bc9d412ce56d6a"
+  integrity sha512-cC61n8rPWKtSIxN99ljr9Qazhajt+vrzefu/IPd292LPmQyft9vuIVcsX9ht1DTUpS6y++dYw0mjUPSitT1Gzg==
+  dependencies:
+    "@types/d3-path" "^1.0.8"
+    "@types/d3-shape" "^1.3.1"
+    "@types/lodash" "^4.14.172"
+    "@types/react" "*"
+    "@visx/curve" "2.1.0"
+    "@visx/group" "2.1.0"
+    "@visx/scale" "2.2.2"
+    classnames "^2.3.1"
+    d3-path "^1.0.5"
+    d3-shape "^1.2.0"
+    lodash "^4.17.21"
+    prop-types "^15.5.10"
+
 "@visx/text@1.17.1":
   version "1.17.1"
   resolved "https://registry.npmjs.org/@visx/text/-/text-1.17.1.tgz"
@@ -2779,13 +2899,36 @@
     prop-types "^15.7.2"
     reduce-css-calc "^1.3.0"
 
-"@visx/tooltip@1.17.1", "@visx/tooltip@^1.17.1":
+"@visx/text@2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@visx/text/-/text-2.3.0.tgz#34b66a467685cf1db2380a2673e032f2f874919a"
+  integrity sha512-5mEcmzWZqbziz6Azv+H6BWrnUbnpygAw4SNzBqF+YiGik5gR/USaBRAs9aKjnoUg6qFe3NZWFOcGpR3BzDR/bQ==
+  dependencies:
+    "@types/lodash" "^4.14.172"
+    "@types/react" "*"
+    classnames "^2.3.1"
+    lodash "^4.17.21"
+    prop-types "^15.7.2"
+    reduce-css-calc "^1.3.0"
+
+"@visx/tooltip@1.17.1":
   version "1.17.1"
   resolved "https://registry.npmjs.org/@visx/tooltip/-/tooltip-1.17.1.tgz"
   integrity sha512-YfRgVtKSLTn3iW8CT5+CfTWhSXGeAp01SaPDThtdaUTx89rKv5wb4oyVgeQ5g2ScRYVC8mYj5RzY/pj3RrezFQ==
   dependencies:
     "@types/react" "*"
     "@visx/bounds" "1.7.0"
+    classnames "^2.3.1"
+    prop-types "^15.5.10"
+    react-use-measure "^2.0.4"
+
+"@visx/tooltip@^2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@visx/tooltip/-/tooltip-2.2.2.tgz#dc6e1c50fb0aaa0ffcb773eb0a5beb25ec89170d"
+  integrity sha512-wI0t+hE+gp7euuqI8likKBDsx70I+WJ6UJ9YCra8/LyyuVSbOobnLZlqQw1QhIYbdmnDReIckZ0dq3sa6z2qbw==
+  dependencies:
+    "@types/react" "*"
+    "@visx/bounds" "2.1.2"
     classnames "^2.3.1"
     prop-types "^15.5.10"
     react-use-measure "^2.0.4"
@@ -4348,6 +4491,11 @@ commondir@^1.0.1:
   resolved "https://registry.npmjs.org/commondir/-/commondir-1.0.1.tgz"
   integrity sha1-3dgA2gxmEnOTzKWVDqloo6rxJTs=
 
+complex.js@^2.0.15:
+  version "2.0.15"
+  resolved "https://registry.yarnpkg.com/complex.js/-/complex.js-2.0.15.tgz#7add6848b4c1d12aa9262f7df925ebe7a51a7406"
+  integrity sha512-gDBvQU8IG139ZBQTSo2qvDFP+lANMGluM779csXOr6ny1NUtA3wkUnCFjlDNH/moAVfXtvClYt6G0zarFbtz5w==
+
 component-emitter@^1.2.1:
   version "1.3.0"
   resolved "https://registry.npmjs.org/component-emitter/-/component-emitter-1.3.0.tgz"
@@ -5204,6 +5352,11 @@ decimal.js@^10.2.1:
   resolved "https://registry.npmjs.org/decimal.js/-/decimal.js-10.2.1.tgz"
   integrity sha512-KaL7+6Fw6i5A2XSnsbhm/6B+NuEA7TZ4vqxnd5tXz9sbKtrN9Srj8ab4vKVdK8YAqZO9P1kg45Y6YLoduPf+kw==
 
+decimal.js@^10.3.1:
+  version "10.3.1"
+  resolved "https://registry.yarnpkg.com/decimal.js/-/decimal.js-10.3.1.tgz#d8c3a444a9c6774ba60ca6ad7261c3a94fd5e783"
+  integrity sha512-V0pfhfr8suzyPGOx3nmq4aHqabehUZn6Ch9kyFpV79TGDTWFmHqUqXdabR7QHqxzrYolF4+tVmJhUG4OURg5dQ==
+
 decode-uri-component@^0.2.0:
   version "0.2.0"
   resolved "https://registry.npmjs.org/decode-uri-component/-/decode-uri-component-0.2.0.tgz"
@@ -5683,6 +5836,11 @@ escape-html@~1.0.3:
   version "1.0.3"
   resolved "https://registry.npmjs.org/escape-html/-/escape-html-1.0.3.tgz"
   integrity sha1-Aljq5NPQwJdN4cFpGI7wBR0dGYg=
+
+escape-latex@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/escape-latex/-/escape-latex-1.2.0.tgz#07c03818cf7dac250cce517f4fda1b001ef2bca1"
+  integrity sha512-nV5aVWW1K0wEiUIEdZ4erkGGH8mDxGyxSeqPzRNtWP7ataw+/olFObw7hujFWlVjNsaDFw5VZ5NzVSIqRgfTiw==
 
 escape-string-regexp@2.0.0, escape-string-regexp@^2.0.0:
   version "2.0.0"
@@ -6412,6 +6570,11 @@ forwarded@~0.1.2:
   version "0.1.2"
   resolved "https://registry.npmjs.org/forwarded/-/forwarded-0.1.2.tgz"
   integrity sha1-mMI9qxF1ZXuMBXPozszZGw/xjIQ=
+
+fraction.js@^4.1.1:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/fraction.js/-/fraction.js-4.1.2.tgz#13e420a92422b6cf244dff8690ed89401029fbe8"
+  integrity sha512-o2RiJQ6DZaR/5+Si0qJUIy637QMRudSi9kU/FFzx9EZazrIdnBgpU+3sEWCxAVhH2RtxW2Oz+T4p2o8uOPVcgA==
 
 fragment-cache@^0.2.1:
   version "0.2.1"
@@ -7689,6 +7852,11 @@ iterall@^1.2.2:
   resolved "https://registry.npmjs.org/iterall/-/iterall-1.3.0.tgz"
   integrity sha512-QZ9qOMdF+QLHxy1QIpUHUU1D5pS2CG2P69LF6L6CPjPYA/XMOmKV3PZpawHoAjHNyB0swdVTRxdYT4tbBbxqwg==
 
+javascript-natural-sort@^0.7.1:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/javascript-natural-sort/-/javascript-natural-sort-0.7.1.tgz#f9e2303d4507f6d74355a73664d1440fb5a0ef59"
+  integrity sha1-+eIwPUUH9tdDVac2ZNFED7Wg71k=
+
 jest-changed-files@^26.6.2:
   version "26.6.2"
   resolved "https://registry.npmjs.org/jest-changed-files/-/jest-changed-files-26.6.2.tgz"
@@ -8729,7 +8897,7 @@ lodash.uniq@^4.5.0:
   resolved "https://registry.npmjs.org/lodash.uniq/-/lodash.uniq-4.5.0.tgz"
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
 
-"lodash@>=3.5 <5", lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.5, lodash@^4.7.0:
+"lodash@>=3.5 <5", lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.17.5, lodash@^4.7.0:
   version "4.17.21"
   resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -8835,6 +9003,21 @@ math-expression-evaluator@^1.2.14:
   version "1.3.8"
   resolved "https://registry.npmjs.org/math-expression-evaluator/-/math-expression-evaluator-1.3.8.tgz"
   integrity sha512-9FbRY3i6U+CbHgrdNbAUaisjWTozkm1ZfupYQJiZ87NtYHk2Zh9DvxMgp/fifxVhqTLpd5fCCLossUbpZxGeKw==
+
+mathjs@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/mathjs/-/mathjs-10.0.0.tgz#872e8e5c0d23a383760cb84e16542fad5093c6a5"
+  integrity sha512-PZcQ73mVvVG2GZXvE47q+j7P3ALVxWUM51wTmlVX3F/3IJMLNziNIqStwyIDAO64ZGB8u3iFlQwxT7DIijtNlw==
+  dependencies:
+    "@babel/runtime" "^7.16.0"
+    complex.js "^2.0.15"
+    decimal.js "^10.3.1"
+    escape-latex "^1.2.0"
+    fraction.js "^4.1.1"
+    javascript-natural-sort "^0.7.1"
+    seedrandom "^3.0.5"
+    tiny-emitter "^2.1.0"
+    typed-function "^2.0.0"
 
 md5.js@^1.3.4:
   version "1.3.5"
@@ -11146,6 +11329,13 @@ react-test-renderer@^17.0.2:
     react-shallow-renderer "^16.13.1"
     scheduler "^0.20.2"
 
+react-to-print@^2.14.0:
+  version "2.14.0"
+  resolved "https://registry.yarnpkg.com/react-to-print/-/react-to-print-2.14.0.tgz#376d83391928221e45f4fdf1f7fd02891fc3042d"
+  integrity sha512-R5EbtQY6tqch+Vwoo7hlZ5cZ5Ew81SYessW1Nyb9Uq5njWolwYWyJUh5X7AtGNhVWD6y4ZfyTN+1iW1tR5a84w==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-transition-group@^4.4.0:
   version "4.4.1"
   resolved "https://registry.npmjs.org/react-transition-group/-/react-transition-group-4.4.1.tgz"
@@ -11836,6 +12026,11 @@ schema-utils@^3.0.0:
     "@types/json-schema" "^7.0.6"
     ajv "^6.12.5"
     ajv-keywords "^3.5.2"
+
+seedrandom@^3.0.5:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/seedrandom/-/seedrandom-3.0.5.tgz#54edc85c95222525b0c7a6f6b3543d8e0b3aa0a7"
+  integrity sha512-8OwmbklUNzwezjGInmZ+2clQmExQPvomqjL7LFqOYqtmuxRgQYqOD3mHaU+MvZn5FLUeVxVfQjwLZW/n/JFuqg==
 
 select-hose@^2.0.0:
   version "2.0.0"
@@ -12739,6 +12934,11 @@ timsort@^0.3.0:
   resolved "https://registry.npmjs.org/timsort/-/timsort-0.3.0.tgz"
   integrity sha1-QFQRqOfmM5/mTbmiNN4R3DHgK9Q=
 
+tiny-emitter@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/tiny-emitter/-/tiny-emitter-2.1.0.tgz#1d1a56edfc51c43e863cbb5382a72330e3555423"
+  integrity sha512-NB6Dk1A9xgQPMoGqC5CVXn123gWyte215ONT5Pp5a0yt4nlEoO1ZWeCwpncaekPHXO60i47ihFnZPiRPjRMq4Q==
+
 tiny-invariant@^1.0.2:
   version "1.1.0"
   resolved "https://registry.npmjs.org/tiny-invariant/-/tiny-invariant-1.1.0.tgz"
@@ -12945,6 +13145,11 @@ type@^2.0.0:
   version "2.5.0"
   resolved "https://registry.npmjs.org/type/-/type-2.5.0.tgz"
   integrity sha512-180WMDQaIMm3+7hGXWf12GtdniDEy7nYcyFMKJn/eZz/6tSLXrUN9V0wKSbMjej0I1WHWbpREDEKHtqPQa9NNw==
+
+typed-function@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/typed-function/-/typed-function-2.0.0.tgz#15ab3825845138a8b1113bd89e60cd6a435739e8"
+  integrity sha512-Hhy1Iwo/e4AtLZNK10ewVVcP2UEs408DS35ubP825w/YgSBK1KVLwALvvIG4yX75QJrxjCpcWkzkVRB0BwwYlA==
 
 typedarray-to-buffer@^3.1.5:
   version "3.1.5"

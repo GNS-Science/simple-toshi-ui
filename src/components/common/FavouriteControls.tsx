@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Button, makeStyles, Tooltip } from '@material-ui/core';
 
 import LocalStorageContext from '../../contexts/localStorage';
@@ -10,7 +10,7 @@ const useStyles = makeStyles(() => ({
     filter: 'invert(88%) sepia(0%) saturate(1246%) hue-rotate(152deg) brightness(99%) contrast(97%)',
   },
   iconSelected: {
-    height: 42,
+    height: 35,
     filter: 'invert(48%) sepia(27%) saturate(2609%) hue-rotate(189deg) brightness(104%) contrast(102%)',
   },
 }));
@@ -30,14 +30,14 @@ const FavouriteControls: React.FC<FavouriteControlsProps> = ({ id, producedBy }:
     setISFavourites(favourites);
   };
 
-  const keypressHandler = (event: KeyboardEvent) => {
-    if (event.key === 'r' || event.key === 'R') handleFavourites();
-  };
+  // const keypressHandler = (event: KeyboardEvent) => {
+  //   if (event.key === 'r' || event.key === 'R') handleFavourites();
+  // };
 
-  useEffect(() => {
-    window.addEventListener('keypress', keypressHandler);
-    return () => window.removeEventListener('keypress', keypressHandler);
-  }, [id, ISFavourites]);
+  // useEffect(() => {
+  //   window.addEventListener('keypress', keypressHandler);
+  //   return () => window.removeEventListener('keypress', keypressHandler);
+  // }, [id, ISFavourites]);
 
   return (
     <>
