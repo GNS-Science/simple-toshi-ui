@@ -2,53 +2,93 @@ import { Typography } from '@material-ui/core';
 import { LegendOrdinal } from '@visx/legend';
 import { scaleOrdinal } from '@visx/scale';
 import { AnimatedAxis, AnimatedLineSeries, Grid, Tooltip, XYChart } from '@visx/xychart';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { XY } from '../../../interfaces/common';
 import { HazardTableFilteredData } from '../../../interfaces/inversionSolutions';
 
 interface HazardCurvesProps {
-  height: number;
-  width: number;
+  parentWidth: number;
+  parentRef: HTMLDivElement | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  resizeParent: (state: any) => void;
   data: HazardTableFilteredData;
   POE: string;
   PGA: string[];
+  PGAoptions: string[];
   POEdata: XY[];
   subHeading: string;
   location: string;
 }
 
 const HazardCurves: React.FC<HazardCurvesProps> = ({
-  height,
-  width,
+  parentWidth,
   data,
   POE,
   PGA,
+  PGAoptions,
   POEdata,
   subHeading,
   location,
 }: HazardCurvesProps) => {
-  const colors = ['#FE1100', '#73d629', '#ffd700', '#7fe5f0', '#003366', '#ff7f50', '#047806', '#4ca3dd', '#000000'];
+  const colors = ['#000000', '#FE1100', '#73d629', '#ffd700', '#7fe5f0', '#003366', '#ff7f50', '#047806', '#4ca3dd'];
+  const [currentColors, setCurrentColors] = useState<string[]>([]);
+  const [headingSize, setHeadingSize] = useState<number>(0);
+  const [subHeadingSize, setSubHeadingSize] = useState<number>(0);
+
+  useEffect(() => {
+    parentWidth * 0.035 >= 24 ? setHeadingSize(24) : setHeadingSize(parentWidth * 0.035);
+    parentWidth * 0.025 >= 15 ? setSubHeadingSize(15) : setSubHeadingSize(parentWidth * 0.025);
+  }, [parentWidth]);
+
+  const curveColors: Record<string, string> = {};
+
+  PGAoptions.map((value, index) => {
+    curveColors[value] = colors[index];
+  });
+
+  useEffect(() => {
+    const currentColorsArray: string[] = [];
+    PGA.map((value) => {
+      currentColorsArray.push(curveColors[value]);
+    });
+    setCurrentColors(currentColorsArray);
+  }, [PGA]);
 
   const ordinalColorScale = scaleOrdinal({
-    domain: POE === 'None' ? [...PGA] : [...PGA, `POE ${POE}`],
-    range: colors,
+    domain: POE === 'None' ? [...PGA] : [...PGA, `PoE ${POE}`],
+    range: POE === 'None' ? [...currentColors] : [...currentColors, '#989C9C'],
   });
 
   return (
     <>
       <div style={{ position: 'relative', width: '100%' }}>
         <XYChart
-          height={height}
-          width={width}
+          height={parentWidth * 0.75}
+          width={parentWidth}
           xScale={{ type: 'log', domain: [1e-3, 10] }}
           yScale={{ type: 'log', domain: [1e-13, 2.0] }}
         >
-          <text y={23} x={20} fontSize={20} fontWeight="bold">{`${location} hazard (opensha)`}</text>
-          <text y={42} x={20} fontSize={15}>
+          <text
+            y={18}
+            x={'50%'}
+            alignmentBaseline="middle"
+            dominantBaseline="middle"
+            textAnchor="middle"
+            fontSize={headingSize}
+            fontWeight="bold"
+          >{`${location} Hazard (opensha)`}</text>
+          <text
+            y={headingSize + 18}
+            x={'50%'}
+            alignmentBaseline="middle"
+            dominantBaseline="middle"
+            textAnchor="middle"
+            fontSize={subHeadingSize}
+          >
             {subHeading}
           </text>
           <AnimatedAxis label="Ground Motion (g)" orientation="bottom" />
-          <AnimatedAxis label="Annual Frequency of Exceedance" orientation="left" />
+          <AnimatedAxis label="Annual Frequency of Exceedance" labelOffset={20} orientation="left" />
           <Tooltip
             showHorizontalCrosshair
             showVerticalCrosshair
@@ -84,7 +124,7 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
             }}
           />
           <Grid rows columns lineStyle={{ opacity: '90%' }} numTicks={10} />
-          {Object.keys(data).map((key, index) => {
+          {Object.keys(data).map((key) => {
             return (
               <AnimatedLineSeries
                 key={key}
@@ -92,7 +132,7 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
                 data={data[key]}
                 xAccessor={(d: XY) => d?.x}
                 yAccessor={(d: XY) => d?.y}
-                stroke={colors[index]}
+                stroke={curveColors[key]}
               />
             );
           })}
@@ -102,12 +142,20 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
               data={POEdata}
               xAccessor={(d) => d.x}
               yAccessor={(d) => d.y}
-              stroke={colors[PGA.length]}
+              stroke={'#989C9C'}
             />
           )}
         </XYChart>
-        <div style={{ width: 100, height: 100, position: 'absolute', top: height * 0.45, left: 70, display: 'flex' }}>
-          <LegendOrdinal direction="column" scale={ordinalColorScale} shape="line" style={{ fontSize: '15px' }} />
+        <div
+          style={{ width: 100, height: 100, position: 'absolute', top: parentWidth * 0.3, left: 70, display: 'flex' }}
+        >
+          <LegendOrdinal
+            direction="column"
+            scale={ordinalColorScale}
+            shape="line"
+            style={{ fontSize: parentWidth * 0.02 }}
+            shapeHeight={parentWidth * 0.02}
+          />
         </div>
       </div>
     </>
