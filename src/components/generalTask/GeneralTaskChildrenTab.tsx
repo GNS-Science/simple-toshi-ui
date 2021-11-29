@@ -25,7 +25,7 @@ import {
 import { GeneralTaskQueryResponse } from '../../pages/__generated__/GeneralTaskQuery.graphql';
 import DialogAlert from '../common/DialogAlert';
 import LocalStorageContext from '../../contexts/localStorage';
-import { useShortcut } from '../../hooks/useShortcut';
+// import { useShortcut } from '../../hooks/useShortcut';
 import GeneralTaskDetailDrawer from '../diagnosticReportView/GeneralTaskDetailDrawer';
 import SweepArgumentFilter from './SweepArgumentFilter';
 import CommonModal from '../common/Modal/CommonModal';
@@ -191,9 +191,9 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     history.push(`/GeneralTask/${id}/ChildTasks`);
   };
 
-  useShortcut(handleViewChange, ['s']);
-  useShortcut(() => setShowFilter((v) => !v), ['f']);
-  useShortcut(() => setOpenDrawer((v) => !v), ['d']);
+  // useShortcut(handleViewChange, ['s']);
+  // useShortcut(() => setShowFilter((v) => !v), ['f']);
+  // useShortcut(() => setOpenDrawer((v) => !v), ['d']);
 
   if (!data?.node) {
     return (
