@@ -1,6 +1,6 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
-import { Box, Card, Snackbar } from '@material-ui/core';
+import { Box, Button, Card, Snackbar } from '@material-ui/core';
 import { graphql } from 'babel-plugin-relay/macro';
 import SelectControl from '../common/SelectControl';
 import { XY } from '../../interfaces/common';
@@ -17,6 +17,8 @@ import { toProperCase } from '../../utils';
 import { InversionSolutionHazardChartsQuery } from './__generated__/InversionSolutionHazardChartsQuery.graphql';
 import HazardCurves from './charts/HazardCurves';
 import SpectralAccelerationChart from './charts/SpectralAccelerationChart';
+import { ParentSize } from '@visx/responsive';
+import { useReactToPrint } from 'react-to-print';
 
 interface InversionSolutionHazardChartsProps {
   id: string;
@@ -40,15 +42,8 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
 
   const [filteredData, setFilteredData] = useState<HazardTableFilteredData>({});
   const [openNotification, setOpenNotification] = useState<boolean>(false);
-  const [containerWidth, setContainerWidth] = useState<number>(700);
 
   const [showUHSA, setShowUHSA] = useState<boolean>(false);
-
-  useLayoutEffect(() => {
-    if (targetRef.current) {
-      setContainerWidth(targetRef.current.offsetWidth as number);
-    }
-  }, []);
 
   useEffect(() => {
     const filteredCurves = filterMultipleCurves(PGA, data, location, forecastTime, gmpe, backgroundSeismicity);
@@ -109,14 +104,18 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
   };
 
   const getHazardCurvesSubHeading = (): string => {
-    return `Model: ${gmpe}. Background: ${toProperCase(backgroundSeismicity)}d. Forecast: ${forecastTime} years.`;
+    return `Model: ${gmpe}. Background: ${toProperCase(backgroundSeismicity)}d. Time-span: ${forecastTime} years.`;
   };
 
   const getSACurveSubHeading = (): string => {
     return ` Model: ${gmpe}. Background: ${toProperCase(
       backgroundSeismicity,
-    )}d. Forecast: ${forecastTime} years.  POE: ${POE}`;
+    )}d. Time-span: ${forecastTime} years.  PoE: ${POE}`;
   };
+
+  const handlePrint = useReactToPrint({
+    content: () => targetRef.current,
+  });
 
   return (
     <>
@@ -133,25 +132,45 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
       <Box>
         <Card>
           <div style={{ width: '100%', padding: '1rem', display: 'flex' }} ref={targetRef}>
-            <HazardCurves
-              height={(containerWidth / 2) * 0.7}
-              width={containerWidth / 2}
-              data={filteredData}
-              POE={POE}
-              PGA={PGA}
-              POEdata={POEdata}
-              subHeading={getHazardCurvesSubHeading()}
-              location={location}
-            />
-            {showUHSA && (
-              <SpectralAccelerationChart
-                height={(containerWidth / 2) * 0.7}
-                width={containerWidth / 2}
-                data={SAdata}
-                subHeading={getSACurveSubHeading()}
-                location={location}
-              />
-            )}
+            <div style={{ width: '50%', minWidth: 350 }}>
+              <ParentSize>
+                {(parent) => (
+                  <HazardCurves
+                    parentWidth={parent.width}
+                    parentRef={parent.ref}
+                    resizeParent={parent.resize}
+                    data={filteredData}
+                    POE={POE}
+                    PGA={PGA}
+                    PGAoptions={options.PGA}
+                    POEdata={POEdata}
+                    subHeading={getHazardCurvesSubHeading()}
+                    location={location}
+                  />
+                )}
+              </ParentSize>
+            </div>
+            <div style={{ width: '50%', minWidth: 350 }}>
+              {showUHSA && (
+                <ParentSize>
+                  {(parent) => (
+                    <SpectralAccelerationChart
+                      parentWidth={parent.width}
+                      parentRef={parent.ref}
+                      resizeParent={parent.resize}
+                      data={SAdata}
+                      subHeading={getSACurveSubHeading()}
+                      location={location}
+                    />
+                  )}
+                </ParentSize>
+              )}
+            </div>
+          </div>
+          <div style={{ padding: 20 }}>
+            <Button variant="contained" onClick={handlePrint}>
+              Print Figures
+            </Button>
           </div>
         </Card>
       </Box>
