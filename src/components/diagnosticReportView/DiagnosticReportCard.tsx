@@ -238,7 +238,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             <Tab label="General" id="simple-tab-0" disableFocusRipple />
             <Tab label="Regional Solutions" id="simple-tab-1" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
             <Tab label="Named Faults" id="simple-tab-2" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
-            <Tab label="Parent Fault" id="simple-etab-3" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
+            <Tab label="Parent Faults" id="simple-etab-3" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
             <Tab label="Hazard Charts" id="simple-tab-4" disabled={!hazardId.length} disableFocusRipple />
           </Tabs>
           {renderTab()}
