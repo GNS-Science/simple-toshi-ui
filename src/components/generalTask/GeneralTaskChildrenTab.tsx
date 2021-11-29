@@ -89,7 +89,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const [regionalViews, setRegionalViews] = useState<string[]>([regionalSolutionMfdOptions[0].displayName]);
   const [reportTab, setReportTab] = useState<number>(0);
   const [parentFaultViews, setParentFaultViews] = useState<string[]>([parentViewsOptions[0].displayName]);
-  const [parentFault, setParentFault] = useState<string>(parentFaultsOptions[0]);
+  const [parentFault, setParentFault] = useState<string | null>(parentFaultsOptions[0]);
 
   const [showList, setShowList] = useState(true);
   const [showFilter, setShowFilter] = useState(false);
@@ -153,7 +153,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     const namedFaultsViewOption: string = isClipBoard ? namedFaultsView : localStorageNamedFaultsView;
     const namedFaultsLocationsOption: string[] = isClipBoard ? namedFaultsLocations : localStorageNamedFaultsLocations;
     const regionalViewsOption: string[] = isClipBoard ? regionalViews : localStorageRegionalViews;
-    const parentFaultOption: string = isClipBoard ? parentFault : localStorageParentFault;
+    const parentFaultOption: string = isClipBoard ? (parentFault as string) : localStorageParentFault;
     const parentFaultViewsOption: string[] = isClipBoard ? parentFaultViews : localStorageParentFaultViews;
 
     const sharableState = {
@@ -264,7 +264,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
             setRegionalViews={isClipBoard ? setRegionalViews : setLocalStorageRegionalViews}
             reportTab={reportTab}
             setReportTab={setReportTab}
-            parentFault={isClipBoard ? parentFault : localStorageParentFault}
+            parentFault={isClipBoard ? (parentFault as string) : localStorageParentFault}
             parentFaultViews={isClipBoard ? parentFaultViews : localStorageParentFaultViews}
             setParentFault={isClipBoard ? setParentFault : setLocalStorageParentFault}
             setParentFaultViews={isClipBoard ? setParentFaultViews : setLocalStorageParentFaultViews}

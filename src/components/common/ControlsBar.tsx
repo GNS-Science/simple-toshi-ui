@@ -8,7 +8,6 @@ const useStyles = makeStyles(() => ({
     flexWrap: 'wrap',
   },
   control: {
-    marginLeft: 10,
     marginRight: 10,
   },
 }));
