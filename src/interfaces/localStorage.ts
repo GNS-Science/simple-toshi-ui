@@ -9,6 +9,10 @@ export interface LocalStorageContextInterface {
   setLocalStorageNamedFaultsView: (newValue: string) => void;
   localStorageNamedFaultsLocations: string[];
   setLocalStorageNamedFaultsLocations: (newValue: string[]) => void;
+  localStorageParentFaultViews: string[];
+  setLocalStorageParentFaultViews: (newValue: string[]) => void;
+  localStorageParentFault: string;
+  setLocalStorageParentFault: (newValue: string) => void;
 }
 
 export type ISFavouritesInstance = Record<string, ISFavouriteValue> | null;

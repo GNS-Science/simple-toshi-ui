@@ -13,6 +13,10 @@ const LocalStorageContext = createContext<LocalStorageContextInterface>({
   setLocalStorageNamedFaultsView: noop,
   localStorageNamedFaultsLocations: [],
   setLocalStorageNamedFaultsLocations: noop,
+  localStorageParentFaultViews: [],
+  setLocalStorageParentFaultViews: noop,
+  localStorageParentFault: '',
+  setLocalStorageParentFault: noop,
 });
 
 export default LocalStorageContext;

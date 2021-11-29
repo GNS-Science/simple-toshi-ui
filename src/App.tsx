@@ -41,6 +41,7 @@ import MySolutions from './pages/MySolutions';
 import { regionalSolutionMfdOptions } from './constants/regionalSolutionMfd';
 import { diagnosticReportViewOptions } from './constants/diagnosticReport';
 import { mfdPlotOptions, namedFaultsOptions } from './constants/nameFaultsMfds';
+import { parentFaultsOptions, parentViewsOptions } from './constants/parentFault';
 
 const useStyles = makeStyles({
   root: {
@@ -159,6 +160,12 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
     'named-faults-locations',
     [namedFaultsOptions[0].displayName],
   );
+  const [localStorageParentFaultViews, setLocalStorageParentFaultViews] = useLocalStorage<string[]>(
+    'parent-fault-views',
+    [parentViewsOptions[0].displayName],
+  );
+  const [localStorageParentFault, setLocalStorageParentFault] = useLocalStorage('parent-fault', parentFaultsOptions[0]);
+
   const LocalStorageProvider = LocalStorageContext.Provider;
 
   return (
@@ -177,6 +184,10 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
               setLocalStorageNamedFaultsView,
               localStorageNamedFaultsLocations,
               setLocalStorageNamedFaultsLocations,
+              localStorageParentFaultViews,
+              setLocalStorageParentFaultViews,
+              localStorageParentFault,
+              setLocalStorageParentFault,
             }}
           >
             <MenuBar />

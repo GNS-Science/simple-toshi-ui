@@ -21,6 +21,7 @@ import GeneralView from './GeneralView';
 import NamedFaultsView from './NamedFaultsView';
 import RegionalMfdView from './RegionalMfdView';
 import InversionSolutionHazardCharts from '../inversionSolution/InversionSolutionHazardCharts';
+import ParentFaultView from './ParentFaultViews';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -54,6 +55,10 @@ interface DiagnosticReportCardProps {
   changeCurrentImage?: (index: number) => void;
   reportTab?: number;
   setReportTab?: (tab: number) => void;
+  parentFaultViews: string[];
+  setParentFaultViews: (views: string[]) => void;
+  parentFault: string;
+  setParentFault: (fault: string) => void;
 }
 
 const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
@@ -70,6 +75,10 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   changeCurrentImage,
   reportTab,
   setReportTab,
+  parentFaultViews,
+  setParentFaultViews,
+  parentFault,
+  setParentFault,
 }: DiagnosticReportCardProps) => {
   const classes = useStyles();
   const [currentImage, setCurrentImage] = useState<number>(0);
@@ -141,6 +150,16 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       case 1:
         return (
           <DiagnosticReportTabPanel value={currentTab} index={1}>
+            <RegionalMfdView
+              id={automationTasks[currentImage].inversion_solution.id}
+              regionalViews={regionalViews}
+              setRegionalViews={setRegionalViews}
+            />
+          </DiagnosticReportTabPanel>
+        );
+      case 2:
+        return (
+          <DiagnosticReportTabPanel value={currentTab} index={2}>
             <NamedFaultsView
               id={automationTasks[currentImage].inversion_solution.id}
               namedFaultsView={namedFaultsView}
@@ -150,19 +169,22 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             />
           </DiagnosticReportTabPanel>
         );
-      case 2:
-        return (
-          <DiagnosticReportTabPanel value={currentTab} index={2}>
-            <RegionalMfdView
-              id={automationTasks[currentImage].inversion_solution.id}
-              regionalViews={regionalViews}
-              setRegionalViews={setRegionalViews}
-            />
-          </DiagnosticReportTabPanel>
-        );
+
       case 3:
         return (
           <DiagnosticReportTabPanel value={currentTab} index={3}>
+            <ParentFaultView
+              id={automationTasks[currentImage].inversion_solution.id}
+              parentFaultViews={parentFaultViews}
+              setParentFaultViews={setParentFaultViews}
+              parentFault={parentFault}
+              setParentFault={setParentFault}
+            />
+          </DiagnosticReportTabPanel>
+        );
+      case 4:
+        return (
+          <DiagnosticReportTabPanel value={currentTab} index={4}>
             {hazardId && (
               <React.Suspense fallback={<CircularProgress />}>
                 <InversionSolutionHazardCharts id={hazardId} />
@@ -214,9 +236,10 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
           </div>
           <Tabs value={currentTab} onChange={handleTabChange}>
             <Tab label="General" id="simple-tab-0" disableFocusRipple />
-            <Tab label="Named Faults" id="simple-tab-1" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
-            <Tab label="Regional Solutions" id="simple-tab-2" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
-            <Tab label="Hazard Charts" id="simple-tab-3" disabled={!hazardId.length} disableFocusRipple />
+            <Tab label="Regional Solutions" id="simple-tab-1" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
+            <Tab label="Named Faults" id="simple-tab-2" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
+            <Tab label="Parent Faults" id="simple-etab-3" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
+            <Tab label="Hazard Charts" id="simple-tab-4" disabled={!hazardId.length} disableFocusRipple />
           </Tabs>
           {renderTab()}
         </CardContent>

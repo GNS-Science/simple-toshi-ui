@@ -101,4 +101,6 @@ export interface ClipBoardObject {
   namedFaultsLocations: string[];
   regionalViews: string[];
   reportTab: number;
+  parentFaultViews: string[];
+  parentFault: string;
 }
