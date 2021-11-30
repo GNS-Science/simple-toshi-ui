@@ -58,7 +58,7 @@ const SpectralAccelerationChart: React.FC<SpectralAccelerationChartProps> = ({
             {subHeading}
           </text>
           <AnimatedAxis label="Spectral Period (s)" orientation="bottom" />
-          <AnimatedAxis label="Ground Motion (g)" orientation="left" />
+          <AnimatedAxis label="Pseudo-Spectral Acceleration (g)" orientation="left" />
           <Tooltip
             showHorizontalCrosshair
             showVerticalCrosshair

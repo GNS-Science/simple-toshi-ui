@@ -87,7 +87,7 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
           >
             {subHeading}
           </text>
-          <AnimatedAxis label="Ground Motion (g)" orientation="bottom" />
+          <AnimatedAxis label="Acceleration (g)" orientation="bottom" />
           <AnimatedAxis label="Annual Frequency of Exceedance" labelOffset={20} orientation="left" />
           <Tooltip
             showHorizontalCrosshair
@@ -116,8 +116,8 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
                       &nbsp;&nbsp;&nbsp;
                       {key}
                     </Typography>
-                    <Typography>x: {datum.x.toExponential()}</Typography>
-                    <Typography>y: {datum.y.toExponential()}</Typography>
+                    <Typography>x: {datum.x.toExponential(2)}</Typography>
+                    <Typography>y: {datum.y.toExponential(2)}</Typography>
                   </>
                 );
               }

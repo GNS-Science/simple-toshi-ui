@@ -104,11 +104,11 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
   };
 
   const getHazardCurvesSubHeading = (): string => {
-    return `Model: ${gmpe}. Background: ${toProperCase(backgroundSeismicity)}d. Time-span: ${forecastTime} years.`;
+    return `GMM: ${gmpe}. Background: ${toProperCase(backgroundSeismicity)}d. Time-span: ${forecastTime} years.`;
   };
 
   const getSACurveSubHeading = (): string => {
-    return ` Model: ${gmpe}. Background: ${toProperCase(
+    return ` GMM: ${gmpe}. Background: ${toProperCase(
       backgroundSeismicity,
     )}d. Time-span: ${forecastTime} years.  PoE: ${POE}`;
   };
@@ -127,7 +127,7 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
         options={options.backgroundSeismicity}
         setOptions={setBackgroundSeismicity}
       />
-      <SelectControl name="Background Motion Model" options={options.gmpe} setOptions={setGmpe} />
+      <SelectControl name="Ground Motion Model" options={options.gmpe} setOptions={setGmpe} />
       <SelectControl name="Probability of Exceedence" options={['None', '2%', '10%']} setOptions={setPOE} />
       <Box>
         <Card>
