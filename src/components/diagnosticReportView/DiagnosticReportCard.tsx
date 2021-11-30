@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
@@ -59,6 +59,7 @@ interface DiagnosticReportCardProps {
   setParentFaultViews: (views: string[]) => void;
   parentFault: string;
   setParentFault: (fault: string) => void;
+  setDisableHotkey: Dispatch<SetStateAction<boolean>>;
 }
 
 const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
@@ -79,6 +80,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   setParentFaultViews,
   parentFault,
   setParentFault,
+  setDisableHotkey,
 }: DiagnosticReportCardProps) => {
   const classes = useStyles();
   const [currentImage, setCurrentImage] = useState<number>(0);
@@ -179,6 +181,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
               setParentFaultViews={setParentFaultViews}
               parentFault={parentFault}
               setParentFault={setParentFault}
+              setDisableHotkey={setDisableHotkey}
             />
           </DiagnosticReportTabPanel>
         );

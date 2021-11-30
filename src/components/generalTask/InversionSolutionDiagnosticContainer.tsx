@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
 import { graphql } from 'babel-plugin-relay/macro';
 
@@ -25,6 +25,7 @@ interface InversionSolutionDiagnosticContainerProps {
   setParentFaultViews: (views: string[]) => void;
   parentFault: string;
   setParentFault: (fault: string) => void;
+  setDisableHotkey: Dispatch<SetStateAction<boolean>>;
 }
 
 const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnosticContainerProps> = ({
@@ -45,6 +46,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   setParentFaultViews,
   parentFault,
   setParentFault,
+  setDisableHotkey,
 }: InversionSolutionDiagnosticContainerProps) => {
   const data = useLazyLoadQuery<InversionSolutionDiagnosticContainerQuery>(inversionSolutionDiagnosticContainerQuery, {
     id: ids,
@@ -70,6 +72,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
         setParentFaultViews={setParentFaultViews}
         parentFault={parentFault}
         setParentFault={setParentFault}
+        setDisableHotkey={setDisableHotkey}
       />
     </>
   );

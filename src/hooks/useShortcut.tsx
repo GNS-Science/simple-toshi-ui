@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router';
 
-export function useShortcut(callback: () => void, keyCodes: string[]): void {
+export function useShortcut(callback: () => void, keyCodes: string[], disableHotkey?: boolean): void {
   const history = useHistory();
 
   React.useEffect(() => {
@@ -11,9 +11,11 @@ export function useShortcut(callback: () => void, keyCodes: string[]): void {
         callback();
       }
     };
-    window.addEventListener('keydown', handler);
-    return () => {
-      window.removeEventListener('keydown', handler);
-    };
+    if (!disableHotkey) {
+      window.addEventListener('keydown', handler);
+      return () => {
+        window.removeEventListener('keydown', handler);
+      };
+    }
   }, [callback]);
 }
