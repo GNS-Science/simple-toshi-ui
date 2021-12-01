@@ -21,7 +21,7 @@ const Root = styled('div')(() => ({
 
   [`& .${classes.iconSelected}`]: {
     height: 35,
-    filter: 'invert(48%) sepia(27%) saturate(2609%) hue-rotate(189deg) brightness(104%) contrast(102%)',
+    filter: 'invert(8%) sepia(100%) saturate(5314%) hue-rotate(342deg) brightness(96%) contrast(99%)',
   },
 }));
 
