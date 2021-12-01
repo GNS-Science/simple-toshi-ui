@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { styled } from '@mui/material/styles';
 import { Button, Tooltip } from '@mui/material';
 
@@ -39,14 +39,14 @@ const FavouriteControls: React.FC<FavouriteControlsProps> = ({ id, producedBy }:
     setISFavourites(favourites);
   };
 
-  const keypressHandler = (event: KeyboardEvent) => {
-    if (event.key === 'r' || event.key === 'R') handleFavourites();
-  };
+  // const keypressHandler = (event: KeyboardEvent) => {
+  //   if (event.key === 'r' || event.key === 'R') handleFavourites();
+  // };
 
-  useEffect(() => {
-    window.addEventListener('keypress', keypressHandler);
-    return () => window.removeEventListener('keypress', keypressHandler);
-  }, [id, ISFavourites]);
+  // useEffect(() => {
+  //   window.addEventListener('keypress', keypressHandler);
+  //   return () => window.removeEventListener('keypress', keypressHandler);
+  // }, [id, ISFavourites]);
 
   return (
     <Root>

@@ -30,6 +30,10 @@ const MySolutions: React.FC = () => {
     setLocalStorageNamedFaultsLocations,
     localStorageRegionalViews,
     setLocalStorageRegionalViews,
+    localStorageParentFault,
+    setLocalStorageParentFault,
+    localStorageParentFaultViews,
+    setLocalStorageParentFaultViews,
   } = useContext(LocalStorageContext);
 
   const [showList, setShowList] = useState(true);
@@ -125,6 +129,10 @@ const MySolutions: React.FC = () => {
           setNamedFaultsLocations={setLocalStorageNamedFaultsLocations}
           regionalViews={localStorageRegionalViews}
           setRegionalViews={setLocalStorageRegionalViews}
+          parentFaultViews={localStorageParentFaultViews}
+          setParentFaultViews={setLocalStorageParentFaultViews}
+          parentFault={localStorageParentFault}
+          setParentFault={setLocalStorageParentFault}
         />
       )}
       {!showList && <GeneralTaskDetailDrawer generalTaskDetails={currentGeneralTask} openDrawer={openDrawer} />}

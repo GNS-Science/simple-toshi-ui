@@ -26,13 +26,14 @@ import {
 import { GeneralTaskQueryResponse } from '../../pages/__generated__/GeneralTaskQuery.graphql';
 import DialogAlert from '../common/DialogAlert';
 import LocalStorageContext from '../../contexts/localStorage';
-import { useShortcut } from '../../hooks/useShortcut';
+// import { useShortcut } from '../../hooks/useShortcut';
 import GeneralTaskDetailDrawer from '../diagnosticReportView/GeneralTaskDetailDrawer';
 import SweepArgumentFilter from './SweepArgumentFilter';
 import CommonModal from '../common/Modal/CommonModal';
 import { mfdPlotOptions, namedFaultsOptions } from '../../constants/nameFaultsMfds';
 import { regionalSolutionMfdOptions } from '../../constants/regionalSolutionMfd';
 import ControlsBar from '../common/ControlsBar';
+import { parentFaultsOptions, parentViewsOptions } from '../../constants/parentFault';
 
 const PREFIX = 'GeneralTaskChildrenTab';
 
@@ -91,6 +92,10 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     setLocalStorageNamedFaultsLocations,
     localStorageRegionalViews,
     setLocalStorageRegionalViews,
+    localStorageParentFaultViews,
+    setLocalStorageParentFaultViews,
+    localStorageParentFault,
+    setLocalStorageParentFault,
   } = useContext(LocalStorageContext);
 
   const [generalViews, setGeneralViews] = useState<string[]>([options[0].displayName]);
@@ -98,6 +103,8 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const [namedFaultsLocations, setNamedFaultsLocations] = useState<string[]>([namedFaultsOptions[0].displayName]);
   const [regionalViews, setRegionalViews] = useState<string[]>([regionalSolutionMfdOptions[0].displayName]);
   const [reportTab, setReportTab] = useState<number>(0);
+  const [parentFaultViews, setParentFaultViews] = useState<string[]>([parentViewsOptions[0].displayName]);
+  const [parentFault, setParentFault] = useState<string | null>(parentFaultsOptions[0]);
 
   const [showList, setShowList] = useState(true);
   const [showFilter, setShowFilter] = useState(false);
@@ -130,6 +137,8 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
           setNamedFaultsLocations(res.namedFaultsLocations);
           setRegionalViews(res.regionalViews);
           setReportTab(res.reportTab);
+          setParentFaultViews(res.parentFaultViews);
+          setParentFault(res.parentFault);
         })
         .catch(() => {
           setOpenNotification(true);
@@ -159,6 +168,8 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     const namedFaultsViewOption: string = isClipBoard ? namedFaultsView : localStorageNamedFaultsView;
     const namedFaultsLocationsOption: string[] = isClipBoard ? namedFaultsLocations : localStorageNamedFaultsLocations;
     const regionalViewsOption: string[] = isClipBoard ? regionalViews : localStorageRegionalViews;
+    const parentFaultOption: string = isClipBoard ? (parentFault as string) : localStorageParentFault;
+    const parentFaultViewsOption: string[] = isClipBoard ? parentFaultViews : localStorageParentFaultViews;
 
     const sharableState = {
       filter: filteredArguments,
@@ -169,6 +180,8 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
       namedFaultsLocations: namedFaultsLocationsOption,
       regionalViews: regionalViewsOption,
       reportTab,
+      parentFault: parentFaultOption,
+      parentFaultViews: parentFaultViewsOption,
     };
     const url = buildUrl(baseUrl, {
       queryParams: {
@@ -193,9 +206,9 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     history.push(`/GeneralTask/${id}/ChildTasks`);
   };
 
-  useShortcut(handleViewChange, ['s']);
-  useShortcut(() => setShowFilter((v) => !v), ['f']);
-  useShortcut(() => setOpenDrawer((v) => !v), ['d']);
+  // useShortcut(handleViewChange, ['s']);
+  // useShortcut(() => setShowFilter((v) => !v), ['f']);
+  // useShortcut(() => setOpenDrawer((v) => !v), ['d']);
 
   if (!data?.node) {
     return (
@@ -278,6 +291,10 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
             setRegionalViews={isClipBoard ? setRegionalViews : setLocalStorageRegionalViews}
             reportTab={reportTab}
             setReportTab={setReportTab}
+            parentFault={isClipBoard ? (parentFault as string) : localStorageParentFault}
+            parentFaultViews={isClipBoard ? parentFaultViews : localStorageParentFaultViews}
+            setParentFault={isClipBoard ? setParentFault : setLocalStorageParentFault}
+            setParentFaultViews={isClipBoard ? setParentFaultViews : setLocalStorageParentFaultViews}
           />
         )}
       </React.Suspense>

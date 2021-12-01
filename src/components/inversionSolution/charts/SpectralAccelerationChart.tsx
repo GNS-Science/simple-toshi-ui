@@ -1,39 +1,64 @@
 import { Typography } from '@mui/material';
 import { curveLinear } from '@visx/curve';
 import { AnimatedAxis, AnimatedLineSeries, Grid, Tooltip, XYChart } from '@visx/xychart';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { XY } from '../../../interfaces/common';
 
 interface SpectralAccelerationChartProps {
-  height: number;
-  width: number;
+  parentWidth: number;
+  parentRef: HTMLDivElement | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  resizeParent: (state: any) => void;
   data: XY[];
   subHeading: string;
   location: string;
 }
 
 const SpectralAccelerationChart: React.FC<SpectralAccelerationChartProps> = ({
-  height,
-  width,
+  parentWidth,
   data,
   subHeading,
   location,
 }: SpectralAccelerationChartProps) => {
+  const [headingSize, setHeadingSize] = useState<number>(0);
+  const [subHeadingSize, setSubHeadingSize] = useState<number>(0);
+
+  useEffect(() => {
+    parentWidth * 0.035 >= 24 ? setHeadingSize(24) : setHeadingSize(parentWidth * 0.035);
+    parentWidth * 0.025 >= 15 ? setSubHeadingSize(15) : setSubHeadingSize(parentWidth * 0.025);
+  }, [parentWidth]);
+
   return (
     <>
       <div style={{ position: 'relative', width: '100%' }}>
         <XYChart
-          height={height}
-          width={width}
+          height={parentWidth * 0.75}
+          width={parentWidth}
           xScale={{ type: 'linear', domain: [-1, 10] }}
           yScale={{ type: 'linear', domain: [0, 6] }}
         >
-          <AnimatedAxis label="Spectral Period (s)" orientation="bottom" />
-          <AnimatedAxis label="Ground Motion (g)" orientation="left" />
-          <text y={23} x={20} fontSize={20} fontWeight="bold">{` ${location} Uniform Hazard Spectrum (opensha)`}</text>
-          <text y={42} x={20} fontSize={15}>
+          <text
+            y={18}
+            x={'50%'}
+            alignmentBaseline="middle"
+            dominantBaseline="middle"
+            textAnchor="middle"
+            fontSize={headingSize}
+            fontWeight="bold"
+          >{` ${location} Uniform Hazard Spectrum (opensha)`}</text>
+          <text
+            y={headingSize + 18}
+            x={'50%'}
+            alignmentBaseline="middle"
+            dominantBaseline="middle"
+            textAnchor="middle"
+            fontSize={subHeadingSize}
+            style={{ margin: 10 }}
+          >
             {subHeading}
           </text>
+          <AnimatedAxis label="Spectral Period (s)" orientation="bottom" />
+          <AnimatedAxis label="Ground Motion (g)" orientation="left" />
           <Tooltip
             showHorizontalCrosshair
             showVerticalCrosshair

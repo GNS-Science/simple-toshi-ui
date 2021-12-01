@@ -33,6 +33,7 @@ import { HomeQuery } from './pages/__generated__/HomeQuery.graphql';
 import Loading from './components/common/Loading';
 import theme from './theme';
 import { ThemeProvider } from '@mui/material';
+import { parentFaultsOptions, parentViewsOptions } from './constants/parentFault';
 
 // Immediately load the query as our app starts. For a real app, we'd move this
 // into our routing configuration, preloading data as we transition to new routes.
@@ -64,6 +65,12 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
     'named-faults-locations',
     [namedFaultsOptions[0].displayName],
   );
+  const [localStorageParentFaultViews, setLocalStorageParentFaultViews] = useLocalStorage<string[]>(
+    'parent-fault-views',
+    [parentViewsOptions[0].displayName],
+  );
+  const [localStorageParentFault, setLocalStorageParentFault] = useLocalStorage('parent-fault', parentFaultsOptions[0]);
+
   const LocalStorageProvider = LocalStorageContext.Provider;
 
   return (
@@ -83,6 +90,10 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
                 setLocalStorageNamedFaultsView,
                 localStorageNamedFaultsLocations,
                 setLocalStorageNamedFaultsLocations,
+                localStorageParentFaultViews,
+                setLocalStorageParentFaultViews,
+                localStorageParentFault,
+                setLocalStorageParentFault,
               }}
             >
               <MenuBar />
