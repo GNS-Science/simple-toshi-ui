@@ -32,6 +32,7 @@ import SweepArgumentFilter from './SweepArgumentFilter';
 import CommonModal from '../common/Modal/CommonModal';
 import { mfdPlotOptions, namedFaultsOptions } from '../../constants/nameFaultsMfds';
 import { regionalSolutionMfdOptions } from '../../constants/regionalSolutionMfd';
+import ControlsBar from '../common/ControlsBar';
 
 const PREFIX = 'GeneralTaskChildrenTab';
 
@@ -208,7 +209,12 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     <Root>
       <div className={classes.controlsContainer}>
         <Tooltip title="use (f/F) to open/close filters">
-          <Button className={classes.control} variant="contained" onClick={() => setShowFilter((v) => !v)}>
+          <Button
+            className={classes.control}
+            color="inherit"
+            variant="contained"
+            onClick={() => setShowFilter((v) => !v)}
+          >
             <span>
               Filter&nbsp;
               {`${filteredArguments.data.length ? filteredChildren.data?.length ?? 0 : childTasks.data?.length ?? 0}/${
@@ -218,12 +224,17 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
           </Button>
         </Tooltip>
         <Tooltip title="use (s/S) to toggle between views">
-          <Button className={classes.control} variant="contained" onClick={handleViewChange}>
+          <Button color="inherit" className={classes.control} variant="contained" onClick={handleViewChange}>
             {showList ? 'Show Report' : 'Show List'}
           </Button>
         </Tooltip>
         <Tooltip title="use (d/D) to open/close details">
-          <Button className={classes.control} variant="contained" onClick={() => setOpenDrawer((v) => !v)}>
+          <Button
+            color="inherit"
+            className={classes.control}
+            variant="contained"
+            onClick={() => setOpenDrawer((v) => !v)}
+          >
             Details
           </Button>
         </Tooltip>
@@ -232,12 +243,14 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
         </Fab>
       </div>
       <div className={showFilter ? classes.filterContainer : classes.hidden}>
-        {sweepArgs?.map((argument) => (
-          <SweepArgumentFilter key={`${argument?.k}-filter`} argument={argument} onChange={handleChange} />
-        ))}
-        <Button color="primary" variant="contained" onClick={applyFilter}>
-          Apply
-        </Button>
+        <ControlsBar>
+          {sweepArgs?.map((argument) => (
+            <SweepArgumentFilter key={`${argument?.k}-filter`} argument={argument} onChange={handleChange} />
+          ))}
+          <Button color="inherit" variant="contained" onClick={applyFilter}>
+            Apply
+          </Button>
+        </ControlsBar>
       </div>
       <React.Suspense fallback={<CircularProgress />}>
         {showList ? (
