@@ -125,7 +125,7 @@ export const getSpectralAccelerationData = (
     });
     const point = mathjs.intersect(p1, p2, p3, p4);
     const result = [Math.exp(point[0] as number), mathjs.exp(mathjs.exp(point[1] as number))];
-    dataSet.push({ x: value === 'PGA' ? 0 : parseFloat(value), y: result[0] });
+    dataSet.push({ x: value === 'PGA' ? 0.01 : parseFloat(value), y: result[0] });
   });
 
   return dataSet;
