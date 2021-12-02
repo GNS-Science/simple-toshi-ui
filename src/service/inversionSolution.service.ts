@@ -4,7 +4,7 @@ import { HazardTableFilteredData, HazardTableOptions } from '../interfaces/inver
 import * as mathjs from 'mathjs';
 
 const minXBound = parseFloat(process.env.REACT_APP_MIN_X_BOUND ?? '0');
-const minYBound = 1e-13;
+const minYBound = 1e-5;
 
 export const minDataFilter = (data: XY[]): XY[] => {
   return data.filter((xy) => {

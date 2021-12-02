@@ -18,6 +18,7 @@ interface HazardCurvesProps {
   POEdata: XY[];
   subHeading: string;
   location: string;
+  timeSpan: string;
 }
 
 const HazardCurves: React.FC<HazardCurvesProps> = ({
@@ -29,6 +30,7 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
   POEdata,
   subHeading,
   location,
+  timeSpan,
 }: HazardCurvesProps) => {
   const colors = ['#000000', '#FE1100', '#73d629', '#ffd700', '#7fe5f0', '#003366', '#ff7f50', '#047806', '#4ca3dd'];
   const [currentColors, setCurrentColors] = useState<string[]>([]);
@@ -66,7 +68,7 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
           height={parentWidth * 0.75}
           width={parentWidth}
           xScale={{ type: 'log', domain: [1e-3, 10] }}
-          yScale={{ type: 'log', domain: [1e-13, 2.0] }}
+          yScale={{ type: 'log', domain: [1e-5, 1] }}
         >
           <text
             y={18}
@@ -87,8 +89,8 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
           >
             {subHeading}
           </text>
-          <AnimatedAxis label="Ground Motion (g)" orientation="bottom" />
-          <AnimatedAxis label="Annual Frequency of Exceedance" labelOffset={20} orientation="left" />
+          <AnimatedAxis label="Acceleration (g)" orientation="bottom" />
+          <AnimatedAxis label={`Probability of Exceedance in ${timeSpan} Years`} labelOffset={20} orientation="left" />
           <Tooltip
             showHorizontalCrosshair
             showVerticalCrosshair
