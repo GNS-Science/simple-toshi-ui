@@ -71,8 +71,8 @@ const SpectralAccelerationChart: React.FC<SpectralAccelerationChartProps> = ({
               if (datum) {
                 return (
                   <>
-                    <Typography>x: {datum.x}</Typography>
-                    <Typography>y: {datum.y.toExponential()}</Typography>
+                    <Typography>x: {datum.x === 0.01 ? 0 : datum.x}</Typography>
+                    <Typography>y: {datum.y.toExponential(2)}</Typography>
                   </>
                 );
               }

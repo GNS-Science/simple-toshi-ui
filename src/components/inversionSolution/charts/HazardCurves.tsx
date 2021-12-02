@@ -118,8 +118,8 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
                       &nbsp;&nbsp;&nbsp;
                       {key}
                     </Typography>
-                    <Typography>x: {datum.x.toExponential()}</Typography>
-                    <Typography>y: {datum.y.toExponential()}</Typography>
+                    <Typography>x: {datum.x.toExponential(2)}</Typography>
+                    <Typography>y: {datum.y.toExponential(2)}</Typography>
                   </>
                 );
               }
