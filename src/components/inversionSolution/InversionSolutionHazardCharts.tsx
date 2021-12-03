@@ -67,7 +67,7 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
   }, [POE]);
 
   const getSAdata = (): XY[] => {
-    const xValue = POE === '2%' ? 1 / 2475 : 1 / 475;
+    const xValue = POE === '2%' ? 0.02 : 0.1;
     const allCurves = filterMultipleCurves(options.PGA, data, location, forecastTime, gmpe, backgroundSeismicity);
     return getSpectralAccelerationData(options.PGA, xValue, allCurves);
   };
@@ -96,7 +96,7 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
   };
 
   const getPoE = () => {
-    const yValue = POE === '2%' ? 1 / 2475 : 1 / 475;
+    const yValue = POE === '2%' ? 0.02 : 0.1;
     return [
       { x: 1e-3, y: yValue },
       { x: 10, y: yValue },
@@ -104,11 +104,11 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
   };
 
   const getHazardCurvesSubHeading = (): string => {
-    return `Model: ${gmpe}. Background: ${toProperCase(backgroundSeismicity)}d. Time-span: ${forecastTime} years.`;
+    return `GMM: ${gmpe}. Background: ${toProperCase(backgroundSeismicity)}d. Time-span: ${forecastTime} years.`;
   };
 
   const getSACurveSubHeading = (): string => {
-    return ` Model: ${gmpe}. Background: ${toProperCase(
+    return ` GMM: ${gmpe}. Background: ${toProperCase(
       backgroundSeismicity,
     )}d. Time-span: ${forecastTime} years.  PoE: ${POE}`;
   };
@@ -127,7 +127,7 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
         options={options.backgroundSeismicity}
         setOptions={setBackgroundSeismicity}
       />
-      <SelectControl name="Background Motion Model" options={options.gmpe} setOptions={setGmpe} />
+      <SelectControl name="Ground Motion Model" options={options.gmpe} setOptions={setGmpe} />
       <SelectControl name="Probability of Exceedence" options={['None', '2%', '10%']} setOptions={setPOE} />
       <Box>
         <Card>
@@ -146,6 +146,7 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
                     POEdata={POEdata}
                     subHeading={getHazardCurvesSubHeading()}
                     location={location}
+                    timeSpan={forecastTime}
                   />
                 )}
               </ParentSize>
