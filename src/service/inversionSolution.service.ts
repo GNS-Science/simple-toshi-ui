@@ -47,7 +47,7 @@ export const filterData = (
     }
   });
 
-  return minDataFilter(xy);
+  return xy;
 };
 
 export const filterMultipleCurves = (
@@ -67,6 +67,14 @@ export const filterMultipleCurves = (
   });
 
   return filteredCurves;
+};
+
+export const cropCurves = (data: HazardTableFilteredData): HazardTableFilteredData => {
+  const croppedCurves: HazardTableFilteredData = {};
+  Object.keys(data).map((key) => {
+    croppedCurves[key] = minDataFilter(data[key]);
+  });
+  return croppedCurves;
 };
 
 export const getHazardTableOptions = (data: InversionSolutionHazardChartsQueryResponse): HazardTableOptions => {
