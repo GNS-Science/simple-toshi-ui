@@ -177,13 +177,12 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   };
 
   const handleViewChange = () => {
-    if (showList && filteredArguments.data.length === 0 && filteredChildren.data?.length === 0) {
+    if (showList && filteredArguments.data?.length === 0 && filteredChildren.data?.length === 0) {
       const ids = getChildTaskIdArray(childTasks);
-      if (ids.length === 0) {
-        setOpenAlert(true);
-      }
+      ids.length === 0 ? setOpenAlert(true) : setShowList((v) => !v);
+    } else {
+      setShowList((v) => !v);
     }
-    setShowList((v) => !v);
   };
 
   const handleCloseNotification = () => {
