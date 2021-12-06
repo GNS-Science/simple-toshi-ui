@@ -143,7 +143,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const applyFilter = () => {
     const filtered = applyChildTaskFilter(childTasks, filteredArguments);
     setFilteredChildren(filtered);
-    if ((filtered?.data?.length ?? 0) > maxLength) {
+    if (filtered.data && filtered.data?.length > maxLength) {
       setOpenAlert(true);
     }
   };
@@ -177,13 +177,22 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   };
 
   const handleViewChange = () => {
-    if (showList && filteredArguments.data.length === 0 && filteredChildren.data?.length === 0) {
-      const ids = getChildTaskIdArray(childTasks);
-      if (ids.length === 0) {
+    //On List
+    //1.(filteredChildren = [])
+    //  -> (allChildTasks > Max) -> openAlert
+    //  -> (allChildTasks <= Max) -> changeView
+    //2.(filteredChildren.length > 0) -> changeView
+    //On Report
+    //- changeView
+    if (showList) {
+      if (filteredChildren.data && filteredChildren.data?.length > 0 && filteredChildren.data?.length <= maxLength) {
+        setShowList((v) => !v);
+      } else {
         setOpenAlert(true);
       }
+    } else {
+      setShowList((v) => !v);
     }
-    setShowList((v) => !v);
   };
 
   const handleCloseNotification = () => {
