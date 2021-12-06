@@ -27,7 +27,11 @@ const StyledPaper = styled(Paper)({
   },
 });
 
-const AlternatingRow = TableRow;
+const AlternatingRow = styled(TableRow)({
+  '&:nth-of-type(odd)': {
+    backgroundColor: '#F5F5F5',
+  },
+});
 
 export interface KeyValueListTableProps {
   header: string | null;
