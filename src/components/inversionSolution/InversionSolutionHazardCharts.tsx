@@ -5,6 +5,7 @@ import { graphql } from 'babel-plugin-relay/macro';
 import SelectControl from '../common/SelectControl';
 import { XY } from '../../interfaces/common';
 import {
+  cropCurves,
   filterMultipleCurves,
   getHazardTableOptions,
   getSpectralAccelerationData,
@@ -47,7 +48,8 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
 
   useEffect(() => {
     const filteredCurves = filterMultipleCurves(PGA, data, location, forecastTime, gmpe, backgroundSeismicity);
-    setFilteredData(filteredCurves);
+    const croppedFilteredCurves = cropCurves(filteredCurves);
+    setFilteredData(croppedFilteredCurves);
 
     const SAplot = getSAdata();
     setSAdata(SAplot);

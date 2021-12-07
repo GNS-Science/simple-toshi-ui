@@ -47,7 +47,7 @@ export const filterData = (
     }
   });
 
-  return minDataFilter(xy);
+  return xy;
 };
 
 export const filterMultipleCurves = (
@@ -67,6 +67,14 @@ export const filterMultipleCurves = (
   });
 
   return filteredCurves;
+};
+
+export const cropCurves = (data: HazardTableFilteredData): HazardTableFilteredData => {
+  const croppedCurves: HazardTableFilteredData = {};
+  Object.keys(data).map((key) => {
+    croppedCurves[key] = minDataFilter(data[key]);
+  });
+  return croppedCurves;
 };
 
 export const getHazardTableOptions = (data: InversionSolutionHazardChartsQueryResponse): HazardTableOptions => {
@@ -111,21 +119,25 @@ export const getSpectralAccelerationData = (
   const dataSet: XY[] = [];
 
   pgaValues.map((value) => {
-    let p1: number[] = [];
-    let p2: number[] = [];
-    const p3 = [Math.log(2e-3), Math.log(xValue)];
-    const p4 = [Math.log(10), Math.log(xValue)];
+    try {
+      let p1: number[] = [];
+      let p2: number[] = [];
+      const p3 = [Math.log(2e-3), Math.log(xValue)];
+      const p4 = [Math.log(10), Math.log(xValue)];
 
-    filteredCurves[value].find((xy, i) => {
-      if (xy.y <= xValue) {
-        p1 = [Math.log(xy.x), Math.log(xy.y)];
-        p2 = [Math.log(filteredCurves[value][i - 1].x), Math.log(filteredCurves[value][i - 1].y)];
-        return true;
-      }
-    });
-    const point = mathjs.intersect(p1, p2, p3, p4);
-    const result = [Math.exp(point[0] as number), mathjs.exp(mathjs.exp(point[1] as number))];
-    dataSet.push({ x: value === 'PGA' ? 0.01 : parseFloat(value), y: result[0] });
+      filteredCurves[value].find((xy, i) => {
+        if (xy.y <= xValue) {
+          p1 = [Math.log(xy.x), Math.log(xy.y)];
+          p2 = [Math.log(filteredCurves[value][i - 1].x), Math.log(filteredCurves[value][i - 1].y)];
+          return true;
+        }
+      });
+      const point = mathjs.intersect(p1, p2, p3, p4);
+      const result = [Math.exp(point[0] as number), mathjs.exp(mathjs.exp(point[1] as number))];
+      dataSet.push({ x: value === 'PGA' ? 0.01 : parseFloat(value), y: result[0] });
+    } catch {
+      dataSet.push({ x: value === 'PGA' ? 0.01 : parseFloat(value), y: 0 });
+    }
   });
 
   return dataSet;
