@@ -98,11 +98,12 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const [openDrawer, setOpenDrawer] = useState(false);
   const [showShare, setShowShare] = useState(false);
 
-  const [filteredArguments, setFilteredArguments] = useState<FilteredArguments>({ data: [] });
-  const [filteredChildren, setFilteredChildren] = useState<ValidatedChildren>({ data: [] });
-
   const data = useLazyLoadQuery<GeneralTaskChildrenTabQuery>(generalTaskChildrenTabQuery, { id });
   const childTasks = validateChildTasks(data);
+
+  const [filteredArguments, setFilteredArguments] = useState<FilteredArguments>({ data: [] });
+  const [filteredChildren, setFilteredChildren] = useState<ValidatedChildren>(childTasks);
+
   const search = useLocation().search;
   const history = useHistory();
 
