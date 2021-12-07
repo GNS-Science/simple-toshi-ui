@@ -13,20 +13,17 @@ const classes = {
   paper: `${PREFIX}-paper`,
 };
 
-// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
-const Root = styled('div')(({ theme }) => ({
-  [`& .${classes.modal}`]: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+const StyledModal = styled(Modal)({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+});
 
-  [`& .${classes.paper}`]: {
-    position: 'absolute',
-    width: 1000,
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(2, 4, 5),
-  },
+const Paper = styled('div')(({ theme }) => ({
+  position: 'absolute',
+  width: 1000,
+  backgroundColor: theme.palette.background.paper,
+  padding: theme.spacing(2, 4, 5),
 }));
 
 interface CommonModalProps {
@@ -47,15 +44,15 @@ const CommonModal: React.FC<CommonModalProps> = ({
   handleImport,
 }: CommonModalProps) => {
   return (
-    <Root>
-      <Modal
+    <>
+      <StyledModal
         open={openModal}
         onClose={handleClose}
         className={classes.modal}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
-        <div className={classes.paper}>
+        <Paper className={classes.paper}>
           <h2>
             {title}{' '}
             {!input && (
@@ -67,9 +64,9 @@ const CommonModal: React.FC<CommonModalProps> = ({
             )}
           </h2>
           {input && handleImport ? <LoadInsert handleImport={handleImport} /> : <ShareInsert text={text as string} />}
-        </div>
-      </Modal>
-    </Root>
+        </Paper>
+      </StyledModal>
+    </>
   );
 };
 
