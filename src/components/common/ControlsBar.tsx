@@ -1,10 +1,10 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
 
-const Control = styled('span')`
-  margin: 10;
-  width: auto;
-`;
+const Control = styled('span')({
+  margin: 10,
+  width: 'auto',
+});
 
 const ControlsContainer = styled('div')({
   width: '100%',
