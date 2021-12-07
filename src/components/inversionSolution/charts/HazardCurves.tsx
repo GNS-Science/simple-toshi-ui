@@ -149,7 +149,7 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
           )}
         </XYChart>
         <div
-          style={{ width: 100, height: 100, position: 'absolute', top: parentWidth * 0.3, left: 70, display: 'flex' }}
+          style={{ width: 100, height: 100, position: 'absolute', top: parentWidth * 0.4, left: 70, display: 'flex' }}
         >
           <LegendOrdinal
             direction="column"
