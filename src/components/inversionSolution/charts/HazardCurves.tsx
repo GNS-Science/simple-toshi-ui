@@ -90,7 +90,7 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
             {subHeading}
           </text>
           <AnimatedAxis label="Acceleration (g)" orientation="bottom" />
-          <AnimatedAxis label="Annual Frequency of Exceedance" labelOffset={20} orientation="left" />
+          <AnimatedAxis label={`Probability of Exceedance in ${timeSpan} Years`} labelOffset={20} orientation="left" />
           <Tooltip
             showHorizontalCrosshair
             showVerticalCrosshair
