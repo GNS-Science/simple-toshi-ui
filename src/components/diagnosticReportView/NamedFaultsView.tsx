@@ -9,6 +9,7 @@ const PREFIX = 'NamedFaultsView';
 
 const classes = {
   imageContainer: `${PREFIX}-imageContainer`,
+  selectContainer: `${PREFIX}-selectContainer`,
   image: `${PREFIX}-image`,
 };
 
@@ -16,6 +17,11 @@ const Root = styled('div')(() => ({
   [`& .${classes.imageContainer}`]: {
     display: 'flex',
     justifyContent: 'center',
+    flexWrap: 'wrap',
+  },
+
+  [`& .${classes.selectContainer}`]: {
+    display: 'flex',
     flexWrap: 'wrap',
   },
 
@@ -80,13 +86,15 @@ const NamedFaultsView: React.FC<NamedFaultsViewProps> = ({
 
   return (
     <Root>
-      <MultiSelect
-        name="Named Faults"
-        selected={namedFaultsLocations}
-        options={faultOptions}
-        setOptions={setNamedFaultsLocations}
-      />
-      <SelectControl name="Mfd Plot Views" options={mfdPlot} setOptions={setNamedFaultsView} />
+      <div className={classes.selectContainer}>
+        <MultiSelect
+          name="Named Faults"
+          selected={namedFaultsLocations}
+          options={faultOptions}
+          setOptions={setNamedFaultsLocations}
+        />
+        <SelectControl name="Mfd Plot Views" options={mfdPlot} setOptions={setNamedFaultsView} />
+      </div>
       <div className={classes.imageContainer}>
         {namedFaultsSelection?.map((item) => (
           <img

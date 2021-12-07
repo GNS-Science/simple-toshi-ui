@@ -28,7 +28,11 @@ const StyledPaper = styled(Paper)({
   },
 });
 
-const AlternatingRow = TableRow;
+const AlternatingRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+}));
 
 export interface FileTableProps {
   data?: readonly ({
