@@ -49,7 +49,11 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   },
 }));
 
-const AlternatingRow = TableRow;
+const AlternatingRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+}));
 
 export interface ChildTaskTableProps {
   data?: ValidatedChildren;

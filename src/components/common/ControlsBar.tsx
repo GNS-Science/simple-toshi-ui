@@ -6,13 +6,13 @@ const Control = styled('span')`
   width: auto;
 `;
 
-const ControlsContainer = styled('div')`
-  width: 100%;
-  display: 'flex';
-  alignitems: 'center';
-  flexwrap: 'wrap';
-  flexdirect: 'column';
-`;
+const ControlsContainer = styled('div')({
+  width: '100%',
+  display: 'flex',
+  alignItems: 'center',
+  flexWrap: 'wrap',
+  flexDirect: 'column',
+});
 
 interface ControlsBarProps {
   children: React.ReactNode;

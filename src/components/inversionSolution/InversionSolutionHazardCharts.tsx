@@ -121,16 +121,18 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
 
   return (
     <>
-      <SelectControl name="Location" options={options.location} setOptions={setLocation} />
-      <MultiSelect name="PGA/SA Period" selected={[]} options={options.PGA} setOptions={handleSetPGA} />
-      <SelectControl name="Forecast Timespan" options={options.forecastTime} setOptions={setForecastTime} />
-      <SelectControl
-        name="Background Seismicity"
-        options={options.backgroundSeismicity}
-        setOptions={setBackgroundSeismicity}
-      />
-      <SelectControl name="Ground Motion Model" options={options.gmpe} setOptions={setGmpe} />
-      <SelectControl name="Probability of Exceedence" options={['None', '2%', '10%']} setOptions={setPOE} />
+      <div style={{ width: '100%', padding: '1rem', display: 'flex', flexWrap: 'wrap' }}>
+        <SelectControl name="Location" options={options.location} setOptions={setLocation} />
+        <MultiSelect name="PGA/SA Period" selected={[]} options={options.PGA} setOptions={handleSetPGA} />
+        <SelectControl name="Forecast Timespan" options={options.forecastTime} setOptions={setForecastTime} />
+        <SelectControl
+          name="Background Seismicity"
+          options={options.backgroundSeismicity}
+          setOptions={setBackgroundSeismicity}
+        />
+        <SelectControl name="Ground Motion Model" options={options.gmpe} setOptions={setGmpe} />
+        <SelectControl name="Probability of Exceedence" options={['None', '2%', '10%']} setOptions={setPOE} />
+      </div>
       <Box>
         <Card>
           <div style={{ width: '100%', padding: '1rem', display: 'flex' }} ref={targetRef}>
