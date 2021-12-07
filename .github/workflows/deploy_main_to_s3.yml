@@ -17,7 +17,8 @@ jobs:
       REACT_APP_REPORTS_URL: ${{ secrets.REACT_APP_REPORTS_URL }}
       REACT_APP_REPORTS_LIMIT: ${{ secrets.REACT_APP_REPORTS_LIMIT }}
       REACT_APP_ROOT_PATH: ${{ secrets.REACT_APP_ROOT_PATH }}
-      
+      REACT_APP_MIN_X_BOUND: ${{secrets.REACT_APP_MIN_X_BOUND }}
+
     strategy:
       matrix:
         node-version: [15.x]
