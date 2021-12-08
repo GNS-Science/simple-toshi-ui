@@ -10,20 +10,6 @@ import { AnimatedAxis, AnimatedLineSeries, Tooltip, XYChart } from '@visx/xychar
 import { scaleOrdinal } from '@visx/scale';
 import { LegendOrdinal } from '@visx/legend';
 
-export const inversionSolutionMfdTabQuery = graphql`
-  query InversionSolutionMfdTabQuery($id: ID!) {
-    node(id: $id) {
-      ... on Table {
-        id
-        name
-        column_types
-        column_headers
-        rows
-      }
-    }
-  }
-`;
-
 interface InversionSolutionMfdTabProps {
   mfdTableId: string;
   meta:
@@ -40,9 +26,9 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
   meta,
 }: InversionSolutionMfdTabProps) => {
   const data = useLazyLoadQuery<InversionSolutionMfdTabQuery>(inversionSolutionMfdTabQuery, { id: mfdTableId });
-  // console.log('data', data);
 
   const rows = data?.node?.rows;
+  console.log(rows);
   const config_type = meta?.filter((kv) => kv?.k == 'config_type')[0]?.v;
 
   //Removes filename & file id from inversion meta data list
@@ -67,14 +53,24 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
     maxMagnitude = 9.5;
     minMagnitude = 6.5;
   } else {
+    rows?.some((value) => {
+      return value?.includes('InversionTargetMFDs.targetOnFaultSupraSeisMFD_SansTVZ');
+    })
+      ? (series = [
+          'trulyOffFaultMFD.all',
+          'InversionTargetMFDs.targetOnFaultSupraSeisMFD_SansTVZ',
+          'InversionTargetMFDs.targetOnFaultSupraSeisMFD_TVZ',
+          'totalSubSeismoOnFaultMFD',
+          'solutionMFD_rateWeighted',
+        ])
+      : (series = [
+          'trulyOffFaultMFD.all',
+          'targetOnFaultSupraSeisMFD_SansTVZ',
+          'targetOnFaultSupraSeisMFD_TVZ',
+          'totalSubSeismoOnFaultMFD',
+          'solutionMFD_rateWeighted',
+        ]);
     colours = ['orange', 'steelblue', 'lightgray', 'black', 'red'];
-    series = [
-      'trulyOffFaultMFD.all',
-      'targetOnFaultSupraSeisMFD_SansTVZ',
-      'targetOnFaultSupraSeisMFD_TVZ',
-      'totalSubSeismoOnFaultMFD',
-      'solutionMFD_rateWeighted',
-    ];
     maxMagnitude = 9.0;
     minMagnitude = 5.0;
   }
@@ -147,3 +143,17 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
 };
 
 export default InversionSolutionMfdTab;
+
+export const inversionSolutionMfdTabQuery = graphql`
+  query InversionSolutionMfdTabQuery($id: ID!) {
+    node(id: $id) {
+      ... on Table {
+        id
+        name
+        column_types
+        column_headers
+        rows
+      }
+    }
+  }
+`;
