@@ -63,3 +63,14 @@ Go to this general task on test db: `SW52ZXJzaW9uU29sdXRpb246Mjk2MS4wREtva2Q=`
 
 - [ ] Go to the `Parent Faults` tab, you should be able to see the reports depending on your selections.
 - [ ] Your changes should update in Local Storage
+
+**Favourites**
+On the same General Task report view,
+- [ ] add an Inversion Solution to your favourites by clikcing the fist button. It should change color.
+- [ ] go the My Solutions Page, and check that this has now occured in your list of favourites
+
+####**My Solutions Page**
+
+- [ ] Click the `save` button on this page, copy the JSON into your clicpboard. Then open the My Solutions page in a private window, the list should be empty. Cick `load` and paste the JSON into the input window. You should now have a list of favourites identical to your local one. 
+- [ ] Click `show report` and make sure things work property.
+- [ ] Resize your browser window and make sure everything looks ok.
