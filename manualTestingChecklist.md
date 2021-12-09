@@ -59,5 +59,7 @@ On the same General Task as above,
 - Try resizing the browser and check that everything looks ok.
 
 **Parent Faults**
+Go to this general task on test db: `SW52ZXJzaW9uU29sdXRpb246Mjk2MS4wREtva2Q=`
 
-- [ ]
+- [ ] Go to the `Parent Faults` tab, you should be able to see the reports depending on your selections.
+- [ ] Your changes should update in Local Storage
