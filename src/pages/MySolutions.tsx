@@ -129,6 +129,7 @@ const MySolutions: React.FC = () => {
           setParentFaultViews={setLocalStorageParentFaultViews}
           parentFault={localStorageParentFault}
           setParentFault={setLocalStorageParentFault}
+          disableHotkey={disableHotkey}
           setDisableHotkey={setDisableHotkey}
         />
       )}

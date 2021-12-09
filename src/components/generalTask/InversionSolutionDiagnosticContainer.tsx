@@ -25,6 +25,7 @@ interface InversionSolutionDiagnosticContainerProps {
   setParentFaultViews: (views: string[]) => void;
   parentFault: string;
   setParentFault: (fault: string) => void;
+  disableHotkey: boolean;
   setDisableHotkey: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -46,6 +47,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   setParentFaultViews,
   parentFault,
   setParentFault,
+  disableHotkey,
   setDisableHotkey,
 }: InversionSolutionDiagnosticContainerProps) => {
   const data = useLazyLoadQuery<InversionSolutionDiagnosticContainerQuery>(inversionSolutionDiagnosticContainerQuery, {
@@ -72,6 +74,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
         setParentFaultViews={setParentFaultViews}
         parentFault={parentFault}
         setParentFault={setParentFault}
+        disableHotkey={disableHotkey}
         setDisableHotkey={setDisableHotkey}
       />
     </>

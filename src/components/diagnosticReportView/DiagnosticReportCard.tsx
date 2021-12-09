@@ -59,6 +59,7 @@ interface DiagnosticReportCardProps {
   setParentFaultViews: (views: string[]) => void;
   parentFault: string;
   setParentFault: (fault: string) => void;
+  disableHotkey: boolean;
   setDisableHotkey: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -80,6 +81,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   setParentFaultViews,
   parentFault,
   setParentFault,
+  disableHotkey,
   setDisableHotkey,
 }: DiagnosticReportCardProps) => {
   const classes = useStyles();
@@ -235,6 +237,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             <FavouriteControls
               id={automationTasks[currentImage].inversion_solution.id}
               producedBy={automationTasks[currentImage].id}
+              disableHotkey={disableHotkey}
             />
           </div>
           <Tabs value={currentTab} onChange={handleTabChange}>

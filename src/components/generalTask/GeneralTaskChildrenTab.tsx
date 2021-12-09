@@ -280,6 +280,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
             parentFaultViews={isClipBoard ? parentFaultViews : localStorageParentFaultViews}
             setParentFault={isClipBoard ? setParentFault : setLocalStorageParentFault}
             setParentFaultViews={isClipBoard ? setParentFaultViews : setLocalStorageParentFaultViews}
+            disableHotkey={disableHotkey}
             setDisableHotkey={setDisableHotkey}
           />
         )}
