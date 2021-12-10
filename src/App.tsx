@@ -33,7 +33,7 @@ import { HomeQuery } from './pages/__generated__/HomeQuery.graphql';
 import Loading from './components/common/Loading';
 import theme from './theme';
 import { ThemeProvider } from '@mui/material';
-import { parentFaultsOptions, parentViewsOptions } from './constants/parentFault';
+import { parentViewsOptions } from './constants/parentFault';
 
 // Immediately load the query as our app starts. For a real app, we'd move this
 // into our routing configuration, preloading data as we transition to new routes.
