@@ -169,7 +169,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     const namedFaultsViewOption: string = isClipBoard ? namedFaultsView : localStorageNamedFaultsView;
     const namedFaultsLocationsOption: string[] = isClipBoard ? namedFaultsLocations : localStorageNamedFaultsLocations;
     const regionalViewsOption: string[] = isClipBoard ? regionalViews : localStorageRegionalViews;
-    const parentFaultOption: string = isClipBoard ? (parentFault as string) : localStorageParentFault;
+    const parentFaultOption: string = isClipBoard ? (parentFault as string) : (localStorageParentFault as string);
     const parentFaultViewsOption: string[] = isClipBoard ? parentFaultViews : localStorageParentFaultViews;
 
     const sharableState = {
@@ -301,7 +301,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
             setRegionalViews={isClipBoard ? setRegionalViews : setLocalStorageRegionalViews}
             reportTab={reportTab}
             setReportTab={setReportTab}
-            parentFault={isClipBoard ? (parentFault as string) : localStorageParentFault}
+            parentFault={isClipBoard ? (parentFault as string) : (localStorageParentFault as string)}
             parentFaultViews={isClipBoard ? parentFaultViews : localStorageParentFaultViews}
             setParentFault={isClipBoard ? setParentFault : setLocalStorageParentFault}
             setParentFaultViews={isClipBoard ? setParentFaultViews : setLocalStorageParentFaultViews}

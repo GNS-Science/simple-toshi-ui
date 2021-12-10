@@ -131,7 +131,7 @@ const MySolutions: React.FC = () => {
           setRegionalViews={setLocalStorageRegionalViews}
           parentFaultViews={localStorageParentFaultViews}
           setParentFaultViews={setLocalStorageParentFaultViews}
-          parentFault={localStorageParentFault}
+          parentFault={localStorageParentFault as string}
           setParentFault={setLocalStorageParentFault}
         />
       )}

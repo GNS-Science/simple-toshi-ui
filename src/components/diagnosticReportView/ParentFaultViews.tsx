@@ -37,6 +37,7 @@ const ParentFaultView: React.FC<ParentFaultViewProps> = ({
   setParentFault,
 }: ParentFaultViewProps) => {
   const [viewsSelctions, setViewsSelections] = useState<ParentViewsOption[]>([parentViewsOptions[0]]);
+  const [inputValue, setInputValue] = React.useState('');
 
   const viewsOptions: string[] = [];
   parentViewsOptions.map((view) => {
@@ -65,6 +66,10 @@ const ParentFaultView: React.FC<ParentFaultViewProps> = ({
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           onChange={(event: any, newValue: string | null) => {
             setParentFault(newValue as string);
+          }}
+          inputValue={inputValue}
+          onInputChange={(event, newInputValue) => {
+            setInputValue(newInputValue);
           }}
           id="controllable-states-demo"
           options={parentFaultsOptions}
