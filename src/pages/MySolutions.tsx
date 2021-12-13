@@ -85,7 +85,7 @@ const MySolutions: React.FC = () => {
         </ButtonGroup>
         <Tooltip title="use (s/S) to toggle between views">
           <Button variant="contained" onClick={() => setShowList((v) => !v)}>
-            {showList ? 'Show Report' : 'Show Report'}
+            {showList ? 'Show Report' : 'Show List'}
           </Button>
         </Tooltip>
         {!showList && (
