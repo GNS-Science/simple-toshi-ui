@@ -4,6 +4,7 @@ import { Button, Tooltip } from '@mui/material';
 
 import LocalStorageContext from '../../contexts/localStorage';
 import _ from 'lodash';
+import { useShortcut } from '../../hooks/useShortcut';
 
 const PREFIX = 'FavouriteControls';
 
@@ -28,9 +29,14 @@ const Root = styled('div')(() => ({
 interface FavouriteControlsProps {
   id: string;
   producedBy: string;
+  disableHotkey?: boolean;
 }
 
-const FavouriteControls: React.FC<FavouriteControlsProps> = ({ id, producedBy }: FavouriteControlsProps) => {
+const FavouriteControls: React.FC<FavouriteControlsProps> = ({
+  id,
+  producedBy,
+  disableHotkey,
+}: FavouriteControlsProps) => {
   const { ISFavourites, setISFavourites } = useContext(LocalStorageContext);
 
   const handleFavourites = () => {
@@ -39,14 +45,7 @@ const FavouriteControls: React.FC<FavouriteControlsProps> = ({ id, producedBy }:
     setISFavourites(favourites);
   };
 
-  // const keypressHandler = (event: KeyboardEvent) => {
-  //   if (event.key === 'r' || event.key === 'R') handleFavourites();
-  // };
-
-  // useEffect(() => {
-  //   window.addEventListener('keypress', keypressHandler);
-  //   return () => window.removeEventListener('keypress', keypressHandler);
-  // }, [id, ISFavourites]);
+  useShortcut(handleFavourites, ['r'], disableHotkey);
 
   return (
     <Root>
