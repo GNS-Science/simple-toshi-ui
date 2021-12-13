@@ -1,7 +1,7 @@
 import { makeStyles, TextField } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 import buildUrl from 'build-url-ts';
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { parentFaultsOptions, ParentViewsOption, parentViewsOptions } from '../../constants/parentFault';
 import ControlsBar from '../common/ControlsBar';
 import MultiSelect from '../common/MultiSelect';
@@ -28,6 +28,7 @@ interface ParentFaultViewProps {
   setParentFaultViews: (views: string[]) => void;
   parentFault: string;
   setParentFault: (fault: string) => void;
+  setDisableHotkey: Dispatch<SetStateAction<boolean>>;
 }
 
 const ParentFaultView: React.FC<ParentFaultViewProps> = ({
@@ -36,6 +37,7 @@ const ParentFaultView: React.FC<ParentFaultViewProps> = ({
   setParentFaultViews,
   parentFault,
   setParentFault,
+  setDisableHotkey,
 }: ParentFaultViewProps) => {
   const classes = useStyles();
   const [viewsSelctions, setViewsSelections] = useState<ParentViewsOption[]>([parentViewsOptions[0]]);
@@ -72,6 +74,8 @@ const ParentFaultView: React.FC<ParentFaultViewProps> = ({
           options={parentFaultsOptions}
           style={{ width: 300 }}
           renderInput={(params) => <TextField {...params} label="Parent Faults" />}
+          onOpen={() => setDisableHotkey(true)}
+          onClose={() => setDisableHotkey(false)}
         />
       </ControlsBar>
       <div className={classes.imageContainer}>

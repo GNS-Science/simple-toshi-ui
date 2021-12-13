@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
@@ -59,6 +59,8 @@ interface DiagnosticReportCardProps {
   setParentFaultViews: (views: string[]) => void;
   parentFault: string;
   setParentFault: (fault: string) => void;
+  disableHotkey: boolean;
+  setDisableHotkey: Dispatch<SetStateAction<boolean>>;
 }
 
 const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
@@ -79,6 +81,8 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   setParentFaultViews,
   parentFault,
   setParentFault,
+  disableHotkey,
+  setDisableHotkey,
 }: DiagnosticReportCardProps) => {
   const classes = useStyles();
   const [currentImage, setCurrentImage] = useState<number>(0);
@@ -179,6 +183,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
               setParentFaultViews={setParentFaultViews}
               parentFault={parentFault}
               setParentFault={setParentFault}
+              setDisableHotkey={setDisableHotkey}
             />
           </DiagnosticReportTabPanel>
         );
@@ -232,6 +237,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             <FavouriteControls
               id={automationTasks[currentImage].inversion_solution.id}
               producedBy={automationTasks[currentImage].id}
+              disableHotkey={disableHotkey}
             />
           </div>
           <Tabs value={currentTab} onChange={handleTabChange}>

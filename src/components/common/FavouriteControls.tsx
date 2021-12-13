@@ -3,6 +3,7 @@ import { Button, makeStyles, Tooltip } from '@material-ui/core';
 
 import LocalStorageContext from '../../contexts/localStorage';
 import _ from 'lodash';
+import { useShortcut } from '../../hooks/useShortcut';
 
 const useStyles = makeStyles(() => ({
   icon: {
@@ -18,9 +19,14 @@ const useStyles = makeStyles(() => ({
 interface FavouriteControlsProps {
   id: string;
   producedBy: string;
+  disableHotkey?: boolean;
 }
 
-const FavouriteControls: React.FC<FavouriteControlsProps> = ({ id, producedBy }: FavouriteControlsProps) => {
+const FavouriteControls: React.FC<FavouriteControlsProps> = ({
+  id,
+  producedBy,
+  disableHotkey,
+}: FavouriteControlsProps) => {
   const classes = useStyles();
   const { ISFavourites, setISFavourites } = useContext(LocalStorageContext);
 
@@ -30,14 +36,7 @@ const FavouriteControls: React.FC<FavouriteControlsProps> = ({ id, producedBy }:
     setISFavourites(favourites);
   };
 
-  // const keypressHandler = (event: KeyboardEvent) => {
-  //   if (event.key === 'r' || event.key === 'R') handleFavourites();
-  // };
-
-  // useEffect(() => {
-  //   window.addEventListener('keypress', keypressHandler);
-  //   return () => window.removeEventListener('keypress', keypressHandler);
-  // }, [id, ISFavourites]);
+  useShortcut(handleFavourites, ['r'], disableHotkey);
 
   return (
     <>
