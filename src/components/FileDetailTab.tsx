@@ -1,4 +1,4 @@
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import { graphql } from 'babel-plugin-relay/macro';
 import React from 'react';
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay';

@@ -1,7 +1,36 @@
 import React from 'react';
-import { Card, makeStyles, Typography } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Card, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { format, formatDuration, intervalToDuration, secondsToMilliseconds } from 'date-fns';
+
+const PREFIX = 'MiniAutomationTask';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  success: `${PREFIX}-success`,
+  failure: `${PREFIX}-failure`,
+  warning: `${PREFIX}-warning`,
+};
+
+const StyledCard = styled(Card)(({ theme }) => ({
+  [`&.${classes.root}`]: {
+    margin: `${theme.spacing(2)} 0px`,
+    padding: theme.spacing(1),
+  },
+
+  [`& .${classes.success}`]: {
+    color: theme.palette.success.main,
+  },
+
+  [`& .${classes.failure}`]: {
+    color: theme.palette.error.main,
+  },
+
+  [`& .${classes.warning}`]: {
+    color: theme.palette.warning.main,
+  },
+}));
 
 interface MiniAutomationTaskProps {
   id?: string;
@@ -13,22 +42,6 @@ interface MiniAutomationTaskProps {
   model_type?: string | null;
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    margin: `${theme.spacing(2)}px 0px`,
-    padding: theme.spacing(1),
-  },
-  success: {
-    color: theme.palette.success.main,
-  },
-  failure: {
-    color: theme.palette.error.main,
-  },
-  warning: {
-    color: theme.palette.warning.main,
-  },
-}));
-
 const MiniAutomationTask: React.FC<MiniAutomationTaskProps> = ({
   id,
   created,
@@ -38,7 +51,6 @@ const MiniAutomationTask: React.FC<MiniAutomationTaskProps> = ({
   task_type,
   model_type,
 }: MiniAutomationTaskProps) => {
-  const classes = useStyles();
   const durationInterval = duration
     ? formatDuration(
         intervalToDuration({
@@ -50,7 +62,7 @@ const MiniAutomationTask: React.FC<MiniAutomationTaskProps> = ({
 
   const formattedDate = created ? format(new Date(created), 'PPPppp') : '';
   return (
-    <Card className={classes.root}>
+    <StyledCard className={classes.root}>
       <Typography>
         <strong>Type: </strong> Automation Task
       </Typography>
@@ -77,7 +89,7 @@ const MiniAutomationTask: React.FC<MiniAutomationTaskProps> = ({
       <Typography>
         <Link to={`/AutomationTask/${id}`}>[more]</Link>
       </Typography>
-    </Card>
+    </StyledCard>
   );
 };
 

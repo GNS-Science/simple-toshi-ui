@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
-import { Box, Button, Card, Snackbar } from '@material-ui/core';
+import { Box, Button, Card, Snackbar } from '@mui/material';
 import { graphql } from 'babel-plugin-relay/macro';
 import SelectControl from '../common/SelectControl';
 import { XY } from '../../interfaces/common';
@@ -11,7 +11,7 @@ import {
   getSpectralAccelerationData,
 } from '../../service/inversionSolution.service';
 import MultiSelect from '../common/MultiSelect';
-import MuiAlert from '@material-ui/lab/Alert';
+import Alert from '@mui/material/Alert';
 
 import { HazardTableFilteredData } from '../../interfaces/inversionSolutions';
 import { toProperCase } from '../../utils';
@@ -121,16 +121,18 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
 
   return (
     <>
-      <SelectControl name="Location" options={options.location} setOptions={setLocation} />
-      <MultiSelect name="PGA/SA Period" selected={[]} options={options.PGA} setOptions={handleSetPGA} />
-      <SelectControl name="Forecast Timespan" options={options.forecastTime} setOptions={setForecastTime} />
-      <SelectControl
-        name="Background Seismicity"
-        options={options.backgroundSeismicity}
-        setOptions={setBackgroundSeismicity}
-      />
-      <SelectControl name="Ground Motion Model" options={options.gmpe} setOptions={setGmpe} />
-      <SelectControl name="Probability of Exceedence" options={['None', '2%', '10%']} setOptions={setPOE} />
+      <div style={{ width: '100%', padding: '1rem', display: 'flex', flexWrap: 'wrap' }}>
+        <SelectControl name="Location" options={options.location} setOptions={setLocation} />
+        <MultiSelect name="PGA/SA Period" selected={[]} options={options.PGA} setOptions={handleSetPGA} />
+        <SelectControl name="Forecast Timespan" options={options.forecastTime} setOptions={setForecastTime} />
+        <SelectControl
+          name="Background Seismicity"
+          options={options.backgroundSeismicity}
+          setOptions={setBackgroundSeismicity}
+        />
+        <SelectControl name="Ground Motion Model" options={options.gmpe} setOptions={setGmpe} />
+        <SelectControl name="Probability of Exceedence" options={['None', '2%', '10%']} setOptions={setPOE} />
+      </div>
       <Box>
         <Card>
           <div style={{ width: '100%', padding: '1rem', display: 'flex' }} ref={targetRef}>
@@ -182,9 +184,9 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
         open={openNotification}
         onClose={() => setOpenNotification(false)}
       >
-        <MuiAlert variant="filled" severity="warning">
+        <Alert variant="filled" severity="warning">
           Sorry, we cannot show more than 8 curves in one chart.
-        </MuiAlert>
+        </Alert>
       </Snackbar>
     </>
   );

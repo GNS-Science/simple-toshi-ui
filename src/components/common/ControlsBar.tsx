@@ -1,25 +1,27 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/styles';
+import { styled } from '@mui/material/styles';
 
-const useStyles = makeStyles(() => ({
-  controlsContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-  },
-  control: {
-    marginRight: 10,
-  },
-}));
+const Control = styled('span')({
+  margin: 10,
+  width: 'auto',
+});
+
+const ControlsContainer = styled('div')({
+  width: '100%',
+  display: 'flex',
+  alignItems: 'center',
+  flexWrap: 'wrap',
+  flexDirect: 'column',
+});
+
 interface ControlsBarProps {
   children: React.ReactNode;
 }
 const ControlsBar: React.FC<ControlsBarProps> = ({ children }: ControlsBarProps) => {
-  const classes = useStyles();
   const childrenWithMargin = React.Children.map(children, (child) => {
-    return <div className={classes.control}>{child}</div>;
+    return <Control>{child}</Control>;
   });
-  return <div className={classes.controlsContainer}>{childrenWithMargin}</div>;
+  return <ControlsContainer>{childrenWithMargin}</ControlsContainer>;
 };
 
 export default ControlsBar;

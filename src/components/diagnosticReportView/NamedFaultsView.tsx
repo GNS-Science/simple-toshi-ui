@@ -1,17 +1,31 @@
-import { makeStyles } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
 import buildUrl from 'build-url-ts';
 import React, { useEffect, useState } from 'react';
 import { mfdPlotOptions, NamedFaultsOption, namedFaultsOptions, PlotOption } from '../../constants/nameFaultsMfds';
 import MultiSelect from '../common/MultiSelect';
 import SelectControl from '../common/SelectControl';
 
-const useStyles = makeStyles(() => ({
-  imageContainer: {
+const PREFIX = 'NamedFaultsView';
+
+const classes = {
+  imageContainer: `${PREFIX}-imageContainer`,
+  selectContainer: `${PREFIX}-selectContainer`,
+  image: `${PREFIX}-image`,
+};
+
+const Root = styled('div')(() => ({
+  [`& .${classes.imageContainer}`]: {
     display: 'flex',
     justifyContent: 'center',
     flexWrap: 'wrap',
   },
-  image: {
+
+  [`& .${classes.selectContainer}`]: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+
+  [`& .${classes.image}`]: {
     padding: '5px',
     maxHeight: '80vh',
     width: '25%',
@@ -36,8 +50,6 @@ const NamedFaultsView: React.FC<NamedFaultsViewProps> = ({
   namedFaultsLocations,
   setNamedFaultsLocations,
 }: NamedFaultsViewProps) => {
-  const classes = useStyles();
-
   const [namedFaultsSelection, setNamedFaultsSelection] = useState<NamedFaultsOption[]>([namedFaultsOptions[0]]);
   const [mfdPlotSelection, setMfdPlotSelection] = useState<PlotOption>(mfdPlotOptions[0]);
 
@@ -73,14 +85,16 @@ const NamedFaultsView: React.FC<NamedFaultsViewProps> = ({
   };
 
   return (
-    <>
-      <MultiSelect
-        name="Named Faults"
-        selected={namedFaultsLocations}
-        options={faultOptions}
-        setOptions={setNamedFaultsLocations}
-      />
-      <SelectControl name="Mfd Plot Views" options={mfdPlot} setOptions={setNamedFaultsView} />
+    <Root>
+      <div className={classes.selectContainer}>
+        <MultiSelect
+          name="Named Faults"
+          selected={namedFaultsLocations}
+          options={faultOptions}
+          setOptions={setNamedFaultsLocations}
+        />
+        <SelectControl name="Mfd Plot Views" options={mfdPlot} setOptions={setNamedFaultsView} />
+      </div>
       <div className={classes.imageContainer}>
         {namedFaultsSelection?.map((item) => (
           <img
@@ -90,7 +104,7 @@ const NamedFaultsView: React.FC<NamedFaultsViewProps> = ({
           />
         ))}
       </div>
-    </>
+    </Root>
   );
 };
 

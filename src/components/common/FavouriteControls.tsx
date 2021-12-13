@@ -1,18 +1,28 @@
 import React, { useContext } from 'react';
-import { Button, makeStyles, Tooltip } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Button, Tooltip } from '@mui/material';
 
 import LocalStorageContext from '../../contexts/localStorage';
 import _ from 'lodash';
 import { useShortcut } from '../../hooks/useShortcut';
 
-const useStyles = makeStyles(() => ({
-  icon: {
+const PREFIX = 'FavouriteControls';
+
+const classes = {
+  icon: `${PREFIX}-icon`,
+  iconSelected: `${PREFIX}-iconSelected`,
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')(() => ({
+  [`& .${classes.icon}`]: {
     height: 35,
     filter: 'invert(88%) sepia(0%) saturate(1246%) hue-rotate(152deg) brightness(99%) contrast(97%)',
   },
-  iconSelected: {
+
+  [`& .${classes.iconSelected}`]: {
     height: 35,
-    filter: 'invert(48%) sepia(27%) saturate(2609%) hue-rotate(189deg) brightness(104%) contrast(102%)',
+    filter: 'invert(8%) sepia(100%) saturate(5314%) hue-rotate(342deg) brightness(96%) contrast(99%)',
   },
 }));
 
@@ -27,7 +37,6 @@ const FavouriteControls: React.FC<FavouriteControlsProps> = ({
   producedBy,
   disableHotkey,
 }: FavouriteControlsProps) => {
-  const classes = useStyles();
   const { ISFavourites, setISFavourites } = useContext(LocalStorageContext);
 
   const handleFavourites = () => {
@@ -39,7 +48,7 @@ const FavouriteControls: React.FC<FavouriteControlsProps> = ({
   useShortcut(handleFavourites, ['r'], disableHotkey);
 
   return (
-    <>
+    <Root>
       <Tooltip title="use (r/R) to favourite/remove item">
         <Button onClick={handleFavourites}>
           <img
@@ -48,7 +57,7 @@ const FavouriteControls: React.FC<FavouriteControlsProps> = ({
           />
         </Button>
       </Tooltip>
-    </>
+    </Root>
   );
 };
 

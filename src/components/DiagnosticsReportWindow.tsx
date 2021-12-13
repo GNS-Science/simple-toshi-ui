@@ -1,19 +1,29 @@
 import React from 'react';
-import { makeStyles, Theme } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import { Typography } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import { Typography } from '@mui/material';
 import NewWindow from 'rc-new-window';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
+const PREFIX = 'DiagnosticsReportWindow';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  cardContent: `${PREFIX}-cardContent`,
+  media: `${PREFIX}-media`,
+};
+
+const StyledNewWindow = styled(NewWindow)(({ theme }) => ({
+  [`& .${classes.root}`]: {
     padding: theme.spacing(0),
   },
-  cardContent: {
+
+  [`& .${classes.cardContent}`]: {
     paddingTop: 0,
   },
-  media: {
+
+  [`& .${classes.media}`]: {
     height: '90%',
     padding: theme.spacing(0),
   },
@@ -32,11 +42,10 @@ const DiagnosticsReportWindow: React.FC<DiagnosticsReportWindowProps> = ({
   title,
   info,
 }: DiagnosticsReportWindowProps) => {
-  const classes = useStyles();
   //const features = { center: false, menubar: false, location: false, height: 60, width: 100 };
 
   return (
-    <NewWindow title={windowTitle} name={windowTitle}>
+    <StyledNewWindow title={windowTitle} name={windowTitle}>
       <Card className={classes.root}>
         <CardContent className={classes.cardContent}>
           <Typography gutterBottom variant="h5" component="h5">
@@ -48,7 +57,7 @@ const DiagnosticsReportWindow: React.FC<DiagnosticsReportWindowProps> = ({
         </CardContent>
         <CardMedia className={classes.media} src={url} title="DiagnosticsReport" component="iframe" />
       </Card>
-    </NewWindow>
+    </StyledNewWindow>
   );
 };
 

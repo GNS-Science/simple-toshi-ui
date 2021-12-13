@@ -1,16 +1,24 @@
-import { makeStyles } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
 import buildUrl from 'build-url-ts';
 import React, { useEffect, useState } from 'react';
 import { RegionalSolutionMfdOption, regionalSolutionMfdOptions } from '../../constants/regionalSolutionMfd';
 import MultiSelect from '../common/MultiSelect';
 
-const useStyles = makeStyles(() => ({
-  imageContainer: {
+const PREFIX = 'RegionalMfdView';
+
+const classes = {
+  imageContainer: `${PREFIX}-imageContainer`,
+  image: `${PREFIX}-image`,
+};
+
+const Root = styled('div')(() => ({
+  [`& .${classes.imageContainer}`]: {
     display: 'flex',
     justifyContent: 'center',
     flexWrap: 'wrap',
   },
-  image: {
+
+  [`& .${classes.image}`]: {
     padding: '5px',
     maxHeight: '80vh',
     width: '25%',
@@ -31,8 +39,6 @@ const RegionalMfdView: React.FC<RegionalMfdViewProps> = ({
   regionalViews,
   setRegionalViews,
 }: RegionalMfdViewProps) => {
-  const classes = useStyles();
-
   const [regionalViewSelections, setRegionalViewSelections] = useState<RegionalSolutionMfdOption[]>([
     regionalSolutionMfdOptions[0],
   ]);
@@ -57,7 +63,7 @@ const RegionalMfdView: React.FC<RegionalMfdViewProps> = ({
   });
 
   return (
-    <>
+    <Root>
       <MultiSelect
         name="Regional Solution MFD"
         selected={regionalViews}
@@ -69,7 +75,7 @@ const RegionalMfdView: React.FC<RegionalMfdViewProps> = ({
           <img key={option.path} className={classes.image} src={getRegionalMfdUrl(id, option.path)} alt={option.path} />
         ))}
       </div>
-    </>
+    </Root>
   );
 };
 

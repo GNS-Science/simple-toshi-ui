@@ -1,22 +1,28 @@
 import React from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import useScrollTrigger from '@material-ui/core/useScrollTrigger';
-import Slide from '@material-ui/core/Slide';
-import MenuIcon from '@material-ui/icons/Menu';
-import { IconButton, Menu, MenuItem, Theme } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import useScrollTrigger from '@mui/material/useScrollTrigger';
+import Slide from '@mui/material/Slide';
+import MenuIcon from '@mui/icons-material/Menu';
+import { Menu, MenuItem } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { makeStyles } from '@material-ui/styles';
+import { IconButton } from '@mui/material';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  appBar: {
+const PREFIX = 'MenuBar';
+
+const classes = {
+  appBar: `${PREFIX}-appBar`,
+};
+
+const StyledSlide = styled(Slide)(({ theme }) => ({
+  [`& .${classes.appBar}`]: {
     zIndex: theme.zIndex.drawer + 1,
   },
 }));
 
 const MenuBar: React.FC = () => {
-  const classes = useStyles();
   const trigger = useScrollTrigger();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -29,10 +35,10 @@ const MenuBar: React.FC = () => {
   };
 
   return (
-    <Slide appear={false} direction="down" in={!trigger}>
+    <StyledSlide appear={false} direction="down" in={!trigger}>
       <AppBar className={classes.appBar} position="sticky">
         <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="menu" onClick={handleClick}>
+          <IconButton edge="start" color="inherit" aria-label="menu" onClick={handleClick} size="large">
             <MenuIcon />
           </IconButton>
           <Menu
@@ -42,7 +48,6 @@ const MenuBar: React.FC = () => {
             onClose={handleClose}
             anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
             transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-            getContentAnchorEl={null}
           >
             <MenuItem component={Link} to="/Search" onClick={handleClose}>
               Search
@@ -62,7 +67,7 @@ const MenuBar: React.FC = () => {
           </Typography>
         </Toolbar>
       </AppBar>
-    </Slide>
+    </StyledSlide>
   );
 };
 

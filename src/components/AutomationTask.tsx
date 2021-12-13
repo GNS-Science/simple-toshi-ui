@@ -3,7 +3,7 @@ import { graphql } from 'babel-plugin-relay/macro';
 import { Link, useParams } from 'react-router-dom';
 import { AutomationTaskQuery } from './__generated__/AutomationTaskQuery.graphql';
 import { useLazyLoadQuery } from 'react-relay/hooks';
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import KeyValueTable from './common/KeyValueTable';
 import InfoTable from './InfoTable';
 import FileTable from './FileTable';

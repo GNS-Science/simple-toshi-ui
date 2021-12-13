@@ -1,12 +1,19 @@
-import { Card, CardContent, Grid, List, ListItem, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
+import { Card, CardContent, Grid, List, ListItem, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Link } from 'react-router-dom';
 import { SolutionItem } from '../../interfaces/mySolutions';
 
-const useStyles = makeStyles(() => ({
-  card: {
+const PREFIX = 'MySolutionsListItem';
+
+const classes = {
+  card: `${PREFIX}-card`,
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')(() => ({
+  [`& .${classes.card}`]: {
     margin: 10,
   },
 }));
@@ -15,11 +22,10 @@ interface MySolutionsListItemProps {
   automationTask: SolutionItem;
 }
 const MySolutionsListItem: React.FC<MySolutionsListItemProps> = ({ automationTask }: MySolutionsListItemProps) => {
-  const classes = useStyles();
   const parentTask = automationTask?.parents?.edges[0]?.node?.parent;
   const inversionSolution = automationTask?.inversion_solution;
   return (
-    <>
+    <Root>
       <Card className={classes.card}>
         <CardContent>
           <Typography variant="h5">
@@ -75,7 +81,7 @@ const MySolutionsListItem: React.FC<MySolutionsListItemProps> = ({ automationTas
           )}
         </CardContent>
       </Card>
-    </>
+    </Root>
   );
 };
 

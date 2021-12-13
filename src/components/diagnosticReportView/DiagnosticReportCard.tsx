@@ -1,18 +1,10 @@
+import { styled } from '@mui/material/styles';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import {
-  Card,
-  CardContent,
-  IconButton,
-  makeStyles,
-  Tooltip,
-  Typography,
-  Tabs,
-  Tab,
-  CircularProgress,
-} from '@material-ui/core';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { Card, CardContent, Tooltip, Typography, Tabs, Tab, CircularProgress } from '@mui/material';
+import { IconButton } from '@mui/material';
 
 import { ReportItem } from '../../interfaces/diagnosticReport';
 import FavouriteControls from '../common/FavouriteControls';
@@ -23,11 +15,21 @@ import RegionalMfdView from './RegionalMfdView';
 import InversionSolutionHazardCharts from '../inversionSolution/InversionSolutionHazardCharts';
 import ParentFaultView from './ParentFaultViews';
 
-const useStyles = makeStyles(() => ({
-  root: {
+const PREFIX = 'DiagnosticReportCard';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  buttonContainer: `${PREFIX}-buttonContainer`,
+  button: `${PREFIX}-button`,
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')(() => ({
+  [`& .${classes.root}`]: {
     flexGrow: 1,
   },
-  buttonContainer: {
+
+  [`& .${classes.buttonContainer}`]: {
     paddingLeft: '25%',
     paddingRight: '25%',
     width: '100%',
@@ -35,7 +37,8 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  button: {
+
+  [`& .${classes.button}`]: {
     paddingLeft: 70,
     paddingRight: 70,
   },
@@ -84,7 +87,6 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   disableHotkey,
   setDisableHotkey,
 }: DiagnosticReportCardProps) => {
-  const classes = useStyles();
   const [currentImage, setCurrentImage] = useState<number>(0);
   const [currentTab, setCurrentTab] = useState<number>(0);
   const [hazardId, setHazardId] = useState<string>('');
@@ -201,7 +203,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   };
 
   return (
-    <>
+    <Root>
       <Card className={classes.root}>
         <CardContent>
           <h4>
@@ -217,7 +219,13 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
           </Typography>
           <div className={classes.buttonContainer}>
             <Tooltip title="use (<,) (>.) or arrow keys to navigate">
-              <IconButton className={classes.button} color="primary" onClick={prevImage} disabled={currentImage === 0}>
+              <IconButton
+                className={classes.button}
+                color="primary"
+                onClick={prevImage}
+                disabled={currentImage === 0}
+                size="large"
+              >
                 <ArrowBackIosIcon />
               </IconButton>
             </Tooltip>
@@ -230,6 +238,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
                 color="primary"
                 onClick={nextImage}
                 disabled={currentImage === automationTasks.length - 1}
+                size="large"
               >
                 <ArrowForwardIosIcon />
               </IconButton>
@@ -244,13 +253,13 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             <Tab label="General" id="simple-tab-0" disableFocusRipple />
             <Tab label="Regional Solutions" id="simple-tab-1" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
             <Tab label="Named Faults" id="simple-tab-2" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
-            <Tab label="Parent Faults" id="simple-etab-3" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
+            <Tab label="Parent Faults" id="simple-tab-3" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
             <Tab label="Hazard Charts" id="simple-tab-4" disabled={!hazardId.length} disableFocusRipple />
           </Tabs>
           {renderTab()}
         </CardContent>
       </Card>
-    </>
+    </Root>
   );
 };
 

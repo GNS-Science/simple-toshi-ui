@@ -1,30 +1,38 @@
 import React from 'react';
-import { makeStyles, Paper, Table, TableBody, TableCell, TableHead, TableRow, withStyles } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import TruncateText from './TruncateText';
 import { FileRole } from './__generated__/RuptureGenerationTaskQuery.graphql';
 import { Link } from 'react-router-dom';
 
-const useStyles = makeStyles({
-  root: {
+const PREFIX = 'FileTable';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  root2: `${PREFIX}-root2`,
+  table: `${PREFIX}-table`,
+  tableCell: `${PREFIX}-tableCell`,
+};
+
+const StyledPaper = styled(Paper)({
+  [`& .${classes.root2}`]: {
     marginTop: '40px',
     marginBottom: '40px',
   },
-  table: {
+  [`& .${classes.table}`]: {
     tableLayout: 'fixed',
     wordWrap: 'break-word',
   },
-  tableCell: {
+  [`& .${classes.tableCell}`]: {
     borderBottom: 'none',
   },
 });
 
-const AlternatingRow = withStyles((theme) => ({
-  root: {
-    '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.grey[100],
-    },
+const AlternatingRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
   },
-}))(TableRow);
+}));
 
 export interface FileTableProps {
   data?: readonly ({
@@ -41,15 +49,18 @@ export interface FileTableProps {
 }
 
 const FileTable: React.FC<FileTableProps> = ({ data }: FileTableProps) => {
-  const classes = useStyles();
   return (
-    <Paper className={classes.root}>
+    <StyledPaper className={classes.root}>
       <Table stickyHeader size="small" className={classes.table}>
         <colgroup>
           <col style={{ width: '50%' }} />
         </colgroup>
         <TableHead>
-          <AlternatingRow>
+          <AlternatingRow
+            classes={{
+              root: classes.root,
+            }}
+          >
             <TableCell>File</TableCell>
             <TableCell>Role</TableCell>
             <TableCell>Download</TableCell>
@@ -57,7 +68,12 @@ const FileTable: React.FC<FileTableProps> = ({ data }: FileTableProps) => {
         </TableHead>
         <TableBody>
           {data?.map((e) => (
-            <AlternatingRow key={e?.node?.file?.id}>
+            <AlternatingRow
+              key={e?.node?.file?.id}
+              classes={{
+                root: classes.root,
+              }}
+            >
               <TableCell className={classes.tableCell}>
                 <TruncateText text={e?.node?.file?.file_name ?? ''} />
               </TableCell>
@@ -76,7 +92,7 @@ const FileTable: React.FC<FileTableProps> = ({ data }: FileTableProps) => {
           ))}
         </TableBody>
       </Table>
-    </Paper>
+    </StyledPaper>
   );
 };
 

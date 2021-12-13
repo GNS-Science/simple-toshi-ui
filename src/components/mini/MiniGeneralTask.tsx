@@ -1,8 +1,22 @@
 import React from 'react';
-import { Card, Grid, List, ListItem, makeStyles, Tooltip, Typography } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Card, Grid, List, ListItem, Tooltip, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import ReactMarkdown from 'react-markdown';
+
+const PREFIX = 'MiniGeneralTask';
+
+const classes = {
+  root: `${PREFIX}-root`,
+};
+
+const StyledCard = styled(Card)(({ theme }) => ({
+  [`&.${classes.root}`]: {
+    margin: `${theme.spacing(2)} 0px`,
+    padding: theme.spacing(1),
+  },
+}));
 
 interface MiniGeneralTaskProps {
   id?: string;
@@ -17,12 +31,6 @@ interface MiniGeneralTaskProps {
   subtask_count?: number | null;
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    margin: `${theme.spacing(2)}px 0px`,
-    padding: theme.spacing(1),
-  },
-}));
 const MiniGeneralTask: React.FC<MiniGeneralTaskProps> = ({
   id,
   title,
@@ -35,10 +43,9 @@ const MiniGeneralTask: React.FC<MiniGeneralTaskProps> = ({
   notes,
   subtask_count,
 }: MiniGeneralTaskProps) => {
-  const classes = useStyles();
   const formattedDate = created ? format(new Date(created), 'PPPppp') : '';
   return (
-    <Card className={classes.root}>
+    <StyledCard className={classes.root}>
       <Typography>
         <strong>Type: General Task</strong>
       </Typography>
@@ -103,7 +110,7 @@ const MiniGeneralTask: React.FC<MiniGeneralTaskProps> = ({
       <Typography>
         <Link to={`/GeneralTask/${id}`}>[more]</Link>
       </Typography>
-    </Card>
+    </StyledCard>
   );
 };
 

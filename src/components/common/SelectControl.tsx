@@ -1,8 +1,16 @@
 import React, { useState } from 'react';
-import { FormControl, Input, InputLabel, makeStyles, MenuItem, Select, Theme } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { FormControl, Input, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  formControl: {
+const PREFIX = 'SelectControl';
+
+const classes = {
+  formControl: `${PREFIX}-formControl`,
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classes.formControl}`]: {
     margin: theme.spacing(2),
     minWidth: 200,
     maxWidth: 300,
@@ -26,17 +34,15 @@ interface SelectControlProps {
 const SelectControl: React.FC<SelectControlProps> = ({ options, setOptions, name }: SelectControlProps) => {
   const [selectedItems, setSelectedItems] = useState<string>(options[0]);
 
-  const classes = useStyles();
-
-  const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
+  const handleChange = (event: SelectChangeEvent<string>) => {
     const value = (event.target.value as string) || '';
     setSelectedItems(value);
     setOptions(value);
   };
 
   return (
-    <>
-      <FormControl className={classes.formControl}>
+    <Root>
+      <FormControl className={classes.formControl} variant="standard">
         <InputLabel>{name}</InputLabel>
         <Select
           labelId={`report-hash-label`}
@@ -46,6 +52,7 @@ const SelectControl: React.FC<SelectControlProps> = ({ options, setOptions, name
           onChange={handleChange}
           input={<Input />}
           MenuProps={MenuProps}
+          variant="standard"
         >
           {options.map((opt) => (
             <MenuItem key={opt} value={opt}>
@@ -54,7 +61,7 @@ const SelectControl: React.FC<SelectControlProps> = ({ options, setOptions, name
           ))}
         </Select>
       </FormControl>
-    </>
+    </Root>
   );
 };
 
