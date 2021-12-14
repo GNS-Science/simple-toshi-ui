@@ -82,8 +82,9 @@ const ParentFaultView: React.FC<ParentFaultViewProps> = ({
         />
       </ControlsBar>
       <ImageContainer>
-        {parentFault !== null &&
-          viewsSelections.map((option) => <Image key={option.path} src={getUrl(option.path)} alt={option.path} />)}
+        {parentFault
+          ? viewsSelections.map((option) => <Image key={option.path} src={getUrl(option.path)} alt={option.path} />)
+          : 'Select a parent fault to display charts.'}
       </ImageContainer>
     </>
   );
