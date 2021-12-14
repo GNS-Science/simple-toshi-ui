@@ -1,9 +1,13 @@
 import { LatLngExpression } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Map, TileLayer } from 'react-leaflet';
+import { Map, TileLayer, GeoJSON } from 'react-leaflet';
 import React from 'react';
 import { Typography, Box, Card, FormControl, MenuItem, Select, Slider } from '@mui/material';
 import HeatmapLayer from 'react-leaflet-heatmap-layer';
+import sampleData from '../constants/sampleGeojsonData1.json';
+import { GeoJsonObject } from 'geojson';
+
+const geoJsonData = sampleData as GeoJsonObject;
 
 const generateHazardData = () => {
   let i;
@@ -123,7 +127,7 @@ const HazardMap: React.FC = () => {
           Hazard Map
         </Typography>
         <Map center={nz_centre} zoom={zoom} scrollWheelZoom={false} style={{ height: '700px' }}>
-          <HeatmapLayer
+          {/* <HeatmapLayer
             fitBoundsOnLoad
             fitBoundsOnUpdate
             points={filteredRows}
@@ -131,8 +135,9 @@ const HazardMap: React.FC = () => {
             latitudeExtractor={(m: string) => m[2]}
             intensityExtractor={(m: string) => parseFloat(m[4])}
             maxZoom={10}
-          />
+          /> */}
           <TileLayer attribution={provider_attibution} url={provider_url} />
+          <GeoJSON data={geoJsonData} />
         </Map>
       </Card>
     </Box>
