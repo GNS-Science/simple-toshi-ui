@@ -52,7 +52,12 @@ const HazardMapPreview2: React.FC = () => {
         </Typography>
         <Map center={nz_centre} zoom={zoom} scrollWheelZoom={false} style={{ height: '700px' }}>
           <TileLayer attribution={provider_attibution} url={provider_url} />
-          <GeoJSON data={geoJsonData} />
+          <GeoJSON
+            data={geoJsonData}
+            style={(feature) => {
+              return { color: feature?.properties.stroke, weight: feature?.properties['stroke-width'] };
+            }}
+          />
         </Map>
       </Card>
     </Box>
