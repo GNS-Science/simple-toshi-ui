@@ -3,11 +3,16 @@ import 'leaflet/dist/leaflet.css';
 import { Map, TileLayer, GeoJSON } from 'react-leaflet';
 import React from 'react';
 import { Typography, Box, Card, FormControl, MenuItem, Select, Slider } from '@mui/material';
-import HeatmapLayer from 'react-leaflet-heatmap-layer';
-import sampleData from '../constants/sampleGeojsonData1.json';
 import { GeoJsonObject } from 'geojson';
+import sampleData from '../constants/sampleGeojsonData2.json';
 
 const geoJsonData = sampleData as GeoJsonObject;
+
+const myStyle = {
+  color: '#000000',
+  weight: 1,
+  opacity: 0.65,
+};
 
 const generateHazardData = () => {
   let i;
@@ -60,7 +65,7 @@ const generateHazardData = () => {
   return data;
 };
 
-const HazardMap: React.FC = () => {
+const HazardMapPreview1: React.FC = () => {
   // Default coordinates set to Masterton station
   const nz_centre: LatLngExpression = [-40.946, 174.167];
   // const position: LatLngExpression = [-40.946, 175.667]; //Masterton
@@ -137,11 +142,11 @@ const HazardMap: React.FC = () => {
             maxZoom={10}
           /> */}
           <TileLayer attribution={provider_attibution} url={provider_url} />
-          <GeoJSON data={geoJsonData} />
+          <GeoJSON data={geoJsonData} style={myStyle} />
         </Map>
       </Card>
     </Box>
   );
 };
 
-export default HazardMap;
+export default HazardMapPreview1;
