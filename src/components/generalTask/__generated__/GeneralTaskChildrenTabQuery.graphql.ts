@@ -3,6 +3,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+
 export type EventResult = "FAILURE" | "PARTIAL" | "SUCCESS" | "UNDEFINED" | "%future added value";
 export type EventState = "DONE" | "SCHEDULED" | "STARTED" | "UNDEFINED" | "%future added value";
 export type ModelType = "CRUSTAL" | "SUBDUCTION" | "%future added value";
@@ -11,8 +12,8 @@ export type GeneralTaskChildrenTabQueryVariables = {
 };
 export type GeneralTaskChildrenTabQueryResponse = {
     readonly node: {
-        readonly id?: string;
-        readonly model_type?: ModelType | null;
+        readonly id?: string | undefined;
+        readonly model_type?: ModelType | null | undefined;
         readonly children?: {
             readonly edges: ReadonlyArray<{
                 readonly node: {
@@ -45,7 +46,7 @@ export type GeneralTaskChildrenTabQueryResponse = {
                     };
                 } | null;
             } | null>;
-        } | null;
+        } | null | undefined;
     } | null;
 };
 export type GeneralTaskChildrenTabQuery = {

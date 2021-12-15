@@ -3,17 +3,18 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+
 export type RowItemType = "boolean" | "double" | "integer" | "string" | "%future added value";
 export type InversionSolutionMfdTabQueryVariables = {
     id: string;
 };
 export type InversionSolutionMfdTabQueryResponse = {
     readonly node: {
-        readonly id?: string;
-        readonly name?: string | null;
-        readonly column_types?: ReadonlyArray<RowItemType | null> | null;
-        readonly column_headers?: ReadonlyArray<string | null> | null;
-        readonly rows?: ReadonlyArray<ReadonlyArray<string | null> | null> | null;
+        readonly id?: string | undefined;
+        readonly name?: string | null | undefined;
+        readonly column_types?: ReadonlyArray<RowItemType | null> | null | undefined;
+        readonly column_headers?: ReadonlyArray<string | null> | null | undefined;
+        readonly rows?: ReadonlyArray<ReadonlyArray<string | null> | null> | null | undefined;
     } | null;
 };
 export type InversionSolutionMfdTabQuery = {

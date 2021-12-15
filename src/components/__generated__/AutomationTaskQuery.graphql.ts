@@ -3,6 +3,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+
 export type EventResult = "FAILURE" | "PARTIAL" | "SUCCESS" | "UNDEFINED" | "%future added value";
 export type EventState = "DONE" | "SCHEDULED" | "STARTED" | "UNDEFINED" | "%future added value";
 export type FileRole = "READ" | "READ_WRITE" | "UNDEFINED" | "WRITE" | "%future added value";
@@ -14,38 +15,37 @@ export type AutomationTaskQueryVariables = {
 export type AutomationTaskQueryResponse = {
     readonly node: {
         readonly id: string;
-        readonly duration?: number | null;
-        readonly created?: unknown | null;
-        readonly result?: EventResult | null;
-        readonly state?: EventState | null;
-        readonly task_type?: TaskSubType | null;
-        readonly model_type?: ModelType | null;
+        readonly duration?: number | null | undefined;
+        readonly created?: unknown | null | undefined;
+        readonly result?: EventResult | null | undefined;
+        readonly state?: EventState | null | undefined;
+        readonly task_type?: TaskSubType | null | undefined;
+        readonly model_type?: ModelType | null | undefined;
         readonly files?: {
             readonly edges: ReadonlyArray<{
                 readonly node: {
-                    readonly id: string;
                     readonly role: FileRole;
                     readonly file: {
                         readonly __typename: string;
-                        readonly id?: string;
-                        readonly file_name?: string | null;
-                        readonly file_url?: string | null;
-                    };
+                        readonly id?: string | undefined;
+                        readonly file_name?: string | null | undefined;
+                        readonly file_url?: string | null | undefined;
+                    } | null;
                 } | null;
             } | null>;
-        } | null;
+        } | null | undefined;
         readonly arguments?: ReadonlyArray<{
             readonly k: string | null;
             readonly v: string | null;
-        } | null> | null;
+        } | null> | null | undefined;
         readonly environment?: ReadonlyArray<{
             readonly k: string | null;
             readonly v: string | null;
-        } | null> | null;
+        } | null> | null | undefined;
         readonly metrics?: ReadonlyArray<{
             readonly k: string | null;
             readonly v: string | null;
-        } | null> | null;
+        } | null> | null | undefined;
         readonly parents?: {
             readonly edges: ReadonlyArray<{
                 readonly node: {
@@ -54,7 +54,7 @@ export type AutomationTaskQueryResponse = {
                     };
                 } | null;
             } | null>;
-        } | null;
+        } | null | undefined;
     } | null;
 };
 export type AutomationTaskQuery = {
@@ -82,7 +82,6 @@ query AutomationTaskQuery(
       files {
         edges {
           node {
-            id
             role
             file {
               __typename
@@ -224,7 +223,6 @@ v11 = {
           "name": "node",
           "plural": false,
           "selections": [
-            (v2/*: any*/),
             {
               "alias": null,
               "args": null,
@@ -484,14 +482,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "01823c1440176aaa198c7a9737756c57",
+    "cacheID": "194c9ef5dd0b6da0f608d1e3f2b1ca78",
     "id": null,
     "metadata": {},
     "name": "AutomationTaskQuery",
     "operationKind": "query",
-    "text": "query AutomationTaskQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    id\n    ... on AutomationTask {\n      id\n      duration\n      created\n      result\n      state\n      task_type\n      model_type\n      files {\n        edges {\n          node {\n            id\n            role\n            file {\n              __typename\n              ... on Node {\n                __isNode: __typename\n                id\n              }\n              ... on FileInterface {\n                __isFileInterface: __typename\n                file_name\n                file_url\n              }\n            }\n          }\n        }\n      }\n      arguments {\n        k\n        v\n      }\n      environment {\n        k\n        v\n      }\n      metrics {\n        k\n        v\n      }\n      parents {\n        edges {\n          node {\n            parent {\n              id\n            }\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query AutomationTaskQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    id\n    ... on AutomationTask {\n      id\n      duration\n      created\n      result\n      state\n      task_type\n      model_type\n      files {\n        edges {\n          node {\n            role\n            file {\n              __typename\n              ... on Node {\n                __isNode: __typename\n                id\n              }\n              ... on FileInterface {\n                __isFileInterface: __typename\n                file_name\n                file_url\n              }\n            }\n          }\n        }\n      }\n      arguments {\n        k\n        v\n      }\n      environment {\n        k\n        v\n      }\n      metrics {\n        k\n        v\n      }\n      parents {\n        edges {\n          node {\n            parent {\n              id\n            }\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '66006b6cf8bcbcc6224030e24b9a4cf0';
+(node as any).hash = '2c5609e7eebd35bca611599d91fe3870';
 export default node;

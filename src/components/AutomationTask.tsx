@@ -29,7 +29,7 @@ const automationTaskQuery = graphql`
         files {
           edges {
             node {
-              id
+              # id
               role
               file {
                 __typename

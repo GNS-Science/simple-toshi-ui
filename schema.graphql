@@ -385,11 +385,9 @@ interface FileInterface {
   relations(before: String, after: String, first: Int, last: Int): FileRelationConnection
 }
 
-type FileRelation implements Node {
-  """The ID of the object."""
-  id: ID!
-  thing: Thing!
-  file: FileUnion!
+type FileRelation {
+  thing: Thing
+  file: FileUnion
   role: FileRole!
   thing_id: String
   file_id: String

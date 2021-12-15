@@ -27,7 +27,9 @@ const ruptureGenerationTaskQuery = graphql`
         files {
           edges {
             node {
-              id
+              file_id
+              thing_id
+              # id
               role
               file {
                 __typename
