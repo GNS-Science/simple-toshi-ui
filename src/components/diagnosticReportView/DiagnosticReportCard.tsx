@@ -95,6 +95,10 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
     if (reportTab !== 0) setCurrentTab(reportTab ?? 0);
   }, []);
 
+  if (!automationTasks[currentImage]) {
+    return <Typography> There are no valid reports to show. </Typography>;
+  }
+
   useEffect(() => {
     setReportTab && setReportTab(currentTab);
   }, [currentTab]);
@@ -136,10 +140,6 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
     window.addEventListener('keyup', hotkeyHandler);
     return () => window.removeEventListener('keyup', hotkeyHandler);
   }, [currentImage]);
-
-  if (!automationTasks[currentImage]) {
-    return <Typography> There are no valid reports to show. </Typography>;
-  }
 
   const renderTab = () => {
     switch (currentTab) {
