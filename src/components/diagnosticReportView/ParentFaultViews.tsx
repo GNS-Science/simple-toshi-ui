@@ -38,7 +38,7 @@ const ParentFaultView: React.FC<ParentFaultViewProps> = ({
   setParentFault,
   setDisableHotkey,
 }: ParentFaultViewProps) => {
-  const [viewsSelctions, setViewsSelections] = useState<ParentViewsOption[]>([parentViewsOptions[0]]);
+  const [viewsSelections, setViewsSelections] = useState<ParentViewsOption[]>([parentViewsOptions[0]]);
   const [inputValue, setInputValue] = React.useState('');
 
   const viewsOptions: string[] = [];
@@ -82,9 +82,9 @@ const ParentFaultView: React.FC<ParentFaultViewProps> = ({
         />
       </ControlsBar>
       <ImageContainer>
-        {viewsSelctions.map((option) => (
-          <Image key={option.path} src={getUrl(option.path)} alt={option.path} />
-        ))}
+        {parentFault
+          ? viewsSelections.map((option) => <Image key={option.path} src={getUrl(option.path)} alt={option.path} />)
+          : 'Select a parent fault to display charts.'}
       </ImageContainer>
     </>
   );
