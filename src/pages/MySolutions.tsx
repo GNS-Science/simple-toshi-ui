@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
-import { Button, ButtonGroup, Tooltip, Typography } from '@material-ui/core';
+import { Button, ButtonGroup, Tooltip, Typography } from '@mui/material';
 import { graphql } from 'babel-plugin-relay/macro';
 
 import GeneralTaskDetailDrawer from '../components/diagnosticReportView/GeneralTaskDetailDrawer';
@@ -17,6 +17,7 @@ import {
   validateListItems,
 } from '../service/mySolution.service';
 import CommonModal from '../components/common/Modal/CommonModal';
+import { useShortcut } from '../hooks/useShortcut';
 
 const MySolutions: React.FC = () => {
   const {
@@ -41,6 +42,7 @@ const MySolutions: React.FC = () => {
   const [openSaveModal, setOpenSaveModal] = useState(false);
   const [openLoadModal, setOpenLoadModal] = useState(false);
   const [currentImage, setCurrentImage] = useState<number>(0);
+  const [disableHotkey, setDisableHotkey] = useState<boolean>(false);
 
   const id = getMySolutionIdsArray(ISFavourites);
   const data = useLazyLoadQuery<MySolutionsQuery>(mySolutionsQuery, { id });
@@ -59,14 +61,8 @@ const MySolutions: React.FC = () => {
     setCurrentGeneralTask(getGeneralTaskDetails(listItems, reportItems, currentImage));
   }, [currentImage]);
 
-  const hotkeyHandler = (event: KeyboardEvent) => {
-    if (event.key === 's' || event.key === 'S') setShowList((v) => !v);
-    if (event.key === 'd' || event.key === 'D') setOpenDrawer((v) => !v);
-  };
-
-  useEffect(() => {
-    window.addEventListener('keypress', hotkeyHandler);
-  }, []);
+  useShortcut(() => setShowList((v) => !v), ['s'], disableHotkey);
+  useShortcut(() => setOpenDrawer((v) => !v), ['d'], disableHotkey);
 
   const handleImport = (value: string) => {
     const ISFavObj = JSON.parse(value);
@@ -89,7 +85,7 @@ const MySolutions: React.FC = () => {
         </ButtonGroup>
         <Tooltip title="use (s/S) to toggle between views">
           <Button variant="contained" onClick={() => setShowList((v) => !v)}>
-            {showList ? 'Show Report' : 'Show Report'}
+            {showList ? 'Show Report' : 'Show List'}
           </Button>
         </Tooltip>
         {!showList && (
@@ -131,8 +127,10 @@ const MySolutions: React.FC = () => {
           setRegionalViews={setLocalStorageRegionalViews}
           parentFaultViews={localStorageParentFaultViews}
           setParentFaultViews={setLocalStorageParentFaultViews}
-          parentFault={localStorageParentFault}
+          parentFault={localStorageParentFault as string}
           setParentFault={setLocalStorageParentFault}
+          disableHotkey={disableHotkey}
+          setDisableHotkey={setDisableHotkey}
         />
       )}
       {!showList && <GeneralTaskDetailDrawer generalTaskDetails={currentGeneralTask} openDrawer={openDrawer} />}

@@ -1,15 +1,26 @@
 import React from 'react';
-import { Grid, List, ListItem, ListItemText, makeStyles } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Grid, List, ListItem, ListItemText } from '@mui/material';
 import { format, formatDuration, intervalToDuration, secondsToMilliseconds } from 'date-fns';
 
-const useStyles = makeStyles((theme) => ({
-  success: {
+const PREFIX = 'InfoTable';
+
+const classes = {
+  success: `${PREFIX}-success`,
+  failure: `${PREFIX}-failure`,
+  warning: `${PREFIX}-warning`,
+};
+
+const StyledGrid = styled(Grid)(({ theme }) => ({
+  [`& .${classes.success}`]: {
     color: theme.palette.success.main,
   },
-  failure: {
+
+  [`& .${classes.failure}`]: {
     color: theme.palette.error.main,
   },
-  warning: {
+
+  [`& .${classes.warning}`]: {
     color: theme.palette.warning.main,
   },
 }));
@@ -31,7 +42,6 @@ const InfoTable: React.FC<InfoTableProps> = ({
   task_type,
   model_type,
 }: InfoTableProps) => {
-  const classes = useStyles();
   const durationInterval = duration
     ? formatDuration(
         intervalToDuration({
@@ -43,7 +53,7 @@ const InfoTable: React.FC<InfoTableProps> = ({
 
   const formattedDate = created ? format(new Date(created), 'PPPppp') : '';
   return (
-    <Grid container spacing={0} wrap={'nowrap'}>
+    <StyledGrid container spacing={0} wrap={'nowrap'}>
       <Grid item xs={6}>
         <List dense>
           <ListItem>
@@ -84,7 +94,7 @@ const InfoTable: React.FC<InfoTableProps> = ({
           </List>
         </Grid>
       )}
-    </Grid>
+    </StyledGrid>
   );
 };
 

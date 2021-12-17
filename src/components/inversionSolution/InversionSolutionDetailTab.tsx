@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import { graphql } from 'babel-plugin-relay/macro';
 
 import { formatBytes } from '../FileDetail';

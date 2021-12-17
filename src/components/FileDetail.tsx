@@ -1,4 +1,5 @@
-import { Box, CircularProgress, makeStyles, Tab, Tabs, Theme, Typography } from '@material-ui/core';
+import { Box, CircularProgress, Tab, Tabs, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { graphql } from 'babel-plugin-relay/macro';
 import React from 'react';
 import { useLazyLoadQuery, useQueryLoader } from 'react-relay';
@@ -9,17 +10,28 @@ import RuptureSetDiags from './RuptureSetDiags';
 import { FileDetailQuery } from './__generated__/FileDetailQuery.graphql';
 import { FileDetailTabQuery } from './__generated__/FileDetailTabQuery.graphql';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
+const PREFIX = 'FileDetail';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  tabPanel: `${PREFIX}-tabPanel`,
+  tab: `${PREFIX}-tab`,
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classes.root}`]: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
     display: 'flex',
   },
-  tabPanel: {
+
+  [`& .${classes.tabPanel}`]: {
     width: '80%',
     padding: theme.spacing(2),
   },
-  tab: {
+
+  [`& .${classes.tab}`]: {
     width: '20%',
     borderRight: `1px solid ${theme.palette.divider}`,
   },
@@ -61,7 +73,6 @@ export const formatBytes = (bytes: number, decimals = 2): string => {
 };
 
 const FileDetail: React.FC = () => {
-  const classes = useStyles();
   const { id, tab } = useParams<FileDetailParams>();
   const data = useLazyLoadQuery<FileDetailQuery>(fileDetailQuery, { id });
   const [queryRef, loadQuery] = useQueryLoader<FileDetailTabQuery>(fileDetailTabQuery);
@@ -105,7 +116,7 @@ const FileDetail: React.FC = () => {
   };
 
   return (
-    <>
+    <Root>
       <Box className={classes.root}>
         <Tabs
           orientation="vertical"
@@ -119,7 +130,7 @@ const FileDetail: React.FC = () => {
         </Tabs>
         {renderTab()}
       </Box>
-    </>
+    </Root>
   );
 };
 

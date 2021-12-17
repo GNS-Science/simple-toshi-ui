@@ -2,7 +2,7 @@ import { LatLngExpression } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Map, TileLayer } from 'react-leaflet';
 import React from 'react';
-import { Typography, Box, Card, FormControl, MenuItem, Select, Slider } from '@material-ui/core';
+import { Typography, Box, Card, FormControl, MenuItem, Select, Slider } from '@mui/material';
 import HeatmapLayer from 'react-leaflet-heatmap-layer';
 
 const generateHazardData = () => {
@@ -93,14 +93,14 @@ const HazardMap: React.FC = () => {
   return (
     <Box>
       <Box style={{ display: 'flex' }}>
-        <FormControl style={{ flexWrap: 'wrap', margin: '16px' }}>
+        <FormControl style={{ flexWrap: 'wrap', margin: '16px' }} variant="standard">
           <Typography>Probability</Typography>
-          <Select value={prob} onChange={(e) => setProb(e.target.value as number)}>
+          <Select value={prob} onChange={(e) => setProb(e.target.value as number)} variant="standard">
             <MenuItem value={0.02}>2%</MenuItem>
             <MenuItem value={0.1}>10%</MenuItem>
           </Select>
         </FormControl>
-        <FormControl style={{ flexWrap: 'wrap', flexGrow: 1, margin: '16px' }}>
+        <FormControl style={{ flexWrap: 'wrap', flexGrow: 1, margin: '16px' }} variant="standard">
           <Typography>Magnitude</Typography>
           <Slider
             value={mag}

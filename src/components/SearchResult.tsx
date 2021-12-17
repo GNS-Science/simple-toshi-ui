@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography } from '@material-ui/core';
+import { Box, Typography } from '@mui/material';
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay/hooks';
 import { SearchQuery } from './__generated__/SearchQuery.graphql';
 import { searchQuery } from './Search';

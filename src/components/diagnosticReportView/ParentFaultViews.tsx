@@ -1,26 +1,25 @@
-import { makeStyles, TextField } from '@material-ui/core';
-import { Autocomplete } from '@material-ui/lab';
+import { Autocomplete, TextField } from '@mui/material';
 import buildUrl from 'build-url-ts';
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { parentFaultsOptions, ParentViewsOption, parentViewsOptions } from '../../constants/parentFault';
 import ControlsBar from '../common/ControlsBar';
 import MultiSelect from '../common/MultiSelect';
+import { styled } from '@mui/system';
 
-const useStyles = makeStyles(() => ({
-  imageContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-  },
-  image: {
-    padding: '5px',
-    maxHeight: '80vh',
-    width: '25%',
-    objectFit: 'contain',
-    flexGrow: 3,
-    flexShrink: 4,
-  },
-}));
+const ImageContainer = styled('div')({
+  display: 'flex',
+  justifyContent: 'center',
+  flexWrap: 'wrap',
+});
+
+const Image = styled('img')({
+  padding: '5px',
+  maxHeight: '80vh',
+  width: '25%',
+  objectFit: 'contain',
+  flexGrow: 2,
+  flexShrink: 3,
+});
 
 interface ParentFaultViewProps {
   id: string;
@@ -28,6 +27,7 @@ interface ParentFaultViewProps {
   setParentFaultViews: (views: string[]) => void;
   parentFault: string;
   setParentFault: (fault: string) => void;
+  setDisableHotkey: Dispatch<SetStateAction<boolean>>;
 }
 
 const ParentFaultView: React.FC<ParentFaultViewProps> = ({
@@ -36,9 +36,10 @@ const ParentFaultView: React.FC<ParentFaultViewProps> = ({
   setParentFaultViews,
   parentFault,
   setParentFault,
+  setDisableHotkey,
 }: ParentFaultViewProps) => {
-  const classes = useStyles();
-  const [viewsSelctions, setViewsSelections] = useState<ParentViewsOption[]>([parentViewsOptions[0]]);
+  const [viewsSelections, setViewsSelections] = useState<ParentViewsOption[]>([parentViewsOptions[0]]);
+  const [inputValue, setInputValue] = React.useState('');
 
   const viewsOptions: string[] = [];
   parentViewsOptions.map((view) => {
@@ -68,17 +69,23 @@ const ParentFaultView: React.FC<ParentFaultViewProps> = ({
           onChange={(event: any, newValue: string | null) => {
             setParentFault(newValue as string);
           }}
+          inputValue={inputValue}
+          onInputChange={(event, newInputValue) => {
+            setInputValue(newInputValue);
+          }}
           id="controllable-states-demo"
           options={parentFaultsOptions}
           style={{ width: 300 }}
           renderInput={(params) => <TextField {...params} label="Parent Faults" />}
+          onOpen={() => setDisableHotkey(true)}
+          onClose={() => setDisableHotkey(false)}
         />
       </ControlsBar>
-      <div className={classes.imageContainer}>
-        {viewsSelctions.map((option) => (
-          <img key={option.path} className={classes.image} src={getUrl(option.path)} alt={option.path} />
-        ))}
-      </div>
+      <ImageContainer>
+        {parentFault
+          ? viewsSelections.map((option) => <Image key={option.path} src={getUrl(option.path)} alt={option.path} />)
+          : 'Select a parent fault to display charts.'}
+      </ImageContainer>
     </>
   );
 };

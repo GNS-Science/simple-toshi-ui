@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import { useLocation, useParams, useHistory } from 'react-router-dom';
 import { graphql } from 'babel-plugin-relay/macro';
 import { useLazyLoadQuery } from 'react-relay/hooks';
-import { Typography, CircularProgress, Snackbar, Button, Tooltip, Fab, makeStyles } from '@material-ui/core';
-import MuiAlert from '@material-ui/lab/Alert';
+import { Typography, CircularProgress, Snackbar, Button, Tooltip, Fab, SelectChangeEvent } from '@mui/material';
+import Alert from '@mui/material/Alert';
 import buildUrl from 'build-url-ts';
-import ShareIcon from '@material-ui/icons/Share';
+import ShareIcon from '@mui/icons-material/Share';
 
 import ChildTaskTable from './ChildTaskTable';
 import { GeneralTaskChildrenTabQuery } from './__generated__/GeneralTaskChildrenTabQuery.graphql';
@@ -25,32 +26,47 @@ import {
 import { GeneralTaskQueryResponse } from '../../pages/__generated__/GeneralTaskQuery.graphql';
 import DialogAlert from '../common/DialogAlert';
 import LocalStorageContext from '../../contexts/localStorage';
-// import { useShortcut } from '../../hooks/useShortcut';
+import { useShortcut } from '../../hooks/useShortcut';
 import GeneralTaskDetailDrawer from '../diagnosticReportView/GeneralTaskDetailDrawer';
 import SweepArgumentFilter from './SweepArgumentFilter';
 import CommonModal from '../common/Modal/CommonModal';
 import { mfdPlotOptions, namedFaultsOptions } from '../../constants/nameFaultsMfds';
 import { regionalSolutionMfdOptions } from '../../constants/regionalSolutionMfd';
+import ControlsBar from '../common/ControlsBar';
 import { parentFaultsOptions, parentViewsOptions } from '../../constants/parentFault';
 
-const useStyles = makeStyles(() => ({
-  filterContainer: {
+const PREFIX = 'GeneralTaskChildrenTab';
+
+const classes = {
+  filterContainer: `${PREFIX}-filterContainer`,
+  hidden: `${PREFIX}-hidden`,
+  controlsContainer: `${PREFIX}-controlsContainer`,
+  control: `${PREFIX}-control`,
+  rightAlignControl: `${PREFIX}-rightAlignControl`,
+};
+
+const Root = styled('div')(() => ({
+  [`& .${classes.filterContainer}`]: {
     width: '100%',
     display: 'flex',
     flexWrap: 'wrap',
     paddingLeft: 10,
   },
-  hidden: {
+
+  [`& .${classes.hidden}`]: {
     display: 'none',
   },
-  controlsContainer: {
+
+  [`& .${classes.controlsContainer}`]: {
     display: 'flex',
     alignItems: 'center',
   },
-  control: {
+
+  [`& .${classes.control}`]: {
     margin: 10,
   },
-  rightAlignControl: {
+
+  [`& .${classes.rightAlignControl}`]: {
     margin: 10,
     position: 'absolute',
     right: '2.5%',
@@ -66,7 +82,6 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   sweepArgs,
   generalTaskData,
 }: GeneralTaskChildrenTabProps) => {
-  const classes = useStyles();
   const { id } = useParams<GeneralTaskParams>();
   const {
     localStorageGeneralViews,
@@ -98,11 +113,14 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const [openDrawer, setOpenDrawer] = useState(false);
   const [showShare, setShowShare] = useState(false);
 
-  const [filteredArguments, setFilteredArguments] = useState<FilteredArguments>({ data: [] });
-  const [filteredChildren, setFilteredChildren] = useState<ValidatedChildren>({ data: [] });
+  const [disableHotkey, setDisableHotkey] = useState<boolean>(false);
 
   const data = useLazyLoadQuery<GeneralTaskChildrenTabQuery>(generalTaskChildrenTabQuery, { id });
   const childTasks = validateChildTasks(data);
+
+  const [filteredArguments, setFilteredArguments] = useState<FilteredArguments>({ data: [] });
+  const [filteredChildren, setFilteredChildren] = useState<ValidatedChildren>(childTasks);
+
   const search = useLocation().search;
   const history = useHistory();
 
@@ -131,7 +149,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     }
   }, []);
 
-  const handleChange = (event: React.ChangeEvent<{ value: unknown; name?: string | undefined }>) => {
+  const handleChange = (event: SelectChangeEvent<string[]>) => {
     const newFilteredArguments = updateFilteredArguments(
       filteredArguments,
       event.target.value as string[],
@@ -143,7 +161,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const applyFilter = () => {
     const filtered = applyChildTaskFilter(childTasks, filteredArguments);
     setFilteredChildren(filtered);
-    if ((filtered?.data?.length ?? 0) > maxLength) {
+    if (filtered.data && filtered.data?.length > maxLength) {
       setOpenAlert(true);
     }
   };
@@ -153,7 +171,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     const namedFaultsViewOption: string = isClipBoard ? namedFaultsView : localStorageNamedFaultsView;
     const namedFaultsLocationsOption: string[] = isClipBoard ? namedFaultsLocations : localStorageNamedFaultsLocations;
     const regionalViewsOption: string[] = isClipBoard ? regionalViews : localStorageRegionalViews;
-    const parentFaultOption: string = isClipBoard ? (parentFault as string) : localStorageParentFault;
+    const parentFaultOption: string = isClipBoard ? (parentFault as string) : (localStorageParentFault as string);
     const parentFaultViewsOption: string[] = isClipBoard ? parentFaultViews : localStorageParentFaultViews;
 
     const sharableState = {
@@ -177,13 +195,22 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   };
 
   const handleViewChange = () => {
-    if (showList && filteredArguments.data.length === 0 && filteredChildren.data?.length === 0) {
-      const ids = getChildTaskIdArray(childTasks);
-      if (ids.length === 0) {
+    //On List
+    //1.(filteredChildren = [])
+    //  -> (allChildTasks > Max) -> openAlert
+    //  -> (allChildTasks <= Max) -> changeView
+    //2.(filteredChildren.length > 0) -> changeView
+    //On Report
+    //- changeView
+    if (showList) {
+      if (filteredChildren.data && filteredChildren.data?.length > 0 && filteredChildren.data?.length <= maxLength) {
+        setShowList((v) => !v);
+      } else {
         setOpenAlert(true);
       }
+    } else {
+      setShowList((v) => !v);
     }
-    setShowList((v) => !v);
   };
 
   const handleCloseNotification = () => {
@@ -191,9 +218,9 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     history.push(`/GeneralTask/${id}/ChildTasks`);
   };
 
-  // useShortcut(handleViewChange, ['s']);
-  // useShortcut(() => setShowFilter((v) => !v), ['f']);
-  // useShortcut(() => setOpenDrawer((v) => !v), ['d']);
+  useShortcut(handleViewChange, ['s'], disableHotkey);
+  useShortcut(() => setShowFilter((v) => !v), ['f'], disableHotkey);
+  useShortcut(() => setOpenDrawer((v) => !v), ['d'], disableHotkey);
 
   if (!data?.node) {
     return (
@@ -204,10 +231,15 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   }
 
   return (
-    <div>
+    <Root>
       <div className={classes.controlsContainer}>
         <Tooltip title="use (f/F) to open/close filters">
-          <Button className={classes.control} variant="contained" onClick={() => setShowFilter((v) => !v)}>
+          <Button
+            className={classes.control}
+            color="inherit"
+            variant="contained"
+            onClick={() => setShowFilter((v) => !v)}
+          >
             <span>
               Filter&nbsp;
               {`${filteredArguments.data.length ? filteredChildren.data?.length ?? 0 : childTasks.data?.length ?? 0}/${
@@ -217,12 +249,17 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
           </Button>
         </Tooltip>
         <Tooltip title="use (s/S) to toggle between views">
-          <Button className={classes.control} variant="contained" onClick={handleViewChange}>
+          <Button color="inherit" className={classes.control} variant="contained" onClick={handleViewChange}>
             {showList ? 'Show Report' : 'Show List'}
           </Button>
         </Tooltip>
         <Tooltip title="use (d/D) to open/close details">
-          <Button className={classes.control} variant="contained" onClick={() => setOpenDrawer((v) => !v)}>
+          <Button
+            color="inherit"
+            className={classes.control}
+            variant="contained"
+            onClick={() => setOpenDrawer((v) => !v)}
+          >
             Details
           </Button>
         </Tooltip>
@@ -231,12 +268,14 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
         </Fab>
       </div>
       <div className={showFilter ? classes.filterContainer : classes.hidden}>
-        {sweepArgs?.map((argument) => (
-          <SweepArgumentFilter key={`${argument?.k}-filter`} argument={argument} onChange={handleChange} />
-        ))}
-        <Button color="primary" variant="contained" onClick={applyFilter}>
-          Apply
-        </Button>
+        <ControlsBar>
+          {sweepArgs?.map((argument) => (
+            <SweepArgumentFilter key={`${argument?.k}-filter`} argument={argument} onChange={handleChange} />
+          ))}
+          <Button color="inherit" variant="contained" onClick={applyFilter}>
+            Apply
+          </Button>
+        </ControlsBar>
       </div>
       <React.Suspense fallback={<CircularProgress />}>
         {showList ? (
@@ -264,10 +303,12 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
             setRegionalViews={isClipBoard ? setRegionalViews : setLocalStorageRegionalViews}
             reportTab={reportTab}
             setReportTab={setReportTab}
-            parentFault={isClipBoard ? (parentFault as string) : localStorageParentFault}
+            parentFault={isClipBoard ? (parentFault as string) : (localStorageParentFault as string)}
             parentFaultViews={isClipBoard ? parentFaultViews : localStorageParentFaultViews}
             setParentFault={isClipBoard ? setParentFault : setLocalStorageParentFault}
             setParentFaultViews={isClipBoard ? setParentFaultViews : setLocalStorageParentFaultViews}
+            disableHotkey={disableHotkey}
+            setDisableHotkey={setDisableHotkey}
           />
         )}
       </React.Suspense>
@@ -287,9 +328,9 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
         open={openNotification}
         onClose={handleCloseNotification}
       >
-        <MuiAlert variant="filled" severity="warning">
+        <Alert variant="filled" severity="warning">
           Sorry, this URL is invalid. The clipBoard state cannot be applied.
-        </MuiAlert>
+        </Alert>
       </Snackbar>
       {openAlert && (
         <DialogAlert
@@ -299,7 +340,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
           handleClose={() => setOpenAlert(false)}
         />
       )}
-    </div>
+    </Root>
   );
 };
 

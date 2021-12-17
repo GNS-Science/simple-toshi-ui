@@ -1,8 +1,15 @@
-import { Box, makeStyles, Theme } from '@material-ui/core';
+import { Box } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  tabPanel: {
+const PREFIX = 'TabPanel';
+
+const classes = {
+  tabPanel: `${PREFIX}-tabPanel`,
+};
+
+const Root = styled('div')(({ theme }) => ({
+  [`&.${classes.tabPanel}`]: {
     width: '80%',
     padding: theme.spacing(0),
   },
@@ -15,10 +22,9 @@ interface TabPanelProps {
 }
 
 const TabPanel: React.FC<TabPanelProps> = (props: TabPanelProps) => {
-  const classes = useStyles();
   const { children, tab, index } = props;
   return (
-    <div
+    <Root
       className={classes.tabPanel}
       role="tabpanel"
       hidden={tab !== index}
@@ -26,7 +32,7 @@ const TabPanel: React.FC<TabPanelProps> = (props: TabPanelProps) => {
       aria-labelledby={`vertical-tab-${index}`}
     >
       {tab === index && <Box p={3}>{children}</Box>}
-    </div>
+    </Root>
   );
 };
 

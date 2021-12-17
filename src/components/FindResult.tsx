@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay/hooks';
 import { FindQuery } from './__generated__/FindQuery.graphql';
 import { findQuery } from './Find';

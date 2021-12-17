@@ -1,17 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
 import buildUrl from 'build-url-ts';
 import { diagnosticReportViewOptions } from '../../constants/diagnosticReport';
 import { SolutionDiagnosticsOption } from '../../interfaces/generaltask';
 import MultiSelect from '../common/MultiSelect';
 
-const useStyles = makeStyles(() => ({
-  imageContainer: {
+const PREFIX = 'GeneralView';
+
+const classes = {
+  imageContainer: `${PREFIX}-imageContainer`,
+  image: `${PREFIX}-image`,
+};
+
+const Root = styled('div')(() => ({
+  [`& .${classes.imageContainer}`]: {
     display: 'flex',
     justifyContent: 'center',
     flexWrap: 'wrap',
   },
-  image: {
+
+  [`& .${classes.image}`]: {
     padding: '5px',
     maxHeight: '80vh',
     width: '25%',
@@ -28,7 +36,6 @@ interface GeneralViewProps {
 }
 
 const GeneralView: React.FC<GeneralViewProps> = ({ id, generalViews, setGeneralViews }: GeneralViewProps) => {
-  const classes = useStyles();
   const [generalViewSelections, setGeneralViewSelections] = useState<SolutionDiagnosticsOption[]>([
     diagnosticReportViewOptions[0],
   ]);
@@ -53,7 +60,7 @@ const GeneralView: React.FC<GeneralViewProps> = ({ id, generalViews, setGeneralV
   });
 
   return (
-    <>
+    <Root>
       <MultiSelect
         name="Reports"
         selected={generalViews}
@@ -70,7 +77,7 @@ const GeneralView: React.FC<GeneralViewProps> = ({ id, generalViews, setGeneralV
           />
         ))}
       </div>
-    </>
+    </Root>
   );
 };
 

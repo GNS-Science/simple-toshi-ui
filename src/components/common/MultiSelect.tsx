@@ -1,13 +1,21 @@
-import { Checkbox, FormControl, Input, InputLabel, makeStyles, MenuItem, Select, Theme } from '@material-ui/core';
+import { Checkbox, FormControl, Input, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  formControl: {
+const PREFIX = 'MultiSelect';
+
+const classes = {
+  formControl: `${PREFIX}-formControl`,
+};
+
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classes.formControl}`]: {
     margin: theme.spacing(2),
     minWidth: 200,
     maxWidthg: 300,
   },
 }));
+
 const MenuProps = {
   PaperProps: {
     style: {
@@ -23,22 +31,20 @@ interface MultiSelectProps {
 }
 
 const MultiSelect: React.FC<MultiSelectProps> = ({ options, selected, setOptions, name }: MultiSelectProps) => {
-  const classes = useStyles();
-
   const [selectedItems, setSelectedItems] = useState<string[]>([options[0]]);
 
   useEffect(() => {
     if (selected.length) setSelectedItems(selected);
   }, []);
 
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleChange = (event: SelectChangeEvent<string[]>) => {
     setSelectedItems(event.target.value as string[]);
     setOptions(event.target.value as string[]);
   };
 
   return (
-    <>
-      <FormControl className={classes.formControl}>
+    <Root>
+      <FormControl className={classes.formControl} variant="standard">
         <InputLabel>{name}</InputLabel>
         <Select
           name={name}
@@ -54,6 +60,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({ options, selected, setOptions
             }
             if (selectedArray.length >= 1) return 'Multiple selected';
           }}
+          variant="standard"
         >
           {options.map((opt) => (
             <MenuItem key={opt} value={opt}>
@@ -63,7 +70,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({ options, selected, setOptions
           ))}
         </Select>
       </FormControl>
-    </>
+    </Root>
   );
 };
 

@@ -1,8 +1,15 @@
-import { Button, makeStyles, TextField } from '@material-ui/core';
+import { Button, TextField } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useState } from 'react';
 
-const useStyles = makeStyles(() => ({
-  button: {
+const PREFIX = 'LoadInsert';
+
+const classes = {
+  button: `${PREFIX}-button`,
+};
+
+const Root = styled('div')(() => ({
+  [`& .${classes.button}`]: {
     margin: 10,
   },
 }));
@@ -12,11 +19,10 @@ interface LoadInsertProps {
 }
 
 const LoadInsert: React.FC<LoadInsertProps> = ({ handleImport }: LoadInsertProps) => {
-  const classes = useStyles();
   const [value, setValue] = useState<string>('');
 
   return (
-    <>
+    <Root>
       <form onSubmit={() => handleImport(value)}>
         <TextField
           id="standard-full-width"
@@ -33,7 +39,7 @@ const LoadInsert: React.FC<LoadInsertProps> = ({ handleImport }: LoadInsertProps
           Import
         </Button>
       </form>
-    </>
+    </Root>
   );
 };
 

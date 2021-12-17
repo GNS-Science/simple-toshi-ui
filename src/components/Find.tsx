@@ -1,24 +1,27 @@
 import React from 'react';
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CircularProgress,
-  Container,
-  InputBase,
-  makeStyles,
-  Typography,
-} from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
+import { styled } from '@mui/material/styles';
+import { Box, Button, Card, CardContent, CircularProgress, Container, InputBase, Typography } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 import { graphql } from 'babel-plugin-relay/macro';
 import { useQueryLoader } from 'react-relay/hooks';
 import { FindQuery } from './__generated__/FindQuery.graphql';
 import FindResult from './FindResult';
 import { useParams } from 'react-router-dom';
 
-const useStyles = makeStyles((theme) => ({
-  find: {
+const PREFIX = 'Find';
+
+const classes = {
+  find: `${PREFIX}-find`,
+  searchIcon: `${PREFIX}-searchIcon`,
+  findButton: `${PREFIX}-findButton`,
+  inputInput: `${PREFIX}-inputInput`,
+  inputRoot: `${PREFIX}-inputRoot`,
+  root: `${PREFIX}-root`,
+  pos: `${PREFIX}-pos`,
+};
+
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classes.find}`]: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
     marginRight: theme.spacing(2),
@@ -26,7 +29,8 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     marginBottom: theme.spacing(2),
   },
-  searchIcon: {
+
+  [`& .${classes.searchIcon}`]: {
     padding: theme.spacing(0, 2),
     height: '100%',
     position: 'absolute',
@@ -35,7 +39,8 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  findButton: {
+
+  [`& .${classes.findButton}`]: {
     padding: theme.spacing(0, 2),
     height: '100%',
     position: 'absolute',
@@ -45,9 +50,10 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 99,
     right: 0,
   },
-  inputInput: {
+
+  [`& .${classes.inputInput}`]: {
     padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     width: '100%',
     height: '35px',
     boxShadow: theme.shadows[5],
@@ -56,13 +62,16 @@ const useStyles = makeStyles((theme) => ({
     },
     borderRadius: '12px',
   },
-  inputRoot: {
+
+  [`& .${classes.inputRoot}`]: {
     width: '100%',
   },
-  root: {
+
+  [`& .${classes.root}`]: {
     minWidth: 275,
   },
-  pos: {
+
+  [`& .${classes.pos}`]: {
     marginBottom: 3,
   },
 }));
@@ -81,7 +90,6 @@ export const findQuery = graphql`
 `;
 
 const Find: React.FC = () => {
-  const classes = useStyles();
   const { id } = useParams<FindParams>();
   const [queryRef, loadQuery] = useQueryLoader<FindQuery>(findQuery);
   const [queryInput, setQueryInput] = React.useState('');
@@ -96,7 +104,7 @@ const Find: React.FC = () => {
   }, [id]);
 
   return (
-    <>
+    <Root>
       <Box className={classes.find}>
         <Box className={classes.searchIcon}>
           <SearchIcon />
@@ -147,7 +155,7 @@ const Find: React.FC = () => {
           </Card>
         </Container>
       )}
-    </>
+    </Root>
   );
 };
 

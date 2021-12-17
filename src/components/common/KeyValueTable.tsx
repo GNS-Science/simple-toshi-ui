@@ -1,28 +1,36 @@
 import React from 'react';
-import { makeStyles, Paper, Table, TableBody, TableCell, TableHead, TableRow, withStyles } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { ArgumentKeyValuePair } from '../../interfaces/common';
 
-const useStyles = makeStyles({
-  root: {
+const PREFIX = 'KeyValueTable';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  root2: `${PREFIX}-root2`,
+  table: `${PREFIX}-table`,
+  tableCell: `${PREFIX}-tableCell`,
+};
+
+const StyledPaper = styled(Paper)({
+  [`& .${classes.root2}`]: {
     marginTop: '40px',
     marginBottom: '40px',
   },
-  table: {
+  [`& .${classes.table}`]: {
     tableLayout: 'fixed',
     wordWrap: 'break-word',
   },
-  tableCell: {
+  [`& .${classes.tableCell}`]: {
     borderBottom: 'none',
   },
 });
 
-const AlternatingRow = withStyles((theme) => ({
-  root: {
-    '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.grey[100],
-    },
+const AlternatingRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
   },
-}))(TableRow);
+}));
 
 export interface KeyValueTableProps {
   header: string;
@@ -30,25 +38,33 @@ export interface KeyValueTableProps {
 }
 
 const KeyValueTable: React.FC<KeyValueTableProps> = ({ header, data }: KeyValueTableProps) => {
-  const classes = useStyles();
   return (
-    <Paper className={classes.root}>
+    <StyledPaper className={classes.root}>
       <Table stickyHeader size="small" className={classes.table}>
         <TableHead>
-          <AlternatingRow>
+          <AlternatingRow
+            classes={{
+              root: classes.root,
+            }}
+          >
             <TableCell colSpan={2}>{header}</TableCell>
           </AlternatingRow>
         </TableHead>
         <TableBody>
           {data?.map((kv) => (
-            <AlternatingRow key={kv?.k}>
+            <AlternatingRow
+              key={kv?.k}
+              classes={{
+                root: classes.root,
+              }}
+            >
               <TableCell className={classes.tableCell}>{kv?.k}</TableCell>
               <TableCell className={classes.tableCell}>{kv?.v}</TableCell>
             </AlternatingRow>
           ))}
         </TableBody>
       </Table>
-    </Paper>
+    </StyledPaper>
   );
 };
 
