@@ -3,6 +3,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+
 export type EventResult = "FAILURE" | "PARTIAL" | "SUCCESS" | "UNDEFINED" | "%future added value";
 export type EventState = "DONE" | "SCHEDULED" | "STARTED" | "UNDEFINED" | "%future added value";
 export type ModelType = "CRUSTAL" | "SUBDUCTION" | "%future added value";
@@ -17,24 +18,24 @@ export type SearchQueryResponse = {
             readonly edges: ReadonlyArray<{
                 readonly node: {
                     readonly __typename: string;
-                    readonly id?: string;
-                    readonly file_name?: string | null;
-                    readonly file_size?: number | null;
-                    readonly created?: unknown | null;
-                    readonly duration?: number | null;
-                    readonly state?: EventState | null;
-                    readonly result?: EventResult | null;
-                    readonly task_type?: TaskSubType | null;
-                    readonly model_type?: ModelType | null;
-                    readonly description?: string | null;
-                    readonly notes?: string | null;
-                    readonly title?: string | null;
-                    readonly subtask_type?: TaskSubType | null;
-                    readonly subtask_count?: number | null;
-                    readonly subtask_result?: EventResult | null;
+                    readonly id?: string | undefined;
+                    readonly file_name?: string | null | undefined;
+                    readonly file_size?: number | null | undefined;
+                    readonly created?: unknown | null | undefined;
+                    readonly duration?: number | null | undefined;
+                    readonly state?: EventState | null | undefined;
+                    readonly result?: EventResult | null | undefined;
+                    readonly task_type?: TaskSubType | null | undefined;
+                    readonly model_type?: ModelType | null | undefined;
+                    readonly description?: string | null | undefined;
+                    readonly notes?: string | null | undefined;
+                    readonly title?: string | null | undefined;
+                    readonly subtask_type?: TaskSubType | null | undefined;
+                    readonly subtask_count?: number | null | undefined;
+                    readonly subtask_result?: EventResult | null | undefined;
                     readonly children?: {
                         readonly total_count: number | null;
-                    } | null;
+                    } | null | undefined;
                 } | null;
             } | null>;
         } | null;

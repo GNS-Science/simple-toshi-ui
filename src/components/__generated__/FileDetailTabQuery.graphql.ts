@@ -3,20 +3,21 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+
 export type FileDetailTabQueryVariables = {
     id: string;
 };
 export type FileDetailTabQueryResponse = {
     readonly node: {
-        readonly id?: string;
-        readonly file_name?: string | null;
-        readonly file_size?: number | null;
-        readonly file_url?: string | null;
-        readonly md5_digest?: string | null;
+        readonly id?: string | undefined;
+        readonly file_name?: string | null | undefined;
+        readonly file_size?: number | null | undefined;
+        readonly file_url?: string | null | undefined;
+        readonly md5_digest?: string | null | undefined;
         readonly meta?: ReadonlyArray<{
             readonly k: string | null;
             readonly v: string | null;
-        } | null> | null;
+        } | null> | null | undefined;
     } | null;
 };
 export type FileDetailTabQuery = {

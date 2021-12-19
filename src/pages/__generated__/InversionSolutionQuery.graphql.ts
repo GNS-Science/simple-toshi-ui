@@ -3,26 +3,27 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+
 export type TableType = "GENERAL" | "HAZARD_GRIDDED" | "HAZARD_SITES" | "MFD_CURVES" | "%future added value";
 export type InversionSolutionQueryVariables = {
     id: string;
 };
 export type InversionSolutionQueryResponse = {
     readonly node: {
-        readonly id?: string;
-        readonly mfd_table_id?: string | null;
-        readonly hazard_table_id?: string | null;
-        readonly produced_by_id?: string | null;
-        readonly created?: unknown | null;
+        readonly id?: string | undefined;
+        readonly mfd_table_id?: string | null | undefined;
+        readonly hazard_table_id?: string | null | undefined;
+        readonly produced_by_id?: string | null | undefined;
+        readonly created?: unknown | null | undefined;
         readonly meta?: ReadonlyArray<{
             readonly k: string | null;
             readonly v: string | null;
-        } | null> | null;
+        } | null> | null | undefined;
         readonly tables?: ReadonlyArray<{
             readonly table_id: string | null;
             readonly table_type: TableType | null;
             readonly created: unknown | null;
-        } | null> | null;
+        } | null> | null | undefined;
     } | null;
 };
 export type InversionSolutionQuery = {

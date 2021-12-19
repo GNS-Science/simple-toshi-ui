@@ -3,6 +3,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+
 export type SmsSiteClass = "A" | "B" | "C" | "D" | "E" | "%future added value";
 export type HomeQueryVariables = {};
 export type HomeQueryResponse = {

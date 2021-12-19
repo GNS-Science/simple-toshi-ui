@@ -3,6 +3,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+
 export type EventResult = "FAILURE" | "PARTIAL" | "SUCCESS" | "UNDEFINED" | "%future added value";
 export type ModelType = "CRUSTAL" | "SUBDUCTION" | "%future added value";
 export type TaskSubType = "HAZARD" | "INVERSION" | "REPORT" | "RUPTURE_SET" | "%future added value";
@@ -11,25 +12,25 @@ export type GeneralTaskQueryVariables = {
 };
 export type GeneralTaskQueryResponse = {
     readonly node: {
-        readonly id?: string;
-        readonly title?: string | null;
-        readonly description?: string | null;
-        readonly notes?: string | null;
-        readonly created?: unknown | null;
-        readonly updated?: unknown | null;
-        readonly agent_name?: string | null;
-        readonly model_type?: ModelType | null;
-        readonly subtask_type?: TaskSubType | null;
-        readonly subtask_count?: number | null;
-        readonly subtask_result?: EventResult | null;
+        readonly id?: string | undefined;
+        readonly title?: string | null | undefined;
+        readonly description?: string | null | undefined;
+        readonly notes?: string | null | undefined;
+        readonly created?: unknown | null | undefined;
+        readonly updated?: unknown | null | undefined;
+        readonly agent_name?: string | null | undefined;
+        readonly model_type?: ModelType | null | undefined;
+        readonly subtask_type?: TaskSubType | null | undefined;
+        readonly subtask_count?: number | null | undefined;
+        readonly subtask_result?: EventResult | null | undefined;
         readonly argument_lists?: ReadonlyArray<{
             readonly k: string | null;
             readonly v: ReadonlyArray<string | null> | null;
-        } | null> | null;
-        readonly swept_arguments?: ReadonlyArray<string | null> | null;
+        } | null> | null | undefined;
+        readonly swept_arguments?: ReadonlyArray<string | null> | null | undefined;
         readonly children?: {
             readonly total_count: number | null;
-        } | null;
+        } | null | undefined;
     } | null;
 };
 export type GeneralTaskQuery = {
