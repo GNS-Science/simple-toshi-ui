@@ -35,7 +35,7 @@ const AlternatingRow = styled(TableRow)(({ theme }) => ({
 }));
 
 export interface FileTableProps {
-  data?: readonly ({
+  data?: ReadonlyArray<{
     readonly node: {
       readonly role: FileRole;
       readonly file: {
@@ -43,9 +43,9 @@ export interface FileTableProps {
         readonly id?: string | undefined;
         readonly file_name?: string | null | undefined;
         readonly file_url?: string | null | undefined;
-      };
+      } | null;
     } | null;
-  } | null)[];
+  } | null>;
 }
 
 const FileTable: React.FC<FileTableProps> = ({ data }: FileTableProps) => {

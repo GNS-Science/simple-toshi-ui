@@ -74,6 +74,29 @@ const GeneralView: React.FC<GeneralViewProps> = ({ id, generalViews, setGeneralV
             className={classes.image}
             src={reportUrl(option.finalPath, id)}
             alt={option.finalPath}
+            onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+              let newUrl;
+
+              switch (option.finalPath) {
+                case 'mfd_plot_Total_MFD.png':
+                  newUrl = reportUrl('mfd_plot_Total_Target_MFDs.png', id);
+                  break;
+                case 'mfd_plot_Total_MFD_cumulative.png':
+                  newUrl = reportUrl('mfd_plot_Total_Target_MFDs.png', id);
+                  break;
+                case 'rate_dist.png':
+                  newUrl = reportUrl('mfd_plot_Total_Target_MFDs.png', id);
+                  break;
+                default:
+                  newUrl = '/img-placeholder.jpg';
+              }
+
+              if (e.currentTarget.src !== newUrl && e.currentTarget.src !== '/imgPlaceholder.jpeg') {
+                e.currentTarget.src = newUrl;
+              } else if (e.currentTarget.src === newUrl && e.currentTarget.src !== '/imgPlaceholder.jpeg') {
+                e.currentTarget.src = '/img-placeholder.jpg';
+              }
+            }}
           />
         ))}
       </div>

@@ -3,16 +3,17 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+
 export type FileDetailQueryVariables = {
     id: string;
 };
 export type FileDetailQueryResponse = {
     readonly node: {
-        readonly id?: string;
+        readonly id?: string | undefined;
         readonly meta?: ReadonlyArray<{
             readonly k: string | null;
             readonly v: string | null;
-        } | null> | null;
+        } | null> | null | undefined;
     } | null;
 };
 export type FileDetailQuery = {

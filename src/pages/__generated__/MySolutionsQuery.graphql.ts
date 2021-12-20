@@ -3,10 +3,11 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
+
 export type ModelType = "CRUSTAL" | "SUBDUCTION" | "%future added value";
 export type TableType = "GENERAL" | "HAZARD_GRIDDED" | "HAZARD_SITES" | "MFD_CURVES" | "%future added value";
 export type MySolutionsQueryVariables = {
-    id?: Array<string> | null;
+    id?: Array<string> | null | undefined;
 };
 export type MySolutionsQueryResponse = {
     readonly nodes: {

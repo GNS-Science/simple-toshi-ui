@@ -4,7 +4,7 @@ export const diagnosticReportViewOptions: SolutionDiagnosticsOption[] = [
   {
     viewType: ViewTypeEnum.Image,
     displayName: 'Solution MFDs (incremental)',
-    finalPath: 'mfd_plot_Total_Target_MFDs.png',
+    finalPath: 'mfd_plot_Total_MFD.png',
     imgHght: 600,
     imgWdth: 500,
   },
@@ -12,7 +12,7 @@ export const diagnosticReportViewOptions: SolutionDiagnosticsOption[] = [
   {
     viewType: ViewTypeEnum.Image,
     displayName: 'Solution MFDs (cumulative)',
-    finalPath: 'mfd_plot_Total_Target_MFDs_cumulative.png',
+    finalPath: 'mfd_plot_Total_MFD_cumulative.png',
     imgHght: 600,
     imgWdth: 500,
   },
@@ -28,7 +28,7 @@ export const diagnosticReportViewOptions: SolutionDiagnosticsOption[] = [
   {
     viewType: ViewTypeEnum.Image,
     displayName: 'Rate Distribution',
-    finalPath: 'sa_progress_rate_dist.png',
+    finalPath: 'rate_dist.png',
     imgHght: 600,
     imgWdth: 500,
   },
