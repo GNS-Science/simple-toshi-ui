@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LatLngExpression, LeafletEventHandlerFnMap, LatLng, icon } from 'leaflet';
+import { LatLngExpression, LeafletEvent, LeafletEventHandlerFnMap, LatLng, icon } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, GeoJSON, Tooltip, Marker, Popup, useMapEvents } from 'react-leaflet';
 import { Typography, Box, Card } from '@mui/material';
@@ -13,6 +13,8 @@ const HazardMapPreview2: React.FC = () => {
   const zoom = 5;
   const [showMarker, setShowMarker] = useState<boolean>(false);
   const [position, setPosition] = useState<LatLng | null>(null);
+  // const [feature, setFeature] = useState<LeafletEvent.propogatedFrom | null>(null);
+  const [fault, setFault] = useState<string | null>(null);
 
   const provider_url = 'https://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}';
   const provider_attibution =
@@ -45,14 +47,19 @@ const HazardMapPreview2: React.FC = () => {
             }}
             eventHandlers={{
               click: (e) => {
+                console.log(e);
                 setPosition(e.latlng);
+                setFault(e.propagatedFrom.feature.properties.name as string);
               },
             }}
           ></GeoJSON>
-          {showMarker && position && (
+          {showMarker && position && fault && (
             <>
               <Marker position={position} icon={pinIcon}>
-                <Popup>{`Position Latlng ${position.toString()}`}</Popup>
+                <Popup>
+                  <h4>{fault}</h4>
+                  {`Position ${position.toString()}`}
+                </Popup>
               </Marker>
             </>
           )}
