@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LatLngExpression, LeafletEventHandlerFnMap, LatLng } from 'leaflet';
+import { LatLngExpression, LeafletEventHandlerFnMap, LatLng, icon } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, GeoJSON, Tooltip, Marker, Popup, useMapEvents } from 'react-leaflet';
 import { Typography, Box, Card } from '@mui/material';
@@ -18,9 +18,15 @@ const HazardMapPreview2: React.FC = () => {
   const provider_attibution =
     'Tiles &copy; Esri &mdash; Sources: GEBCO, NOAA, CHS, OSU, UNH, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri';
 
+  const pinIcon = icon({
+    iconUrl: '/map-pin.png',
+    iconSize: [38, 60],
+    shadowSize: [50, 64],
+    iconAnchor: [16, 60],
+    popupAnchor: [4, -60],
+  });
+
   useEffect(() => {
-    console.log(position?.toString());
-    console.log(position?.lat, position?.lng);
     setShowMarker(true);
   }, [position]);
 
@@ -45,7 +51,7 @@ const HazardMapPreview2: React.FC = () => {
           ></GeoJSON>
           {showMarker && position && (
             <>
-              <Marker position={position}>
+              <Marker position={position} icon={pinIcon}>
                 <Popup>{`Position Latlng ${position.toString()}`}</Popup>
               </Marker>
             </>
