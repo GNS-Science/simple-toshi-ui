@@ -53,7 +53,7 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
 
     const SAplot = getSAdata();
     setSAdata(SAplot);
-  }, [location, PGA, forecastTime, gmpe, backgroundSeismicity]);
+  }, [data, location, PGA, forecastTime, gmpe, backgroundSeismicity]);
 
   useEffect(() => {
     if (POE !== 'None') {

@@ -108,7 +108,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       const hazardTable = automationTasks[currentImage].inversion_solution.tables?.find(
         (table) => table?.table_type === 'HAZARD_SITES',
       );
-      hazardTable && setHazardId(hazardTable?.table_id as string);
+      hazardTable ? setHazardId(hazardTable?.table_id as string) : setHazardId('');
     }
   }, [currentImage]);
 
@@ -192,10 +192,12 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       case 4:
         return (
           <DiagnosticReportTabPanel value={currentTab} index={4}>
-            {hazardId && (
+            {hazardId.length ? (
               <React.Suspense fallback={<CircularProgress />}>
                 <InversionSolutionHazardCharts id={hazardId} />
               </React.Suspense>
+            ) : (
+              <Typography>There is no hazard table for this task.</Typography>
             )}
           </DiagnosticReportTabPanel>
         );
