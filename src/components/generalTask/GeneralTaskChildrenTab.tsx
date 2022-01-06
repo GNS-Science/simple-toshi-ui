@@ -160,9 +160,10 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
 
   const applyFilter = () => {
     const filtered = applyChildTaskFilter(childTasks, filteredArguments);
-    setFilteredChildren(filtered);
-    if (filtered.data && filtered.data?.length > maxLength) {
+    if (filtered.data && filtered.data?.length > maxLength && !showList) {
       setOpenAlert(true);
+    } else {
+      setFilteredChildren(filtered);
     }
   };
 
