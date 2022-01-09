@@ -2,7 +2,7 @@ import { LatLngExpression } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import React from 'react';
-import { Typography, Box, Card, FormControl, MenuItem, Select, Slider } from '@mui/material';
+import { Typography, Box, Card } from '@mui/material';
 import { GeoJsonObject } from 'geojson';
 import sampleData from '../constants/sampleGeojsonData2.json';
 

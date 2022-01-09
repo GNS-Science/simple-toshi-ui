@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { LatLngExpression, LeafletEvent, LeafletEventHandlerFnMap, LatLng, icon } from 'leaflet';
+import { LatLngExpression, LatLng, icon } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { MapContainer, TileLayer, GeoJSON, Tooltip, Marker, Popup, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, GeoJSON, Marker, Popup } from 'react-leaflet';
 import { Typography, Box, Card } from '@mui/material';
 import { GeoJsonObject } from 'geojson';
 import sampleData from '../constants/sampleGeojsonData1.json';
