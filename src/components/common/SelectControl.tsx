@@ -13,7 +13,7 @@ const Root = styled('div')(({ theme }) => ({
   [`& .${classes.formControl}`]: {
     margin: theme.spacing(2),
     minWidth: 200,
-    maxWidth: 600,
+    maxWidth: 300,
   },
 }));
 
