@@ -69,6 +69,9 @@ function Preview(): React.ReactElement {
             <Button size="small" href="/preview/hazard">
               go
             </Button>
+            <Button size="small" href="/deckgl">
+              deckGL
+            </Button>
           </Typography>
         </CardContent>
       </Card>

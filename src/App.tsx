@@ -138,7 +138,7 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
                   <Route path="/Preview">
                     <Preview />
                   </Route>
-                  <Route path="/Preview/deckgl">
+                  <Route path="/deckgl">
                     <DeckglPreview />
                   </Route>
                   <Route path="/">
