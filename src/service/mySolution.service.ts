@@ -1,9 +1,8 @@
 import { GeneralTaskDetails, ReportItem } from '../interfaces/diagnosticReport';
 import { IStables, ValidatedSubtask } from '../interfaces/generaltask';
 import { ISFavouritesInstance } from '../interfaces/localStorage';
-import { MetaArguments, SolutionItem } from '../interfaces/mySolutions';
+import { SolutionItem } from '../interfaces/mySolutions';
 import { MySolutionsQueryResponse } from '../pages/__generated__/MySolutionsQuery.graphql';
-import { pluralCompare } from './generalTask.service';
 
 export const getGeneralTaskDetails = (
   listItems: SolutionItem[],
@@ -67,14 +66,4 @@ export const getMySolutionIdsArray = (ISFavourites: ISFavouritesInstance): strin
     ids.push(ISFavourites[inversionSolution].producedBy);
   }
   return ids;
-};
-
-export const filterMetaArguments = (metaArguments: MetaArguments, sweepArguments: string[]): MetaArguments => {
-  const filteredMetaArguments = metaArguments.filter((kv) => {
-    return (
-      kv !== null &&
-      sweepArguments.some((argument) => argument.includes(kv.k as string) || pluralCompare(argument, kv.k as string))
-    );
-  });
-  return filteredMetaArguments;
 };

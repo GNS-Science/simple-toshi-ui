@@ -14,6 +14,9 @@ import RegionalMfdView from './RegionalMfdView';
 import InversionSolutionHazardCharts from '../inversionSolution/InversionSolutionHazardCharts';
 import ParentFaultView from './ParentFaultViews';
 import { SweepArguments, ValidatedSubtask } from '../../interfaces/generaltask';
+import { MetaArguments } from '../../interfaces/mySolutions';
+import { pluralCompare } from '../../service/generalTask.service';
+import { filteredMetaGT, filterMetaArguments } from '../../service/diagnosticReports.service';
 
 const PREFIX = 'DiagnosticReportCard';
 
@@ -46,6 +49,7 @@ const Root = styled('div')(() => ({
 
 interface DiagnosticReportCardProps {
   sweepArgs?: SweepArguments;
+  sweepList?: string[];
   modelType: string;
   automationTasks: ValidatedSubtask[];
   generalViews: string[];
@@ -68,6 +72,8 @@ interface DiagnosticReportCardProps {
 }
 
 const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
+  sweepArgs,
+  sweepList,
   modelType,
   automationTasks,
   generalViews,
@@ -91,6 +97,8 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   const [currentImage, setCurrentImage] = useState<number>(0);
   const [currentTab, setCurrentTab] = useState<number>(0);
   const [hazardId, setHazardId] = useState<string>('');
+  const [filteredMeta, setFilteredMeta] = useState<MetaArguments>([]);
+  console.log(sweepArgs);
 
   useEffect(() => {
     if (reportTab !== 0) setCurrentTab(reportTab ?? 0);
@@ -102,6 +110,13 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
 
   useEffect(() => {
     setReportTab && setReportTab(currentTab);
+    let metaList: MetaArguments = [];
+    if (sweepArgs) {
+      metaList = filteredMetaGT(automationTasks[currentImage].inversion_solution.meta, sweepArgs);
+    } else if (sweepList) {
+      metaList = filterMetaArguments(automationTasks[currentImage].inversion_solution.meta, sweepList);
+    }
+    setFilteredMeta(metaList);
   }, [currentTab]);
 
   useEffect(() => {
@@ -216,7 +231,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             <Link to={`/InversionSolution/${automationTasks[currentImage].inversion_solution.id}`}>[more]</Link>
           </h4>
           <Typography>
-            {automationTasks[currentImage].inversion_solution.meta.map((kv) => (
+            {filteredMeta.map((kv) => (
               <span key={kv?.k}>
                 {kv?.k}: {kv?.v}, &nbsp;
               </span>
