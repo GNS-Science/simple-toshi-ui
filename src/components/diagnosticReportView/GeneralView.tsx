@@ -85,12 +85,7 @@ const GeneralView: React.FC<GeneralViewProps> = ({
       />
       <div className={classes.imageContainer}>
         {generalViewSelections.map((option) => {
-          if (
-            option.finalPath === 'mfd_plot_Total_MFD.png' ||
-            option.finalPath === 'mfd_plot_Total_MFD_cumulative.png' ||
-            option.finalPath === 'mfd_plot_Total_Target_MFDs.png' ||
-            option.finalPath === 'mfd_plot_Total_Target_MFDs_cumulative.png'
-          ) {
+          if (option.finalPath === 'mfd_plot_Total_MFD.png' || option.finalPath === 'mfd_plot_Total_Target_MFDs.png') {
             return (
               <div className={classes.image}>
                 <ParentSize>
@@ -103,8 +98,6 @@ const GeneralView: React.FC<GeneralViewProps> = ({
                       resizeParent={parent.resize}
                     />
                   )}
-
-                  {/* <InversionSolutionMfdTab mfdTableId={mfdTableId} meta={meta} />; */}
                 </ParentSize>
               </div>
             );
