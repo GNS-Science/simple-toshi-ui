@@ -70,9 +70,9 @@ export const validateSubtask = (
       };
       subtask.inversion_solution.meta.map((kv) => {
         kv !== null &&
-          sweepArgs?.some((argument) => {
-            return argument?.k?.includes(kv.k as string) || pluralCompare(argument?.k as string, kv.k as string);
-          }) &&
+          // sweepArgs?.some((argument) => {
+          //   return argument?.k?.includes(kv.k as string) || pluralCompare(argument?.k as string, kv.k as string);
+          // }) &&
           newSubtask.inversion_solution.meta.push(kv);
       });
       validatedSubtasks.push(newSubtask);

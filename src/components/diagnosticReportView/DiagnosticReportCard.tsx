@@ -13,7 +13,7 @@ import NamedFaultsView from './NamedFaultsView';
 import RegionalMfdView from './RegionalMfdView';
 import InversionSolutionHazardCharts from '../inversionSolution/InversionSolutionHazardCharts';
 import ParentFaultView from './ParentFaultViews';
-import { ValidatedSubtask } from '../../interfaces/generaltask';
+import { SweepArguments, ValidatedSubtask } from '../../interfaces/generaltask';
 
 const PREFIX = 'DiagnosticReportCard';
 
@@ -45,6 +45,7 @@ const Root = styled('div')(() => ({
 }));
 
 interface DiagnosticReportCardProps {
+  sweepArgs?: SweepArguments;
   modelType: string;
   automationTasks: ValidatedSubtask[];
   generalViews: string[];
