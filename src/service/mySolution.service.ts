@@ -39,8 +39,7 @@ export const getReportItems = (listItems: SolutionItem[]): ValidatedSubtask[] =>
   const reportItems: ValidatedSubtask[] = [];
   listItems.map((task) => {
     const taskMeta = task.inversion_solution?.meta ?? [];
-    const sweepArguments = (task?.parents?.edges[0]?.node?.parent?.swept_arguments as string[]) ?? [];
-    const metaFiltered = filterMetaArguments(taskMeta, sweepArguments);
+    // const sweepArguments = (task?.parents?.edges[0]?.node?.parent?.swept_arguments as string[]) ?? [];
     const mfdTableId = (): string => {
       if (task.inversion_solution?.mfd_table_id) return task.inversion_solution?.mfd_table_id;
       const new_mfd_table = task.inversion_solution?.tables?.filter((ltr) => ltr?.table_type == 'MFD_CURVES')[0];
@@ -53,7 +52,7 @@ export const getReportItems = (listItems: SolutionItem[]): ValidatedSubtask[] =>
       inversion_solution: {
         id: task.inversion_solution?.id as string,
         mfd_table_id: mfdTableId(),
-        meta: [...metaFiltered],
+        meta: [...taskMeta],
         tables: task.inversion_solution?.tables as IStables,
       },
     };
