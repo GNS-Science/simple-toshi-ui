@@ -114,6 +114,7 @@ const MySolutions: React.FC = () => {
         <MySolutionsList solutionsList={listItems} />
       ) : (
         <DiagnosticReportCard
+          sweepList={currentGeneralTask.swept_arguments}
           modelType={currentGeneralTask.model_type}
           changeCurrentImage={handleChangeCurrentImage}
           automationTasks={reportItems}
