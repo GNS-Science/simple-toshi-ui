@@ -53,7 +53,9 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   const data = useLazyLoadQuery<InversionSolutionDiagnosticContainerQuery>(inversionSolutionDiagnosticContainerQuery, {
     id: ids,
   });
+  console.log(data);
   const validatedSubtasks = validateSubtask(data, sweepArgs ?? []);
+  console.log(validatedSubtasks);
 
   return (
     <>
@@ -97,6 +99,7 @@ export const inversionSolutionDiagnosticContainerQuery = graphql`
               inversion_solution {
                 id
                 file_name
+                mfd_table_id
                 meta {
                   k
                   v

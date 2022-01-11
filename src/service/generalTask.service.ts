@@ -51,6 +51,12 @@ export const validateSubtask = (
       subtask.inversion_solution &&
       subtask.inversion_solution.meta
     ) {
+      const mfdTableId = (): string => {
+        if (subtask.inversion_solution?.mfd_table_id) return subtask.inversion_solution?.mfd_table_id;
+        const new_mfd_table = subtask.inversion_solution?.tables?.filter((ltr) => ltr?.table_type == 'MFD_CURVES')[0];
+        if (new_mfd_table) return new_mfd_table.table_id || '';
+        return '';
+      };
       const newSubtask: ValidatedSubtask = {
         __typename: 'AutomationTask',
         id: subtask.id,
@@ -59,6 +65,7 @@ export const validateSubtask = (
           id: subtask.inversion_solution.id,
           meta: [],
           tables: subtask.inversion_solution.tables,
+          mfd_table_id: mfdTableId(),
         },
       };
       subtask.inversion_solution.meta.map((kv) => {

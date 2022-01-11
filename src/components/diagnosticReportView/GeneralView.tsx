@@ -4,6 +4,8 @@ import buildUrl from 'build-url-ts';
 import { diagnosticReportViewOptions } from '../../constants/diagnosticReport';
 import { SolutionDiagnosticsOption } from '../../interfaces/generaltask';
 import MultiSelect from '../common/MultiSelect';
+import { ParentSize } from '@visx/responsive';
+import GeneralViewMfd from './GeneralViewMfd';
 
 const PREFIX = 'GeneralView';
 
@@ -31,11 +33,25 @@ const Root = styled('div')(() => ({
 
 interface GeneralViewProps {
   id: string;
+  meta:
+    | readonly ({
+        readonly k: string | null;
+        readonly v: string | null;
+      } | null)[]
+    | null
+    | undefined;
+  mfdTableId: string;
   generalViews: string[];
   setGeneralViews: (selection: string[]) => void;
 }
 
-const GeneralView: React.FC<GeneralViewProps> = ({ id, generalViews, setGeneralViews }: GeneralViewProps) => {
+const GeneralView: React.FC<GeneralViewProps> = ({
+  id,
+  mfdTableId,
+  meta,
+  generalViews,
+  setGeneralViews,
+}: GeneralViewProps) => {
   const [generalViewSelections, setGeneralViewSelections] = useState<SolutionDiagnosticsOption[]>([
     diagnosticReportViewOptions[0],
   ]);
@@ -68,37 +84,64 @@ const GeneralView: React.FC<GeneralViewProps> = ({ id, generalViews, setGeneralV
         setOptions={setGeneralViews}
       />
       <div className={classes.imageContainer}>
-        {generalViewSelections.map((option) => (
-          <img
-            key={option.finalPath}
-            className={classes.image}
-            src={reportUrl(option.finalPath, id)}
-            alt={option.finalPath}
-            onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-              let newUrl;
+        {generalViewSelections.map((option) => {
+          if (
+            option.finalPath === 'mfd_plot_Total_MFD.png' ||
+            option.finalPath === 'mfd_plot_Total_MFD_cumulative.png' ||
+            option.finalPath === 'mfd_plot_Total_Target_MFDs.png' ||
+            option.finalPath === 'mfd_plot_Total_Target_MFDs_cumulative.png'
+          ) {
+            return (
+              <div className={classes.image}>
+                <ParentSize>
+                  {(parent) => (
+                    <GeneralViewMfd
+                      mfdTableId={mfdTableId}
+                      meta={meta}
+                      parentWidth={parent.width}
+                      parentRef={parent.ref}
+                      resizeParent={parent.resize}
+                    />
+                  )}
 
-              switch (option.finalPath) {
-                case 'mfd_plot_Total_MFD.png':
-                  newUrl = reportUrl('mfd_plot_Total_Target_MFDs.png', id);
-                  break;
-                case 'mfd_plot_Total_MFD_cumulative.png':
-                  newUrl = reportUrl('mfd_plot_Total_Target_MFDs.png', id);
-                  break;
-                case 'rate_dist.png':
-                  newUrl = reportUrl('mfd_plot_Total_Target_MFDs.png', id);
-                  break;
-                default:
-                  newUrl = '/img-placeholder.jpg';
-              }
+                  {/* <InversionSolutionMfdTab mfdTableId={mfdTableId} meta={meta} />; */}
+                </ParentSize>
+              </div>
+            );
+          } else {
+            return (
+              <img
+                key={option.finalPath}
+                className={classes.image}
+                src={reportUrl(option.finalPath, id)}
+                alt={option.finalPath}
+                onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                  let newUrl;
 
-              if (e.currentTarget.src !== newUrl && e.currentTarget.src !== '/imgPlaceholder.jpeg') {
-                e.currentTarget.src = newUrl;
-              } else if (e.currentTarget.src === newUrl && e.currentTarget.src !== '/imgPlaceholder.jpeg') {
-                e.currentTarget.src = '/img-placeholder.jpg';
-              }
-            }}
-          />
-        ))}
+                  switch (option.finalPath) {
+                    case 'mfd_plot_Total_MFD.png':
+                      newUrl = reportUrl('mfd_plot_Total_Target_MFDs.png', id);
+                      break;
+                    case 'mfd_plot_Total_MFD_cumulative.png':
+                      newUrl = reportUrl('mfd_plot_Total_Target_MFDs.png', id);
+                      break;
+                    case 'rate_dist.png':
+                      newUrl = reportUrl('mfd_plot_Total_Target_MFDs.png', id);
+                      break;
+                    default:
+                      newUrl = '/img-placeholder.jpg';
+                  }
+
+                  if (e.currentTarget.src !== newUrl && e.currentTarget.src !== '/imgPlaceholder.jpeg') {
+                    e.currentTarget.src = newUrl;
+                  } else if (e.currentTarget.src === newUrl && e.currentTarget.src !== '/imgPlaceholder.jpeg') {
+                    e.currentTarget.src = '/img-placeholder.jpg';
+                  }
+                }}
+              />
+            );
+          }
+        })}
       </div>
     </Root>
   );
