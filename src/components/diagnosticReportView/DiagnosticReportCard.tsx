@@ -6,7 +6,6 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Card, CardContent, Tooltip, Typography, Tabs, Tab, CircularProgress } from '@mui/material';
 import { IconButton } from '@mui/material';
 
-import { ReportItem } from '../../interfaces/diagnosticReport';
 import FavouriteControls from '../common/FavouriteControls';
 import DiagnosticReportTabPanel from './DiagnosticReportTabPanel';
 import GeneralView from './GeneralView';
@@ -14,6 +13,7 @@ import NamedFaultsView from './NamedFaultsView';
 import RegionalMfdView from './RegionalMfdView';
 import InversionSolutionHazardCharts from '../inversionSolution/InversionSolutionHazardCharts';
 import ParentFaultView from './ParentFaultViews';
+import { ValidatedSubtask } from '../../interfaces/generaltask';
 
 const PREFIX = 'DiagnosticReportCard';
 
@@ -46,7 +46,7 @@ const Root = styled('div')(() => ({
 
 interface DiagnosticReportCardProps {
   modelType: string;
-  automationTasks: ReportItem[];
+  automationTasks: ValidatedSubtask[];
   generalViews: string[];
   setGeneralViews: (selection: string[]) => void;
   namedFaultsView: string;
@@ -148,6 +148,8 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
           <DiagnosticReportTabPanel value={currentTab} index={0}>
             <GeneralView
               id={automationTasks[currentImage].inversion_solution.id}
+              mfdTableId={automationTasks[currentImage].inversion_solution.mfd_table_id}
+              meta={automationTasks[currentImage].inversion_solution.meta}
               generalViews={generalViews}
               setGeneralViews={setGeneralViews}
             />
