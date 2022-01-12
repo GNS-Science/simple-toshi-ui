@@ -97,7 +97,6 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   const [currentTab, setCurrentTab] = useState<number>(0);
   const [hazardId, setHazardId] = useState<string>('');
   const [filteredMeta, setFilteredMeta] = useState<MetaArguments>([]);
-  console.log(sweepArgs);
 
   useEffect(() => {
     if (reportTab !== 0) setCurrentTab(reportTab ?? 0);
