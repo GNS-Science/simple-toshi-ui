@@ -15,7 +15,6 @@ import InversionSolutionHazardCharts from '../inversionSolution/InversionSolutio
 import ParentFaultView from './ParentFaultViews';
 import { SweepArguments, ValidatedSubtask } from '../../interfaces/generaltask';
 import { MetaArguments } from '../../interfaces/mySolutions';
-import { pluralCompare } from '../../service/generalTask.service';
 import { filteredMetaGT, filterMetaArguments } from '../../service/diagnosticReports.service';
 
 const PREFIX = 'DiagnosticReportCard';

@@ -53,7 +53,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   const data = useLazyLoadQuery<InversionSolutionDiagnosticContainerQuery>(inversionSolutionDiagnosticContainerQuery, {
     id: ids,
   });
-  const validatedSubtasks = validateSubtask(data, sweepArgs ?? []);
+  const validatedSubtasks = validateSubtask(data);
 
   return (
     <>
