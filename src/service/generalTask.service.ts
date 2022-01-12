@@ -1,7 +1,7 @@
 import { GeneralTaskChildrenTabQueryResponse } from '../components/generalTask/__generated__/GeneralTaskChildrenTabQuery.graphql';
 import { InversionSolutionDiagnosticContainerQueryResponse } from '../components/generalTask/__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
 import { GeneralTaskDetails } from '../interfaces/diagnosticReport';
-import { ValidatedChildren, SweepArguments, ValidatedSubtask, ClipBoardObject } from '../interfaces/generaltask';
+import { ValidatedChildren, ValidatedSubtask, ClipBoardObject } from '../interfaces/generaltask';
 import { FilteredArguments, GeneralTaskKeyValueListPairs } from '../interfaces/generaltask';
 import { GeneralTaskQueryResponse } from '../pages/__generated__/GeneralTaskQuery.graphql';
 
@@ -37,10 +37,7 @@ export const updateFilteredArguments = (
   };
 };
 
-export const validateSubtask = (
-  data: InversionSolutionDiagnosticContainerQueryResponse,
-  sweepArgs: SweepArguments,
-): ValidatedSubtask[] => {
+export const validateSubtask = (data: InversionSolutionDiagnosticContainerQueryResponse): ValidatedSubtask[] => {
   const subtasks = data?.nodes?.result?.edges.map((subtask) => subtask?.node);
   const validatedSubtasks: ValidatedSubtask[] = [];
 
