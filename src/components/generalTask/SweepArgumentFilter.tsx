@@ -35,7 +35,8 @@ const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
+      minWidth: 250,
+      maxWidth: 700,
     },
   },
 };
@@ -89,6 +90,7 @@ const SweepArgumentFilter: React.FC<SweepArgumentFilterProps> = ({ argument, onC
           input={<Input />}
           MenuProps={MenuProps}
           variant="standard"
+          autoWidth={true}
         >
           {argument?.v?.map((value) => (
             <MenuItem key={value} value={`${value}`}>
