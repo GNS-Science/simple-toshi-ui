@@ -113,6 +113,13 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
 
   useEffect(() => {
     setReportTab && setReportTab(currentTab);
+    let metaList: MetaArguments = [];
+    if (sweepArgs) {
+      metaList = filteredMetaGT(automationTasks[currentImage].inversion_solution.meta, sweepArgs);
+    } else if (sweepList) {
+      metaList = filterMetaArguments(automationTasks[currentImage].inversion_solution.meta, sweepList);
+    }
+    setFilteredMeta(metaList);
   }, [currentTab]);
 
   useEffect(() => {
