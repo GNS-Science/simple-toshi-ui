@@ -114,6 +114,7 @@ const MySolutions: React.FC = () => {
         <MySolutionsList solutionsList={listItems} />
       ) : (
         <DiagnosticReportCard
+          sweepList={currentGeneralTask.swept_arguments}
           modelType={currentGeneralTask.model_type}
           changeCurrentImage={handleChangeCurrentImage}
           automationTasks={reportItems}
@@ -172,6 +173,7 @@ export const mySolutionsQuery = graphql`
               }
               inversion_solution {
                 id
+                mfd_table_id
                 meta {
                   k
                   v
