@@ -15,11 +15,12 @@ import MenuBar from './components/MenuBar';
 import InversionSolution from './pages/InversionSolution';
 
 /* preview views (with no test coverage...) */
-import Preview from './components/Preview';
-import PreviewMFD from './components/PreviewMFD';
-import PreviewLineMFD from './components/PreviewLineMFD';
+import Preview from './pages/Preview';
+import PreviewMFD from './pages/PreviewMFD';
+import PreviewLineMFD from './pages/PreviewLineMFD';
 import RuptureSetViews from './components/RuptureSetViews';
-import HazardMap from './components/HazardMap';
+import HazardMapPreview1 from './pages/HazardMapPreview1';
+import HazardMapPreview2 from './pages/HazardMapPreview2';
 import Find from './components/Find';
 import AutomationTask from './components/AutomationTask';
 import LocalStorageContext from './contexts/localStorage';
@@ -131,8 +132,11 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
                   <Route path="/Preview/views">
                     <RuptureSetViews />
                   </Route>
-                  <Route path="/Preview/hazard">
-                    <HazardMap />
+                  <Route path="/Preview/hazard1">
+                    <HazardMapPreview1 />
+                  </Route>
+                  <Route path="/Preview/hazard2">
+                    <HazardMapPreview2 />
                   </Route>
                   <Route path="/Preview">
                     <Preview />
