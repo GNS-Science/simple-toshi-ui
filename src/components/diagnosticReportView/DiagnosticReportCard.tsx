@@ -6,6 +6,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Card, CardContent, Tooltip, Typography, Tabs, Tab, CircularProgress } from '@mui/material';
 import { IconButton } from '@mui/material';
 
+import { ReportItem } from '../../interfaces/diagnosticReport';
 import FavouriteControls from '../common/FavouriteControls';
 import DiagnosticReportTabPanel from './DiagnosticReportTabPanel';
 import GeneralView from './GeneralView';
@@ -13,9 +14,6 @@ import NamedFaultsView from './NamedFaultsView';
 import RegionalMfdView from './RegionalMfdView';
 import InversionSolutionHazardCharts from '../inversionSolution/InversionSolutionHazardCharts';
 import ParentFaultView from './ParentFaultViews';
-import { SweepArguments, ValidatedSubtask } from '../../interfaces/generaltask';
-import { MetaArguments } from '../../interfaces/mySolutions';
-import { filteredMetaGT, filterMetaArguments } from '../../service/diagnosticReports.service';
 
 const PREFIX = 'DiagnosticReportCard';
 
@@ -47,10 +45,8 @@ const Root = styled('div')(() => ({
 }));
 
 interface DiagnosticReportCardProps {
-  sweepArgs?: SweepArguments;
-  sweepList?: string[];
   modelType: string;
-  automationTasks: ValidatedSubtask[];
+  automationTasks: ReportItem[];
   generalViews: string[];
   setGeneralViews: (selection: string[]) => void;
   namedFaultsView: string;
@@ -71,8 +67,6 @@ interface DiagnosticReportCardProps {
 }
 
 const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
-  sweepArgs,
-  sweepList,
   modelType,
   automationTasks,
   generalViews,
@@ -96,7 +90,6 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   const [currentImage, setCurrentImage] = useState<number>(0);
   const [currentTab, setCurrentTab] = useState<number>(0);
   const [hazardId, setHazardId] = useState<string>('');
-  const [filteredMeta, setFilteredMeta] = useState<MetaArguments>([]);
 
   useEffect(() => {
     if (reportTab !== 0) setCurrentTab(reportTab ?? 0);
@@ -108,13 +101,6 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
 
   useEffect(() => {
     setReportTab && setReportTab(currentTab);
-    let metaList: MetaArguments = [];
-    if (sweepArgs) {
-      metaList = filteredMetaGT(automationTasks[currentImage].inversion_solution.meta, sweepArgs);
-    } else if (sweepList) {
-      metaList = filterMetaArguments(automationTasks[currentImage].inversion_solution.meta, sweepList);
-    }
-    setFilteredMeta(metaList);
   }, [currentTab]);
 
   useEffect(() => {
@@ -162,8 +148,6 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
           <DiagnosticReportTabPanel value={currentTab} index={0}>
             <GeneralView
               id={automationTasks[currentImage].inversion_solution.id}
-              mfdTableId={automationTasks[currentImage].inversion_solution.mfd_table_id}
-              meta={automationTasks[currentImage].inversion_solution.meta}
               generalViews={generalViews}
               setGeneralViews={setGeneralViews}
             />
@@ -229,7 +213,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             <Link to={`/InversionSolution/${automationTasks[currentImage].inversion_solution.id}`}>[more]</Link>
           </h4>
           <Typography>
-            {filteredMeta.map((kv) => (
+            {automationTasks[currentImage].inversion_solution.meta.map((kv) => (
               <span key={kv?.k}>
                 {kv?.k}: {kv?.v}, &nbsp;
               </span>
