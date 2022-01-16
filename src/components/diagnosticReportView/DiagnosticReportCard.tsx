@@ -110,6 +110,13 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       );
       hazardTable ? setHazardId(hazardTable?.table_id as string) : setHazardId('');
     }
+    let metaList: MetaArguments = [];
+    if (sweepArgs) {
+      metaList = filteredMetaGT(automationTasks[currentImage].inversion_solution.meta, sweepArgs);
+    } else if (sweepList) {
+      metaList = filterMetaArguments(automationTasks[currentImage].inversion_solution.meta, sweepList);
+    }
+    setFilteredMeta(metaList);
   }, [currentImage]);
 
   const nextImage = () => {
