@@ -37,7 +37,6 @@ export type MySolutionsQueryResponse = {
                     } | null;
                     readonly inversion_solution: {
                         readonly id: string;
-                        readonly mfd_table_id: string | null;
                         readonly meta: ReadonlyArray<{
                             readonly k: string | null;
                             readonly v: string | null;
@@ -96,7 +95,6 @@ query MySolutionsQuery(
             }
             inversion_solution {
               id
-              mfd_table_id
               meta {
                 k
                 v
@@ -236,13 +234,6 @@ v6 = {
   "plural": false,
   "selections": [
     (v3/*: any*/),
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "mfd_table_id",
-      "storageKey": null
-    },
     {
       "alias": null,
       "args": null,
@@ -486,14 +477,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "b4be86f04fc52bc398defc148589a9a7",
+    "cacheID": "ac722725338a02adbbd64d3f3be24ddb",
     "id": null,
     "metadata": {},
     "name": "MySolutionsQuery",
     "operationKind": "query",
-    "text": "query MySolutionsQuery(\n  $id: [ID!]\n) {\n  nodes(id_in: $id) {\n    result {\n      edges {\n        node {\n          __typename\n          ... on AutomationTask {\n            id\n            parents {\n              edges {\n                node {\n                  parent {\n                    id\n                    created\n                    title\n                    description\n                    model_type\n                    swept_arguments\n                    notes\n                    argument_lists {\n                      k\n                      v\n                    }\n                  }\n                  id\n                }\n              }\n            }\n            inversion_solution {\n              id\n              mfd_table_id\n              meta {\n                k\n                v\n              }\n              tables {\n                table_id\n                table_type\n              }\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query MySolutionsQuery(\n  $id: [ID!]\n) {\n  nodes(id_in: $id) {\n    result {\n      edges {\n        node {\n          __typename\n          ... on AutomationTask {\n            id\n            parents {\n              edges {\n                node {\n                  parent {\n                    id\n                    created\n                    title\n                    description\n                    model_type\n                    swept_arguments\n                    notes\n                    argument_lists {\n                      k\n                      v\n                    }\n                  }\n                  id\n                }\n              }\n            }\n            inversion_solution {\n              id\n              meta {\n                k\n                v\n              }\n              tables {\n                table_id\n                table_type\n              }\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '46ce7880050c16a1f35ed728a70d7695';
+(node as any).hash = '389cae9cfa4513dfcfc8c5f51f4b0cd2';
 export default node;

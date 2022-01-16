@@ -28,9 +28,8 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
   const data = useLazyLoadQuery<InversionSolutionMfdTabQuery>(inversionSolutionMfdTabQuery, { id: mfdTableId });
 
   const rows = data?.node?.rows;
+  console.log(rows);
   const config_type = meta?.filter((kv) => kv?.k == 'config_type')[0]?.v;
-  console.log(meta);
-  console.log(config_type);
 
   //Removes filename & file id from inversion meta data list
   const cleanedMeta = meta?.filter((el) => {

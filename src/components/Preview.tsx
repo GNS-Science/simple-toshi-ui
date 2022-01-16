@@ -66,11 +66,8 @@ function Preview(): React.ReactElement {
           </Typography>
           <Typography className={classes.pos} component="p">
             An interactive map using `leaflet`.
-            <Button size="small" href="/preview/hazard1">
-              Example 1
-            </Button>
-            <Button size="small" href="/preview/hazard2">
-              Example 2
+            <Button size="small" href="/preview/hazard">
+              go
             </Button>
           </Typography>
         </CardContent>

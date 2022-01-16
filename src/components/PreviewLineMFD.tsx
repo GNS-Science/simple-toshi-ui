@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 import React, { useRef, useEffect } from 'react';
 import { Typography } from '@mui/material';
 
-import { d0, d1, magRateData, IMagRate } from '../components/PreviewMFD_data';
+import { d0, d1, magRateData, IMagRate } from './PreviewMFD_data';
 
 const PreviewMFD: React.FC = () => {
   const ref = useRef<SVGSVGElement>(null);
