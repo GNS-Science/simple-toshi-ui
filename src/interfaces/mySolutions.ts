@@ -25,7 +25,6 @@ export interface SolutionItem {
   } | null;
   readonly inversion_solution: {
     readonly id: string;
-    readonly mfd_table_id: string | null;
     readonly meta: ReadonlyArray<{
       readonly k: string | null;
       readonly v: string | null;
@@ -36,7 +35,7 @@ export interface SolutionItem {
     } | null> | null;
   } | null;
 }
-export type MetaArguments = Array<{
+export type MetaArguments = readonly ({
   readonly k: string | null;
   readonly v: string | null;
-}>;
+} | null)[];

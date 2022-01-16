@@ -47,25 +47,11 @@ const Root = styled('div')(() => ({
 
 interface GeneralViewProps {
   id: string;
-  meta:
-    | readonly ({
-        readonly k: string | null;
-        readonly v: string | null;
-      } | null)[]
-    | null
-    | undefined;
-  mfdTableId: string;
   generalViews: string[];
   setGeneralViews: (selection: string[]) => void;
 }
 
-const GeneralView: React.FC<GeneralViewProps> = ({
-  id,
-  mfdTableId,
-  meta,
-  generalViews,
-  setGeneralViews,
-}: GeneralViewProps) => {
+const GeneralView: React.FC<GeneralViewProps> = ({ id, generalViews, setGeneralViews }: GeneralViewProps) => {
   const [generalViewSelections, setGeneralViewSelections] = useState<SolutionDiagnosticsOption[]>([
     diagnosticReportViewOptions[0],
   ]);

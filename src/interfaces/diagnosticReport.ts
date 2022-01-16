@@ -5,7 +5,6 @@ export type ReportItem = {
   id: string;
   inversion_solution: {
     id: string;
-    mfd_table_id: string;
     meta: ValidatedSubtaskMeta;
     tables?: IStables;
   };

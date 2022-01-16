@@ -1,7 +1,7 @@
 import { GeneralTaskChildrenTabQueryResponse } from '../components/generalTask/__generated__/GeneralTaskChildrenTabQuery.graphql';
 import { InversionSolutionDiagnosticContainerQueryResponse } from '../components/generalTask/__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
 import { GeneralTaskDetails } from '../interfaces/diagnosticReport';
-import { ValidatedChildren, ValidatedSubtask, ClipBoardObject } from '../interfaces/generaltask';
+import { ValidatedChildren, SweepArguments, ValidatedSubtask, ClipBoardObject } from '../interfaces/generaltask';
 import { FilteredArguments, GeneralTaskKeyValueListPairs } from '../interfaces/generaltask';
 import { GeneralTaskQueryResponse } from '../pages/__generated__/GeneralTaskQuery.graphql';
 
@@ -37,7 +37,10 @@ export const updateFilteredArguments = (
   };
 };
 
-export const validateSubtask = (data: InversionSolutionDiagnosticContainerQueryResponse): ValidatedSubtask[] => {
+export const validateSubtask = (
+  data: InversionSolutionDiagnosticContainerQueryResponse,
+  sweepArgs: SweepArguments,
+): ValidatedSubtask[] => {
   const subtasks = data?.nodes?.result?.edges.map((subtask) => subtask?.node);
   const validatedSubtasks: ValidatedSubtask[] = [];
 
@@ -48,12 +51,6 @@ export const validateSubtask = (data: InversionSolutionDiagnosticContainerQueryR
       subtask.inversion_solution &&
       subtask.inversion_solution.meta
     ) {
-      const mfdTableId = (): string => {
-        if (subtask.inversion_solution?.mfd_table_id) return subtask.inversion_solution?.mfd_table_id;
-        const new_mfd_table = subtask.inversion_solution?.tables?.filter((ltr) => ltr?.table_type == 'MFD_CURVES')[0];
-        if (new_mfd_table) return new_mfd_table.table_id || '';
-        return '';
-      };
       const newSubtask: ValidatedSubtask = {
         __typename: 'AutomationTask',
         id: subtask.id,
@@ -62,14 +59,13 @@ export const validateSubtask = (data: InversionSolutionDiagnosticContainerQueryR
           id: subtask.inversion_solution.id,
           meta: [],
           tables: subtask.inversion_solution.tables,
-          mfd_table_id: mfdTableId(),
         },
       };
       subtask.inversion_solution.meta.map((kv) => {
         kv !== null &&
-          // sweepArgs?.some((argument) => {
-          //   return argument?.k?.includes(kv.k as string) || pluralCompare(argument?.k as string, kv.k as string);
-          // }) &&
+          sweepArgs?.some((argument) => {
+            return argument?.k?.includes(kv.k as string) || pluralCompare(argument?.k as string, kv.k as string);
+          }) &&
           newSubtask.inversion_solution.meta.push(kv);
       });
       validatedSubtasks.push(newSubtask);
