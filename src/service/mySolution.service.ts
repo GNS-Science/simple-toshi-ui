@@ -1,8 +1,8 @@
 import { GeneralTaskDetails, ReportItem } from '../interfaces/diagnosticReport';
-import { IStables, ValidatedSubtask } from '../interfaces/generaltask';
 import { ISFavouritesInstance } from '../interfaces/localStorage';
-import { SolutionItem } from '../interfaces/mySolutions';
+import { MetaArguments, SolutionItem } from '../interfaces/mySolutions';
 import { MySolutionsQueryResponse } from '../pages/__generated__/MySolutionsQuery.graphql';
+import { pluralCompare } from './generalTask.service';
 
 export const getGeneralTaskDetails = (
   listItems: SolutionItem[],
@@ -34,25 +34,19 @@ export const validateListItems = (data: MySolutionsQueryResponse): SolutionItem[
   return listItems;
 };
 
-export const getReportItems = (listItems: SolutionItem[]): ValidatedSubtask[] => {
-  const reportItems: ValidatedSubtask[] = [];
+export const getReportItems = (listItems: SolutionItem[]): ReportItem[] => {
+  const reportItems: ReportItem[] = [];
   listItems.map((task) => {
     const taskMeta = task.inversion_solution?.meta ?? [];
-    // const sweepArguments = (task?.parents?.edges[0]?.node?.parent?.swept_arguments as string[]) ?? [];
-    const mfdTableId = (): string => {
-      if (task.inversion_solution?.mfd_table_id) return task.inversion_solution?.mfd_table_id;
-      const new_mfd_table = task.inversion_solution?.tables?.filter((ltr) => ltr?.table_type == 'MFD_CURVES')[0];
-      if (new_mfd_table) return new_mfd_table.table_id || '';
-      return '';
-    };
-    const validatedTask: ValidatedSubtask = {
+    const sweepArguments = (task?.parents?.edges[0]?.node?.parent?.swept_arguments as string[]) ?? [];
+    const metaFiltered = filterMetaArguments(taskMeta, sweepArguments);
+    const validatedTask: ReportItem = {
       __typename: 'AutomationTask',
       id: task.id,
       inversion_solution: {
         id: task.inversion_solution?.id as string,
-        mfd_table_id: mfdTableId(),
-        meta: [...taskMeta],
-        tables: task.inversion_solution?.tables as IStables,
+        meta: [...metaFiltered],
+        tables: task.inversion_solution?.tables,
       },
     };
     reportItems.push(validatedTask);
@@ -66,4 +60,14 @@ export const getMySolutionIdsArray = (ISFavourites: ISFavouritesInstance): strin
     ids.push(ISFavourites[inversionSolution].producedBy);
   }
   return ids;
+};
+
+export const filterMetaArguments = (metaArguments: MetaArguments, sweepArguments: string[]): MetaArguments => {
+  const filteredMetaArguments = metaArguments.filter((kv) => {
+    return (
+      kv !== null &&
+      sweepArguments.some((argument) => argument.includes(kv.k as string) || pluralCompare(argument, kv.k as string))
+    );
+  });
+  return filteredMetaArguments;
 };
