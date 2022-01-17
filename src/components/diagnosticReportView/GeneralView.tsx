@@ -17,6 +17,7 @@ const Root = styled('div')(() => ({
     display: 'flex',
     justifyContent: 'center',
     flexWrap: 'wrap',
+    minHeight: 600,
   },
 
   [`& .${classes.image}`]: {
