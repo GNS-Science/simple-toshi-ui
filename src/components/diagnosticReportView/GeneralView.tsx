@@ -4,7 +4,7 @@ import buildUrl from 'build-url-ts';
 import { diagnosticReportViewOptions } from '../../constants/diagnosticReport';
 import { SolutionDiagnosticsOption } from '../../interfaces/generaltask';
 import MultiSelect from '../common/MultiSelect';
-import { Card } from '@mui/material';
+import { Card, CircularProgress } from '@mui/material';
 import { ParentSize } from '@visx/responsive';
 import GeneralViewMfd from './GeneralViewMfd';
 
@@ -104,17 +104,19 @@ const GeneralView: React.FC<GeneralViewProps> = ({
             return (
               <Card key={option.finalPath} className={classes.card} variant="outlined">
                 <div className={classes.image}>
-                  <ParentSize>
-                    {(parent) => (
-                      <GeneralViewMfd
-                        mfdTableId={mfdTableId}
-                        meta={meta}
-                        parentWidth={parent.width}
-                        parentRef={parent.ref}
-                        resizeParent={parent.resize}
-                      />
-                    )}
-                  </ParentSize>
+                  <React.Suspense fallback={<CircularProgress />}>
+                    <ParentSize>
+                      {(parent) => (
+                        <GeneralViewMfd
+                          mfdTableId={mfdTableId}
+                          meta={meta}
+                          parentWidth={parent.width}
+                          parentRef={parent.ref}
+                          resizeParent={parent.resize}
+                        />
+                      )}
+                    </ParentSize>
+                  </React.Suspense>
                 </div>
               </Card>
             );
