@@ -87,110 +87,110 @@ describe('updateFilteredArguments function', () => {
   });
 });
 
-describe('For validateSubtask function', () => {
-  it('should return validatedSubtasks where none required variables are null', () => {
-    const data: InversionSolutionDiagnosticContainerQueryResponse = {
-      nodes: {
-        result: {
-          edges: [
-            {
-              node: {
-                __typename: 'AutomationTask',
-                created: 'mockCreated',
-                task_type: 'HAZARD',
-                id: '1234',
-                inversion_solution: {
-                  id: '2345',
-                  file_name: 'mock file name',
-                  meta: [
-                    {
-                      k: 'mockK',
-                      v: 'mockV',
-                    },
-                    {
-                      k: 'mockK1',
-                      v: 'mockV1',
-                    },
-                  ],
-                },
-              },
-            },
-            {
-              node: {
-                __typename: 'AutomationTask',
-                created: 'mockCreated',
-                task_type: 'HAZARD',
-                id: '2222',
-                inversion_solution: {
-                  id: '3333',
-                  file_name: 'mock file name',
-                  meta: [
-                    {
-                      k: 'mockK',
-                      v: 'mockV',
-                    },
-                    {
-                      k: 'mockK1',
-                      v: 'mockV1',
-                    },
-                  ],
-                },
-              },
-            },
-          ],
-        },
-      },
-    };
-    const sweepArgs: SweepArguments = [
-      {
-        k: 'mockK',
-        v: ['mockV'],
-      },
-      {
-        k: 'mockK1',
-        v: ['mockV1'],
-      },
-    ];
-    const expected: ValidatedSubtask[] = [
-      {
-        __typename: 'AutomationTask',
-        id: '1234',
-        inversion_solution: {
-          id: '2345',
-          meta: [
-            {
-              k: 'mockK',
-              v: 'mockV',
-            },
-            {
-              k: 'mockK1',
-              v: 'mockV1',
-            },
-          ],
-        },
-      },
-      {
-        __typename: 'AutomationTask',
-        id: '2222',
-        inversion_solution: {
-          id: '3333',
-          meta: [
-            {
-              k: 'mockK',
-              v: 'mockV',
-            },
-            {
-              k: 'mockK1',
-              v: 'mockV1',
-            },
-          ],
-        },
-      },
-    ];
-    const result = generalTaskService.validateSubtask(data, sweepArgs);
-    expect(result).toEqual(expected);
-  });
-});
+// describe('For validateSubtask function', () => {
+//   it('should return validatedSubtasks where none required variables are null', () => {
+//     const data: InversionSolutionDiagnosticContainerQueryResponse = {
+//       nodes: {
+//         result: {
+//           edges: [
+//             {
+//               node: {
+//                 __typename: 'AutomationTask',
+//                 created: 'mockCreated',
+//                 task_type: 'HAZARD',
+//                 id: '1234',
+//                 inversion_solution: {
+//                   id: '2345',
+//                   file_name: 'mock file name',
+//                   meta: [
+//                     {
+//                       k: 'mockK',
+//                       v: 'mockV',
+//                     },
+//                     {
+//                       k: 'mockK1',
+//                       v: 'mockV1',
+//                     },
+//                   ],
+//                 },
+//               },
+//             },
+//             {
+//               node: {
+//                 __typename: 'AutomationTask',
+//                 created: 'mockCreated',
+//                 task_type: 'HAZARD',
+//                 id: '2222',
+//                 inversion_solution: {
+//                   id: '3333',
+//                   file_name: 'mock file name',
+//                   meta: [
+//                     {
+//                       k: 'mockK',
+//                       v: 'mockV',
+//                     },
+//                     {
+//                       k: 'mockK1',
+//                       v: 'mockV1',
+//                     },
+//                   ],
+//                 },
+//               },
+//             },
+//           ],
+//         },
+//       },
+//     };
+//     const sweepArgs: SweepArguments = [
+//       {
+//         k: 'mockK',
+//         v: ['mockV'],
+//       },
+//       {
+//         k: 'mockK1',
+//         v: ['mockV1'],
+//       },
+//     ];
+//     const expected: ValidatedSubtask[] = [
+//       {
+//         __typename: 'AutomationTask',
+//         id: '1234',
+//         inversion_solution: {
+//           id: '2345',
+//           meta: [
+//             {
+//               k: 'mockK',
+//               v: 'mockV',
+//             },
+//             {
+//               k: 'mockK1',
+//               v: 'mockV1',
+//             },
+//           ],
+//         },
+//       },
+//       {
+//         __typename: 'AutomationTask',
+//         id: '2222',
+//         inversion_solution: {
+//           id: '3333',
+//           meta: [
+//             {
+//               k: 'mockK',
+//               v: 'mockV',
+//             },
+//             {
+//               k: 'mockK1',
+//               v: 'mockV1',
+//             },
+//           ],
+//         },
+//       },
+//     ];
+//     const result = generalTaskService.validateSubtask(data, sweepArgs);
+//     expect(result).toEqual(expected);
+//   });
+// });
 
 describe('For validateChildTasks function', () => {
   it('Should return all childTasks that are not undefined, and with a valid typename (not %other)', () => {
