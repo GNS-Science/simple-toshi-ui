@@ -130,14 +130,8 @@ const GeneralView: React.FC<GeneralViewProps> = ({
                     let newUrl;
 
                     switch (option.finalPath) {
-                      case 'mfd_plot_Total_MFD.png':
-                        newUrl = reportUrl('mfd_plot_Total_Target_MFDs.png', id);
-                        break;
-                      case 'mfd_plot_Total_MFD_cumulative.png':
-                        newUrl = reportUrl('mfd_plot_Total_Target_MFDs.png', id);
-                        break;
                       case 'rate_dist.png':
-                        newUrl = reportUrl('mfd_plot_Total_Target_MFDs.png', id);
+                        newUrl = reportUrl('sa_progress_rate_dist.png', id);
                         break;
                       default:
                         newUrl = '/img-placeholder.jpg';
