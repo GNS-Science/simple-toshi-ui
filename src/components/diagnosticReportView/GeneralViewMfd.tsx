@@ -9,6 +9,7 @@ import { scaleOrdinal } from '@visx/scale';
 import { RectClipPath } from '@visx/clip-path';
 import { Group } from '@visx/group';
 
+
 interface GeneralViewMfdProps {
   mfdTableId: string;
   meta:
@@ -31,8 +32,6 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({ mfdTableId, meta, paren
 
   const rows = data?.node?.rows;
   const config_type = meta?.filter((kv) => kv?.k == 'config_type')[0]?.v;
-  console.log(meta);
-  console.log(config_type);
 
   useEffect(() => {
     parentWidth * 0.035 >= 24 ? setHeadingSize(24) : setHeadingSize(parentWidth * 0.035);
@@ -146,6 +145,7 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({ mfdTableId, meta, paren
             );
           })}
         </Group>
+
         <Tooltip
           snapTooltipToDatumX
           snapTooltipToDatumY
