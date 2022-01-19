@@ -31,7 +31,7 @@ const Root = styled('div')(() => ({
     objectFit: 'contain',
   },
   [`& .${classes.card}`]: {
-    padding: '5px',
+    padding: '0px',
     maxHeight: '80vh',
     width: '25%',
     objectFit: 'contain',
@@ -40,6 +40,8 @@ const Root = styled('div')(() => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    border: 'none',
+    boxShadow: 'none',
   },
 }));
 
@@ -97,13 +99,12 @@ const GeneralView: React.FC<GeneralViewProps> = ({
       />
       <div className={classes.imageContainer}>
         {generalViewSelections.map((option) => {
-
           if (
             option.finalPath === 'mfd_plot_Total_MFD.png' ||
             option.finalPath === 'mfd_plot_Total_MFD_cumulative.png'
           ) {
             return (
-              <Card key={option.finalPath} className={classes.card} variant="outlined">
+              <Card key={option.finalPath} className={classes.card}>
                 <div className={classes.image}>
                   <React.Suspense fallback={<CircularProgress />}>
                     <ParentSize>
@@ -123,7 +124,7 @@ const GeneralView: React.FC<GeneralViewProps> = ({
             );
           } else {
             return (
-              <Card key={option.finalPath} className={classes.card} variant="outlined">
+              <Card key={option.finalPath} className={classes.card}>
                 <img
                   key={option.finalPath}
                   className={classes.image}

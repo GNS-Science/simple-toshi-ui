@@ -9,7 +9,6 @@ import { scaleOrdinal } from '@visx/scale';
 import { RectClipPath } from '@visx/clip-path';
 import { Group } from '@visx/group';
 
-
 interface GeneralViewMfdProps {
   mfdTableId: string;
   meta:
@@ -34,7 +33,7 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({ mfdTableId, meta, paren
   const config_type = meta?.filter((kv) => kv?.k == 'config_type')[0]?.v;
 
   useEffect(() => {
-    parentWidth * 0.035 >= 24 ? setHeadingSize(24) : setHeadingSize(parentWidth * 0.035);
+    parentWidth * 0.035 >= 18 ? setHeadingSize(18) : setHeadingSize(parentWidth * 0.035);
   });
 
   if (!rows) {
@@ -115,7 +114,7 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({ mfdTableId, meta, paren
           fontSize={headingSize}
           fontWeight="bold"
         >
-          Solution Target vs final MFD
+          Solution Target vs Final MFD
         </text>
         <Axis
           tickLabelProps={() => ({
