@@ -79,6 +79,7 @@ export type ValidatedSubtask = {
   id: string;
   inversion_solution: {
     id: string;
+    mfd_table_id: string;
     meta: Array<{
       readonly k: string | null;
       readonly v: string | null;

@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 
 import buildUrl from 'build-url-ts';
-import PreviewMFD from '../components/PreviewMFD';
+import PreviewMFD from '../pages/PreviewMFD';
 
 const PREFIX = 'RuptureSetDiags';
 

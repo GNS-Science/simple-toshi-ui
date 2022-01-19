@@ -21,6 +21,7 @@ export type InversionSolutionDiagnosticContainerQueryResponse = {
                     readonly inversion_solution: {
                         readonly id: string;
                         readonly file_name: string | null;
+                        readonly mfd_table_id: string | null;
                         readonly meta: ReadonlyArray<{
                             readonly k: string | null;
                             readonly v: string | null;
@@ -62,6 +63,7 @@ query InversionSolutionDiagnosticContainerQuery(
             inversion_solution {
               id
               file_name
+              mfd_table_id
               meta {
                 k
                 v
@@ -144,6 +146,13 @@ v4 = {
           "args": null,
           "kind": "ScalarField",
           "name": "file_name",
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "mfd_table_id",
           "storageKey": null
         },
         {
@@ -323,14 +332,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "de9bcb6219aec80fc9a622eb08c23589",
+    "cacheID": "f5ecb97a2dee29b2ae6f9d42442f033d",
     "id": null,
     "metadata": {},
     "name": "InversionSolutionDiagnosticContainerQuery",
     "operationKind": "query",
-    "text": "query InversionSolutionDiagnosticContainerQuery(\n  $id: [ID!]\n) {\n  nodes(id_in: $id) {\n    result {\n      edges {\n        node {\n          __typename\n          ... on AutomationTask {\n            created\n            task_type\n            id\n            inversion_solution {\n              id\n              file_name\n              meta {\n                k\n                v\n              }\n              tables {\n                table_id\n                table_type\n              }\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query InversionSolutionDiagnosticContainerQuery(\n  $id: [ID!]\n) {\n  nodes(id_in: $id) {\n    result {\n      edges {\n        node {\n          __typename\n          ... on AutomationTask {\n            created\n            task_type\n            id\n            inversion_solution {\n              id\n              file_name\n              mfd_table_id\n              meta {\n                k\n                v\n              }\n              tables {\n                table_id\n                table_type\n              }\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'c1f737f84a5d766592e85b94fab9b2aa';
+(node as any).hash = '976a3ed9bf0cfab99803611db4e96825';
 export default node;
