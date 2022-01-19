@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
 import { graphql } from 'babel-plugin-relay/macro';
 import { GeneralViewMfdQuery } from './__generated__/GeneralViewMfdQuery.graphql';
-import { AnimatedAxis, AnimatedLineSeries, Tooltip, XYChart } from '@visx/xychart';
+import { Axis, AnimatedLineSeries, Tooltip, XYChart } from '@visx/xychart';
 import { Typography } from '@mui/material';
 import { LegendOrdinal } from '@visx/legend';
 import { scaleOrdinal } from '@visx/scale';
+import { RectClipPath } from '@visx/clip-path';
+import { Group } from '@visx/group';
 
 interface GeneralViewMfdProps {
   mfdTableId: string;
@@ -31,7 +33,7 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({ mfdTableId, meta, paren
   const config_type = meta?.filter((kv) => kv?.k == 'config_type')[0]?.v;
 
   useEffect(() => {
-    parentWidth * 0.035 >= 24 ? setHeadingSize(24) : setHeadingSize(parentWidth * 0.035);
+    parentWidth * 0.035 >= 18 ? setHeadingSize(18) : setHeadingSize(parentWidth * 0.035);
   });
 
   if (!rows) {
@@ -81,7 +83,7 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({ mfdTableId, meta, paren
 
   const magRateData = (data: number[][]): Array<IMagRate> => {
     return magAndRate(data).map((mr) => {
-      const min = 1e-15; //log scales cannot include 0
+      const min = 1e-20; //log scales cannot include 0
       return { mag: mr[0], rate: Math.max(mr[1], min) } as IMagRate;
     });
   };
@@ -98,7 +100,7 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({ mfdTableId, meta, paren
   return (
     <div style={{ position: 'relative', width: '100%' }}>
       <XYChart
-        height={parentWidth * 0.75}
+        height={parentWidth}
         width={parentWidth}
         xScale={{ type: 'linear', domain: [minMagnitude, maxMagnitude], zero: false }}
         yScale={{ type: 'log', domain: [1e-6, 1] }}
@@ -112,22 +114,37 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({ mfdTableId, meta, paren
           fontSize={headingSize}
           fontWeight="bold"
         >
-          Solution Target vs final Magnitude Frequency distribution
+          Solution Target vs Final MFD
         </text>
-        <AnimatedAxis orientation="bottom" />
-        <AnimatedAxis orientation="left" />
-        {series.map((e, idx) => {
-          return (
-            <AnimatedLineSeries
-              key={e}
-              dataKey={e}
-              data={seriesMfd(series, idx)}
-              xAccessor={(d: IMagRate) => d?.mag}
-              yAccessor={(d: IMagRate) => d?.rate}
-              stroke={colours[idx]}
-            />
-          );
-        })}
+        <Axis
+          tickLabelProps={() => ({
+            fontSize: 8,
+          })}
+          numTicks={5}
+          orientation="bottom"
+        />
+        <Axis
+          tickLabelProps={() => ({
+            fontSize: 8,
+          })}
+          orientation="left"
+        />
+        <RectClipPath id="clip" width={parentWidth} height={parentWidth - 50} />
+        <Group clipPath="url(#clip)">
+          {series.map((e, idx) => {
+            return (
+              <AnimatedLineSeries
+                key={e}
+                dataKey={e}
+                data={seriesMfd(series, idx)}
+                xAccessor={(d: IMagRate) => d?.mag}
+                yAccessor={(d: IMagRate) => d?.rate}
+                stroke={colours[idx]}
+              />
+            );
+          })}
+        </Group>
+
         <Tooltip
           snapTooltipToDatumX
           snapTooltipToDatumY
