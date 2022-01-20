@@ -6,6 +6,7 @@ import axios from 'axios';
 import SelectControl from '../components/common/SelectControl';
 import { Button, Card } from '@mui/material';
 import { styled } from '@mui/styles';
+import MultiSelect from '../components/common/MultiSelect';
 
 const FloatingCard = styled(Card)({
   zIndex: 100,
@@ -42,7 +43,7 @@ const data = [{ sourcePosition: [-122.41669, 37.7853], targetPosition: [-122.416
 
 const DeckglPreview: React.FC = () => {
   const [locationOptions, setLocationOptions] = useState<LocationData[]>([]);
-  const [locationSelection, setLocationSelection] = useState<string>('');
+  const [locationSelection, setLocationSelection] = useState<string[]>([]);
 
   const [radiiOptions, setRadiiOptions] = useState<string[]>([]);
   const [radiiSelection, setRadiiSelection] = useState<string>('');
@@ -110,7 +111,12 @@ const DeckglPreview: React.FC = () => {
     <>
       <FloatingCard>
         <ControlsBar>
-          <SelectControl name="Location" options={getOptions()} setOptions={setLocationSelection} />
+          <MultiSelect
+            options={getOptions()}
+            selected={locationSelection}
+            setOptions={setLocationSelection}
+            name="Location"
+          />
           <SelectControl name="Radii" options={radiiOptions} setOptions={setRadiiSelection} />
           <Button variant="outlined">Fetch</Button>
         </ControlsBar>
