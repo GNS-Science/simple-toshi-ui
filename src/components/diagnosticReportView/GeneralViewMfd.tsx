@@ -19,12 +19,18 @@ interface GeneralViewMfdProps {
     | null
     | undefined;
   parentWidth: number;
+  cumulative: boolean;
   parentRef: HTMLDivElement | null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   resizeParent: (state: any) => void;
 }
 
-const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({ mfdTableId, meta, parentWidth }: GeneralViewMfdProps) => {
+const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({
+  mfdTableId,
+  meta,
+  parentWidth,
+  cumulative,
+}: GeneralViewMfdProps) => {
   const data = useLazyLoadQuery<GeneralViewMfdQuery>(generalViewMfdQuery, { id: mfdTableId });
 
   const [headingSize, setHeadingSize] = useState<number>(0);
@@ -73,6 +79,18 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({ mfdTableId, meta, paren
     minMagnitude = 5.0;
   }
 
+  const cumulativeMfd = (series: string[], index: number): Array<IMagRate> => {
+    const data = magRateData(
+      rows
+        .filter((row) => row && row[1] == series[index])
+        .map((r) => (r ? [parseFloat(r[2] ?? ''), parseFloat(r[3] ?? '')] : [])),
+    );
+    for (let x = data.length - 1; x > 0; x--) {
+      data[x - 1].rate += data[x].rate;
+    }
+    return data;
+  };
+
   const seriesMfd = (series: string[], index: number): Array<IMagRate> => {
     return magRateData(
       rows
@@ -114,7 +132,7 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({ mfdTableId, meta, paren
           fontSize={headingSize}
           fontWeight="bold"
         >
-          Solution Target vs Final MFD
+          {cumulative ? 'Solution Target vs Final MFD (cumul.)' : 'Solution Target vs Final MFD'}
         </text>
         <Axis
           tickLabelProps={() => ({
@@ -129,14 +147,14 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({ mfdTableId, meta, paren
           })}
           orientation="left"
         />
-        <RectClipPath id="clip" width={parentWidth} height={parentWidth - 50} />
+        <RectClipPath id="clip" x={50} width={parentWidth} height={parentWidth - 50} />
         <Group clipPath="url(#clip)">
           {series.map((e, idx) => {
             return (
               <AnimatedLineSeries
                 key={e}
                 dataKey={e}
-                data={seriesMfd(series, idx)}
+                data={cumulative ? cumulativeMfd(series, idx) : seriesMfd(series, idx)}
                 xAccessor={(d: IMagRate) => d?.mag}
                 yAccessor={(d: IMagRate) => d?.rate}
                 stroke={colours[idx]}
