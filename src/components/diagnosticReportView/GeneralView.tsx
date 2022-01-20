@@ -114,6 +114,7 @@ const GeneralView: React.FC<GeneralViewProps> = ({
                           meta={meta}
                           parentWidth={parent.width}
                           parentRef={parent.ref}
+                          cumulative={option.finalPath === 'mfd_plot_Total_MFD_cumulative.png'}
                           resizeParent={parent.resize}
                         />
                       )}

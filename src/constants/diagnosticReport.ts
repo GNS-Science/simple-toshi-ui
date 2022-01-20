@@ -8,15 +8,15 @@ export const diagnosticReportViewOptions: SolutionDiagnosticsOption[] = [
     imgHght: 600,
     imgWdth: 500,
   },
-  //solution_report/resources/mfd_plot_Total_Target_MFDs_cumulative.png
-  // {
-  //   viewType: ViewTypeEnum.Image,
-  //   displayName: 'Solution MFDs (cumulative)',
-  //   finalPath: 'mfd_plot_Total_MFD_cumulative.png',
-  //   imgHght: 600,
-  //   imgWdth: 500,
-  // },
-  //solution_report/resources/sa_progress_energy_vs_time.png
+  // solution_report/resources/mfd_plot_Total_Target_MFDs_cumulative.png
+  {
+    viewType: ViewTypeEnum.Image,
+    displayName: 'Solution MFDs (cumulative)',
+    finalPath: 'mfd_plot_Total_MFD_cumulative.png',
+    imgHght: 600,
+    imgWdth: 500,
+  },
+  // solution_report/resources/sa_progress_energy_vs_time.png
   {
     viewType: ViewTypeEnum.Image,
     displayName: 'Energy vs Time',
