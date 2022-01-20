@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StaticMap } from 'react-map-gl';
 import { DeckGL } from '@deck.gl/react';
-import { LineLayer } from '@deck.gl/layers';
+import { LineLayer, GeoJsonLayer } from '@deck.gl/layers';
 import axios from 'axios';
 import SelectControl from '../components/common/SelectControl';
 import { Button, Card } from '@mui/material';
@@ -43,7 +43,8 @@ const data = [{ sourcePosition: [-122.41669, 37.7853], targetPosition: [-122.416
 
 const DeckglPreview: React.FC = () => {
   const [locationOptions, setLocationOptions] = useState<LocationData[]>([]);
-  const [locationSelection, setLocationSelection] = useState<string[]>([]);
+  const [locationSelections, setLocationSelections] = useState<string[]>([]);
+  const [locationIDs, setLocationIDs] = useState<string[]>([]);
 
   const [radiiOptions, setRadiiOptions] = useState<string[]>([]);
   const [radiiSelection, setRadiiSelection] = useState<string>('');
@@ -51,27 +52,40 @@ const DeckglPreview: React.FC = () => {
   const [geojsonData, setGeoJsonData] = useState<string>('');
   const layers = [new LineLayer({ id: 'line-layer', data })];
 
+  const layer = new GeoJsonLayer({
+    id: 'geojson-layer',
+    data: geojsonData,
+    pickable: true,
+    stroked: false,
+    filled: true,
+    extruded: true,
+    pointType: 'circle',
+    lineWidthScale: 20,
+    lineWidthMinPixels: 2,
+    getFillColor: [160, 160, 180, 200],
+    // getLineColor: (d) => colorToRGBArray(d.properties.color),
+    getPointRadius: 100,
+    getLineWidth: 1,
+    getElevation: 30,
+  });
+
   useEffect(() => {
     console.log(geojsonData);
   }, [geojsonData]);
 
   useEffect(() => {
+    const filteredLocations = locationOptions.filter((location) => locationSelections.includes(location.name));
+    const filteredLocationIDs: string[] = [];
+    filteredLocations.map((location) => {
+      filteredLocationIDs.push(location.id);
+    });
+    setLocationIDs(filteredLocationIDs);
+  }, [locationSelections]);
+
+  useEffect(() => {
     const locationListID = process.env.REACT_APP_ANALYSIS_LOC_LIST_ID as string;
     const radiiID = process.env.REACT_APP_RADII_ID;
 
-    // axios
-    //   .get(`${solvisEndpoint}/solution_analysis/3faedbd7-2d01-48ff-8042-a9eebd127a15`, {
-    //     headers: {
-    //       'x-api-key': process.env.REACT_APP_SOLVIS_API_KEY as string,
-    //     },
-    //   })
-    //   .then((response) => {
-    //     console.log(response);
-    //     setGeoJsonData(response.data.dataframe);
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
     axios
       .get(`${solvisEndpoint}/location_lists/${locationListID}/locations`, {
         headers: {
@@ -107,21 +121,46 @@ const DeckglPreview: React.FC = () => {
     return locations;
   };
 
+  const getGeoJson = (): void => {
+    const locationSelectionsString = locationIDs.join('%2C');
+    const radiiInKm = Number(radiiSelection) / 1000;
+    axios
+      .get(
+        `${solvisEndpoint}/solution_analysis/SW52ZXJzaW9uU29sdXRpb246MTk4MzcuMGZraHVq/loc/${locationSelectionsString}/rad/10`,
+        {
+          headers: {
+            'x-api-key': process.env.REACT_APP_SOLVIS_API_KEY as string,
+          },
+        },
+      )
+      .then((response) => {
+        setGeoJsonData(response.data.ruptures);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   return (
     <>
       <FloatingCard>
         <ControlsBar>
           <MultiSelect
             options={getOptions()}
-            selected={locationSelection}
-            setOptions={setLocationSelection}
+            selected={locationSelections}
+            setOptions={setLocationSelections}
             name="Location"
           />
           <SelectControl name="Radii" options={radiiOptions} setOptions={setRadiiSelection} />
-          <Button variant="outlined">Fetch</Button>
+          <Button variant="outlined" onClick={getGeoJson}>
+            Fetch
+          </Button>
+          <p>
+            radii: {radiiSelection} locations: {locationSelections}
+          </p>
         </ControlsBar>
       </FloatingCard>
-      <DeckGL layers={layers} initialViewState={INITIAL_VIEW_STATE} controller={true}>
+      <DeckGL layers={[layer]} initialViewState={INITIAL_VIEW_STATE} controller={true}>
         <StaticMap
           mapboxApiAccessToken={
             'pk.eyJ1IjoicWlhbnllbGluIiwiYSI6ImNreTI0d2NlMzBoZ2UydW8wODV2am11bnEifQ.0P_4i0jBNdI7mtEydiQEkg'
