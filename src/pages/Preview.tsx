@@ -72,6 +72,9 @@ function Preview(): React.ReactElement {
             <Button size="small" href="/preview/hazard2">
               Example 2
             </Button>
+            <Button size="small" href="/preview/hazard3">
+              Example 3
+            </Button>
           </Typography>
         </CardContent>
       </Card>
