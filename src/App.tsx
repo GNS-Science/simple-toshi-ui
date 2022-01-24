@@ -21,7 +21,7 @@ import PreviewLineMFD from './pages/PreviewLineMFD';
 import RuptureSetViews from './components/RuptureSetViews';
 import HazardMapPreview1 from './pages/HazardMapPreview1';
 import HazardMapPreview2 from './pages/HazardMapPreview2';
-import HazardMapPreview3 from './pages/HazardMapPreview3';
+import SolutionAnalysisPreview from './pages/SolutionAnalysisPreview';
 import Find from './components/Find';
 import AutomationTask from './components/AutomationTask';
 import LocalStorageContext from './contexts/localStorage';
@@ -139,8 +139,8 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
                   <Route path="/Preview/hazard2">
                     <HazardMapPreview2 />
                   </Route>
-                  <Route path="/Preview/hazard3">
-                    <HazardMapPreview3 />
+                  <Route path="/Preview/solution-analysis">
+                    <SolutionAnalysisPreview />
                   </Route>
                   <Route path="/Preview">
                     <Preview />

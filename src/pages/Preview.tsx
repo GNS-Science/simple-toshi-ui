@@ -72,8 +72,19 @@ function Preview(): React.ReactElement {
             <Button size="small" href="/preview/hazard2">
               Example 2
             </Button>
-            <Button size="small" href="/preview/hazard3">
-              Example 3
+          </Typography>
+        </CardContent>
+      </Card>
+
+      <Card className={classes.root}>
+        <CardContent>
+          <Typography color="textPrimary" variant="h5" gutterBottom>
+            Solution Analysis
+          </Typography>
+          <Typography className={classes.pos} component="p">
+            An interactive map using `leaflet`.
+            <Button size="small" href="/preview/solution-analysis">
+              go
             </Button>
           </Typography>
         </CardContent>

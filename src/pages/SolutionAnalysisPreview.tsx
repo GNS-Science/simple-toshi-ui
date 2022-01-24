@@ -4,7 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import axios from 'axios';
 import SelectControl from '../components/common/SelectControl';
-import { Button, Card, Typography } from '@mui/material';
+import { Alert, Button, Card, Typography } from '@mui/material';
 import { styled } from '@mui/styles';
 import MultiSelect from '../components/common/MultiSelect';
 import { GeoJsonObject } from 'geojson';
@@ -37,7 +37,7 @@ interface LocationData {
 }
 const solvisEndpoint = process.env.REACT_APP_SOLVIS_ENDPOINT as string;
 
-const HazardMapPreview3: React.FC = () => {
+const SolutionAnalysisPreview: React.FC = () => {
   const [locationOptions, setLocationOptions] = useState<LocationData[]>([]);
   const [locationSelections, setLocationSelections] = useState<string[]>([]);
   const [locationIDs, setLocationIDs] = useState<string[]>([]);
@@ -46,6 +46,8 @@ const HazardMapPreview3: React.FC = () => {
   const [radiiSelection, setRadiiSelection] = useState<string>('');
 
   const [geojsonData, setGeoJsonData] = useState<GeoJsonObject>();
+
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const nz_centre: LatLngExpression = [-40.946, 174.167];
   const zoom = 5;
@@ -71,10 +73,10 @@ const HazardMapPreview3: React.FC = () => {
           'x-api-key': process.env.REACT_APP_SOLVIS_API_KEY as string,
         },
       })
-      .then((response) => {
+      .then((response: any) => {
         setLocationOptions(response.data);
       })
-      .catch((error) => {
+      .catch((error: unknown) => {
         console.error(error);
       });
 
@@ -84,12 +86,12 @@ const HazardMapPreview3: React.FC = () => {
           'x-api-key': process.env.REACT_APP_SOLVIS_API_KEY as string,
         },
       })
-      .then((response) => {
+      .then((response: any) => {
         const radii = response.data.radii;
         const radiiFormatted = radii.map((radius: number) => `${radius / 1000}km`);
         setRadiiOptions(radiiFormatted);
       })
-      .catch((error) => {
+      .catch((error: unknown) => {
         console.error(error);
       });
   }, []);
@@ -99,6 +101,7 @@ const HazardMapPreview3: React.FC = () => {
     locationOptions.map((locationOption) => {
       locations.push(locationOption.name);
     });
+    locations.sort();
     return locations;
   };
   const getGeoJson = (): void => {
@@ -114,17 +117,23 @@ const HazardMapPreview3: React.FC = () => {
           },
         },
       )
-      .then((response) => {
-        const geoJsonData = JSON.parse(response.data.ruptures) as GeoJsonObject;
-        setGeoJsonData(geoJsonData);
+      .then((response: any) => {
+        if (response.data.error_message) {
+          setErrorMessage(response.data.error_message);
+        } else {
+          setErrorMessage(null);
+          const geoJsonData = JSON.parse(response.data.ruptures) as GeoJsonObject;
+          setGeoJsonData(geoJsonData);
+        }
       })
-      .catch((error) => {
+      .catch((error: unknown) => {
         console.error(error);
       });
   };
 
   return (
     <>
+      {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
       <FloatingCard>
         <ControlsBar>
           <MultiSelect
@@ -148,4 +157,4 @@ const HazardMapPreview3: React.FC = () => {
   );
 };
 
-export default HazardMapPreview3;
+export default SolutionAnalysisPreview;
