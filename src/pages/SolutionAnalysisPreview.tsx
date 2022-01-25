@@ -120,7 +120,7 @@ const SolutionAnalysisPreview: React.FC = () => {
 
     axios
       .get(
-        `${solvisEndpoint}/solution_analysis/SW52ZXJzaW9uU29sdXRpb246MTk4MzcuMGZraHVq/loc/${locationSelectionsString}/rad/${radiiInKm}`,
+        `${solvisEndpoint}/solution_analysis/SW52ZXJzaW9uU29sdXRpb246MTk4MzcuMGZraHVq/loc/${locationSelectionsString}/rad/${radiiInKm}?max_mag=${magRange[1]}&min_mag=${magRange[0]}&max_rate=1e${rateRange[1]}&min_rate=1e${rateRange[0]}`,
         {
           headers: {
             'x-api-key': process.env.REACT_APP_SOLVIS_API_KEY as string,
