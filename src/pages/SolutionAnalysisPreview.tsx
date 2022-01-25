@@ -5,7 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import axios from 'axios';
 import SelectControl from '../components/common/SelectControl';
-import { Alert, Button, Card, Typography } from '@mui/material';
+import { Alert, Button, Card, Slider, Typography } from '@mui/material';
 import { styled } from '@mui/styles';
 import MultiSelect from '../components/common/MultiSelect';
 import { GeoJsonObject } from 'geojson';
@@ -24,11 +24,17 @@ const ControlsBar = styled('div')({
   alignItems: 'center',
 });
 
+const SliderContainer = styled('div')({
+  width: '50%',
+  padding: 30,
+});
+
 const myStyle = {
   color: '#000000',
   weight: 1,
   opacity: 0.65,
 };
+
 interface LocationData {
   id: string;
   latitude: number;
@@ -47,6 +53,9 @@ const SolutionAnalysisPreview: React.FC = () => {
   const [radiiSelection, setRadiiSelection] = useState<string>('');
 
   const [geojsonData, setGeoJsonData] = useState<GeoJsonObject>();
+
+  const [magRange, setMagRange] = useState<number[]>([5, 10]);
+  const [rateRange, setRateRange] = useState<number[]>([-20, 0]);
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -132,6 +141,18 @@ const SolutionAnalysisPreview: React.FC = () => {
       });
   };
 
+  const handleMagRangeChange = (event: Event, newValue: number | number[]) => {
+    setMagRange(newValue as number[]);
+  };
+
+  const handleRateRangeChange = (event: Event, newValue: number | number[]) => {
+    setRateRange(newValue as number[]);
+  };
+
+  const rateLabelFormat = (value: number): string => {
+    return `1e${value}`;
+  };
+
   return (
     <>
       {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
@@ -147,8 +168,32 @@ const SolutionAnalysisPreview: React.FC = () => {
           <Button variant="outlined" onClick={getGeoJson}>
             Fetch
           </Button>
-          <Typography sx={{ padding: '10px' }}>Locations: {locationSelections.join(', ')}</Typography>
+          <SliderContainer>
+            <Slider
+              value={magRange}
+              onChange={handleMagRangeChange}
+              valueLabelDisplay="auto"
+              min={5}
+              max={10}
+              step={0.1}
+            />
+          </SliderContainer>
+          <SliderContainer>
+            <Slider
+              value={rateRange}
+              onChange={handleRateRangeChange}
+              valueLabelFormat={rateLabelFormat}
+              valueLabelDisplay="auto"
+              min={-20}
+              max={0}
+              step={1}
+            />
+          </SliderContainer>
         </ControlsBar>
+        <Typography sx={{ padding: '10px' }}>
+          Locations: {locationSelections.join(', ')}, Mag Range: {magRange[0]} - {magRange[1]}, Rate Range:{' '}
+          {`1e${rateRange[0]} to 1e${rateRange[1]}`}
+        </Typography>
       </FloatingCard>
       <MapContainer center={nz_centre} zoom={zoom} scrollWheelZoom={true} style={{ height: '700px' }}>
         <TileLayer url={provider_url} />
