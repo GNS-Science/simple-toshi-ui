@@ -15,6 +15,7 @@ import { InversionSolutionQuery } from './__generated__/InversionSolutionQuery.g
 import { InversionSolutionDetailTabQuery } from '../components/inversionSolution/__generated__/InversionSolutionDetailTabQuery.graphql';
 import DiagnosticReportTab from '../components/inversionSolution/DiagnosticReportTab';
 import InversionSolutionHazardCharts from '../components/inversionSolution/InversionSolutionHazardCharts';
+import SolutionAnalysisTab from '../components/inversionSolution/SolutionAnalysisTab';
 
 const PREFIX = 'InversionSolution';
 
@@ -106,6 +107,13 @@ const InversionSolution: React.FC = () => {
             </React.Suspense>
           </Box>
         );
+
+      case 'SolutionAnalysisTab':
+        return (
+          <Box className={classes.tabPanel}>
+            <SolutionAnalysisTab id={id} />
+          </Box>
+        );
       case 'RuptureSetDiagnosticsTab':
         return (
           <Box className={classes.tabPanel}>
@@ -141,6 +149,7 @@ const InversionSolution: React.FC = () => {
           />
           <Tab label="MFD plot" id="inversionSolutionMfdTab" value="InversionSolutionMfdTab" className={classes.tab} />
           {hazardTableId && <Tab label="Hazard Curves" value="InversionSolutionHazardTab" className={classes.tab} />}
+          <Tab label="Solution Analysis" id="solutionAnalysisTab" value="SolutionAnalysisTab" className={classes.tab} />
           <Tab label="Solution Diags" id="DiagnosticReportTab" value="DiagnosticReportTab" className={classes.tab} />
           {ruptureSetId && (
             <Tab label="Rupture Diags" id="ruptureSetTab" value="RuptureSetDiagnosticsTab" className={classes.tab} />
