@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
-import { Alert, Button, Card, Slider, Typography } from '@mui/material';
+import { Alert, Button, Card, FormControlLabel, Slider, Switch, Typography } from '@mui/material';
 import { styled } from '@mui/styles';
 import { LatLngExpression } from 'leaflet';
 import { GeoJsonObject } from 'geojson';
@@ -54,11 +54,13 @@ const SolutionAanalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Soluti
   const [radiiOptions, setRadiiOptions] = useState<string[]>([]);
   const [radiiSelection, setRadiiSelection] = useState<string>('');
 
-  const [geojsonData, setGeoJsonData] = useState<GeoJsonObject>();
+  const [rupturesData, setRupturesData] = useState<GeoJsonObject>();
+  const [locationsData, setLocationsData] = useState<GeoJsonObject>();
 
   const [magRange, setMagRange] = useState<number[]>([5, 10]);
   const [rateRange, setRateRange] = useState<number[]>([-20, 0]);
 
+  const [showLocation, setShowLocation] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -129,8 +131,10 @@ const SolutionAanalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Soluti
           setErrorMessage(response.data.error_message);
         } else {
           setErrorMessage(null);
-          const geoJsonData = JSON.parse(response.data.ruptures) as GeoJsonObject;
-          setGeoJsonData(geoJsonData);
+          const ruptures = JSON.parse(response.data.ruptures) as GeoJsonObject;
+          const locations = JSON.parse(response.data.locations) as GeoJsonObject;
+          setRupturesData(ruptures);
+          setLocationsData(locations);
         }
       })
       .catch((error: unknown) => {
@@ -148,6 +152,10 @@ const SolutionAanalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Soluti
 
   const rateLabelFormat = (value: number): string => {
     return `1e${value}`;
+  };
+
+  const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setShowLocation(event.target.checked);
   };
 
   return (
@@ -187,6 +195,7 @@ const SolutionAanalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Soluti
             />
           </SliderContainer>
         </ControlsBar>
+        <FormControlLabel control={<Switch defaultChecked onChange={handleSwitchChange} />} label="Show Location" />
         <Typography sx={{ padding: '10px' }}>
           Locations: {locationSelections.join(', ')}, Mag Range: {magRange[0]} - {magRange[1]}, Rate Range:{' '}
           {`1e${rateRange[0]} to 1e${rateRange[1]}`}
@@ -194,7 +203,8 @@ const SolutionAanalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Soluti
       </FloatingCard>
       <MapContainer center={nz_centre} zoom={zoom} scrollWheelZoom={true} style={{ height: '700px' }}>
         <TileLayer url={provider_url} />
-        {geojsonData && <GeoJSON key={Math.random()} data={geojsonData} style={myStyle} />}
+        {rupturesData && <GeoJSON key={Math.random()} data={rupturesData} style={myStyle} />}
+        {showLocation && locationsData && <GeoJSON key={Math.random()} data={locationsData} style={myStyle} />}
       </MapContainer>
     </>
   );
