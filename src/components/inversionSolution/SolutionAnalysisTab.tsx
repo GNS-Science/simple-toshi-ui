@@ -115,11 +115,19 @@ const SolutionAanalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Soluti
   };
   const getGeoJson = (): void => {
     const locationSelectionsString = locationIDs.join('%2C');
-    const radiiInKm = radiiSelection.slice(0, 2);
-
+    const radiiInKm = () => {
+      console.log(radiiSelection);
+      if (radiiSelection === '100km') {
+        return radiiSelection.slice(0, 3);
+      } else {
+        return radiiSelection.slice(0, 2);
+      }
+    };
     axios
       .get(
-        `${solvisEndpoint}/solution_analysis/${id}/loc/${locationSelectionsString}/rad/${radiiInKm}?max_mag=${magRange[1]}&min_mag=${magRange[0]}&max_rate=1e${rateRange[1]}&min_rate=1e${rateRange[0]}`,
+        `${solvisEndpoint}/solution_analysis/${id}/loc/${locationSelectionsString}/rad/${radiiInKm()}?max_mag=${
+          magRange[1]
+        }&min_mag=${magRange[0]}&max_rate=1e${rateRange[1]}&min_rate=1e${rateRange[0]}`,
         {
           headers: {
             'x-api-key': process.env.REACT_APP_SOLVIS_API_KEY as string,
