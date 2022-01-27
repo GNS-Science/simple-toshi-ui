@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
-import { Alert, Button, Card, FormControlLabel, Slider, Switch, Typography } from '@mui/material';
+import { Alert, Button, Card, CircularProgress, FormControlLabel, Slider, Switch, Typography } from '@mui/material';
 import { styled } from '@mui/styles';
 import { LatLngExpression } from 'leaflet';
 import { GeoJsonObject } from 'geojson';
@@ -62,6 +62,7 @@ const SolutionAanalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Soluti
 
   const [showLocation, setShowLocation] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [showLoading, setShowLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const filteredLocations = locationOptions.filter((location) => locationSelections.includes(location.name));
@@ -114,6 +115,7 @@ const SolutionAanalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Soluti
     return locations;
   };
   const getGeoJson = (): void => {
+    setShowLoading(true);
     const locationSelectionsString = locationIDs.join('%2C');
     const radiiInKm = () => {
       console.log(radiiSelection);
@@ -135,6 +137,7 @@ const SolutionAanalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Soluti
         },
       )
       .then((response: any) => {
+        setShowLoading(false);
         if (response.data.error_message) {
           setErrorMessage(response.data.error_message);
         } else {
@@ -178,9 +181,15 @@ const SolutionAanalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Soluti
             name="Location"
           />
           <SelectControl name="Radius" options={radiiOptions} setOptions={setRadiiSelection} />
-          <Button variant="outlined" onClick={getGeoJson}>
-            Fetch
-          </Button>
+          <div>
+            {showLoading ? (
+              <CircularProgress />
+            ) : (
+              <Button variant="outlined" onClick={getGeoJson}>
+                Fetch
+              </Button>
+            )}
+          </div>
           <SliderContainer>
             <Slider
               value={magRange}
@@ -202,8 +211,8 @@ const SolutionAanalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Soluti
               step={1}
             />
           </SliderContainer>
+          <FormControlLabel control={<Switch defaultChecked onChange={handleSwitchChange} />} label="Show Location" />
         </ControlsBar>
-        <FormControlLabel control={<Switch defaultChecked onChange={handleSwitchChange} />} label="Show Location" />
         <Typography sx={{ padding: '10px' }}>
           Locations: {locationSelections.join(', ')}, Mag Range: {magRange[0]} - {magRange[1]}, Rate Range:{' '}
           {`1e${rateRange[0]} to 1e${rateRange[1]}`}
