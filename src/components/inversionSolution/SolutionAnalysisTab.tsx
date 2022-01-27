@@ -139,11 +139,11 @@ const SolutionAanalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Soluti
           setErrorMessage(response.data.error_message);
         } else {
           setErrorMessage(null);
-          const ruptures = JSON.parse(response.data.ruptures) as GeoJsonObject;
-          const locations = JSON.parse(response.data.locations) as GeoJsonObject;
-          setRupturesData(ruptures);
-          setLocationsData(locations);
         }
+        const ruptures = JSON.parse(response.data.ruptures) as GeoJsonObject;
+        const locations = JSON.parse(response.data.locations) as GeoJsonObject;
+        setRupturesData(ruptures);
+        setLocationsData(locations);
       })
       .catch((error: unknown) => {
         console.error(error);
