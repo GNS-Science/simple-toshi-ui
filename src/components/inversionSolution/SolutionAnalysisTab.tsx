@@ -94,17 +94,17 @@ const SolutionAanalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Soluti
     return locations;
   };
 
+  const radiiInKm = () => {
+    if (radiiSelection === '100km') {
+      return radiiSelection.slice(0, 3);
+    } else {
+      return radiiSelection.slice(0, 2);
+    }
+  };
+
   const getGeoJson = (): void => {
     setShowLoading(true);
     const locationSelectionsString = locationIDs.join('%2C');
-    const radiiInKm = () => {
-      console.log(radiiSelection);
-      if (radiiSelection === '100km') {
-        return radiiSelection.slice(0, 3);
-      } else {
-        return radiiSelection.slice(0, 2);
-      }
-    };
     solvisApiService
       .getSolutionAnalysis(id, locationSelectionsString, radiiInKm(), magRange, rateRange)
       .then((response) => {
@@ -115,10 +115,8 @@ const SolutionAanalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Soluti
         } else {
           setErrorMessage(null);
         }
-        const ruptures = JSON.parse(response.data.ruptures) as GeoJsonObject;
-        const locations = JSON.parse(response.data.locations) as GeoJsonObject;
-        setRupturesData(ruptures);
-        setLocationsData(locations);
+        setRupturesData(JSON.parse(response.data.ruptures) as GeoJsonObject);
+        setLocationsData(JSON.parse(response.data.locations) as GeoJsonObject);
       })
       .catch((error: AxiosError) => {
         if (error.response) {
