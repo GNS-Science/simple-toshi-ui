@@ -43,7 +43,6 @@ interface SolutionAnalysisTabProps {
 }
 
 const SolutionAanalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: SolutionAnalysisTabProps) => {
-  const solvisEndpoint = process.env.REACT_APP_SOLVIS_ENDPOINT as string;
   const nz_centre: LatLngExpression = [-40.946, 174.167];
   const zoom = 5;
   const provider_url = 'https://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}';
