@@ -6,11 +6,12 @@ import { LatLngExpression } from 'leaflet';
 import { GeoJsonObject } from 'geojson';
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
-import axios from 'axios';
 
 import { LocationData } from '../../interfaces/inversionSolutions';
 import SelectControl from '../common/SelectControl';
 import MultiSelect from '../common/MultiSelect';
+import { solvisApiService } from '../../service/api';
+import { AxiosError } from 'axios';
 
 const FloatingCard = styled(Card)({
   zIndex: 401,
@@ -74,36 +75,15 @@ const SolutionAanalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Soluti
   }, [locationSelections]);
 
   useEffect(() => {
-    const locationListID = process.env.REACT_APP_ANALYSIS_LOC_LIST_ID as string;
-    const radiiID = process.env.REACT_APP_RADII_ID;
+    solvisApiService.getLocationList().then((response) => {
+      setLocationOptions(response.data);
+    });
 
-    axios
-      .get(`${solvisEndpoint}/location_lists/${locationListID}/locations`, {
-        headers: {
-          'x-api-key': process.env.REACT_APP_SOLVIS_API_KEY as string,
-        },
-      })
-      .then((response: any) => {
-        setLocationOptions(response.data);
-      })
-      .catch((error: unknown) => {
-        console.error(error);
-      });
-
-    axios
-      .get(`${solvisEndpoint}/radii/${radiiID}`, {
-        headers: {
-          'x-api-key': process.env.REACT_APP_SOLVIS_API_KEY as string,
-        },
-      })
-      .then((response: any) => {
-        const radii = response.data.radii;
-        const radiiFormatted = radii.map((radius: number) => `${radius / 1000}km`);
-        setRadiiOptions(radiiFormatted);
-      })
-      .catch((error: unknown) => {
-        console.error(error);
-      });
+    solvisApiService.getRadiiList().then((response) => {
+      const radii = response.data.radii;
+      const radiiFormatted = radii.map((radius: number) => `${radius / 1000}km`);
+      setRadiiOptions(radiiFormatted);
+    });
   }, []);
 
   const getOptions = (): string[] => {
@@ -114,6 +94,7 @@ const SolutionAanalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Soluti
     locations.sort();
     return locations;
   };
+
   const getGeoJson = (): void => {
     setShowLoading(true);
     const locationSelectionsString = locationIDs.join('%2C');
@@ -125,18 +106,10 @@ const SolutionAanalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Soluti
         return radiiSelection.slice(0, 2);
       }
     };
-    axios
-      .get(
-        `${solvisEndpoint}/solution_analysis/${id}/loc/${locationSelectionsString}/rad/${radiiInKm()}?max_mag=${
-          magRange[1]
-        }&min_mag=${magRange[0]}&max_rate=1e${rateRange[1]}&min_rate=1e${rateRange[0]}`,
-        {
-          headers: {
-            'x-api-key': process.env.REACT_APP_SOLVIS_API_KEY as string,
-          },
-        },
-      )
-      .then((response: any) => {
+    solvisApiService
+      .getSolutionAnalysis(id, locationSelectionsString, radiiInKm(), magRange, rateRange)
+      .then((response) => {
+        setShowLoading(false);
         setShowLoading(false);
         if (response.data.error_message) {
           setErrorMessage(response.data.error_message);
@@ -148,7 +121,7 @@ const SolutionAanalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Soluti
         setRupturesData(ruptures);
         setLocationsData(locations);
       })
-      .catch((error: any) => {
+      .catch((error: AxiosError) => {
         if (error.response) {
           setErrorMessage(`Error: ${error.response.status} ${error.response.data.message}`);
         } else if (error.request) {
