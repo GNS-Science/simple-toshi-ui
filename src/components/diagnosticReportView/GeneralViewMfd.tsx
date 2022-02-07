@@ -118,7 +118,7 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({
   return (
     <div style={{ position: 'relative', width: '100%' }}>
       <XYChart
-        height={parentWidth}
+        height={parentWidth * 0.75}
         width={parentWidth}
         xScale={{ type: 'linear', domain: [minMagnitude, maxMagnitude], zero: false }}
         yScale={{ type: 'log', domain: [1e-6, 1] }}
