@@ -79,6 +79,20 @@ function Preview(): React.ReactElement {
       <Card className={classes.root}>
         <CardContent>
           <Typography color="textPrimary" variant="h5" gutterBottom>
+            Solution Analysis
+          </Typography>
+          <Typography className={classes.pos} component="p">
+            An interactive map using `leaflet`.
+            <Button size="small" href="/preview/solution-analysis">
+              go
+            </Button>
+          </Typography>
+        </CardContent>
+      </Card>
+
+      <Card className={classes.root}>
+        <CardContent>
+          <Typography color="textPrimary" variant="h5" gutterBottom>
             Mixed static and dynamic content
           </Typography>
           <Typography className={classes.pos} component="p">

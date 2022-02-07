@@ -32,7 +32,7 @@ interface SelectControlProps {
 }
 
 const SelectControl: React.FC<SelectControlProps> = ({ options, setOptions, name }: SelectControlProps) => {
-  const [selectedItems, setSelectedItems] = useState<string>(options[0]);
+  const [selectedItems, setSelectedItems] = useState<string>(options[0] ?? '');
 
   const handleChange = (event: SelectChangeEvent<string>) => {
     const value = (event.target.value as string) || '';

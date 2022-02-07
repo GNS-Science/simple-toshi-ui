@@ -31,7 +31,7 @@ interface MultiSelectProps {
 }
 
 const MultiSelect: React.FC<MultiSelectProps> = ({ options, selected, setOptions, name }: MultiSelectProps) => {
-  const [selectedItems, setSelectedItems] = useState<string[]>([options[0]]);
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   useEffect(() => {
     if (selected.length) setSelectedItems(selected);
@@ -58,7 +58,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({ options, selected, setOptions
             if (selectedArray.length === 1) {
               return selectedItems[0];
             }
-            if (selectedArray.length >= 1) return 'Multiple selected';
+            if (selectedArray.length > 1) return 'Multiple selected';
           }}
           variant="standard"
         >
