@@ -16,6 +16,7 @@ import ParentFaultView from './ParentFaultViews';
 import { SweepArguments, ValidatedSubtask } from '../../interfaces/generaltask';
 import { MetaArguments } from '../../interfaces/mySolutions';
 import { filteredMetaGT, filterMetaArguments } from '../../service/diagnosticReports.service';
+import SolutionAanalysisTab from '../inversionSolution/SolutionAnalysisTab';
 
 const PREFIX = 'DiagnosticReportCard';
 
@@ -217,6 +218,12 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             )}
           </DiagnosticReportTabPanel>
         );
+      case 5:
+        return (
+          <DiagnosticReportTabPanel value={currentTab} index={5}>
+            <SolutionAanalysisTab id={automationTasks[currentImage].inversion_solution.id} />
+          </DiagnosticReportTabPanel>
+        );
     }
   };
 
@@ -273,6 +280,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             <Tab label="Named Faults" id="simple-tab-2" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
             <Tab label="Parent Faults" id="simple-tab-3" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
             <Tab label="Hazard Charts" id="simple-tab-4" disabled={!hazardId.length} disableFocusRipple />
+            <Tab label="Solution Analysis" id="simple-tab-5" disableFocusRipple />
           </Tabs>
           {renderTab()}
         </CardContent>
