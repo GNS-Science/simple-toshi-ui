@@ -23,6 +23,5 @@
   "include": [
     "src/**/*",
     "*.config.js",
-    "decs.d.ts"
   ]
 }

@@ -16,7 +16,7 @@ import ParentFaultView from './ParentFaultViews';
 import { SweepArguments, ValidatedSubtask } from '../../interfaces/generaltask';
 import { MetaArguments } from '../../interfaces/mySolutions';
 import { filteredMetaGT, filterMetaArguments } from '../../service/diagnosticReports.service';
-import SolutionAanalysisTab from '../inversionSolution/SolutionAnalysisTab';
+import SolutionAnalysisTab from '../inversionSolution/SolutionAnalysisTab';
 
 const PREFIX = 'DiagnosticReportCard';
 
@@ -221,7 +221,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       case 5:
         return (
           <DiagnosticReportTabPanel value={currentTab} index={5}>
-            <SolutionAanalysisTab id={automationTasks[currentImage].inversion_solution.id} />
+            <SolutionAnalysisTab id={automationTasks[currentImage].inversion_solution.id} />
           </DiagnosticReportTabPanel>
         );
     }
