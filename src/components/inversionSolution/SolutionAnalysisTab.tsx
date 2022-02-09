@@ -12,6 +12,7 @@ import SelectControl from '../common/SelectControl';
 import MultiSelect from '../common/MultiSelect';
 import { solvisApiService } from '../../service/api';
 import { AxiosError } from 'axios';
+import SolutionAnalysisTable from './SolutionAnalysisTable';
 
 const FloatingCard = styled(Card)({
   zIndex: 401,
@@ -23,6 +24,8 @@ const FloatingCard = styled(Card)({
 });
 
 const ControlsBar = styled('div')({
+  paddingTop: 10,
+  paddingBottom: 10,
   display: 'flex',
   alignItems: 'center',
 });
@@ -56,6 +59,7 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Solutio
 
   const [rupturesData, setRupturesData] = useState<GeoJsonObject>();
   const [locationsData, setLocationsData] = useState<GeoJsonObject>();
+  const [tableData, setTableData] = useState<string | null>(null);
 
   const [magRange, setMagRange] = useState<number[]>([5, 10]);
   const [rateRange, setRateRange] = useState<number[]>([-20, 0]);
@@ -119,6 +123,7 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Solutio
         } else {
           setErrorMessage(null);
         }
+        setTableData(response.data.ruptures);
         setRupturesData(JSON.parse(response.data.ruptures) as GeoJsonObject);
         setLocationsData(JSON.parse(response.data.locations) as GeoJsonObject);
       })
@@ -204,6 +209,10 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Solutio
         {rupturesData && <GeoJSON key={Math.random()} data={rupturesData} style={myStyle} />}
         {showLocation && locationsData && <GeoJSON key={Math.random()} data={locationsData} style={myStyle} />}
       </MapContainer>
+      <ControlsBar>
+        <Button variant="contained">Show Table</Button>
+      </ControlsBar>
+      {rupturesData && <SolutionAnalysisTable data={tableData} />}
     </>
   );
 };
