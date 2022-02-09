@@ -35,7 +35,7 @@ const SpectralAccelerationChart: React.FC<SpectralAccelerationChartProps> = ({
           height={parentWidth * 0.75}
           width={parentWidth}
           xScale={{ type: 'linear', domain: [-1, 10] }}
-          yScale={{ type: 'linear', domain: [0, 2] }}
+          yScale={{ type: 'linear', domain: [0, 3] }}
         >
           <text
             y={18}
