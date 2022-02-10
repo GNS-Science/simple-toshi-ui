@@ -9,6 +9,7 @@ interface Feature {
   id: number;
   type: string;
   properties: FeatureProperties;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   geometry: any;
 }
 
@@ -81,17 +82,17 @@ const SolutionAnalysisTable: React.FC<SolutionAnalysisTableProps> = ({ data }: S
             </TableRow>
           </TableHead>
           <TableBody>
-            {rowData.length &&
-              rowData.map((row) => {
-                <TableRow>
+            {rowData &&
+              rowData.map((row, index) => (
+                <TableRow key={index}>
                   <TableCell>{row.name}</TableCell>
                   <TableCell>{row.maxMag}</TableCell>
                   <TableCell>{row.minMag}</TableCell>
                   <TableCell>{row.maxRate}</TableCell>
                   <TableCell>{row.minRate}</TableCell>
                   <TableCell>{row.slipRate}</TableCell>
-                </TableRow>;
-              })}
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
