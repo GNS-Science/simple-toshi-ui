@@ -1,6 +1,11 @@
 import { InversionSolutionHazardChartsQueryResponse } from '../components/inversionSolution/__generated__/InversionSolutionHazardChartsQuery.graphql';
 import { XY } from '../interfaces/common';
-import { HazardTableFilteredData, HazardTableOptions } from '../interfaces/inversionSolutions';
+import {
+  HazardTableFilteredData,
+  HazardTableOptions,
+  RowData,
+  SolutionAnalysisGeojsonFeature,
+} from '../interfaces/inversionSolutions';
 import * as mathjs from 'mathjs';
 
 const minXBound = parseFloat(process.env.REACT_APP_MIN_X_BOUND ?? '0');
@@ -145,4 +150,20 @@ export const getSpectralAccelerationData = (
   });
 
   return dataSet;
+};
+
+export const generateSolutionAnalysisTable = (data: string): RowData[] => {
+  const dataParsed = JSON.parse(data);
+  const rows: RowData[] = [];
+  dataParsed.features.map((feature: SolutionAnalysisGeojsonFeature) => {
+    rows.push({
+      name: feature.properties.fault_name,
+      maxMag: mathjs.round(feature.properties['magnitude.max'], 1),
+      minMag: mathjs.round(feature.properties['magnitude.min'], 1),
+      maxRate: Number(feature.properties['annual_rate.max']).toPrecision(3),
+      minRate: Number(feature.properties['annual_rate.min']).toPrecision(3),
+      slipRate: mathjs.round(feature.properties.slip_rate, 1),
+    });
+  });
+  return rows;
 };
