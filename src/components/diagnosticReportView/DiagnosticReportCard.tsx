@@ -100,6 +100,10 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   const [filteredMeta, setFilteredMeta] = useState<MetaArguments>([]);
 
   useEffect(() => {
+    setCurrentImage(0);
+  }, [automationTasks]);
+
+  useEffect(() => {
     if (reportTab !== 0) setCurrentTab(reportTab ?? 0);
   }, []);
 
