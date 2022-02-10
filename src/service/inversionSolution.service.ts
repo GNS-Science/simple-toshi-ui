@@ -160,10 +160,15 @@ export const generateSolutionAnalysisTable = (data: string): RowData[] => {
       name: feature.properties.fault_name,
       maxMag: mathjs.round(feature.properties['magnitude.max'], 1),
       minMag: mathjs.round(feature.properties['magnitude.min'], 1),
-      maxRate: Number(feature.properties['annual_rate.max']).toPrecision(3),
-      minRate: Number(feature.properties['annual_rate.min']).toPrecision(3),
+      maxRate: toPrecisionAndExponential(feature.properties['annual_rate.max'], 3),
+      minRate: toPrecisionAndExponential(feature.properties['annual_rate.min'], 3),
       slipRate: mathjs.round(feature.properties.slip_rate, 1),
     });
   });
   return rows;
+};
+
+const toPrecisionAndExponential = (value: string, precision: number): string => {
+  const valueNumber = Number(value);
+  return Number(valueNumber.toPrecision(precision)).toExponential();
 };
