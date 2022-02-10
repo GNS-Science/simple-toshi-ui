@@ -123,7 +123,7 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
     <>
       <div style={{ width: '100%', padding: '1rem', display: 'flex', flexWrap: 'wrap' }}>
         <SelectControl name="Location" options={options.location} setOptions={setLocation} />
-        <MultiSelect name="PGA/SA Period" selected={[]} options={options.PGA} setOptions={handleSetPGA} />
+        <MultiSelect name="PGA/SA Period" selected={PGA} options={options.PGA} setOptions={handleSetPGA} />
         <SelectControl name="Forecast Timespan" options={options.forecastTime} setOptions={setForecastTime} />
         <SelectControl
           name="Background Seismicity"

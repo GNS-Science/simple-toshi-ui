@@ -75,8 +75,8 @@ export const cropCurves = (data: HazardTableFilteredData): HazardTableFilteredDa
     croppedCurves[key] = minDataFilter(data[key]);
   });
   //Checks to see if ALL data has been filtered out, if so, replaces with one (almost) zero data point so the chart renders.
-  if (croppedCurves?.PGA.length === 0) {
-    croppedCurves.PGA.push({ x: 0.000000000000000001, y: 0.000000000000000001 });
+  if (Object.keys(croppedCurves).length === 0) {
+    croppedCurves.PGA = [{ x: 0.000000000000000001, y: 0.000000000000000001 }];
   }
   return croppedCurves;
 };
