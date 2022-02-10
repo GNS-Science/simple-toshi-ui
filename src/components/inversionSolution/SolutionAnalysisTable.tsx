@@ -1,5 +1,4 @@
-import { Table, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-import { startOfMinute } from 'date-fns';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
 interface SolutionAnalysisTableProps {
@@ -23,9 +22,9 @@ interface FeatureProperties {
   dip_dir: number;
   fault_name: string;
   low_depth: number;
-  magnitude_count: number;
-  magnitude_max: number;
-  magnitude_min: number;
+  magnitude_count: string;
+  'magnitude.max': number;
+  'magnitude.min': number;
   parent_id: number;
   parent_name: string;
   rake: number;
@@ -56,21 +55,17 @@ const SolutionAnalysisTable: React.FC<SolutionAnalysisTableProps> = ({ data }: S
       dataParsed.features.map((feature: Feature) => {
         rows.push({
           name: feature.properties.fault_name,
-          maxMag: feature.properties.magnitude_max,
-          minMag: feature.properties.magnitude_min,
+          maxMag: feature.properties['magnitude.max'],
+          minMag: feature.properties['magnitude.min'],
           maxRate: feature.properties['annual_rate.max'],
           minRate: feature.properties['annual_rate.min'],
           slipRate: feature.properties.slip_rate,
         });
       });
-      console.log('rows in useEffect', rows);
       setRowData(rows);
     }
   }, [data]);
 
-  useEffect(() => {
-    console.log(rowData);
-  }, [rowData]);
   return (
     <>
       <TableContainer>
@@ -85,6 +80,19 @@ const SolutionAnalysisTable: React.FC<SolutionAnalysisTableProps> = ({ data }: S
               <TableCell>Slip Rate</TableCell>
             </TableRow>
           </TableHead>
+          <TableBody>
+            {rowData.length &&
+              rowData.map((row) => {
+                <TableRow>
+                  <TableCell>{row.name}</TableCell>
+                  <TableCell>{row.maxMag}</TableCell>
+                  <TableCell>{row.minMag}</TableCell>
+                  <TableCell>{row.maxRate}</TableCell>
+                  <TableCell>{row.minRate}</TableCell>
+                  <TableCell>{row.slipRate}</TableCell>
+                </TableRow>;
+              })}
+          </TableBody>
         </Table>
       </TableContainer>
     </>
