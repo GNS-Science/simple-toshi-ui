@@ -1,5 +1,6 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import * as math from 'mathjs';
 
 interface SolutionAnalysisTableProps {
   data: string | null;
@@ -56,11 +57,11 @@ const SolutionAnalysisTable: React.FC<SolutionAnalysisTableProps> = ({ data }: S
       dataParsed.features.map((feature: Feature) => {
         rows.push({
           name: feature.properties.fault_name,
-          maxMag: feature.properties['magnitude.max'],
-          minMag: feature.properties['magnitude.min'],
-          maxRate: feature.properties['annual_rate.max'],
-          minRate: feature.properties['annual_rate.min'],
-          slipRate: feature.properties.slip_rate,
+          maxMag: math.round(feature.properties['magnitude.max'], 1),
+          minMag: math.round(feature.properties['magnitude.min'], 1),
+          maxRate: Number(feature.properties['annual_rate.max']).toPrecision(3),
+          minRate: Number(feature.properties['annual_rate.min']).toPrecision(3),
+          slipRate: math.round(feature.properties.slip_rate, 1),
         });
       });
       setRowData(rows);
@@ -74,10 +75,10 @@ const SolutionAnalysisTable: React.FC<SolutionAnalysisTableProps> = ({ data }: S
           <TableHead>
             <TableRow>
               <TableCell>Subsection Name</TableCell>
-              <TableCell>Max Magnitude</TableCell>
               <TableCell>Min Magnitude</TableCell>
-              <TableCell>Max Annual Rate</TableCell>
+              <TableCell>Max Magnitude</TableCell>
               <TableCell>Min Annual Rate</TableCell>
+              <TableCell>Max Annual Rate</TableCell>
               <TableCell>Slip Rate</TableCell>
             </TableRow>
           </TableHead>
@@ -86,10 +87,10 @@ const SolutionAnalysisTable: React.FC<SolutionAnalysisTableProps> = ({ data }: S
               rowData.map((row, index) => (
                 <TableRow key={index}>
                   <TableCell>{row.name}</TableCell>
-                  <TableCell>{row.maxMag}</TableCell>
                   <TableCell>{row.minMag}</TableCell>
-                  <TableCell>{row.maxRate}</TableCell>
+                  <TableCell>{row.maxMag}</TableCell>
                   <TableCell>{row.minRate}</TableCell>
+                  <TableCell>{row.maxRate}</TableCell>
                   <TableCell>{row.slipRate}</TableCell>
                 </TableRow>
               ))}
