@@ -21,7 +21,7 @@ jobs:
       #The following are set up in AWS_TEST deployment environ
       REACT_APP_SOLVIS_ENDPOINT: ${{ secrets.REACT_APP_SOLVIS_ENDPOINT }}
       REACT_APP_SOLVIS_API_KEY: ${{ secrets.REACT_APP_SOLVIS_API_KEY }}
-      REACT_APP_ANALYSIS_LOC_LIST: ${{ secrets.REACT_APP_ANALYSIS_LOC_LIST }}
+      REACT_APP_ANALYSIS_LOC_LIST_ID: ${{ secrets.REACT_APP_ANALYSIS_LOC_LIST_ID }}
       REACT_APP_RADII_ID: ${{ secrets.REACT_APP_RADII_ID }}
 
     strategy:
