@@ -67,6 +67,7 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Solutio
   const [showLocation, setShowLocation] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [showLoading, setShowLoading] = useState<boolean>(false);
+  const [showTable, setShowTable] = useState<boolean>(false);
 
   useEffect(() => {
     const filteredLocations = locationOptions.filter((location) => locationSelections.includes(location.name));
@@ -210,9 +211,11 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Solutio
         {showLocation && locationsData && <GeoJSON key={Math.random()} data={locationsData} style={myStyle} />}
       </MapContainer>
       <ControlsBar>
-        <Button variant="contained">Show Table</Button>
+        <Button variant="contained" onClick={() => setShowTable((v) => !v)}>
+          Show Table
+        </Button>
       </ControlsBar>
-      {rupturesData && <SolutionAnalysisTable data={tableData} />}
+      {showTable && rupturesData && <SolutionAnalysisTable data={tableData} />}
     </>
   );
 };
