@@ -68,6 +68,7 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Solutio
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [showLoading, setShowLoading] = useState<boolean>(false);
   const [showTable, setShowTable] = useState<boolean>(false);
+  const [disableFetch, setDisableFetch] = useState<boolean>(false);
 
   useEffect(() => {
     const filteredLocations = locationOptions.filter((location) => locationSelections.includes(location.name));
@@ -77,6 +78,10 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Solutio
     });
     setLocationIDs(filteredLocationIDs);
   }, [locationSelections]);
+
+  useEffect(() => {
+    setDisableFetch(false);
+  }, [locationSelections, radiiSelection]);
 
   useEffect(() => {
     locationSelections.length && radiiSelection.length && getGeoJson();
@@ -127,6 +132,7 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Solutio
         setTableData(response.data.ruptures);
         setRupturesData(JSON.parse(response.data.ruptures) as GeoJsonObject);
         setLocationsData(JSON.parse(response.data.locations) as GeoJsonObject);
+        setDisableFetch(true);
       })
       .catch((error: AxiosError) => {
         if (error.response) {
@@ -172,7 +178,7 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Solutio
             {showLoading ? (
               <CircularProgress />
             ) : (
-              <Button variant="outlined" onClick={getGeoJson}>
+              <Button variant="outlined" onClick={getGeoJson} disabled={disableFetch}>
                 Fetch
               </Button>
             )}
