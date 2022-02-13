@@ -103,6 +103,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
     setCurrentImage(0);
   }, [automationTasks]);
 
+
   useEffect(() => {
     if (reportTab !== 0) setCurrentTab(reportTab ?? 0);
   }, []);
