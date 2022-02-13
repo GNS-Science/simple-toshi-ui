@@ -93,7 +93,6 @@ function Preview(): React.ReactElement {
       <Card className={classes.root}>
         <CardContent>
           <Typography color="textPrimary" variant="h5" gutterBottom>
-
             Mixed static and dynamic content
           </Typography>
           <Typography className={classes.pos} component="p">
