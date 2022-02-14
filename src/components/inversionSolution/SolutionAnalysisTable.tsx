@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 import { RowData } from '../../interfaces/inversionSolutions';
 import { generateSolutionAnalysisTable } from '../../service/inversionSolution.service';
@@ -7,6 +7,15 @@ import { generateSolutionAnalysisTable } from '../../service/inversionSolution.s
 interface SolutionAnalysisTableProps {
   data: string | null;
 }
+const columns: GridColDef[] = [
+  { field: 'id', hide: true },
+  { field: 'name', headerName: 'Subsection Name', width: 150 },
+  { field: 'minMag', headerName: 'Min Magnitude', type: 'number', width: 150 },
+  { field: 'maxMag', headerName: 'Max Magnitude', type: 'number', width: 150 },
+  { field: 'minRate', headerName: 'Min Annual Rate', width: 150 },
+  { field: 'maxRate', headerName: 'Max Annual Rate', width: 150 },
+  { field: 'slipRate', headerName: 'Slip Rate', type: 'number', width: 150 },
+];
 
 const SolutionAnalysisTable: React.FC<SolutionAnalysisTableProps> = ({ data }: SolutionAnalysisTableProps) => {
   const [rowData, setRowData] = useState<RowData[]>([]);
@@ -19,35 +28,9 @@ const SolutionAnalysisTable: React.FC<SolutionAnalysisTableProps> = ({ data }: S
   }, [data]);
 
   return (
-    <>
-      <TableContainer>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Subsection Name</TableCell>
-              <TableCell>Min Magnitude</TableCell>
-              <TableCell>Max Magnitude</TableCell>
-              <TableCell>Min Annual Rate</TableCell>
-              <TableCell>Max Annual Rate</TableCell>
-              <TableCell>Slip Rate</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rowData &&
-              rowData.map((row, index) => (
-                <TableRow key={index}>
-                  <TableCell>{row.name}</TableCell>
-                  <TableCell>{row.minMag}</TableCell>
-                  <TableCell>{row.maxMag}</TableCell>
-                  <TableCell>{row.minRate}</TableCell>
-                  <TableCell>{row.maxRate}</TableCell>
-                  <TableCell>{row.slipRate}</TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </>
+    <div style={{ height: 400, width: '100%' }}>
+      <DataGrid rows={rowData} columns={columns} pageSize={5} rowsPerPageOptions={[5]} />
+    </div>
   );
 };
 export default SolutionAnalysisTable;
