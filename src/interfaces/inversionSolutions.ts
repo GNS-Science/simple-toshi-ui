@@ -54,6 +54,7 @@ export interface FeatureProperties {
   up_depth: number;
 }
 export interface RowData {
+  id: number;
   name: string;
   maxMag: number;
   minMag: number;

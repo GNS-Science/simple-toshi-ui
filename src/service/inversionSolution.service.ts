@@ -176,6 +176,7 @@ export const generateSolutionAnalysisTable = (data: string): RowData[] => {
   const rows: RowData[] = [];
   dataParsed.features.map((feature: SolutionAnalysisGeojsonFeature) => {
     rows.push({
+      id: feature.id,
       name: feature.properties.fault_name,
       maxMag: mathjs.round(feature.properties['magnitude.max'], 1),
       minMag: mathjs.round(feature.properties['magnitude.min'], 1),
