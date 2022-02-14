@@ -81,7 +81,7 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Solutio
 
   useEffect(() => {
     setDisableFetch(false);
-  }, [locationSelections, radiiSelection]);
+  }, [locationSelections, radiiSelection, magRange, rateRange]);
 
   useEffect(() => {
     locationSelections.length && radiiSelection.length && getGeoJson();
