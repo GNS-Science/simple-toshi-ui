@@ -5,6 +5,7 @@ import { RowData } from '../../interfaces/inversionSolutions';
 import { generateSolutionAnalysisTable } from '../../service/inversionSolution.service';
 
 interface SolutionAnalysisTableProps {
+  id: string;
   data: string | null;
 }
 const columns: GridColDef[] = [
@@ -17,7 +18,7 @@ const columns: GridColDef[] = [
   { field: 'slipRate', headerName: 'Slip Rate', type: 'number', width: 150 },
 ];
 
-const SolutionAnalysisTable: React.FC<SolutionAnalysisTableProps> = ({ data }: SolutionAnalysisTableProps) => {
+const SolutionAnalysisTable: React.FC<SolutionAnalysisTableProps> = ({ id, data }: SolutionAnalysisTableProps) => {
   const [rowData, setRowData] = useState<RowData[]>([]);
 
   useEffect(() => {
@@ -29,7 +30,12 @@ const SolutionAnalysisTable: React.FC<SolutionAnalysisTableProps> = ({ data }: S
 
   return (
     <div style={{ height: 400, width: '100%' }}>
-      <DataGrid rows={rowData} columns={columns} components={{ Toolbar: GridToolbar }} />
+      <DataGrid
+        rows={rowData}
+        columns={columns}
+        components={{ Toolbar: GridToolbar }}
+        componentsProps={{ toolbar: { csvOptions: { fileName: `${id}_analysis` } } }}
+      />
     </div>
   );
 };

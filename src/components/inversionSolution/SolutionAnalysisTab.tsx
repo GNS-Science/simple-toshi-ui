@@ -249,7 +249,7 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
           {showTable && rupturesData ? 'Hide Table' : 'Show Table'}
         </Button>
       </ControlsBar>
-      {showTable && rupturesData && <SolutionAnalysisTable data={tableData} />}
+      {showTable && rupturesData && <SolutionAnalysisTable data={tableData} id={id} />}
     </>
   );
 };
