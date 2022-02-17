@@ -22,6 +22,17 @@ const SolutionAnalysisTable: React.FC<SolutionAnalysisTableProps> = ({ id, data 
   const [rowData, setRowData] = useState<RowData[]>([]);
 
   useEffect(() => {
+    window.addEventListener('keydown', handler);
+    return () => {
+      window.removeEventListener('keydown', handler);
+    };
+  });
+
+  const handler = (event: KeyboardEvent) => {
+    event.stopImmediatePropagation();
+  };
+
+  useEffect(() => {
     if (data) {
       const tableData = generateSolutionAnalysisTable(data);
       setRowData(tableData);
