@@ -21,15 +21,8 @@ const columns: GridColDef[] = [
 const SolutionAnalysisTable: React.FC<SolutionAnalysisTableProps> = ({ id, data }: SolutionAnalysisTableProps) => {
   const [rowData, setRowData] = useState<RowData[]>([]);
 
-  useEffect(() => {
-    window.addEventListener('keydown', handler);
-    return () => {
-      window.removeEventListener('keydown', handler);
-    };
-  });
-
-  const handler = (event: KeyboardEvent) => {
-    event.stopImmediatePropagation();
+  const handler = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    event.nativeEvent.stopImmediatePropagation();
   };
 
   useEffect(() => {
@@ -40,7 +33,11 @@ const SolutionAnalysisTable: React.FC<SolutionAnalysisTableProps> = ({ id, data 
   }, [data]);
 
   return (
-    <div style={{ height: 400, width: '100%' }}>
+    <div
+      onKeyDown={(e) => {
+        handler(e);
+      }}
+    >
       <DataGrid
         rows={rowData}
         columns={columns}
