@@ -40,11 +40,6 @@ const ControlsBar = styled('div')({
   alignItems: 'center',
 });
 
-const SliderContainer = styled('div')({
-  width: '50%',
-  padding: 30,
-});
-
 const myStyle = {
   color: '#000000',
   weight: 1,
