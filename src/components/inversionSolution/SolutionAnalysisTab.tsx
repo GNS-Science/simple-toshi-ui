@@ -7,7 +7,6 @@ import {
   Card,
   CircularProgress,
   FormControlLabel,
-  Slider,
   Switch,
   TextField,
   Typography,
@@ -23,6 +22,7 @@ import { LocationData } from '../../interfaces/inversionSolutions';
 import SelectControl from '../common/SelectControl';
 import { solvisApiService } from '../../service/api';
 import SolutionAnalysisTable from './SolutionAnalysisTable';
+import RangeSliderWithInputs from '../common/RangeSliderWithInputs';
 
 const FloatingCard = styled(Card)({
   zIndex: 401,
@@ -50,7 +50,6 @@ const myStyle = {
   weight: 1,
   opacity: 0.65,
 };
-
 interface SolutionAnalysisTabProps {
   id: string;
   setDisableHotkey?: Dispatch<SetStateAction<boolean>>;
@@ -161,14 +160,6 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
       });
   };
 
-  const handleMagRangeChange = (event: Event, newValue: number | number[]) => {
-    setMagRange(newValue as number[]);
-  };
-
-  const handleRateRangeChange = (event: Event, newValue: number | number[]) => {
-    setRateRange(newValue as number[]);
-  };
-
   const rateLabelFormat = (value: number): string => {
     return `1e${value}`;
   };
@@ -181,7 +172,6 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
     <>
       {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
       <FloatingCard>
-        <ControlsBar></ControlsBar>
         <ControlsBar>
           <Autocomplete
             multiple
@@ -201,30 +191,6 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
             limitTags={1}
           />
           <SelectControl name="Radius" options={radiiOptions} setOptions={setRadiiSelection} />
-
-          <SliderContainer>
-            <Slider
-              value={magRange}
-              onChange={handleMagRangeChange}
-              valueLabelDisplay="auto"
-              min={5}
-              max={10}
-              step={0.1}
-            />
-          </SliderContainer>
-          <SliderContainer>
-            <Slider
-              value={rateRange}
-              onChange={handleRateRangeChange}
-              valueLabelFormat={rateLabelFormat}
-              valueLabelDisplay="auto"
-              min={-20}
-              max={0}
-              step={1}
-            />
-          </SliderContainer>
-        </ControlsBar>
-        <ControlsBar>
           <FormControlLabel control={<Switch defaultChecked onChange={handleSwitchChange} />} label="Show Location" />
           {showLoading ? (
             <CircularProgress />
@@ -233,6 +199,21 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
               Fetch
             </Button>
           )}
+        </ControlsBar>
+        <ControlsBar>
+          <RangeSliderWithInputs
+            label="Magtitude Range"
+            inputProps={{ step: 0.1, min: 5, max: 10, type: 'number' }}
+            valuesRange={magRange}
+            setValues={setMagRange}
+          />
+          <RangeSliderWithInputs
+            label="Rate Range"
+            inputProps={{ step: 1, min: -20, max: 0, type: 'number' }}
+            valuesRange={rateRange}
+            setValues={setRateRange}
+            valueLabelFormat={rateLabelFormat}
+          />
         </ControlsBar>
         <Typography sx={{ padding: '10px' }}>
           Locations: {locationSelections.join(', ')}, Mag Range: {magRange[0]} - {magRange[1]}, Rate Range:{' '}
