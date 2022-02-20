@@ -39,6 +39,7 @@ const SolutionAnalysisTable: React.FC<SolutionAnalysisTableProps> = ({ id, data 
       }}
     >
       <DataGrid
+        style={{ height: 400, width: '100%' }}
         rows={rowData}
         columns={columns}
         components={{ Toolbar: GridToolbar }}
