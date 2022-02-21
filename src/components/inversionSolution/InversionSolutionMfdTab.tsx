@@ -1,7 +1,7 @@
-import { graphql } from 'babel-plugin-relay/macro';
-import React from 'react';
-import { Box, Typography } from '@mui/material';
+import React, { useState } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
+import { graphql } from 'babel-plugin-relay/macro';
+import { Box, Typography } from '@mui/material';
 
 import { magRateData, IMagRate } from '../PreviewMFD_data';
 import { InversionSolutionMfdTabQuery } from './__generated__/InversionSolutionMfdTabQuery.graphql';
@@ -9,6 +9,9 @@ import { InversionSolutionMfdTabQuery } from './__generated__/InversionSolutionM
 import { AnimatedAxis, AnimatedLineSeries, Tooltip, XYChart } from '@visx/xychart';
 import { scaleOrdinal } from '@visx/scale';
 import { LegendOrdinal } from '@visx/legend';
+import ControlsBar from '../common/ControlsBar';
+import SelectControl from '../common/SelectControl';
+import MultiSelect from '../common/MultiSelect';
 
 interface InversionSolutionMfdTabProps {
   mfdTableId: string;
@@ -25,6 +28,9 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
   mfdTableId,
   meta,
 }: InversionSolutionMfdTabProps) => {
+  const [region, setRegion] = useState<string>('');
+  const [mfdCurves, setMfdCurves] = useState<string[]>([]);
+
   const data = useLazyLoadQuery<InversionSolutionMfdTabQuery>(inversionSolutionMfdTabQuery, { id: mfdTableId });
 
   const rows = data?.node?.rows;
@@ -90,6 +96,15 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
         Solution Target vs final Magnitude Frequency distribution
       </Typography>
       <Box style={{ width: '100%', color: '#646464', padding: '1rem' }}>{metaAsString}</Box>
+      <ControlsBar>
+        <SelectControl name="Region" options={['TVZ', 'SansTVZ', 'Both']} setOptions={setRegion} />
+        <MultiSelect
+          name="MFD Curves"
+          options={['total GR', 'truly off fualt', 'sub-seismo on fault', 'supra-seismo on fault', 'solution']}
+          selected={mfdCurves}
+          setOptions={setMfdCurves}
+        />
+      </ControlsBar>
       <Box style={{ border: '1px solid', width: 'fit-content', position: 'relative' }}>
         <XYChart
           height={600}
