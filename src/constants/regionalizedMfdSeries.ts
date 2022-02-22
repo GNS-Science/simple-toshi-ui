@@ -58,6 +58,29 @@ export const regionalizedMfdSeries = [
   },
 ];
 
+export const mfdCurvesOptions = [
+  {
+    displayName: 'Total Target GR',
+    path: 'totalTargetGR',
+  },
+  {
+    displayName: 'Truly Off Fault MFD',
+    path: 'trulyOffFaultMFD',
+  },
+  {
+    displayName: 'Target On Fault Supra Seis MFD ',
+    path: 'targetOnFaultSupraSeisMFD',
+  },
+  {
+    displayName: 'Total Subseismo On Fault MFD',
+    path: 'totalSubSeismoOnFaultMFD',
+  },
+  {
+    displayName: 'Solution MFD',
+    path: 'solutionMFD',
+  },
+];
+
 export const regionalizedMfdColors: string[] = [
   'orange',
   'steelblue',
