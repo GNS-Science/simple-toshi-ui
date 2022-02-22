@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { useHistory, useParams } from 'react-router-dom';
 import { useLazyLoadQuery, useQueryLoader } from 'react-relay';
@@ -53,6 +53,9 @@ const InversionSolution: React.FC = () => {
   const data = useLazyLoadQuery<InversionSolutionQuery>(inversionSolutionQuery, { id });
   const [queryRef, loadQuery] = useQueryLoader<InversionSolutionDetailTabQuery>(inversionSolutionDetailTabQuery);
 
+  const [mfdIsV2, setMfdIsV2] = useState<boolean>(false);
+  const [mfdTableId, setMfdTableId] = useState<string>('');
+
   const history = useHistory();
 
   React.useEffect(() => {
@@ -75,12 +78,16 @@ const InversionSolution: React.FC = () => {
   const hazardTable = tables?.find((table) => table?.table_type === 'HAZARD_SITES');
   const hazardTableId = hazardTable?.table_id as string;
 
-  const mfdTableId = (): string => {
-    if (data?.node?.mfd_table_id) return data?.node?.mfd_table_id;
-    const new_mfd_table = data?.node?.tables?.filter((ltr) => ltr?.table_type == 'MFD_CURVES')[0];
-    if (new_mfd_table) return new_mfd_table.table_id || '';
-    return '';
-  };
+  useEffect(() => {
+    const MFDtables = data?.node?.tables?.filter((table) => {
+      return table?.table_type === 'MFD_CURVES' || table?.table_type === 'MFD_CURVES_V2';
+    });
+    if (MFDtables?.some((table) => table?.table_type === 'MFD_CURVES_V2')) {
+      setMfdIsV2(true);
+      const V2table = MFDtables.find((table) => table?.table_type === 'MFD_CURVES_V2');
+      setMfdTableId(V2table?.table_id || '');
+    }
+  }, [data]);
 
   const renderTab = () => {
     switch (tab) {
@@ -95,7 +102,7 @@ const InversionSolution: React.FC = () => {
         return (
           <Box className={classes.tabPanel}>
             <React.Suspense fallback={<CircularProgress />}>
-              {mfdTableId && <InversionSolutionMfdTab mfdTableId={mfdTableId()} meta={data?.node?.meta} />}
+              {mfdTableId && <InversionSolutionMfdTab isV2={mfdIsV2} mfdTableId={mfdTableId} meta={data?.node?.meta} />}
             </React.Suspense>
           </Box>
         );
