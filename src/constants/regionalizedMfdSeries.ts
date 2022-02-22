@@ -10,11 +10,11 @@ export const regionalizedMfdSeries = [
   },
   {
     displayName: 'Total Target GR - SansTVZ',
-    path: 'totalTargetGR_SansTVZ',
+    path: 'inversionTargetMFDs.totalTargetGR_SansTVZ',
   },
   {
     displayName: 'Total Target GR - TVZ',
-    path: 'totalTargetGR_TVZ',
+    path: 'inversionTargetMFDs.totalTargetGR_TVZ',
   },
   {
     displayName: 'Truly Off Fault MFD - All',
@@ -22,11 +22,11 @@ export const regionalizedMfdSeries = [
   },
   {
     displayName: 'Truly Off Fault MFD - SansTVZ',
-    path: 'trulyOffFaultMFD_SansTVZ',
+    path: 'inversionTargetMFDs.trulyOffFaultMFD_SansTVZ',
   },
   {
     displayName: 'Truly Off Fault MFD - TVZ',
-    path: 'trulyOffFaultMFD_TVZ',
+    path: 'inversionTargetMFDs.trulyOffFaultMFD_TVZ',
   },
   {
     displayName: 'Target On Fault Supra Seis MFD - All',
@@ -34,11 +34,11 @@ export const regionalizedMfdSeries = [
   },
   {
     displayName: 'Target On Fault Supra Seis MFD - SansTVZ',
-    path: 'targetOnFaultSupraSeisMFD_SansTVZ',
+    path: 'inversionTargetMFDs.targetOnFaultSupraSeisMFD_SansTVZ',
   },
   {
     displayName: 'Target On Fault Supra Seis MFD - TVZ',
-    path: 'targetOnFaultSupraSeisMFD_TVZ',
+    path: 'inversionTargetMFDs.targetOnFaultSupraSeisMFD_TVZ',
   },
   {
     displayName: 'Total Subseismo On Fault MFD - All',
@@ -46,11 +46,11 @@ export const regionalizedMfdSeries = [
   },
   {
     displayName: 'Total Subseismo On Fault MFD - SansTVZ',
-    path: 'totalSubSeismoOnFaultMFD_SansTVZ',
+    path: 'inversionTargetMFDs.totalSubSeismoOnFaultMFD_SansTVZ',
   },
   {
     displayName: 'Total Subseismo On Fault MFD - TVZ',
-    path: 'totalSubSeismoOnFaultMFD_TVZ',
+    path: 'inversionTargetMFDs.totalSubSeismoOnFaultMFD_TVZ',
   },
   {
     displayName: 'Solution MFD',
