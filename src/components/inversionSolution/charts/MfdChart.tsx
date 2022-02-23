@@ -14,10 +14,10 @@ interface MfdChartProps {
 
 const MfdChart: React.FC<MfdChartProps> = ({ mfdProps, rows }: MfdChartProps) => {
   const [xScaleDomain, setXscaleDomain] = useState<number[]>([5, 9]);
+  const [colors, setColors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     setXscaleDomain([mfdProps.minMagnitude, mfdProps.maxMagnitude]);
-    console.log(mfdProps);
   }, [mfdProps]);
 
   if (!rows) {
@@ -32,25 +32,36 @@ const MfdChart: React.FC<MfdChartProps> = ({ mfdProps, rows }: MfdChartProps) =>
     );
   };
 
-  // const curveColors: Record<string, string> = {};
-  // mfdProps.series.map((value, index) => {
-  //   curveColors[value] = colors[index];
-  // });
+  useEffect(() => {
+    const curveColors: Record<string, string> = {};
+    mfdProps.series.map((value, index) => {
+      if (value.includes('totalTargetGR')) {
+        curveColors[value] = 'orange';
+      } else if (value.includes('trulyOffFaultMFD')) {
+        curveColors[value] = 'steelblue';
+      } else if (value.includes('targetOnFaultSupraSeisMFD')) {
+        curveColors[value] = 'lightgray';
+      } else if (value.includes('totalSubSeismoOnFaultMFD')) {
+        curveColors[value] = 'black';
+      } else if (value.includes('solutionMFD')) {
+        curveColors[value] = 'red';
+      } else {
+        curveColors[value] = 'yellow';
+      }
+    });
+    setColors(curveColors);
+  }, [mfdProps]);
 
-  const getColor = (curve: string, index: number): string => {
-    if (curve.includes('totalTargetGR')) {
-      return 'orange';
-    } else if (curve.includes('trulyOffFaultMFD')) {
-      return 'steelblue';
-    } else if (curve.includes('targetOnFaultSupraSeisMFD')) {
-      return 'lightgray';
-    } else if (curve.includes('totalSubSeismoOnFaultMFD')) {
-      return 'black';
-    } else if (curve.includes('solutionMFD')) {
-      return 'red';
-    } else {
-      return 'yellow';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const getScale = (): any => {
+    const currentColors: string[] = [];
+    for (const prop in colors) {
+      currentColors.push(colors[prop]);
     }
+    return scaleOrdinal({
+      domain: [...mfdProps.series],
+      range: [...currentColors],
+    });
   };
 
   return (
@@ -71,7 +82,7 @@ const MfdChart: React.FC<MfdChartProps> = ({ mfdProps, rows }: MfdChartProps) =>
               dataKey={curve}
               xAccessor={(d: IMagRate) => d?.mag}
               yAccessor={(d: IMagRate) => d?.rate}
-              stroke={getColor(curve, index)}
+              stroke={colors[curve]}
               data={getMfdCurve(mfdProps.series, index)}
             />
           );
@@ -95,10 +106,7 @@ const MfdChart: React.FC<MfdChartProps> = ({ mfdProps, rows }: MfdChartProps) =>
       </XYChart>
       <LegendOrdinal
         direction="column"
-        scale={scaleOrdinal({
-          domain: mfdProps.series,
-          range: ['orange', 'steelblue', 'lightgray', 'black', 'red'],
-        })}
+        scale={getScale()}
         shape="line"
         style={{ margin: '20px', position: 'absolute', top: 0, right: 0 }}
       />
