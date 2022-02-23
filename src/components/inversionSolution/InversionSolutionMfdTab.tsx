@@ -142,10 +142,14 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
         Solution Target vs final Magnitude Frequency distribution
       </Typography>
       <Box style={{ width: '100%', color: '#646464', padding: '1rem' }}>{metaAsString}</Box>
-      <ControlsBar>
-        <SelectControl name="Region" options={['TVZ', 'SansTVZ', 'Both']} setOptions={setRegion} />
-        <MultiSelect name="MFD Curves" options={options} selected={mfdCurves} setOptions={setMfdCurves} />
-      </ControlsBar>
+      {isV2 && (
+        <>
+          <ControlsBar>
+            <SelectControl name="Region" options={['TVZ', 'SansTVZ', 'Both']} setOptions={setRegion} />
+            <MultiSelect name="MFD Curves" options={options} selected={mfdCurves} setOptions={setMfdCurves} />
+          </ControlsBar>
+        </>
+      )}
       <MfdChart mfdProps={mfdProps} rows={rows} />
     </>
   );
