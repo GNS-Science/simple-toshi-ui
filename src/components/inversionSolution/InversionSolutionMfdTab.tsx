@@ -122,11 +122,11 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
           return item.includes(region) && !item.includes(`Sans${region}`);
         });
       }
-      //     const filteredSeries = series.filter((item) => {
-      //       return mfdCurves.some((curve) => {
-      //         return item.includes(curve);
-      //       });
-      //     });
+      filteredSeries = filteredSeries.filter((item) => {
+        return mfdCurves.some((curve) => {
+          return item.includes(curve);
+        });
+      });
       setMfdProps({
         series: filteredSeries,
         colours: mfdProps.colours,
