@@ -86,6 +86,9 @@ const InversionSolution: React.FC = () => {
       setMfdIsV2(true);
       const V2table = MFDtables.find((table) => table?.table_type === 'MFD_CURVES_V2');
       setMfdTableId(V2table?.table_id || '');
+    } else if (MFDtables?.some((table) => table?.table_type === 'MFD_CURVES')) {
+      const V1table = MFDtables?.find((table) => table?.table_type === 'MFD_CURVES');
+      setMfdTableId(V1table?.table_id || '');
     }
   }, [data]);
 
