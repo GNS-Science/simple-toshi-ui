@@ -130,15 +130,11 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
       setMfdProps({
         series: filteredSeries,
         colours: mfdProps.colours,
-        maxMagnitude: mfdProps.maxMagnitude,
-        minMagnitude: mfdProps.minMagnitude,
+        maxMagnitude: 9,
+        minMagnitude: 5,
       });
     }
   }, [region, mfdCurves]);
-
-  // useEffect(() => {
-  //   console.log(mfdProps);
-  // }, [mfdProps]);
 
   return (
     <>
