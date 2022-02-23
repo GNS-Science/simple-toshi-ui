@@ -6,13 +6,15 @@ import { XYChart, AnimatedAxis, AnimatedLineSeries, Tooltip } from '@visx/xychar
 
 import { MfdProps } from '../../../interfaces/inversionSolutions';
 import { IMagRate, magRateData } from '../../PreviewMFD_data';
+import { regionalizedMfdSeries } from '../../../constants/regionalizedMfdSeries';
 
 interface MfdChartProps {
   mfdProps: MfdProps;
   rows: readonly (readonly (string | null)[] | null)[] | null | undefined;
+  isV2: boolean;
 }
 
-const MfdChart: React.FC<MfdChartProps> = ({ mfdProps, rows }: MfdChartProps) => {
+const MfdChart: React.FC<MfdChartProps> = ({ mfdProps, rows, isV2 }: MfdChartProps) => {
   const [xScaleDomain, setXscaleDomain] = useState<number[]>([5, 9]);
   const [colors, setColors] = useState<Record<string, string>>({});
 
@@ -34,7 +36,7 @@ const MfdChart: React.FC<MfdChartProps> = ({ mfdProps, rows }: MfdChartProps) =>
 
   useEffect(() => {
     const curveColors: Record<string, string> = {};
-    mfdProps.series.map((value, index) => {
+    mfdProps.series.map((value) => {
       if (value.includes('totalTargetGR')) {
         curveColors[value] = 'orange';
       } else if (value.includes('trulyOffFaultMFD')) {
@@ -58,8 +60,24 @@ const MfdChart: React.FC<MfdChartProps> = ({ mfdProps, rows }: MfdChartProps) =>
     for (const prop in colors) {
       currentColors.push(colors[prop]);
     }
+
+    let currentCurves: string[] = [];
+    if (isV2) {
+      mfdProps.series.map((curve) => {
+        console.log(curve);
+        regionalizedMfdSeries.map((options) => {
+          console.log(options);
+          if (options.path === curve) {
+            currentCurves.push(options.displayName);
+          }
+        });
+      });
+    } else {
+      currentCurves = [...mfdProps.series];
+    }
+
     return scaleOrdinal({
-      domain: [...mfdProps.series],
+      domain: [...currentCurves],
       range: [...currentColors],
     });
   };

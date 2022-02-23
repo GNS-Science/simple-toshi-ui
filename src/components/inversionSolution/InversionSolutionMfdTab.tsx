@@ -150,7 +150,7 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
           </ControlsBar>
         </>
       )}
-      <MfdChart mfdProps={mfdProps} rows={rows} />
+      <MfdChart mfdProps={mfdProps} rows={rows} isV2={isV2} />
     </>
   );
 };
