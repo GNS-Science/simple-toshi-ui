@@ -10,11 +10,11 @@ export const regionalizedMfdSeries = [
   },
   {
     displayName: 'Total Target GR - SansTVZ',
-    path: 'inversionTargetMFDs.totalTargetGR_SansTVZ',
+    path: 'InversionTargetMFDs.totalTargetGR_SansTVZ',
   },
   {
     displayName: 'Total Target GR - TVZ',
-    path: 'inversionTargetMFDs.totalTargetGR_TVZ',
+    path: 'InversionTargetMFDs.totalTargetGR_TVZ',
   },
   {
     displayName: 'Truly Off Fault MFD - All',
@@ -22,11 +22,11 @@ export const regionalizedMfdSeries = [
   },
   {
     displayName: 'Truly Off Fault MFD - SansTVZ',
-    path: 'inversionTargetMFDs.trulyOffFaultMFD_SansTVZ',
+    path: 'InversionTargetMFDs.trulyOffFaultMFD_SansTVZ',
   },
   {
     displayName: 'Truly Off Fault MFD - TVZ',
-    path: 'inversionTargetMFDs.trulyOffFaultMFD_TVZ',
+    path: 'InversionTargetMFDs.trulyOffFaultMFD_TVZ',
   },
   {
     displayName: 'Target On Fault Supra Seis MFD - All',
@@ -34,11 +34,11 @@ export const regionalizedMfdSeries = [
   },
   {
     displayName: 'Target On Fault Supra Seis MFD - SansTVZ',
-    path: 'inversionTargetMFDs.targetOnFaultSupraSeisMFD_SansTVZ',
+    path: 'InversionTargetMFDs.targetOnFaultSupraSeisMFD_SansTVZ',
   },
   {
     displayName: 'Target On Fault Supra Seis MFD - TVZ',
-    path: 'inversionTargetMFDs.targetOnFaultSupraSeisMFD_TVZ',
+    path: 'InversionTargetMFDs.targetOnFaultSupraSeisMFD_TVZ',
   },
   {
     displayName: 'Total Subseismo On Fault MFD - All',
@@ -46,11 +46,11 @@ export const regionalizedMfdSeries = [
   },
   {
     displayName: 'Total Subseismo On Fault MFD - SansTVZ',
-    path: 'inversionTargetMFDs.totalSubSeismoOnFaultMFD_SansTVZ',
+    path: 'InversionTargetMFDs.totalSubSeismoOnFaultMFD_SansTVZ',
   },
   {
     displayName: 'Total Subseismo On Fault MFD - TVZ',
-    path: 'inversionTargetMFDs.totalSubSeismoOnFaultMFD_TVZ',
+    path: 'InversionTargetMFDs.totalSubSeismoOnFaultMFD_TVZ',
   },
   {
     displayName: 'Solution MFD',
@@ -81,18 +81,4 @@ export const mfdCurvesOptions = [
   },
 ];
 
-export const regionalizedMfdColors: string[] = [
-  'orange',
-  'steelblue',
-  'lightgray',
-  'black',
-  'red',
-  'yellow',
-  'lightgreen',
-  'darkgreen',
-  'pink',
-  'purple',
-  'salmon',
-  'teal',
-  'blue',
-];
+export const regionalizedMfdColors: string[] = ['orange', 'steelblue', 'lightgray', 'black', 'red'];
