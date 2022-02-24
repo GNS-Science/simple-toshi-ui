@@ -7,6 +7,7 @@ import { XYChart, AnimatedAxis, AnimatedLineSeries, Tooltip } from '@visx/xychar
 import { MfdProps } from '../../../interfaces/inversionSolutions';
 import { IMagRate, magRateData } from '../../PreviewMFD_data';
 import { regionalizedMfdSeries } from '../../../constants/mfdSeries';
+import { mapMFDcurveColors } from '../../../service/inversionSolution.service';
 
 interface MfdChartProps {
   mfdProps: MfdProps;
@@ -15,12 +16,7 @@ interface MfdChartProps {
 }
 
 const MfdChart: React.FC<MfdChartProps> = ({ mfdProps, rows, isV2 }: MfdChartProps) => {
-  const [xScaleDomain, setXscaleDomain] = useState<number[]>([5, 9]);
   const [colors, setColors] = useState<Record<string, string>>({});
-
-  useEffect(() => {
-    setXscaleDomain([mfdProps.minMagnitude, mfdProps.maxMagnitude]);
-  }, [mfdProps]);
 
   if (!rows) {
     return <>There is no mfd curve</>;
@@ -35,23 +31,7 @@ const MfdChart: React.FC<MfdChartProps> = ({ mfdProps, rows, isV2 }: MfdChartPro
   };
 
   useEffect(() => {
-    const curveColors: Record<string, string> = {};
-    mfdProps.series.map((value) => {
-      if (value.includes('totalTargetGR')) {
-        curveColors[value] = 'orange';
-      } else if (value.includes('trulyOffFaultMFD')) {
-        curveColors[value] = 'steelblue';
-      } else if (value.includes('targetOnFaultSupraSeisMFD')) {
-        curveColors[value] = 'lightgray';
-      } else if (value.includes('totalSubSeismoOnFaultMFD')) {
-        curveColors[value] = 'black';
-      } else if (value.includes('solutionMFD')) {
-        curveColors[value] = 'red';
-      } else {
-        curveColors[value] = 'yellow';
-      }
-    });
-    setColors(curveColors);
+    setColors(mapMFDcurveColors(mfdProps.series));
   }, [mfdProps]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -86,7 +66,7 @@ const MfdChart: React.FC<MfdChartProps> = ({ mfdProps, rows, isV2 }: MfdChartPro
         height={600}
         width={800}
         margin={{ bottom: 30, left: 50, right: 50, top: 10 }}
-        xScale={{ type: 'linear', domain: xScaleDomain, zero: false }}
+        xScale={{ type: 'linear', domain: [mfdProps.minMagnitude, mfdProps.maxMagnitude], zero: false }}
         yScale={{ type: 'log', domain: [1e-6, 1] }}
       >
         <AnimatedAxis orientation="bottom" />
