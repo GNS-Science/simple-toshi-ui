@@ -1,3 +1,5 @@
+import { MfdProps } from '../interfaces/inversionSolutions';
+
 export interface RegionalizedMfdSeries {
   displayName: string;
   path: string;
@@ -82,3 +84,26 @@ export const mfdCurvesOptions = [
 ];
 
 export const regionalizedMfdColors: string[] = ['orange', 'steelblue', 'lightgray', 'black', 'red'];
+
+export const oldMFDseries: string[] = [
+  'trulyOffFaultMFD.all',
+  'InversionTargetMFDs.targetOnFaultSupraSeisMFD_SansTVZ',
+  'InversionTargetMFDs.targetOnFaultSupraSeisMFD_TVZ',
+  'totalSubSeismoOnFaultMFD',
+  'solutionMFD_rateWeighted',
+];
+
+export const v1MFDseries: string[] = [
+  'trulyOffFaultMFD.all',
+  'targetOnFaultSupraSeisMFD_SansTVZ',
+  'targetOnFaultSupraSeisMFD_TVZ',
+  'totalSubSeismoOnFaultMFD',
+  'solutionMFD_rateWeighted',
+];
+
+export const subductionMFDprops: MfdProps = {
+  colours: ['steelblue', 'red'],
+  series: ['targetOnFaultSupraSeisMFD', 'solutionMFD_rateWeighted'],
+  maxMagnitude: 9.5,
+  minMagnitude: 6.5,
+};

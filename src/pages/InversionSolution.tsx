@@ -79,17 +79,10 @@ const InversionSolution: React.FC = () => {
   const hazardTableId = hazardTable?.table_id as string;
 
   useEffect(() => {
-    const MFDtables = data?.node?.tables?.filter((table) => {
-      return table?.table_type === 'MFD_CURVES' || table?.table_type === 'MFD_CURVES_V2';
-    });
-    if (MFDtables?.some((table) => table?.table_type === 'MFD_CURVES_V2')) {
-      setMfdIsV2(true);
-      const V2table = MFDtables.find((table) => table?.table_type === 'MFD_CURVES_V2');
-      setMfdTableId(V2table?.table_id || '');
-    } else if (MFDtables?.some((table) => table?.table_type === 'MFD_CURVES')) {
-      const V1table = MFDtables?.find((table) => table?.table_type === 'MFD_CURVES');
-      setMfdTableId(V1table?.table_id || '');
-    }
+    const V2table = tables?.find((table) => table?.table_type === 'MFD_CURVES_V2');
+    const V1table = tables?.find((table) => table?.table_type === 'MFD_CURVES');
+    tables?.some((table) => table?.table_type === 'MFD_CURVES_V2') && setMfdIsV2(true);
+    V2table ? setMfdTableId(V2table?.table_id || '') : setMfdTableId(V1table?.table_id || '');
   }, [data]);
 
   const renderTab = () => {

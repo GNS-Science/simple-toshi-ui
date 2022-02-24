@@ -6,7 +6,7 @@ import { XYChart, AnimatedAxis, AnimatedLineSeries, Tooltip } from '@visx/xychar
 
 import { MfdProps } from '../../../interfaces/inversionSolutions';
 import { IMagRate, magRateData } from '../../PreviewMFD_data';
-import { regionalizedMfdSeries } from '../../../constants/regionalizedMfdSeries';
+import { regionalizedMfdSeries } from '../../../constants/mfdSeries';
 
 interface MfdChartProps {
   mfdProps: MfdProps;

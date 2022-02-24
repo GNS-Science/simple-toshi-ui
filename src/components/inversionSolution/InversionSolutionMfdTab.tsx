@@ -10,7 +10,14 @@ import SelectControl from '../common/SelectControl';
 import MultiSelect from '../common/MultiSelect';
 import { MfdProps } from '../../interfaces/inversionSolutions';
 import MfdChart from './charts/MfdChart';
-import { mfdCurvesOptions, regionalizedMfdColors, regionalizedMfdSeries } from '../../constants/regionalizedMfdSeries';
+import {
+  mfdCurvesOptions,
+  oldMFDseries,
+  regionalizedMfdColors,
+  regionalizedMfdSeries,
+  subductionMFDprops,
+  v1MFDseries,
+} from '../../constants/mfdSeries';
 
 interface InversionSolutionMfdTabProps {
   mfdTableId: string;
@@ -46,12 +53,8 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
 
   const data = useLazyLoadQuery<InversionSolutionMfdTabQuery>(inversionSolutionMfdTabQuery, { id: mfdTableId });
   const rows = data?.node?.rows;
-  console.log(rows);
-  // setRowsData(rows);
 
   const config_type = meta?.filter((kv) => kv?.k == 'config_type')[0]?.v;
-  // console.log(meta);
-  // console.log(config_type);
 
   // //Removes filename & file id from inversion meta data list
   const cleanedMeta = meta?.filter((el) => {
@@ -63,33 +66,16 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
   useEffect(() => {
     if (isV2 === false) {
       if (config_type == 'subduction') {
-        setMfdProps({
-          colours: ['steelblue', 'red'],
-          series: ['targetOnFaultSupraSeisMFD', 'solutionMFD_rateWeighted'],
-          maxMagnitude: 9.5,
-          minMagnitude: 6.5,
-        });
+        setMfdProps(subductionMFDprops);
       } else {
-        let series: string[] = [];
+        let series: string[];
         rows?.some((value) => {
           return value?.includes('InversionTargetMFDs.targetOnFaultSupraSeisMFD_SansTVZ');
         })
-          ? (series = [
-              'trulyOffFaultMFD.all',
-              'InversionTargetMFDs.targetOnFaultSupraSeisMFD_SansTVZ',
-              'InversionTargetMFDs.targetOnFaultSupraSeisMFD_TVZ',
-              'totalSubSeismoOnFaultMFD',
-              'solutionMFD_rateWeighted',
-            ])
-          : (series = [
-              'trulyOffFaultMFD.all',
-              'targetOnFaultSupraSeisMFD_SansTVZ',
-              'targetOnFaultSupraSeisMFD_TVZ',
-              'totalSubSeismoOnFaultMFD',
-              'solutionMFD_rateWeighted',
-            ]);
+          ? (series = oldMFDseries)
+          : (series = v1MFDseries);
         setMfdProps({
-          colours: ['orange', 'steelblue', 'lightgray', 'black', 'red'],
+          colours: regionalizedMfdColors,
           series,
           maxMagnitude: 9.0,
           minMagnitude: 5.0,
