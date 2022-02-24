@@ -125,7 +125,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       }
       setFilteredMeta(metaList);
     }
-  }, [currentImage]);
+  }, [automationTasks, currentImage]);
 
   const nextImage = () => {
     if (currentImage < automationTasks.length - 1) {
