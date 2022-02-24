@@ -64,9 +64,7 @@ const MfdChart: React.FC<MfdChartProps> = ({ mfdProps, rows, isV2 }: MfdChartPro
     let currentCurves: string[] = [];
     if (isV2) {
       mfdProps.series.map((curve) => {
-        console.log(curve);
         regionalizedMfdSeries.map((options) => {
-          console.log(options);
           if (options.path === curve) {
             currentCurves.push(options.displayName);
           }
