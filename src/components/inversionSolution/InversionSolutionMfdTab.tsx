@@ -31,7 +31,7 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
 }: InversionSolutionMfdTabProps) => {
   const options: string[] = [];
   mfdCurvesOptions.map((option) => {
-    options.push(option.path);
+    options.push(option.displayName);
   });
 
   const series: string[] = [];
@@ -40,7 +40,8 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
   });
 
   const [region, setRegion] = useState<string>('TVZ');
-  const [mfdCurves, setMfdCurves] = useState<string[]>(options);
+  const [mfdCurveNames, setMfdCurveNames] = useState<string[]>(options);
+  const [mfdCurvePaths, setMfdCurvePaths] = useState<string[]>([]);
   const [mfdProps, setMfdProps] = useState<MfdProps>({ series: [], colours: [], maxMagnitude: 10.0, minMagnitude: 0 });
 
   const data = useLazyLoadQuery<InversionSolutionMfdTabQuery>(inversionSolutionMfdTabQuery, { id: mfdTableId });
@@ -111,6 +112,18 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
   }, [isV2]);
 
   useEffect(() => {
+    const selections: string[] = [];
+    mfdCurveNames.map((name) => {
+      mfdCurvesOptions.map((curve) => {
+        if (curve.displayName === name) {
+          selections.push(curve.path);
+        }
+      });
+    });
+    setMfdCurvePaths(selections);
+  }, [mfdCurveNames]);
+
+  useEffect(() => {
     if (isV2) {
       let filteredSeries: string[];
       if (region === 'Both') {
@@ -123,7 +136,7 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
         });
       }
       filteredSeries = filteredSeries.filter((item) => {
-        return mfdCurves.some((curve) => {
+        return mfdCurvePaths.some((curve) => {
           return item.includes(curve);
         });
       });
@@ -134,7 +147,7 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
         minMagnitude: 5,
       });
     }
-  }, [region, mfdCurves]);
+  }, [region, mfdCurvePaths]);
 
   return (
     <>
@@ -146,7 +159,7 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
         <>
           <ControlsBar>
             <SelectControl name="Region" options={['TVZ', 'SansTVZ', 'Both']} setOptions={setRegion} />
-            <MultiSelect name="MFD Curves" options={options} selected={mfdCurves} setOptions={setMfdCurves} />
+            <MultiSelect name="MFD Curves" options={options} selected={mfdCurveNames} setOptions={setMfdCurveNames} />
           </ControlsBar>
         </>
       )}
