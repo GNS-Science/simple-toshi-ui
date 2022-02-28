@@ -105,31 +105,27 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
 
   useEffect(() => {
     if (reportTab !== 0) setCurrentTab(reportTab ?? 0);
-  }, []);
-
-  if (!automationTasks[currentImage]) {
-    return <Typography> There are no valid reports to show. </Typography>;
-  }
+  }, [reportTab]);
 
   useEffect(() => {
     setReportTab && setReportTab(currentTab);
-  }, [currentTab]);
+  }, [setReportTab, currentTab]);
 
   useEffect(() => {
-    if (automationTasks[currentImage].inversion_solution.tables) {
+    if (automationTasks[currentImage] && automationTasks[currentImage].inversion_solution.tables) {
       const hazardTable = automationTasks[currentImage].inversion_solution.tables?.find(
         (table) => table?.table_type === 'HAZARD_SITES',
       );
       hazardTable ? setHazardId(hazardTable?.table_id as string) : setHazardId('');
+      let metaList: MetaArguments = [];
+      if (sweepArgs) {
+        metaList = filteredMetaGT(automationTasks[currentImage].inversion_solution.meta, sweepArgs);
+      } else if (sweepList) {
+        metaList = filterMetaArguments(automationTasks[currentImage].inversion_solution.meta, sweepList);
+      }
+      setFilteredMeta(metaList);
     }
-    let metaList: MetaArguments = [];
-    if (sweepArgs) {
-      metaList = filteredMetaGT(automationTasks[currentImage].inversion_solution.meta, sweepArgs);
-    } else if (sweepList) {
-      metaList = filterMetaArguments(automationTasks[currentImage].inversion_solution.meta, sweepList);
-    }
-    setFilteredMeta(metaList);
-  }, [currentImage]);
+  }, [automationTasks, sweepArgs, sweepList, currentImage]);
 
   const nextImage = () => {
     if (currentImage < automationTasks.length - 1) {
@@ -144,12 +140,6 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       changeCurrentImage && changeCurrentImage(currentImage - 1);
     }
   };
-
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-    setCurrentTab(newValue);
-  };
-
   const hotkeyHandler = (event: KeyboardEvent) => {
     if (event.key === '>' || event.key === '.' || event.key === 'ArrowRight') nextImage();
     if (event.key === '<' || event.key === ',' || event.key === 'ArrowLeft') prevImage();
@@ -158,7 +148,16 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   useEffect(() => {
     window.addEventListener('keyup', hotkeyHandler);
     return () => window.removeEventListener('keyup', hotkeyHandler);
-  }, [currentImage]);
+  }, [hotkeyHandler, currentImage]);
+
+  if (!automationTasks[currentImage]) {
+    return <Typography> There are no valid reports to show. </Typography>;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+    setCurrentTab(newValue);
+  };
 
   const renderTab = () => {
     switch (currentTab) {
