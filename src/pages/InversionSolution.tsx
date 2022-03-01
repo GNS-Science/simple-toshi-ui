@@ -59,7 +59,7 @@ const InversionSolution: React.FC = () => {
     if (tab === undefined || tab === 'InversionSolutionDetailTab') {
       loadQuery({ id });
     }
-  }, [tab]);
+  }, [loadQuery, id, tab]);
 
   if (!data?.node) {
     return (

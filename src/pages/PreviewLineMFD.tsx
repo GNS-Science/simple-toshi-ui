@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import { Typography } from '@mui/material';
 
 import { d0, d1, magRateData, IMagRate } from '../components/PreviewMFD_data';
@@ -24,11 +24,7 @@ const PreviewMFD: React.FC = () => {
       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
   }, [height, margin.bottom, margin.left, margin.right, margin.top, width]);
 
-  useEffect(() => {
-    draw();
-  }, [supraData, subData]);
-
-  const draw = () => {
+  const draw = useCallback(() => {
     const svg = d3.select(ref.current);
     // console.log('DATA', supraData);
 
@@ -85,7 +81,11 @@ const PreviewMFD: React.FC = () => {
     svg.attr('alignment-baseline', 'middle');
     svg.append('text').attr('x', w1).attr('y', 66).text('supra seismogenic').style('font-size', '15px');
     svg.attr('alignment-baseline', 'middle');
-  };
+  }, [height, subData, margin.left, width, supraData]);
+
+  useEffect(() => {
+    draw();
+  }, [draw, supraData, subData]);
 
   return (
     <>

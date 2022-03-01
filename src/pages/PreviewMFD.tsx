@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import { Typography } from '@mui/material';
+
 import { d0, onlyRate } from '../components/PreviewMFD_data';
 
 function PreviewMFD(props: { width: number; height: number; bar_width: number }): React.ReactElement {
@@ -13,16 +14,7 @@ function PreviewMFD(props: { width: number; height: number; bar_width: number })
   const height = props.height;
   const bar_width = props.bar_width;
 
-  console.log('DATA', data);
-  useEffect(() => {
-    d3.select(ref.current).attr('width', width).attr('height', height).style('border', '1px solid black');
-  }, []);
-
-  useEffect(() => {
-    draw();
-  }, [data]);
-
-  const draw = () => {
+  const draw = useCallback(() => {
     const svg = d3.select(ref.current);
     const selection = svg.selectAll('rect').data(data);
     const yScale = d3
@@ -69,7 +61,15 @@ function PreviewMFD(props: { width: number; height: number; bar_width: number })
     // prettier-ignore
     svg.append('text').attr('x', width-130).attr('y', 66).text('variable B').style('font-size', '15px');
     svg.attr('alignment-baseline', 'middle');
-  };
+  }, [bar_width, height, width, data, maxData]);
+
+  useEffect(() => {
+    d3.select(ref.current).attr('width', width).attr('height', height).style('border', '1px solid black');
+  }, [height, width]);
+
+  useEffect(() => {
+    draw();
+  }, [draw, data]);
 
   return (
     <>

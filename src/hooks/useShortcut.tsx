@@ -17,5 +17,5 @@ export function useShortcut(callback: () => void, keyCodes: string[], disableHot
         window.removeEventListener('keydown', handler);
       };
     }
-  }, [callback]);
+  }, [history.location.search, disableHotkey, keyCodes, callback]);
 }

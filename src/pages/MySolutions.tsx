@@ -59,7 +59,7 @@ const MySolutions: React.FC = () => {
 
   useEffect(() => {
     setCurrentGeneralTask(getGeneralTaskDetails(listItems, reportItems, currentImage));
-  }, [currentImage]);
+  }, [listItems, reportItems, currentImage]);
 
   useShortcut(() => setShowList((v) => !v), ['s'], disableHotkey);
   useShortcut(() => setOpenDrawer((v) => !v), ['d'], disableHotkey);

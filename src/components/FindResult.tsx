@@ -34,7 +34,7 @@ const FindResult: React.FC<FindResultProps> = ({ queryRef }: FindResultProps) =>
           break;
       }
     }
-  }, [data]);
+  }, [history, data]);
 
   if (!data?.node) {
     return (
