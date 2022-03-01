@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Alert, Button, Card, CircularProgress, FormControlLabel, Slider, Switch, Typography } from '@mui/material';
 import { styled } from '@mui/styles';
 import { LatLngExpression } from 'leaflet';
@@ -64,49 +64,15 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Solutio
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [showLoading, setShowLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    const filteredLocations = locationOptions.filter((location) => locationSelections.includes(location.name));
-    const filteredLocationIDs: string[] = [];
-    filteredLocations.map((location) => {
-      filteredLocationIDs.push(location.id);
-    });
-    setLocationIDs(filteredLocationIDs);
-  }, [locationSelections]);
-
-  useEffect(() => {
-    locationSelections.length && radiiSelection.length && getGeoJson();
-  }, [id]);
-
-  useEffect(() => {
-    solvisApiService.getLocationList().then((response) => {
-      setLocationOptions(response.data);
-    });
-
-    solvisApiService.getRadiiList().then((response) => {
-      const radii = response.data.radii;
-      const radiiFormatted = radii.map((radius: number) => `${radius / 1000}km`);
-      setRadiiOptions(radiiFormatted);
-    });
-  }, []);
-
-  const getOptions = (): string[] => {
-    const locations: string[] = [];
-    locationOptions.map((locationOption) => {
-      locations.push(locationOption.name);
-    });
-    locations.sort();
-    return locations;
-  };
-
-  const radiiInKm = () => {
+  const radiiInKm = useCallback(() => {
     if (radiiSelection === '100km') {
       return radiiSelection.slice(0, 3);
     } else {
       return radiiSelection.slice(0, 2);
     }
-  };
+  }, [radiiSelection]);
 
-  const getGeoJson = (): void => {
+  const getGeoJson = useCallback((): void => {
     setShowLoading(true);
     const locationSelectionsString = locationIDs.join('%2C');
     solvisApiService
@@ -132,6 +98,40 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({ id }: Solutio
         }
         setShowLoading(false);
       });
+  }, [id, locationIDs, magRange, radiiInKm, rateRange]);
+
+  useEffect(() => {
+    const filteredLocations = locationOptions.filter((location) => locationSelections.includes(location.name));
+    const filteredLocationIDs: string[] = [];
+    filteredLocations.map((location) => {
+      filteredLocationIDs.push(location.id);
+    });
+    setLocationIDs(filteredLocationIDs);
+  }, [locationOptions, locationSelections]);
+
+  useEffect(() => {
+    locationSelections.length && radiiSelection.length && getGeoJson();
+  }, [locationSelections.length, radiiSelection.length, getGeoJson, id]);
+
+  useEffect(() => {
+    solvisApiService.getLocationList().then((response) => {
+      setLocationOptions(response.data);
+    });
+
+    solvisApiService.getRadiiList().then((response) => {
+      const radii = response.data.radii;
+      const radiiFormatted = radii.map((radius: number) => `${radius / 1000}km`);
+      setRadiiOptions(radiiFormatted);
+    });
+  }, []);
+
+  const getOptions = (): string[] => {
+    const locations: string[] = [];
+    locationOptions.map((locationOption) => {
+      locations.push(locationOption.name);
+    });
+    locations.sort();
+    return locations;
   };
 
   const handleMagRangeChange = (event: Event, newValue: number | number[]) => {
