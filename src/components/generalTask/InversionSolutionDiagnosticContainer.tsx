@@ -1,9 +1,9 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useState, useEffect } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
 import { graphql } from 'babel-plugin-relay/macro';
 
 import { InversionSolutionDiagnosticContainerQuery } from './__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
-import { SweepArguments } from '../../interfaces/generaltask';
+import { SweepArguments, ValidatedSubtask } from '../../interfaces/generaltask';
 import { validateSubtask } from '../../service/generalTask.service';
 import DiagnosticReportCard from '../diagnosticReportView/DiagnosticReportCard';
 
@@ -50,10 +50,15 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   disableHotkey,
   setDisableHotkey,
 }: InversionSolutionDiagnosticContainerProps) => {
+  const [automationTasks, setAutomationTasks] = useState<ValidatedSubtask[]>([]);
   const data = useLazyLoadQuery<InversionSolutionDiagnosticContainerQuery>(inversionSolutionDiagnosticContainerQuery, {
     id: ids,
   });
-  const validatedSubtasks = validateSubtask(data);
+
+  useEffect(() => {
+    const validatedSubtasks = validateSubtask(data);
+    setAutomationTasks(validatedSubtasks);
+  }, [data]);
 
   return (
     <>
@@ -66,7 +71,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
         setNamedFaultsView={setNamedFaultsView}
         namedFaultsLocations={namedFaultsLocations}
         setNamedFaultsLocations={setNamedFaultsLocations}
-        automationTasks={validatedSubtasks}
+        automationTasks={automationTasks}
         regionalViews={regionalViews}
         setRegionalViews={setRegionalViews}
         reportTab={reportTab}
