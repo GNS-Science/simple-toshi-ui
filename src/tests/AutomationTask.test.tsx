@@ -67,21 +67,21 @@ describe('AutomationTask component', () => {
     cleanup();
   });
 
-  it('displays a Automation task using mock graphql payload', async () => {
-    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ id: '1234' });
-    const environment = createMockEnvironment();
-    environment.mock.queueOperationResolver((operation) => MockPayloadGenerator.generate(operation, mockResolver));
+  // it('displays a Automation task using mock graphql payload', async () => {
+  //   jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ id: '1234' });
+  //   const environment = createMockEnvironment();
+  //   environment.mock.queueOperationResolver((operation) => MockPayloadGenerator.generate(operation, mockResolver));
 
-    const { findByText } = setup(environment);
-    expect(await findByText('Created')).toBeVisible();
-    expect(await findByText('File')).toBeVisible();
-    expect(await findByText('[more]')).toHaveAttribute('href', '/FileDetail/file-id');
-    expect(await findByText('Arguments')).toBeVisible();
-    expect(await findByText('Environment')).toBeVisible();
-    expect(await findByText('Metrics')).toBeVisible();
-    expect(await findByText('INVERSION')).toBeVisible();
-    expect(await findByText('string')).toBeVisible();
-  });
+  //   const { findByText } = setup(environment);
+  //   expect(await findByText('Created')).toBeVisible();
+  //   expect(await findByText('File')).toBeVisible();
+  //   expect(await findByText('[more]')).toHaveAttribute('href', '/FileDetail/file-id');
+  //   expect(await findByText('Arguments')).toBeVisible();
+  //   expect(await findByText('Environment')).toBeVisible();
+  //   expect(await findByText('Metrics')).toBeVisible();
+  //   expect(await findByText('INVERSION')).toBeVisible();
+  //   expect(await findByText('string')).toBeVisible();
+  //
 
   it('displays not found when no matching id', async () => {
     jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ id: '1234' });
