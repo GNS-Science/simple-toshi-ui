@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -127,28 +127,28 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
     }
   }, [currentImage]);
 
-  const nextImage = () => {
+  const nextImage = useCallback(() => {
     if (currentImage < automationTasks.length - 1) {
       setCurrentImage(currentImage + 1);
       changeCurrentImage && changeCurrentImage(currentImage + 1);
     }
-  };
+  }, [automationTasks.length, changeCurrentImage, currentImage]);
 
-  const prevImage = () => {
+  const prevImage = useCallback(() => {
     if (currentImage > 0) {
       setCurrentImage(currentImage - 1);
       changeCurrentImage && changeCurrentImage(currentImage - 1);
     }
-  };
-  const hotkeyHandler = (event: KeyboardEvent) => {
-    if (event.key === '>' || event.key === '.' || event.key === 'ArrowRight') nextImage();
-    if (event.key === '<' || event.key === ',' || event.key === 'ArrowLeft') prevImage();
-  };
+  }, [changeCurrentImage, currentImage]);
 
   useEffect(() => {
+    const hotkeyHandler = (event: KeyboardEvent) => {
+      if (event.key === '>' || event.key === '.' || event.key === 'ArrowRight') nextImage();
+      if (event.key === '<' || event.key === ',' || event.key === 'ArrowLeft') prevImage();
+    };
     window.addEventListener('keyup', hotkeyHandler);
     return () => window.removeEventListener('keyup', hotkeyHandler);
-  }, [hotkeyHandler, currentImage]);
+  }, [nextImage, prevImage, currentImage]);
 
   if (!automationTasks[currentImage]) {
     return <Typography> There are no valid reports to show. </Typography>;
