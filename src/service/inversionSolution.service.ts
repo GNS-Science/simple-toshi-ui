@@ -171,6 +171,8 @@ export const mapMFDcurveColors = (curves: string[]): Record<string, string> => {
     }
   });
   return curveColors;
+};
+
 export const generateSolutionAnalysisTable = (data: string): RowData[] => {
   const dataParsed = JSON.parse(data);
   const rows: RowData[] = [];
