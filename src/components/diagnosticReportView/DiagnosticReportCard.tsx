@@ -225,7 +225,10 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       case 5:
         return (
           <DiagnosticReportTabPanel value={currentTab} index={5}>
-            <SolutionAnalysisTab id={automationTasks[currentImage].inversion_solution.id} />
+            <SolutionAnalysisTab
+              id={automationTasks[currentImage].inversion_solution.id}
+              setDisableHotkey={setDisableHotkey}
+            />
           </DiagnosticReportTabPanel>
         );
     }
