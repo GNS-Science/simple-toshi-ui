@@ -147,7 +147,7 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({
           })}
           orientation="left"
         />
-        <RectClipPath id="clip" x={50} width={parentWidth} height={parentWidth - 50} />
+        <RectClipPath id="clip" x={50} y={-50} width={parentWidth} height={parentWidth * 0.75} />
         <Group clipPath="url(#clip)">
           {series.map((e, idx) => {
             return (
@@ -162,7 +162,6 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({
             );
           })}
         </Group>
-
         <Tooltip
           snapTooltipToDatumX
           snapTooltipToDatumY

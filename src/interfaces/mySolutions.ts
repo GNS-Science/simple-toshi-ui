@@ -19,7 +19,7 @@ export interface SolutionItem {
             readonly k: string | null;
             readonly v: ReadonlyArray<string | null> | null;
           } | null> | null;
-        };
+        } | null;
       } | null;
     } | null>;
   } | null;
@@ -36,6 +36,7 @@ export interface SolutionItem {
     } | null> | null;
   } | null;
 }
+
 export type MetaArguments = Array<{
   readonly k: string | null;
   readonly v: string | null;

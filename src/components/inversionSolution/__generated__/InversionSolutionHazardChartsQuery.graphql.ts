@@ -5,7 +5,7 @@
 import { ConcreteRequest } from "relay-runtime";
 
 export type RowItemType = "boolean" | "double" | "integer" | "string" | "%future added value";
-export type TableType = "GENERAL" | "HAZARD_GRIDDED" | "HAZARD_SITES" | "MFD_CURVES" | "%future added value";
+export type TableType = "GENERAL" | "HAZARD_GRIDDED" | "HAZARD_SITES" | "MFD_CURVES" | "MFD_CURVES_V2" | "%future added value";
 export type InversionSolutionHazardChartsQueryVariables = {
     id: string;
 };

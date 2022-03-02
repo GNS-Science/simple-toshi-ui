@@ -116,6 +116,8 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const [disableHotkey, setDisableHotkey] = useState<boolean>(false);
 
   const data = useLazyLoadQuery<GeneralTaskChildrenTabQuery>(generalTaskChildrenTabQuery, { id });
+  console.log(id);
+  console.log(data);
   const childTasks = validateChildTasks(data);
 
   const [filteredArguments, setFilteredArguments] = useState<FilteredArguments>({ data: [] });

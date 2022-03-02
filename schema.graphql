@@ -26,14 +26,17 @@ type AutomationTask implements Node & Thing & AutomationTaskInterface {
 
   """Files associated with this object."""
   files(before: String, after: String, first: Int, last: Int): FileRelationConnection
+
+  """parent task(s) of this task"""
+  parents(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
+
+  """Children of this thing"""
+  children(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
   result: EventResult
   state: EventState
 
   """the final duration of the event in seconds"""
   duration: Float
-
-  """parent task(s) of this task"""
-  parents(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
 
   """
   input arguments for the rupture generation task, as a list of Key Value pairs.
@@ -434,6 +437,12 @@ type GeneralTask implements Node & Thing {
   """Files associated with this object."""
   files(before: String, after: String, first: Int, last: Int): FileRelationConnection
 
+  """parent task(s) of this task"""
+  parents(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
+
+  """sub-tasks of this task"""
+  children(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
+
   """When the task record was last updated"""
   updated: DateTime
 
@@ -463,12 +472,6 @@ type GeneralTask implements Node & Thing {
   subtask_type: TaskSubType
   model_type: ModelType
   subtask_result: EventResult
-
-  """sub-tasks of this task"""
-  children(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
-
-  """parent task(s) of this task"""
-  parents(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
 }
 
 """Represents an Inversion Solution file"""
@@ -695,14 +698,12 @@ type QueryRoot {
 
   """The files."""
   files(before: String, after: String, first: Int, last: Int): FileConnection
-
-  """The ID of the object"""
-  node(id: ID!): Node
+  node(
+    """The ID of the object"""
+    id: ID!
+  ): Node
   nodes(id_in: [ID]): NodeFilter
   search(search_term: String): Search
-
-  """The ID of the object"""
-  file(id: ID!): File
   strong_motion_station(id: ID!): StrongMotionStation
 
   """The list of strong motion stations"""
@@ -727,14 +728,17 @@ type RuptureGenerationTask implements Node & Thing & AutomationTaskInterface {
 
   """Files associated with this object."""
   files(before: String, after: String, first: Int, last: Int): FileRelationConnection
+
+  """parent task(s) of this task"""
+  parents(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
+
+  """Children of this thing"""
+  children(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
   result: EventResult
   state: EventState
 
   """the final duration of the event in seconds"""
   duration: Float
-
-  """parent task(s) of this task"""
-  parents(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
 
   """
   input arguments for the rupture generation task, as a list of Key Value pairs.
@@ -854,6 +858,12 @@ type StrongMotionStation implements Node & Thing {
   """Files associated with this object."""
   files(before: String, after: String, first: Int, last: Int): FileRelationConnection
 
+  """Parents of this thing"""
+  parents(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
+
+  """Children of this thing"""
+  children(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
+
   """When SMS record was updated"""
   updated: DateTime
 
@@ -940,6 +950,7 @@ enum TableType {
   HAZARD_GRIDDED
   HAZARD_SITES
   MFD_CURVES
+  MFD_CURVES_V2
   GENERAL
 }
 
@@ -953,8 +964,8 @@ enum TaskSubType {
 type TaskTaskRelation implements Node {
   """The ID of the object."""
   id: ID!
-  parent: GeneralTask!
-  child: ChildTaskUnion!
+  parent: GeneralTask
+  child: ChildTaskUnion
   parent_id: String
   child_id: String
 }
@@ -984,6 +995,12 @@ interface Thing {
 
   """Files associated with this object."""
   files(before: String, after: String, first: Int, last: Int): FileRelationConnection
+
+  """Parents of this thing"""
+  parents(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
+
+  """Children of this thing"""
+  children(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
 }
 
 type UpdateAutomationTask {

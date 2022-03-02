@@ -17,7 +17,7 @@ export type GeneralTaskChildrenTabQueryResponse = {
         readonly children?: {
             readonly edges: ReadonlyArray<{
                 readonly node: {
-                    readonly child: {
+                    readonly child: ({
                         readonly __typename: "AutomationTask";
                         readonly id: string;
                         readonly created: unknown | null;
@@ -43,7 +43,7 @@ export type GeneralTaskChildrenTabQueryResponse = {
                         /*This will never be '%other', but we need some
                         value in case none of the concrete values match.*/
                         readonly __typename: "%other";
-                    };
+                    }) | null;
                 } | null;
             } | null>;
         } | null | undefined;

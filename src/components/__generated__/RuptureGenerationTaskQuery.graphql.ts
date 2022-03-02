@@ -49,7 +49,7 @@ export type RuptureGenerationTaskQueryResponse = {
                 readonly node: {
                     readonly parent: {
                         readonly id: string;
-                    };
+                    } | null;
                 } | null;
             } | null>;
         } | null | undefined;
