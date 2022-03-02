@@ -105,7 +105,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
 
   useEffect(() => {
     if (reportTab !== 0) setCurrentTab(reportTab ?? 0);
-  }, []);
+  }, [reportTab]);
 
   useEffect(() => {
     setReportTab && setReportTab(currentTab);
@@ -125,7 +125,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       }
       setFilteredMeta(metaList);
     }
-  }, [currentImage]);
+  }, [automationTasks, sweepArgs, sweepList, currentImage]);
 
   const nextImage = useCallback(() => {
     if (currentImage < automationTasks.length - 1) {
