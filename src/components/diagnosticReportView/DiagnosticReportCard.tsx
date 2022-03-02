@@ -107,28 +107,24 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
     if (reportTab !== 0) setCurrentTab(reportTab ?? 0);
   }, []);
 
-  if (!automationTasks[currentImage]) {
-    return <Typography> There are no valid reports to show. </Typography>;
-  }
-
   useEffect(() => {
     setReportTab && setReportTab(currentTab);
   }, [currentTab]);
 
   useEffect(() => {
-    if (automationTasks[currentImage].inversion_solution.tables) {
+    if (automationTasks[currentImage] && automationTasks[currentImage].inversion_solution.tables) {
       const hazardTable = automationTasks[currentImage].inversion_solution.tables?.find(
         (table) => table?.table_type === 'HAZARD_SITES',
       );
       hazardTable ? setHazardId(hazardTable?.table_id as string) : setHazardId('');
+      let metaList: MetaArguments = [];
+      if (sweepArgs) {
+        metaList = filteredMetaGT(automationTasks[currentImage].inversion_solution.meta, sweepArgs);
+      } else if (sweepList) {
+        metaList = filterMetaArguments(automationTasks[currentImage].inversion_solution.meta, sweepList);
+      }
+      setFilteredMeta(metaList);
     }
-    let metaList: MetaArguments = [];
-    if (sweepArgs) {
-      metaList = filteredMetaGT(automationTasks[currentImage].inversion_solution.meta, sweepArgs);
-    } else if (sweepList) {
-      metaList = filterMetaArguments(automationTasks[currentImage].inversion_solution.meta, sweepList);
-    }
-    setFilteredMeta(metaList);
   }, [currentImage]);
 
   const nextImage = () => {
@@ -159,6 +155,10 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
     window.addEventListener('keyup', hotkeyHandler);
     return () => window.removeEventListener('keyup', hotkeyHandler);
   }, [currentImage]);
+
+  if (!automationTasks[currentImage]) {
+    return <Typography> There are no valid reports to show. </Typography>;
+  }
 
   const renderTab = () => {
     switch (currentTab) {
