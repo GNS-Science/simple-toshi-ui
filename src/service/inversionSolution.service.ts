@@ -146,3 +146,23 @@ export const getSpectralAccelerationData = (
 
   return dataSet;
 };
+
+export const mapMFDcurveColors = (curves: string[]): Record<string, string> => {
+  const curveColors: Record<string, string> = {};
+  curves.map((value) => {
+    if (value.includes('totalTargetGR')) {
+      curveColors[value] = 'orange';
+    } else if (value.includes('trulyOffFaultMFD')) {
+      curveColors[value] = 'steelblue';
+    } else if (value.includes('targetOnFaultSupraSeisMFD')) {
+      curveColors[value] = 'lightgray';
+    } else if (value.includes('totalSubSeismoOnFaultMFD')) {
+      curveColors[value] = 'black';
+    } else if (value.includes('solutionMFD')) {
+      curveColors[value] = 'red';
+    } else {
+      curveColors[value] = 'yellow';
+    }
+  });
+  return curveColors;
+};

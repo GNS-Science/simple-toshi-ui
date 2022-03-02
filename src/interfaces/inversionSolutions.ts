@@ -16,3 +16,10 @@ export interface LocationData {
 }
 
 export type HazardTableFilteredData = Record<string, XY[]>;
+
+export interface MfdProps {
+  series: string[];
+  colours: string[];
+  maxMagnitude: number;
+  minMagnitude: number;
+}
