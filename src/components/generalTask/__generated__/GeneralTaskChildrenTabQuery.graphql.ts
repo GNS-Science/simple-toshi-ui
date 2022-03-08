@@ -99,7 +99,6 @@ query GeneralTaskChildrenTabQuery(
                 id
               }
             }
-            id
           }
         }
       }
@@ -377,8 +376,7 @@ return {
                               }
                             ],
                             "storageKey": null
-                          },
-                          (v2/*: any*/)
+                          }
                         ],
                         "storageKey": null
                       }
@@ -398,12 +396,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "42183d436562b19443944f621f81c892",
+    "cacheID": "ab2cd4fd3fe956d98c50e318973acda8",
     "id": null,
     "metadata": {},
     "name": "GeneralTaskChildrenTabQuery",
     "operationKind": "query",
-    "text": "query GeneralTaskChildrenTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on GeneralTask {\n      id\n      model_type\n      children {\n        edges {\n          node {\n            child {\n              __typename\n              ... on AutomationTask {\n                __typename\n                id\n                created\n                duration\n                state\n                result\n                arguments {\n                  k\n                  v\n                }\n              }\n              ... on RuptureGenerationTask {\n                __typename\n                id\n                created\n                duration\n                state\n                result\n                arguments {\n                  k\n                  v\n                }\n              }\n              ... on Node {\n                __isNode: __typename\n                id\n              }\n            }\n            id\n          }\n        }\n      }\n    }\n    id\n  }\n}\n"
+    "text": "query GeneralTaskChildrenTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on GeneralTask {\n      id\n      model_type\n      children {\n        edges {\n          node {\n            child {\n              __typename\n              ... on AutomationTask {\n                __typename\n                id\n                created\n                duration\n                state\n                result\n                arguments {\n                  k\n                  v\n                }\n              }\n              ... on RuptureGenerationTask {\n                __typename\n                id\n                created\n                duration\n                state\n                result\n                arguments {\n                  k\n                  v\n                }\n              }\n              ... on Node {\n                __isNode: __typename\n                id\n              }\n            }\n          }\n        }\n      }\n    }\n    id\n  }\n}\n"
   }
 };
 })();

@@ -90,7 +90,6 @@ query MySolutionsQuery(
                       v
                     }
                   }
-                  id
                 }
               }
             }
@@ -164,122 +163,163 @@ v4 = [
   }
 ],
 v5 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "GeneralTask",
-  "kind": "LinkedField",
-  "name": "parent",
-  "plural": false,
+  "kind": "InlineFragment",
   "selections": [
     (v3/*: any*/),
     {
       "alias": null,
       "args": null,
-      "kind": "ScalarField",
-      "name": "created",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "title",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "description",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "model_type",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "swept_arguments",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "notes",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "concreteType": "KeyValueListPair",
+      "concreteType": "TaskTaskRelationConnection",
       "kind": "LinkedField",
-      "name": "argument_lists",
-      "plural": true,
-      "selections": (v4/*: any*/),
-      "storageKey": null
-    }
-  ],
-  "storageKey": null
-},
-v6 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "InversionSolution",
-  "kind": "LinkedField",
-  "name": "inversion_solution",
-  "plural": false,
-  "selections": [
-    (v3/*: any*/),
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "mfd_table_id",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "concreteType": "KeyValuePair",
-      "kind": "LinkedField",
-      "name": "meta",
-      "plural": true,
-      "selections": (v4/*: any*/),
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "concreteType": "LabelledTableRelation",
-      "kind": "LinkedField",
-      "name": "tables",
-      "plural": true,
+      "name": "parents",
+      "plural": false,
       "selections": [
         {
           "alias": null,
           "args": null,
+          "concreteType": "TaskTaskRelationEdge",
+          "kind": "LinkedField",
+          "name": "edges",
+          "plural": true,
+          "selections": [
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "TaskTaskRelation",
+              "kind": "LinkedField",
+              "name": "node",
+              "plural": false,
+              "selections": [
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "GeneralTask",
+                  "kind": "LinkedField",
+                  "name": "parent",
+                  "plural": false,
+                  "selections": [
+                    (v3/*: any*/),
+                    {
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "created",
+                      "storageKey": null
+                    },
+                    {
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "title",
+                      "storageKey": null
+                    },
+                    {
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "description",
+                      "storageKey": null
+                    },
+                    {
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "model_type",
+                      "storageKey": null
+                    },
+                    {
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "swept_arguments",
+                      "storageKey": null
+                    },
+                    {
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "notes",
+                      "storageKey": null
+                    },
+                    {
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "KeyValueListPair",
+                      "kind": "LinkedField",
+                      "name": "argument_lists",
+                      "plural": true,
+                      "selections": (v4/*: any*/),
+                      "storageKey": null
+                    }
+                  ],
+                  "storageKey": null
+                }
+              ],
+              "storageKey": null
+            }
+          ],
+          "storageKey": null
+        }
+      ],
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "InversionSolution",
+      "kind": "LinkedField",
+      "name": "inversion_solution",
+      "plural": false,
+      "selections": [
+        (v3/*: any*/),
+        {
+          "alias": null,
+          "args": null,
           "kind": "ScalarField",
-          "name": "table_id",
+          "name": "mfd_table_id",
           "storageKey": null
         },
         {
           "alias": null,
           "args": null,
-          "kind": "ScalarField",
-          "name": "table_type",
+          "concreteType": "KeyValuePair",
+          "kind": "LinkedField",
+          "name": "meta",
+          "plural": true,
+          "selections": (v4/*: any*/),
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": "LabelledTableRelation",
+          "kind": "LinkedField",
+          "name": "tables",
+          "plural": true,
+          "selections": [
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "table_id",
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "table_type",
+              "storageKey": null
+            }
+          ],
           "storageKey": null
         }
       ],
       "storageKey": null
     }
   ],
-  "storageKey": null
+  "type": "AutomationTask",
+  "abstractKey": null
 };
 return {
   "fragment": {
@@ -321,49 +361,7 @@ return {
                     "plural": false,
                     "selections": [
                       (v2/*: any*/),
-                      {
-                        "kind": "InlineFragment",
-                        "selections": [
-                          (v3/*: any*/),
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "TaskTaskRelationConnection",
-                            "kind": "LinkedField",
-                            "name": "parents",
-                            "plural": false,
-                            "selections": [
-                              {
-                                "alias": null,
-                                "args": null,
-                                "concreteType": "TaskTaskRelationEdge",
-                                "kind": "LinkedField",
-                                "name": "edges",
-                                "plural": true,
-                                "selections": [
-                                  {
-                                    "alias": null,
-                                    "args": null,
-                                    "concreteType": "TaskTaskRelation",
-                                    "kind": "LinkedField",
-                                    "name": "node",
-                                    "plural": false,
-                                    "selections": [
-                                      (v5/*: any*/)
-                                    ],
-                                    "storageKey": null
-                                  }
-                                ],
-                                "storageKey": null
-                              }
-                            ],
-                            "storageKey": null
-                          },
-                          (v6/*: any*/)
-                        ],
-                        "type": "AutomationTask",
-                        "abstractKey": null
-                      }
+                      (v5/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -419,50 +417,7 @@ return {
                     "plural": false,
                     "selections": [
                       (v2/*: any*/),
-                      {
-                        "kind": "InlineFragment",
-                        "selections": [
-                          (v3/*: any*/),
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "TaskTaskRelationConnection",
-                            "kind": "LinkedField",
-                            "name": "parents",
-                            "plural": false,
-                            "selections": [
-                              {
-                                "alias": null,
-                                "args": null,
-                                "concreteType": "TaskTaskRelationEdge",
-                                "kind": "LinkedField",
-                                "name": "edges",
-                                "plural": true,
-                                "selections": [
-                                  {
-                                    "alias": null,
-                                    "args": null,
-                                    "concreteType": "TaskTaskRelation",
-                                    "kind": "LinkedField",
-                                    "name": "node",
-                                    "plural": false,
-                                    "selections": [
-                                      (v5/*: any*/),
-                                      (v3/*: any*/)
-                                    ],
-                                    "storageKey": null
-                                  }
-                                ],
-                                "storageKey": null
-                              }
-                            ],
-                            "storageKey": null
-                          },
-                          (v6/*: any*/)
-                        ],
-                        "type": "AutomationTask",
-                        "abstractKey": null
-                      },
+                      (v5/*: any*/),
                       {
                         "kind": "InlineFragment",
                         "selections": [
@@ -486,12 +441,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "b4be86f04fc52bc398defc148589a9a7",
+    "cacheID": "1a077b4a118aa6a21bd48864475b42e8",
     "id": null,
     "metadata": {},
     "name": "MySolutionsQuery",
     "operationKind": "query",
-    "text": "query MySolutionsQuery(\n  $id: [ID!]\n) {\n  nodes(id_in: $id) {\n    result {\n      edges {\n        node {\n          __typename\n          ... on AutomationTask {\n            id\n            parents {\n              edges {\n                node {\n                  parent {\n                    id\n                    created\n                    title\n                    description\n                    model_type\n                    swept_arguments\n                    notes\n                    argument_lists {\n                      k\n                      v\n                    }\n                  }\n                  id\n                }\n              }\n            }\n            inversion_solution {\n              id\n              mfd_table_id\n              meta {\n                k\n                v\n              }\n              tables {\n                table_id\n                table_type\n              }\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query MySolutionsQuery(\n  $id: [ID!]\n) {\n  nodes(id_in: $id) {\n    result {\n      edges {\n        node {\n          __typename\n          ... on AutomationTask {\n            id\n            parents {\n              edges {\n                node {\n                  parent {\n                    id\n                    created\n                    title\n                    description\n                    model_type\n                    swept_arguments\n                    notes\n                    argument_lists {\n                      k\n                      v\n                    }\n                  }\n                }\n              }\n            }\n            inversion_solution {\n              id\n              mfd_table_id\n              meta {\n                k\n                v\n              }\n              tables {\n                table_id\n                table_type\n              }\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();

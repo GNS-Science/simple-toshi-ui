@@ -961,9 +961,7 @@ enum TaskSubType {
   REPORT
 }
 
-type TaskTaskRelation implements Node {
-  """The ID of the object."""
-  id: ID!
+type TaskTaskRelation {
   parent: GeneralTask
   child: ChildTaskUnion
   parent_id: String
