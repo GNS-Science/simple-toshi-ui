@@ -175,4 +175,28 @@ export const diagnosticReportViewOptions: SolutionDiagnosticsOption[] = [
     imgHght: 600,
     imgWdth: 500,
   },
+  //solution_report/resources/paleo_rate_scatter.pngg #Slip Rate (Scatter)
+  {
+    viewType: ViewTypeEnum.Image,
+    displayName: 'Paleo Fit',
+    finalPath: 'paleo_rate_scatter.png',
+    imgHght: 600,
+    imgWdth: 500,
+  },
+  //solution_report/resources/misift_progress_MAD.png #Slip Rate (Scatter)
+  {
+    viewType: ViewTypeEnum.Image,
+    displayName: 'Misfit Progress',
+    finalPath: 'misift_progress_MAD.png',
+    imgHght: 600,
+    imgWdth: 500,
+  },
+  //solution_report/resources/misift_progress_weights.png #Slip Rate (Scatter)
+  {
+    viewType: ViewTypeEnum.Image,
+    displayName: 'Re-Weighting',
+    finalPath: 'misift_progress_weights.png',
+    imgHght: 600,
+    imgWdth: 500,
+  },
 ];
