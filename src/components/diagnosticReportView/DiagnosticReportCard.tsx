@@ -154,7 +154,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   useEffect(() => {
     window.addEventListener('keyup', hotkeyHandler);
     return () => window.removeEventListener('keyup', hotkeyHandler);
-  }, [currentImage]);
+  });
 
   if (!automationTasks[currentImage]) {
     return <Typography> There are no valid reports to show. </Typography>;
