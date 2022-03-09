@@ -187,7 +187,7 @@ export const diagnosticReportViewOptions: SolutionDiagnosticsOption[] = [
   {
     viewType: ViewTypeEnum.Image,
     displayName: 'Misfit Progress',
-    finalPath: 'misfit_progress_MAD.png',
+    finalPath: 'misift_progress_MAD.png',
     imgHght: 600,
     imgWdth: 500,
   },
@@ -195,7 +195,7 @@ export const diagnosticReportViewOptions: SolutionDiagnosticsOption[] = [
   {
     viewType: ViewTypeEnum.Image,
     displayName: 'Re-Weighting',
-    finalPath: 'misfit_progress_weights.png',
+    finalPath: 'misift_progress_weights.png',
     imgHght: 600,
     imgWdth: 500,
   },
