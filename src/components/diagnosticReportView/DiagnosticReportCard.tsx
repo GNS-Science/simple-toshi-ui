@@ -162,10 +162,6 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
     return <Typography> There are no valid reports to show. </Typography>;
   }
 
-  if (!automationTasks[currentImage]) {
-    return <Typography> There are no valid reports to show. </Typography>;
-  }
-
   const renderTab = () => {
     switch (currentTab) {
       default:
