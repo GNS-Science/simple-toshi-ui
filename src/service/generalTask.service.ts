@@ -81,7 +81,6 @@ export const validateSubtask = (data: InversionSolutionDiagnosticContainerQueryR
 export const validateChildTasks = (data: GeneralTaskChildrenTabQueryResponse): ValidatedChildren => {
   const childTasks = data?.node?.children?.edges?.map((e) => e?.node?.child);
   const validatedChildTasks: ValidatedChildren = { data: [] };
-
   childTasks?.map((task) => {
     if (task && task.__typename !== '%other') {
       validatedChildTasks.data?.push(task);
@@ -93,7 +92,6 @@ export const validateChildTasks = (data: GeneralTaskChildrenTabQueryResponse): V
 
 export const getChildTaskIdArray = (filteredChildren: ValidatedChildren): string[] => {
   const idArray: string[] = [];
-
   if (filteredChildren.data && filteredChildren.data.length <= maxLength) {
     filteredChildren.data?.map((task) => {
       idArray.push(task.id);
