@@ -181,8 +181,13 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
             options={getOptions()}
             style={{ width: 500, marginLeft: 16 }}
             renderInput={(params) => <TextField {...params} label="Locations" variant="standard" />}
-            onOpen={() => setDisableHotkey && setDisableHotkey(true)}
-            onClose={() => setDisableHotkey && setDisableHotkey(false)}
+            blurOnSelect={true}
+            onFocus={() => {
+              setDisableHotkey && setDisableHotkey(true);
+            }}
+            onBlur={() => {
+              setDisableHotkey && setDisableHotkey(false);
+            }}
             limitTags={1}
           />
           <SelectControl name="Radius" options={radiiOptions} setOptions={setRadiiSelection} />
