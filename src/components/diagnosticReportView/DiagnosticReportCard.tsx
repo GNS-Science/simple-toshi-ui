@@ -125,7 +125,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       }
       setFilteredMeta(metaList);
     }
-  }, [currentImage]);
+  }, [automationTasks, currentImage]);
 
   const nextImage = () => {
     if (currentImage < automationTasks.length - 1) {
@@ -147,14 +147,16 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   };
 
   const hotkeyHandler = (event: KeyboardEvent) => {
-    if (event.key === '>' || event.key === '.' || event.key === 'ArrowRight') nextImage();
-    if (event.key === '<' || event.key === ',' || event.key === 'ArrowLeft') prevImage();
+    if (disableHotkey === false) {
+      if (event.key === '>' || event.key === '.' || event.key === 'ArrowRight') nextImage();
+      if (event.key === '<' || event.key === ',' || event.key === 'ArrowLeft') prevImage();
+    }
   };
 
   useEffect(() => {
     window.addEventListener('keyup', hotkeyHandler);
     return () => window.removeEventListener('keyup', hotkeyHandler);
-  }, [currentImage]);
+  });
 
   if (!automationTasks[currentImage]) {
     return <Typography> There are no valid reports to show. </Typography>;
@@ -225,7 +227,10 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       case 5:
         return (
           <DiagnosticReportTabPanel value={currentTab} index={5}>
-            <SolutionAnalysisTab id={automationTasks[currentImage].inversion_solution.id} />
+            <SolutionAnalysisTab
+              id={automationTasks[currentImage].inversion_solution.id}
+              setDisableHotkey={setDisableHotkey}
+            />
           </DiagnosticReportTabPanel>
         );
     }

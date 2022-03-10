@@ -1,7 +1,13 @@
+import * as mathjs from 'mathjs';
+
 import { InversionSolutionHazardChartsQueryResponse } from '../components/inversionSolution/__generated__/InversionSolutionHazardChartsQuery.graphql';
 import { XY } from '../interfaces/common';
-import { HazardTableFilteredData, HazardTableOptions } from '../interfaces/inversionSolutions';
-import * as mathjs from 'mathjs';
+import {
+  HazardTableFilteredData,
+  HazardTableOptions,
+  RowData,
+  SolutionAnalysisGeojsonFeature,
+} from '../interfaces/inversionSolutions';
 
 const minXBound = parseFloat(process.env.REACT_APP_MIN_X_BOUND ?? '0');
 const minYBound = 1e-5;
@@ -145,4 +151,41 @@ export const getSpectralAccelerationData = (
   });
 
   return dataSet;
+};
+
+export const mapMFDcurveColors = (curves: string[]): Record<string, string> => {
+  const curveColors: Record<string, string> = {};
+  curves.map((value) => {
+    if (value.includes('totalTargetGR')) {
+      curveColors[value] = 'orange';
+    } else if (value.includes('trulyOffFaultMFD')) {
+      curveColors[value] = 'steelblue';
+    } else if (value.includes('targetOnFaultSupraSeisMFD')) {
+      curveColors[value] = 'lightgray';
+    } else if (value.includes('totalSubSeismoOnFaultMFD')) {
+      curveColors[value] = 'black';
+    } else if (value.includes('solutionMFD')) {
+      curveColors[value] = 'red';
+    } else {
+      curveColors[value] = 'yellow';
+    }
+  });
+  return curveColors;
+};
+
+export const generateSolutionAnalysisTable = (data: string): RowData[] => {
+  const dataParsed = JSON.parse(data);
+  const rows: RowData[] = [];
+  dataParsed.features.map((feature: SolutionAnalysisGeojsonFeature) => {
+    rows.push({
+      id: feature.id,
+      name: feature.properties.fault_name,
+      maxMag: mathjs.round(feature.properties['magnitude.max'], 1),
+      minMag: mathjs.round(feature.properties['magnitude.min'], 1),
+      maxRate: Number(Number(feature.properties['annual_rate.max']).toPrecision(3)).toExponential(),
+      minRate: Number(Number(feature.properties['annual_rate.min']).toPrecision(3)).toExponential(),
+      slipRate: mathjs.round(feature.properties.slip_rate, 1),
+    });
+  });
+  return rows;
 };
