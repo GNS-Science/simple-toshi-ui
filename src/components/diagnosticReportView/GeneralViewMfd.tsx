@@ -40,7 +40,7 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({
 
   useEffect(() => {
     parentWidth * 0.035 >= 18 ? setHeadingSize(18) : setHeadingSize(parentWidth * 0.035);
-  });
+  }, [parentWidth]);
 
   if (!rows) {
     return <></>;

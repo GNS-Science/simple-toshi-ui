@@ -95,7 +95,7 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
         minMagnitude: 5.0,
       });
     }
-  }, [isV2]);
+  }, [config_type, rows, isV2]);
 
   useEffect(() => {
     const selections: string[] = [];

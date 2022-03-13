@@ -35,7 +35,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({ options, selected, setOptions
 
   useEffect(() => {
     if (selected.length) setSelectedItems(selected);
-  }, []);
+  }, [selected]);
 
   const handleChange = (event: SelectChangeEvent<string[]>) => {
     setSelectedItems(event.target.value as string[]);

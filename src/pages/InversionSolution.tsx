@@ -64,14 +64,6 @@ const InversionSolution: React.FC = () => {
     }
   }, [tab]);
 
-  if (!data?.node) {
-    return (
-      <Typography variant="h5" gutterBottom>
-        File ID Not Found
-      </Typography>
-    );
-  }
-
   const ruptureSetId = data?.node?.meta?.filter((kv) => kv?.k == 'rupture_set_file_id')[0]?.v;
 
   const tables = data.node?.tables;
@@ -131,6 +123,14 @@ const InversionSolution: React.FC = () => {
         );
     }
   };
+
+  if (!data?.node) {
+    return (
+      <Typography variant="h5" gutterBottom>
+        File ID Not Found
+      </Typography>
+    );
+  }
 
   return (
     <Root>

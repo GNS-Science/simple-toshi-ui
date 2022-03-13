@@ -101,7 +101,7 @@ const Find: React.FC = () => {
     if (id) {
       loadQuery({ id });
     }
-  }, [id]);
+  }, [loadQuery, id]);
 
   return (
     <Root>
