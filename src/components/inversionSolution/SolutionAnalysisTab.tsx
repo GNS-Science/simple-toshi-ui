@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
+import React, { useState, useEffect, Dispatch, SetStateAction, useCallback } from 'react';
 import {
   Alert,
   Autocomplete,
@@ -79,51 +79,43 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
   const [disableFetch, setDisableFetch] = useState<boolean>(false);
   const [inputValue, setInputValue] = React.useState('');
 
-  useEffect(() => {
-    const filteredLocations = locationOptions.filter((location) => locationSelections.includes(location.name));
-    const filteredLocationIDs: string[] = [];
-    filteredLocations.map((location) => {
-      filteredLocationIDs.push(location.id);
-    });
-    setLocationIDs(filteredLocationIDs);
-  }, [locationSelections]);
-
-  useEffect(() => {
-    setDisableFetch(false);
-  }, [locationSelections, radiiSelection, magRange, rateRange]);
-
-  useEffect(() => {
-    locationSelections.length && radiiSelection.length && getGeoJson();
-  }, [id]);
-
-  useEffect(() => {
-    solvisApiService.getLocationList().then((response) => {
-      setLocationOptions(response.data);
-    });
-
-    solvisApiService.getRadiiList().then((response) => {
-      const radii = response.data.radii;
-      const radiiFormatted = radii.map((radius: number) => `${radius / 1000}km`);
-      setRadiiOptions(radiiFormatted);
-    });
-  }, []);
-
-  const getOptions = (): string[] => {
-    const locations: string[] = [];
-    locationOptions.map((locationOption) => {
-      locations.push(locationOption.name);
-    });
-    locations.sort();
-    return locations;
-  };
-
-  const radiiInKm = () => {
+  const radiiInKm = useCallback(() => {
     if (radiiSelection === '100km') {
       return radiiSelection.slice(0, 3);
     } else {
       return radiiSelection.slice(0, 2);
     }
-  };
+  }, [radiiSelection]);
+
+  const getGeoJsonCallback = useCallback(() => {
+    setShowLoading(true);
+    const locationSelectionsString = locationIDs.join('%2C');
+    solvisApiService
+      .getSolutionAnalysis(id, locationSelectionsString, radiiInKm(), magRange, rateRange)
+      .then((response) => {
+        setShowLoading(false);
+        setShowLoading(false);
+        if (response.data.error_message) {
+          setErrorMessage(response.data.error_message);
+        } else {
+          setErrorMessage(null);
+        }
+        setTableData(response.data.ruptures);
+        setRupturesData(JSON.parse(response.data.ruptures) as GeoJsonObject);
+        setLocationsData(JSON.parse(response.data.locations) as GeoJsonObject);
+        setDisableFetch(true);
+      })
+      .catch((error: AxiosError) => {
+        if (error.response) {
+          setErrorMessage(`Error: ${error.response.status} ${error.response.data.message}`);
+        } else if (error.request) {
+          setErrorMessage(`Error: request failed`);
+        } else {
+          setErrorMessage(`Error: ${error.message}`);
+        }
+        setShowLoading(false);
+      });
+  }, [setShowLoading, locationIDs, id, magRange, radiiInKm, rateRange]);
 
   const getGeoJson = (): void => {
     setShowLoading(true);
@@ -153,6 +145,44 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
         }
         setShowLoading(false);
       });
+  };
+
+  useEffect(() => {
+    const filteredLocations = locationOptions.filter((location) => locationSelections.includes(location.name));
+    const filteredLocationIDs: string[] = [];
+    filteredLocations.map((location) => {
+      filteredLocationIDs.push(location.id);
+    });
+    setLocationIDs(filteredLocationIDs);
+  }, [locationOptions, locationSelections]);
+
+  useEffect(() => {
+    setDisableFetch(false);
+  }, [locationSelections, radiiSelection, magRange, rateRange]);
+
+  useEffect(() => {
+    locationSelections.length && radiiSelection.length && getGeoJsonCallback();
+  }, [getGeoJsonCallback, locationSelections, radiiSelection, id]);
+
+  useEffect(() => {
+    solvisApiService.getLocationList().then((response) => {
+      setLocationOptions(response.data);
+    });
+
+    solvisApiService.getRadiiList().then((response) => {
+      const radii = response.data.radii;
+      const radiiFormatted = radii.map((radius: number) => `${radius / 1000}km`);
+      setRadiiOptions(radiiFormatted);
+    });
+  }, []);
+
+  const getOptions = (): string[] => {
+    const locations: string[] = [];
+    locationOptions.map((locationOption) => {
+      locations.push(locationOption.name);
+    });
+    locations.sort();
+    return locations;
   };
 
   const rateLabelFormat = (value: number): string => {
