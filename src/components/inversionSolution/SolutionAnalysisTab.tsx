@@ -2,15 +2,18 @@
 import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import {
   Alert,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
   Autocomplete,
   Button,
-  Card,
   CircularProgress,
   FormControlLabel,
   Switch,
   TextField,
   Typography,
 } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { styled } from '@mui/styles';
 import { LatLngExpression } from 'leaflet';
 import { GeoJsonObject } from 'geojson';
@@ -24,13 +27,18 @@ import { solvisApiService } from '../../service/api';
 import SolutionAnalysisTable from './SolutionAnalysisTable';
 import RangeSliderWithInputs from '../common/RangeSliderWithInputs';
 
-const FloatingCard = styled(Card)({
-  zIndex: 401,
+const StyledAccordion = styled(Accordion)({
   padding: 20,
   disply: 'flex',
   justifyContent: 'center',
-  left: '3%',
-  top: '10%',
+  alignItems: 'center',
+});
+
+const StyledAccordionDetails = styled(AccordionDetails)({
+  padding: 20,
+  disply: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 });
 
 const ControlsBar = styled('div')({
@@ -166,60 +174,67 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
   return (
     <>
       {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
-      <FloatingCard>
-        <ControlsBar>
-          <Autocomplete
-            multiple
-            value={locationSelections}
-            onChange={(event: any, newValue: string[] | null) => {
-              setLocationSelections(newValue as string[]);
-            }}
-            inputValue={inputValue}
-            onInputChange={(event, newInputValue) => {
-              setInputValue(newInputValue);
-            }}
-            options={getOptions()}
-            style={{ width: 500, marginLeft: 16 }}
-            renderInput={(params) => <TextField {...params} label="Locations" variant="standard" />}
-            blurOnSelect={true}
-            onFocus={() => {
-              setDisableHotkey && setDisableHotkey(true);
-            }}
-            onBlur={() => {
-              setDisableHotkey && setDisableHotkey(false);
-            }}
-            limitTags={1}
-          />
-          <SelectControl name="Radius" options={radiiOptions} setOptions={setRadiiSelection} />
-          <FormControlLabel control={<Switch defaultChecked onChange={handleSwitchChange} />} label="Show Location" />
-          {showLoading ? (
-            <CircularProgress />
-          ) : (
-            <Button variant="outlined" onClick={getGeoJson} disabled={disableFetch}>
-              Fetch
-            </Button>
-          )}
-        </ControlsBar>
-        <ControlsBar>
-          <RangeSliderWithInputs
-            label="Magtitude Range"
-            inputProps={{ step: 0.1, min: 5, max: 10, type: 'number' }}
-            valuesRange={magRange}
-            setValues={setMagRange}
-          />
-          <RangeSliderWithInputs
-            label="Rate Range"
-            inputProps={{ step: 1, min: -20, max: 0, type: 'number' }}
-            valuesRange={rateRange}
-            setValues={setRateRange}
-            valueLabelFormat={rateLabelFormat}
-          />
-        </ControlsBar>
-        <Typography sx={{ padding: '10px' }}>
-          Locations: {locationSelections.join(', ')}, Mag Range: {magRange[0]} - {magRange[1]}, Rate Range:{' '}
-          {`1e${rateRange[0]} to 1e${rateRange[1]}`}
-        </Typography>
-      </FloatingCard>
+      <StyledAccordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
+          <Typography sx={{ padding: '10px' }}>
+            {' '}
+            <strong>Locations:</strong> {locationSelections.length > 0 ? locationSelections.join(', ') : 'None'}{' '}
+            <strong>Radii: </strong>
+            {radiiSelection || 'None'} <strong>Mag Range:</strong> {magRange[0]} - {magRange[1]}{' '}
+            <strong>Rate Range:</strong> {`1e${rateRange[0]} to 1e${rateRange[1]}`}
+          </Typography>
+        </AccordionSummary>
+        <StyledAccordionDetails>
+          <ControlsBar>
+            <Autocomplete
+              multiple
+              value={locationSelections}
+              onChange={(event: any, newValue: string[] | null) => {
+                setLocationSelections(newValue as string[]);
+              }}
+              inputValue={inputValue}
+              onInputChange={(event, newInputValue) => {
+                setInputValue(newInputValue);
+              }}
+              options={getOptions()}
+              style={{ width: 500, marginLeft: 16 }}
+              renderInput={(params) => <TextField {...params} label="Locations" variant="standard" />}
+              blurOnSelect={true}
+              onFocus={() => {
+                setDisableHotkey && setDisableHotkey(true);
+              }}
+              onBlur={() => {
+                setDisableHotkey && setDisableHotkey(false);
+              }}
+              limitTags={1}
+            />
+            <SelectControl name="Radius" options={radiiOptions} setOptions={setRadiiSelection} />
+            <FormControlLabel control={<Switch defaultChecked onChange={handleSwitchChange} />} label="Show Location" />
+            {showLoading ? (
+              <CircularProgress />
+            ) : (
+              <Button variant="outlined" onClick={getGeoJson} disabled={disableFetch}>
+                Fetch
+              </Button>
+            )}
+          </ControlsBar>
+          <ControlsBar>
+            <RangeSliderWithInputs
+              label="Magtitude Range"
+              inputProps={{ step: 0.1, min: 5, max: 10, type: 'number' }}
+              valuesRange={magRange}
+              setValues={setMagRange}
+            />
+            <RangeSliderWithInputs
+              label="Rate Range"
+              inputProps={{ step: 1, min: -20, max: 0, type: 'number' }}
+              valuesRange={rateRange}
+              setValues={setRateRange}
+              valueLabelFormat={rateLabelFormat}
+            />
+          </ControlsBar>
+        </StyledAccordionDetails>
+      </StyledAccordion>
       <MapContainer center={nz_centre} zoom={zoom} scrollWheelZoom={true} style={{ height: '700px' }}>
         <TileLayer url={provider_url} />
         {rupturesData && <GeoJSON key={Math.random()} data={rupturesData} style={myStyle} />}
