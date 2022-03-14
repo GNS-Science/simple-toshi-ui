@@ -144,7 +144,7 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
       {isV2 && (
         <>
           <ControlsBar>
-            <SelectControl name="Region" options={['TVZ', 'SansTVZ', 'Both']} setOptions={setRegion} />
+            <SelectControl name="Region" options={['Both', 'TVZ', 'SansTVZ']} setOptions={setRegion} />
             <MultiSelect name="MFD Curves" options={options} selected={mfdCurveNames} setOptions={setMfdCurveNames} />
           </ControlsBar>
         </>
