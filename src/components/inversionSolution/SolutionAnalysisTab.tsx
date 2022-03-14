@@ -117,36 +117,6 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
       });
   }, [setShowLoading, locationIDs, id, magRange, radiiInKm, rateRange]);
 
-  const getGeoJson = (): void => {
-    setShowLoading(true);
-    const locationSelectionsString = locationIDs.join('%2C');
-    solvisApiService
-      .getSolutionAnalysis(id, locationSelectionsString, radiiInKm(), magRange, rateRange)
-      .then((response) => {
-        setShowLoading(false);
-        setShowLoading(false);
-        if (response.data.error_message) {
-          setErrorMessage(response.data.error_message);
-        } else {
-          setErrorMessage(null);
-        }
-        setTableData(response.data.ruptures);
-        setRupturesData(JSON.parse(response.data.ruptures) as GeoJsonObject);
-        setLocationsData(JSON.parse(response.data.locations) as GeoJsonObject);
-        setDisableFetch(true);
-      })
-      .catch((error: AxiosError) => {
-        if (error.response) {
-          setErrorMessage(`Error: ${error.response.status} ${error.response.data.message}`);
-        } else if (error.request) {
-          setErrorMessage(`Error: request failed`);
-        } else {
-          setErrorMessage(`Error: ${error.message}`);
-        }
-        setShowLoading(false);
-      });
-  };
-
   useEffect(() => {
     const filteredLocations = locationOptions.filter((location) => locationSelections.includes(location.name));
     const filteredLocationIDs: string[] = [];
@@ -225,7 +195,7 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
           {showLoading ? (
             <CircularProgress />
           ) : (
-            <Button variant="outlined" onClick={getGeoJson} disabled={disableFetch}>
+            <Button variant="outlined" onClick={getGeoJsonCallback} disabled={disableFetch}>
               Fetch
             </Button>
           )}
