@@ -133,7 +133,7 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
         minMagnitude: 5,
       });
     }
-  }, [region, mfdCurvePaths]);
+  }, [isV2, mfdProps.colours, series, region, mfdCurvePaths]);
 
   return (
     <>

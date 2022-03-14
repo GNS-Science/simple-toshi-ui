@@ -71,7 +71,7 @@ const SolutionAnalysisPreview: React.FC = () => {
       filteredLocationIDs.push(location.id);
     });
     setLocationIDs(filteredLocationIDs);
-  }, [locationSelections]);
+  }, [locationOptions, locationSelections]);
 
   useEffect(() => {
     const locationListID = process.env.REACT_APP_ANALYSIS_LOC_LIST_ID as string;

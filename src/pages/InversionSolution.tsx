@@ -62,7 +62,7 @@ const InversionSolution: React.FC = () => {
     if (tab === undefined || tab === 'InversionSolutionDetailTab') {
       loadQuery({ id });
     }
-  }, [tab]);
+  }, [id, loadQuery, tab]);
 
   const ruptureSetId = data?.node?.meta?.filter((kv) => kv?.k == 'rupture_set_file_id')[0]?.v;
 
@@ -75,7 +75,7 @@ const InversionSolution: React.FC = () => {
     const V1table = tables?.find((table) => table?.table_type === 'MFD_CURVES');
     tables?.some((table) => table?.table_type === 'MFD_CURVES_V2') && setMfdIsV2(true);
     V2table ? setMfdTableId(V2table?.table_id || '') : setMfdTableId(V1table?.table_id || '');
-  }, [data]);
+  }, [tables, data]);
 
   const renderTab = () => {
     switch (tab) {

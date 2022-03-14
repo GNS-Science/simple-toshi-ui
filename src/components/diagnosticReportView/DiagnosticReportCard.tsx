@@ -105,11 +105,11 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
 
   useEffect(() => {
     if (reportTab !== 0) setCurrentTab(reportTab ?? 0);
-  }, []);
+  }, [reportTab]);
 
   useEffect(() => {
     setReportTab && setReportTab(currentTab);
-  }, [currentTab]);
+  }, [setReportTab, currentTab]);
 
   useEffect(() => {
     if (automationTasks[currentImage] && automationTasks[currentImage].inversion_solution.tables) {
@@ -125,7 +125,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       }
       setFilteredMeta(metaList);
     }
-  }, [automationTasks, currentImage]);
+  }, [sweepArgs, sweepList, automationTasks, currentImage]);
 
   const nextImage = () => {
     if (currentImage < automationTasks.length - 1) {
