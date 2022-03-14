@@ -28,24 +28,21 @@ import SolutionAnalysisTable from './SolutionAnalysisTable';
 import RangeSliderWithInputs from '../common/RangeSliderWithInputs';
 
 const StyledAccordion = styled(Accordion)({
-  padding: 20,
   disply: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
 });
 
 const StyledAccordionDetails = styled(AccordionDetails)({
-  padding: 20,
   disply: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
 });
 
 const ControlsBar = styled('div')({
-  paddingTop: 10,
-  paddingBottom: 10,
   display: 'flex',
   alignItems: 'center',
+  justifyContent: 'center',
 });
 
 const myStyle = {
@@ -176,8 +173,7 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
       {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
       <StyledAccordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
-          <Typography sx={{ padding: '10px' }}>
-            {' '}
+          <Typography>
             <strong>Locations:</strong> {locationSelections.length > 0 ? locationSelections.join(', ') : 'None'}{' '}
             <strong>Radii: </strong>
             {radiiSelection || 'None'} <strong>Mag Range:</strong> {magRange[0]} - {magRange[1]}{' '}
@@ -241,7 +237,7 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
         {showLocation && locationsData && <GeoJSON key={Math.random()} data={locationsData} style={myStyle} />}
       </MapContainer>
       <ControlsBar>
-        <Button variant="contained" onClick={() => setShowTable((v) => !v)}>
+        <Button style={{ padding: 10, margin: 10 }} variant="contained" onClick={() => setShowTable((v) => !v)}>
           {showTable && rupturesData ? 'Hide Table' : 'Show Table'}
         </Button>
       </ControlsBar>
