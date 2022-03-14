@@ -53,6 +53,9 @@ const Root = styled('div')(() => ({
 const Info = styled(Typography)(() => ({
   display: 'flex',
   flexWrap: 'wrap',
+  alignItems: 'center',
+  flexDirection: 'row',
+  alignContent: 'space-between',
 }));
 
 const infoStyle = {
@@ -171,9 +174,9 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       if (v && 'tag' in JSON.parse(v.replaceAll("'", '"'))) {
         return (
           <Tooltip title={v}>
-            <span style={{ display: 'inline' }}>
+            <span style={{ display: 'inline-flex' }}>
               {JSON.parse(v.replaceAll("'", '"')).tag}
-              <InfoIcon sx={{ fontSize: 20, position: 'relative', top: 4, left: 2 }} color="disabled" />
+              <InfoIcon sx={{ fontSize: 20, position: 'relative', top: 1, left: 2 }} color="disabled" />
             </span>
           </Tooltip>
         );
