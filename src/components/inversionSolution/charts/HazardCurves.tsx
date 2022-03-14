@@ -2,7 +2,7 @@ import { Typography } from '@mui/material';
 import { LegendOrdinal } from '@visx/legend';
 import { scaleOrdinal } from '@visx/scale';
 import { AnimatedAxis, AnimatedLineSeries, Grid, Tooltip, XYChart } from '@visx/xychart';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { XY } from '../../../interfaces/common';
 import { HazardTableFilteredData } from '../../../interfaces/inversionSolutions';
 
@@ -32,7 +32,6 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
   location,
   timeSpan,
 }: HazardCurvesProps) => {
-  const colors = ['#000000', '#FE1100', '#73d629', '#ffd700', '#7fe5f0', '#003366', '#ff7f50', '#047806', '#4ca3dd'];
   const [currentColors, setCurrentColors] = useState<string[]>([]);
   const [headingSize, setHeadingSize] = useState<number>(0);
   const [subHeadingSize, setSubHeadingSize] = useState<number>(0);
@@ -42,11 +41,15 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
     parentWidth * 0.025 >= 15 ? setSubHeadingSize(15) : setSubHeadingSize(parentWidth * 0.025);
   }, [parentWidth]);
 
-  const curveColors: Record<string, string> = {};
+  const curveColors: Record<string, string> = useMemo(() => {
+    const colors = ['#000000', '#FE1100', '#73d629', '#ffd700', '#7fe5f0', '#003366', '#ff7f50', '#047806', '#4ca3dd'];
+    const currentColors: Record<string, string> = {};
 
-  PGAoptions.map((value, index) => {
-    curveColors[value] = colors[index];
-  });
+    PGAoptions.map((value, index) => {
+      currentColors[value] = colors[index];
+    });
+    return currentColors;
+  }, [PGAoptions]);
 
   useEffect(() => {
     const currentColorsArray: string[] = [];
@@ -54,7 +57,7 @@ const HazardCurves: React.FC<HazardCurvesProps> = ({
       currentColorsArray.push(curveColors[value]);
     });
     setCurrentColors(currentColorsArray);
-  }, [PGA]);
+  }, [curveColors, PGA]);
 
   const ordinalColorScale = scaleOrdinal({
     domain: POE === 'None' ? [...PGA] : [...PGA, `PoE ${POE}`],
