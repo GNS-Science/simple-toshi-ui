@@ -23,6 +23,7 @@ const SolutionAnalysisTable: React.FC<SolutionAnalysisTableProps> = ({ id, data 
 
   const handler = (event: React.KeyboardEvent<HTMLDivElement>) => {
     event.nativeEvent.stopImmediatePropagation();
+    event.nativeEvent.stopPropagation();
   };
 
   useEffect(() => {
@@ -35,6 +36,9 @@ const SolutionAnalysisTable: React.FC<SolutionAnalysisTableProps> = ({ id, data 
   return (
     <div
       onKeyDown={(e) => {
+        handler(e);
+      }}
+      onKeyUp={(e) => {
         handler(e);
       }}
     >
