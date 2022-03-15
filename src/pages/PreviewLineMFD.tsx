@@ -25,36 +25,33 @@ const PreviewMFD: React.FC = () => {
   }, [height, margin.bottom, margin.left, margin.right, margin.top, width]);
 
   useEffect(() => {
-    draw();
-  }, [supraData, subData]);
+    const draw = () => {
+      const svg = d3.select(ref.current);
+      // console.log('DATA', supraData);
 
-  const draw = () => {
-    const svg = d3.select(ref.current);
-    // console.log('DATA', supraData);
-
-    // X axis
-    // prettier-ignore
-    const x = d3.scaleLinear()
+      // X axis
+      // prettier-ignore
+      const x = d3.scaleLinear()
       .domain([5.0, 8.9])
       .range([margin.left, width]);
-    svg
-      .append('g')
-      .attr('transform', 'translate(0,' + height + ')')
-      .call(d3.axisBottom(x));
+      svg
+        .append('g')
+        .attr('transform', 'translate(0,' + height + ')')
+        .call(d3.axisBottom(x));
 
-    // Add Y axis
-    // prettier-ignore
-    const y = d3.scaleLog()
+      // Add Y axis
+      // prettier-ignore
+      const y = d3.scaleLog()
       .domain([1e-9, 0.2])
       .range([height, 0]);
-    svg
-      .append('g')
-      .attr('transform', 'translate(' + margin.left + ')')
-      .call(d3.axisLeft(y));
+      svg
+        .append('g')
+        .attr('transform', 'translate(' + margin.left + ')')
+        .call(d3.axisLeft(y));
 
-    // Add the supra line
-    // prettier-ignore
-    svg.append<SVGPathElement>('path')
+      // Add the supra line
+      // prettier-ignore
+      svg.append<SVGPathElement>('path')
       .datum(supraData)
       .attr('fill', 'none')
       .attr('stroke', 'steelblue')
@@ -64,9 +61,9 @@ const PreviewMFD: React.FC = () => {
           .y((d) => y(d.rate)),
       );
 
-    // Add line 2, subSeismo
-    // prettier-ignore
-    svg.append<SVGPathElement>('path')
+      // Add line 2, subSeismo
+      // prettier-ignore
+      svg.append<SVGPathElement>('path')
       .datum(subData)
       .attr('fill', 'none')
       .attr('stroke', 'orange')
@@ -76,16 +73,19 @@ const PreviewMFD: React.FC = () => {
           .y((d) => y(d.rate))
     );
 
-    // Handmade legend
-    const w0 = width - 100,
-      w1 = width - 80;
-    svg.append('circle').attr('cx', w0).attr('cy', 30).attr('r', 6).style('fill', 'orange');
-    svg.append('circle').attr('cx', w0).attr('cy', 60).attr('r', 6).style('fill', 'steelblue');
-    svg.append('text').attr('x', w1).attr('y', 36).text('sub seismogenic').style('font-size', '15px');
-    svg.attr('alignment-baseline', 'middle');
-    svg.append('text').attr('x', w1).attr('y', 66).text('supra seismogenic').style('font-size', '15px');
-    svg.attr('alignment-baseline', 'middle');
-  };
+      // Handmade legend
+      const w0 = width - 100,
+        w1 = width - 80;
+      svg.append('circle').attr('cx', w0).attr('cy', 30).attr('r', 6).style('fill', 'orange');
+      svg.append('circle').attr('cx', w0).attr('cy', 60).attr('r', 6).style('fill', 'steelblue');
+      svg.append('text').attr('x', w1).attr('y', 36).text('sub seismogenic').style('font-size', '15px');
+      svg.attr('alignment-baseline', 'middle');
+      svg.append('text').attr('x', w1).attr('y', 66).text('supra seismogenic').style('font-size', '15px');
+      svg.attr('alignment-baseline', 'middle');
+    };
+
+    draw();
+  }, [supraData, subData, height, margin.left, width]);
 
   return (
     <>
