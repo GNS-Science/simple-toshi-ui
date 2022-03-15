@@ -22,6 +22,9 @@ const Root = styled('div')(() => ({
     justifyContent: 'center',
     flexWrap: 'wrap',
     minHeight: '30vh',
+    '&>*:nth-child(-n+2)': {
+      flexGrow: 1,
+    },
   },
 
   [`& .${classes.image}`]: {
