@@ -171,8 +171,8 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
 
   const tagToolTip = (v: string | null) => {
     if (v) {
-      const cleanedJson = JSON.parse(v?.replaceAll("'", '"').replaceAll('False', 'false').replaceAll('True', 'true'));
       try {
+        const cleanedJson = JSON.parse(v?.replaceAll("'", '"').replaceAll('False', 'false').replaceAll('True', 'true'));
         if (v && 'tag' in cleanedJson) {
           return (
             <Tooltip title={v}>
