@@ -46,7 +46,7 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
     series.push(option.path);
   });
 
-  const [region, setRegion] = useState<string>('TVZ');
+  const [region, setRegion] = useState<string>('Both');
   const [mfdCurveNames, setMfdCurveNames] = useState<string[]>(options);
   const [mfdCurvePaths, setMfdCurvePaths] = useState<string[]>([]);
   const [mfdProps, setMfdProps] = useState<MfdProps>({ series: [], colours: [], maxMagnitude: 10.0, minMagnitude: 0 });
