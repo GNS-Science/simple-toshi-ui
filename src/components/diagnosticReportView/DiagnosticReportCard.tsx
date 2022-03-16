@@ -114,6 +114,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   const [currentTab, setCurrentTab] = useState<number>(0);
   const [hazardId, setHazardId] = useState<string>('');
   const [filteredMeta, setFilteredMeta] = useState<MetaArguments>([]);
+  const [tvzEnabled, setTvzEnabled] = useState<boolean>(true);
 
   useEffect(() => {
     setCurrentImage(0);
@@ -126,6 +127,18 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   useEffect(() => {
     setReportTab && setReportTab(currentTab);
   }, [currentTab]);
+
+  useEffect(() => {
+    if (automationTasks[currentImage]) {
+      const tvzValue = automationTasks[currentImage].inversion_solution?.meta?.filter(
+        (kv) => kv?.k && kv?.k === 'enable_tvz_mfd',
+      )[0]?.v;
+      if (tvzValue === 'False') {
+        console.log(tvzValue);
+        setTvzEnabled(false);
+      }
+    }
+  });
 
   useEffect(() => {
     if (automationTasks[currentImage] && automationTasks[currentImage].inversion_solution.tables) {
@@ -218,6 +231,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
               id={automationTasks[currentImage].inversion_solution.id}
               regionalViews={regionalViews}
               setRegionalViews={setRegionalViews}
+              tvzEnabled={tvzEnabled}
             />
           </DiagnosticReportTabPanel>
         );
