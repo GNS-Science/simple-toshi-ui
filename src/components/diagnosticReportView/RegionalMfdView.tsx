@@ -2,6 +2,7 @@ import { styled } from '@mui/material/styles';
 import buildUrl from 'build-url-ts';
 import React, { useEffect, useState } from 'react';
 import { RegionalSolutionMfdOption, regionalSolutionMfdOptions } from '../../constants/regionalSolutionMfd';
+import { SolutionMfdOption, solutionMfdOptions } from '../../constants/solutionMfd';
 import MultiSelect from '../common/MultiSelect';
 
 const PREFIX = 'RegionalMfdView';
@@ -30,17 +31,22 @@ const Root = styled('div')(() => ({
 
 interface RegionalMfdViewProps {
   id: string;
+  tvzEnabled: boolean;
   regionalViews: string[];
   setRegionalViews: (views: string[]) => void;
 }
 
 const RegionalMfdView: React.FC<RegionalMfdViewProps> = ({
   id,
+  tvzEnabled,
   regionalViews,
   setRegionalViews,
 }: RegionalMfdViewProps) => {
   const [regionalViewSelections, setRegionalViewSelections] = useState<RegionalSolutionMfdOption[]>([
     regionalSolutionMfdOptions[0],
+  ]);
+  const [nonRegionalViewSelections, setNonRegionalViewSelections] = useState<SolutionMfdOption[]>([
+    solutionMfdOptions[0],
   ]);
 
   useEffect(() => {
