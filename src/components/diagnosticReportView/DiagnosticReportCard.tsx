@@ -3,9 +3,12 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { Card, CardContent, Tooltip, Typography, Tabs, Tab, CircularProgress } from '@mui/material';
+import { Card, CardContent, Typography, Tabs, Tab, CircularProgress } from '@mui/material';
 import { IconButton } from '@mui/material';
+import InfoIcon from '@mui/icons-material/Info';
+import Tooltip from '@mui/material/Tooltip';
 
+// import json
 import FavouriteControls from '../common/FavouriteControls';
 import DiagnosticReportTabPanel from './DiagnosticReportTabPanel';
 import GeneralView from './GeneralView';
@@ -46,6 +49,19 @@ const Root = styled('div')(() => ({
     paddingRight: 70,
   },
 }));
+
+const Info = styled(Typography)(() => ({
+  display: 'flex',
+  flexWrap: 'wrap',
+  alignItems: 'center',
+  flexDirection: 'row',
+  alignContent: 'space-between',
+}));
+
+const infoStyle = {
+  padding: 0,
+  margin: 0,
+};
 
 interface DiagnosticReportCardProps {
   sweepArgs?: SweepArguments;
@@ -153,6 +169,25 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
     }
   };
 
+  const tagToolTip = (v: string | null) => {
+    try {
+      if (v && 'tag' in JSON.parse(v.replaceAll("'", '"'))) {
+        return (
+          <Tooltip title={v}>
+            <span style={{ display: 'inline-flex' }}>
+              {JSON.parse(v.replaceAll("'", '"')).tag}
+              <InfoIcon sx={{ fontSize: 20, position: 'relative', top: 1, left: 2 }} color="disabled" />
+            </span>
+          </Tooltip>
+        );
+      } else {
+        return <span>{v}</span>;
+      }
+    } catch {
+      return <span>{v}</span>;
+    }
+  };
+
   useEffect(() => {
     window.addEventListener('keyup', hotkeyHandler);
     return () => window.removeEventListener('keyup', hotkeyHandler);
@@ -244,13 +279,13 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             Inversion Solution {automationTasks[currentImage].inversion_solution.id}&nbsp;&nbsp;&nbsp;
             <Link to={`/InversionSolution/${automationTasks[currentImage].inversion_solution.id}`}>[more]</Link>
           </h4>
-          <Typography>
+          <Info>
             {filteredMeta.map((kv) => (
-              <span key={kv?.k}>
-                {kv?.k}: {kv?.v}, &nbsp;
-              </span>
+              <p style={infoStyle} key={kv?.k}>
+                <strong>{kv?.k}:</strong> {tagToolTip(kv?.v)} &nbsp;
+              </p>
             ))}
-          </Typography>
+          </Info>
           <div className={classes.buttonContainer}>
             <Tooltip title="use (<,) (>.) or arrow keys to navigate">
               <IconButton

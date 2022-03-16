@@ -22,6 +22,9 @@ const Root = styled('div')(() => ({
     justifyContent: 'center',
     flexWrap: 'wrap',
     minHeight: '30vh',
+    '&>*:nth-child(-n+2)': {
+      flexGrow: 1,
+    },
   },
 
   [`& .${classes.image}`]: {
@@ -33,10 +36,8 @@ const Root = styled('div')(() => ({
   [`& .${classes.card}`]: {
     padding: '0px',
     maxHeight: '80vh',
-    width: '25%',
+    width: '33%',
     objectFit: 'contain',
-    flexGrow: 3,
-    flexShrink: 4,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',

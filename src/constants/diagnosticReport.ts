@@ -63,6 +63,14 @@ export const diagnosticReportViewOptions: SolutionDiagnosticsOption[] = [
     imgHght: 600,
     imgWdth: 500,
   },
+  //solution_report/resources/sol_partic_m6_to_m7.png
+  {
+    viewType: ViewTypeEnum.Image,
+    displayName: 'Participation M6 to M7',
+    finalPath: 'sol_partic_m6_to_m7.png',
+    imgHght: 600,
+    imgWdth: 500,
+  },
   //solution_report/resources/sol_partic_m7_to_m8.png
   {
     viewType: ViewTypeEnum.Image,
@@ -175,7 +183,7 @@ export const diagnosticReportViewOptions: SolutionDiagnosticsOption[] = [
     imgHght: 600,
     imgWdth: 500,
   },
-  //solution_report/resources/paleo_rate_scatter.pngg #Slip Rate (Scatter)
+  //solution_report/resources/paleo_rate_scatter.png #Slip Rate (Scatter)
   {
     viewType: ViewTypeEnum.Image,
     displayName: 'Paleo Fit',
@@ -183,7 +191,7 @@ export const diagnosticReportViewOptions: SolutionDiagnosticsOption[] = [
     imgHght: 600,
     imgWdth: 500,
   },
-  //solution_report/resources/misift_progress_MAD.png #Slip Rate (Scatter)
+  //solution_report/resources/misift_progress_MAD.png
   {
     viewType: ViewTypeEnum.Image,
     displayName: 'Misfit Progress',
@@ -191,7 +199,7 @@ export const diagnosticReportViewOptions: SolutionDiagnosticsOption[] = [
     imgHght: 600,
     imgWdth: 500,
   },
-  //solution_report/resources/misift_progress_weights.png #Slip Rate (Scatter)
+  //solution_report/resources/misift_progress_weights.png
   {
     viewType: ViewTypeEnum.Image,
     displayName: 'Re-Weighting',
