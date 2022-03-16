@@ -72,7 +72,7 @@ const SweepArgumentFilter: React.FC<SweepArgumentFilterProps> = ({ argument, onC
           setSelectedItems([]);
         });
     }
-  }, []);
+  }, [argument?.k, isClipBoard, search]);
 
   return (
     <Root>
