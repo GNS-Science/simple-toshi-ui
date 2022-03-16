@@ -170,21 +170,24 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   };
 
   const tagToolTip = (v: string | null) => {
-    try {
-      if (v && 'tag' in JSON.parse(v.replaceAll("'", '"'))) {
-        return (
-          <Tooltip title={v}>
-            <span style={{ display: 'inline-flex' }}>
-              {JSON.parse(v.replaceAll("'", '"')).tag}
-              <InfoIcon sx={{ fontSize: 20, position: 'relative', top: 1, left: 2 }} color="disabled" />
-            </span>
-          </Tooltip>
-        );
-      } else {
+    if (v) {
+      try {
+        const cleanedJson = JSON.parse(v?.replaceAll("'", '"').replaceAll('False', 'false').replaceAll('True', 'true'));
+        if (v && 'tag' in cleanedJson) {
+          return (
+            <Tooltip title={v}>
+              <span style={{ display: 'inline-flex' }}>
+                {cleanedJson.tag}
+                <InfoIcon sx={{ fontSize: 20, position: 'relative', top: 1, left: 2 }} color="disabled" />
+              </span>
+            </Tooltip>
+          );
+        } else {
+          return <span>{v}</span>;
+        }
+      } catch {
         return <span>{v}</span>;
       }
-    } catch {
-      return <span>{v}</span>;
     }
   };
 
