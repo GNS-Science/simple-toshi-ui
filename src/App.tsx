@@ -28,6 +28,7 @@ import LocalStorageContext from './contexts/localStorage';
 import { ISFavouritesInstance } from './interfaces/localStorage';
 import MySolutions from './pages/MySolutions';
 import { regionalSolutionMfdOptions } from './constants/regionalSolutionMfd';
+import { solutionMfdOptions } from './constants/solutionMfd';
 import { diagnosticReportViewOptions } from './constants/diagnosticReport';
 import { mfdPlotOptions, namedFaultsOptions } from './constants/nameFaultsMfds';
 import Home, { homeQuery } from './pages/Home';
@@ -56,6 +57,10 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
   const [localStorageRegionalViews, setLocalStorageRegionalViews] = useLocalStorage<string[]>('regional-views', [
     regionalSolutionMfdOptions[0].displayName,
   ]);
+  const [localStorageNonRegionalViews, setLocalStorageNonRegionalViews] = useLocalStorage<string[]>(
+    'non-regional-views',
+    [solutionMfdOptions[0].displayName],
+  );
   const [localStorageGeneralViews, setLocalStorageGeneralViews] = useLocalStorage<string[]>('report-view-selections', [
     diagnosticReportViewOptions[0].displayName,
   ]);
@@ -85,6 +90,8 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
                 setISFavourites,
                 localStorageRegionalViews,
                 setLocalStorageRegionalViews,
+                localStorageNonRegionalViews,
+                setLocalStorageNonRegionalViews,
                 localStorageGeneralViews,
                 setLocalStorageGeneralViews,
                 localStorageNamedFaultsView,

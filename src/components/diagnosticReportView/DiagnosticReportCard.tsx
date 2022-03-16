@@ -76,6 +76,8 @@ interface DiagnosticReportCardProps {
   setNamedFaultsLocations: (selection: string[]) => void;
   regionalViews: string[];
   setRegionalViews: (views: string[]) => void;
+  nonRegionalViews: string[];
+  setNonRegionalViews: (views: string[]) => void;
   changeCurrentImage?: (index: number) => void;
   reportTab?: number;
   setReportTab?: (tab: number) => void;
@@ -100,6 +102,8 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   setNamedFaultsLocations,
   regionalViews,
   setRegionalViews,
+  nonRegionalViews,
+  setNonRegionalViews,
   changeCurrentImage,
   reportTab,
   setReportTab,
@@ -232,6 +236,8 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
               id={automationTasks[currentImage].inversion_solution.id}
               regionalViews={regionalViews}
               setRegionalViews={setRegionalViews}
+              nonRegionalViews={nonRegionalViews}
+              setNonRegionalViews={setNonRegionalViews}
               regional={regional}
             />
           </DiagnosticReportTabPanel>

@@ -34,6 +34,8 @@ interface RegionalMfdViewProps {
   regional: boolean;
   regionalViews: string[];
   setRegionalViews: (views: string[]) => void;
+  nonRegionalViews: string[];
+  setNonRegionalViews: (views: string[]) => void;
 }
 
 const RegionalMfdView: React.FC<RegionalMfdViewProps> = ({
@@ -41,6 +43,8 @@ const RegionalMfdView: React.FC<RegionalMfdViewProps> = ({
   regional,
   regionalViews,
   setRegionalViews,
+  nonRegionalViews,
+  setNonRegionalViews,
 }: RegionalMfdViewProps) => {
   const [regionalViewSelections, setRegionalViewSelections] = useState<RegionalSolutionMfdOption[]>([
     regionalSolutionMfdOptions[0],
@@ -58,10 +62,10 @@ const RegionalMfdView: React.FC<RegionalMfdViewProps> = ({
 
   useEffect(() => {
     const filtered = solutionMfdOptions.filter((option) => {
-      return regionalViews.includes(option.displayName);
+      return nonRegionalViews.includes(option.displayName);
     });
     setNonRegionalViewSelections(filtered);
-  }, [regionalViews]);
+  }, [nonRegionalViews]);
 
   const getRegionalMfdUrl = (id: string, finalPath: string): string => {
     return buildUrl(process.env.REACT_APP_REPORTS_URL, {
@@ -106,9 +110,9 @@ const RegionalMfdView: React.FC<RegionalMfdViewProps> = ({
       <Root>
         <MultiSelect
           name="Solution MFD"
-          selected={regionalViews}
+          selected={nonRegionalViews}
           options={solutionMfdDisplayNames}
-          setOptions={setRegionalViews}
+          setOptions={setNonRegionalViews}
         />
         <div className={classes.imageContainer}>
           {nonRegionalViewSelections.map((option) => (
