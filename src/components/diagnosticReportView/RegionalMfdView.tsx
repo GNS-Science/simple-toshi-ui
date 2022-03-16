@@ -31,14 +31,14 @@ const Root = styled('div')(() => ({
 
 interface RegionalMfdViewProps {
   id: string;
-  tvzEnabled: boolean;
+  regional: boolean;
   regionalViews: string[];
   setRegionalViews: (views: string[]) => void;
 }
 
 const RegionalMfdView: React.FC<RegionalMfdViewProps> = ({
   id,
-  tvzEnabled,
+  regional,
   regionalViews,
   setRegionalViews,
 }: RegionalMfdViewProps) => {
@@ -56,6 +56,13 @@ const RegionalMfdView: React.FC<RegionalMfdViewProps> = ({
     setRegionalViewSelections(filtered);
   }, [regionalViews]);
 
+  useEffect(() => {
+    const filtered = solutionMfdOptions.filter((option) => {
+      return regionalViews.includes(option.displayName);
+    });
+    setNonRegionalViewSelections(filtered);
+  }, [regionalViews]);
+
   const getRegionalMfdUrl = (id: string, finalPath: string): string => {
     return buildUrl(process.env.REACT_APP_REPORTS_URL, {
       path: `/opensha/DATA/${id}/solution_report/resources/${finalPath}`,
@@ -63,26 +70,58 @@ const RegionalMfdView: React.FC<RegionalMfdViewProps> = ({
   };
 
   const regionalSolutionMfdDisplayNames: string[] = [];
+  const solutionMfdDisplayNames: string[] = [];
 
   regionalSolutionMfdOptions.map((option) => {
     regionalSolutionMfdDisplayNames.push(option.displayName);
   });
 
-  return (
-    <Root>
-      <MultiSelect
-        name="Regional Solution MFD"
-        selected={regionalViews}
-        options={regionalSolutionMfdDisplayNames}
-        setOptions={setRegionalViews}
-      />
-      <div className={classes.imageContainer}>
-        {regionalViewSelections.map((option) => (
-          <img key={option.path} className={classes.image} src={getRegionalMfdUrl(id, option.path)} alt={option.path} />
-        ))}
-      </div>
-    </Root>
-  );
+  solutionMfdOptions.map((option) => {
+    solutionMfdDisplayNames.push(option.displayName);
+  });
+
+  if (regional) {
+    return (
+      <Root>
+        <MultiSelect
+          name="Regional Solution MFD"
+          selected={regionalViews}
+          options={regionalSolutionMfdDisplayNames}
+          setOptions={setRegionalViews}
+        />
+        <div className={classes.imageContainer}>
+          {regionalViewSelections.map((option) => (
+            <img
+              key={option.path}
+              className={classes.image}
+              src={getRegionalMfdUrl(id, option.path)}
+              alt={option.path}
+            />
+          ))}
+        </div>
+      </Root>
+    );
+  } else
+    return (
+      <Root>
+        <MultiSelect
+          name="Solution MFD"
+          selected={regionalViews}
+          options={solutionMfdDisplayNames}
+          setOptions={setRegionalViews}
+        />
+        <div className={classes.imageContainer}>
+          {nonRegionalViewSelections.map((option) => (
+            <img
+              key={option.path}
+              className={classes.image}
+              src={getRegionalMfdUrl(id, option.path)}
+              alt={option.path}
+            />
+          ))}
+        </div>
+      </Root>
+    );
 };
 
 export default RegionalMfdView;
