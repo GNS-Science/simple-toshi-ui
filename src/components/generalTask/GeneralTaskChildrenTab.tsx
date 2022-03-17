@@ -151,7 +151,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
           setOpenNotification(true);
         });
     }
-  }, []);
+  }, [childTasks, isClipBoard, search]);
 
   const handleChange = (event: SelectChangeEvent<string[]>) => {
     const newFilteredArguments = updateFilteredArguments(
