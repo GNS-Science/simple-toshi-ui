@@ -92,8 +92,8 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
       ];
     };
     if (POE !== 'None') {
-      const data = getPoE();
-      setPOEdata(data);
+      const POEdata = getPoE();
+      setPOEdata(POEdata);
       const SAplot = getSAdataCallback({
         data,
         location,
