@@ -28,13 +28,15 @@ import SolutionAnalysisTable from './SolutionAnalysisTable';
 import RangeSliderWithInputs from '../common/RangeSliderWithInputs';
 
 const StyledAccordion = styled(Accordion)({
-  disply: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
+  borderRadius: '1px',
+});
+
+const StyledAccordionSummary = styled(AccordionSummary)({
+  border: '1px solid #DBDBDB',
+  borderRadius: '1px',
 });
 
 const StyledAccordionDetails = styled(AccordionDetails)({
-  disply: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
 });
@@ -43,6 +45,7 @@ const ControlsBar = styled('div')({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  padding: '10px',
 });
 
 const myStyle = {
@@ -171,15 +174,15 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
   return (
     <>
       {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
-      <StyledAccordion>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
+      <StyledAccordion defaultExpanded={true}>
+        <StyledAccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
           <Typography>
             <strong>Locations:</strong> {locationSelections.length > 0 ? locationSelections.join(', ') : 'None'}{' '}
             <strong>Radii: </strong>
             {radiiSelection || 'None'} <strong>Mag Range:</strong> {magRange[0]} - {magRange[1]}{' '}
-            <strong>Rate Range:</strong> {`1e${rateRange[0]} to 1e${rateRange[1]}`}
+            <strong>Rate Range:</strong> {`1e${rateRange[0]} - 1e${rateRange[1]}`}
           </Typography>
-        </AccordionSummary>
+        </StyledAccordionSummary>
         <StyledAccordionDetails>
           <ControlsBar>
             <Autocomplete
