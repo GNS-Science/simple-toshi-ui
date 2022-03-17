@@ -143,7 +143,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
         setRegional(true);
       }
     }
-  }, [automationTasks]);
+  }, [currentImage, automationTasks]);
 
   useEffect(() => {
     if (automationTasks[currentImage] && automationTasks[currentImage].inversion_solution.tables) {
