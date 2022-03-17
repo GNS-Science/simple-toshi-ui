@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
+import React, { useState, useEffect, Dispatch, SetStateAction, useCallback } from 'react';
 import {
   Alert,
   Accordion,
@@ -87,53 +87,15 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
   const [disableFetch, setDisableFetch] = useState<boolean>(false);
   const [inputValue, setInputValue] = React.useState('');
 
-  useEffect(() => {
-    const filteredLocations = locationOptions.filter((location) => locationSelections.includes(location.name));
-    const filteredLocationIDs: string[] = [];
-    filteredLocations.map((location) => {
-      filteredLocationIDs.push(location.id);
-    });
-    setLocationIDs(filteredLocationIDs);
-  }, [locationSelections]);
-
-  useEffect(() => {
-    setDisableFetch(false);
-  }, [locationSelections, radiiSelection, magRange, rateRange]);
-
-  useEffect(() => {
-    locationSelections.length && radiiSelection.length && getGeoJson();
-  }, [id]);
-
-  useEffect(() => {
-    solvisApiService.getLocationList().then((response) => {
-      setLocationOptions(response.data);
-    });
-
-    solvisApiService.getRadiiList().then((response) => {
-      const radii = response.data.radii;
-      const radiiFormatted = radii.map((radius: number) => `${radius / 1000}km`);
-      setRadiiOptions(radiiFormatted);
-    });
-  }, []);
-
-  const getOptions = (): string[] => {
-    const locations: string[] = [];
-    locationOptions.map((locationOption) => {
-      locations.push(locationOption.name);
-    });
-    locations.sort();
-    return locations;
-  };
-
-  const radiiInKm = () => {
+  const radiiInKm = useCallback(() => {
     if (radiiSelection === '100km') {
       return radiiSelection.slice(0, 3);
     } else {
       return radiiSelection.slice(0, 2);
     }
-  };
+  }, [radiiSelection]);
 
-  const getGeoJson = (): void => {
+  const getGeoJson = useCallback(() => {
     setShowLoading(true);
     const locationSelectionsString = locationIDs.join('%2C');
     solvisApiService
@@ -161,6 +123,44 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
         }
         setShowLoading(false);
       });
+  }, [setShowLoading, locationIDs, id, magRange, radiiInKm, rateRange]);
+
+  useEffect(() => {
+    const filteredLocations = locationOptions.filter((location) => locationSelections.includes(location.name));
+    const filteredLocationIDs: string[] = [];
+    filteredLocations.map((location) => {
+      filteredLocationIDs.push(location.id);
+    });
+    setLocationIDs(filteredLocationIDs);
+  }, [locationOptions, locationSelections]);
+
+  useEffect(() => {
+    setDisableFetch(false);
+  }, [locationSelections, radiiSelection, magRange, rateRange]);
+
+  useEffect(() => {
+    locationSelections.length && radiiSelection.length && getGeoJson();
+  }, [getGeoJson, locationSelections, radiiSelection, id]);
+
+  useEffect(() => {
+    solvisApiService.getLocationList().then((response) => {
+      setLocationOptions(response.data);
+    });
+
+    solvisApiService.getRadiiList().then((response) => {
+      const radii = response.data.radii;
+      const radiiFormatted = radii.map((radius: number) => `${radius / 1000}km`);
+      setRadiiOptions(radiiFormatted);
+    });
+  }, []);
+
+  const getOptions = (): string[] => {
+    const locations: string[] = [];
+    locationOptions.map((locationOption) => {
+      locations.push(locationOption.name);
+    });
+    locations.sort();
+    return locations;
   };
 
   const rateLabelFormat = (value: number): string => {
