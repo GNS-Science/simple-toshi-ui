@@ -3,6 +3,8 @@ export interface LocalStorageContextInterface {
   setISFavourites: (newValue: ISFavouritesInstance) => void;
   localStorageRegionalViews: string[];
   setLocalStorageRegionalViews: (newValue: string[]) => void;
+  localStorageNonRegionalViews: string[];
+  setLocalStorageNonRegionalViews: (newValue: string[]) => void;
   localStorageGeneralViews: string[];
   setLocalStorageGeneralViews: (newValue: string[]) => void;
   localStorageNamedFaultsView: string;

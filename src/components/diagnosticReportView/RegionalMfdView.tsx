@@ -2,6 +2,7 @@ import { styled } from '@mui/material/styles';
 import buildUrl from 'build-url-ts';
 import React, { useEffect, useState } from 'react';
 import { RegionalSolutionMfdOption, regionalSolutionMfdOptions } from '../../constants/regionalSolutionMfd';
+import { SolutionMfdOption, solutionMfdOptions } from '../../constants/solutionMfd';
 import MultiSelect from '../common/MultiSelect';
 
 const PREFIX = 'RegionalMfdView';
@@ -30,17 +31,26 @@ const Root = styled('div')(() => ({
 
 interface RegionalMfdViewProps {
   id: string;
+  regional: boolean;
   regionalViews: string[];
   setRegionalViews: (views: string[]) => void;
+  nonRegionalViews: string[];
+  setNonRegionalViews: (views: string[]) => void;
 }
 
 const RegionalMfdView: React.FC<RegionalMfdViewProps> = ({
   id,
+  regional,
   regionalViews,
   setRegionalViews,
+  nonRegionalViews,
+  setNonRegionalViews,
 }: RegionalMfdViewProps) => {
   const [regionalViewSelections, setRegionalViewSelections] = useState<RegionalSolutionMfdOption[]>([
     regionalSolutionMfdOptions[0],
+  ]);
+  const [nonRegionalViewSelections, setNonRegionalViewSelections] = useState<SolutionMfdOption[]>([
+    solutionMfdOptions[0],
   ]);
 
   useEffect(() => {
@@ -50,6 +60,13 @@ const RegionalMfdView: React.FC<RegionalMfdViewProps> = ({
     setRegionalViewSelections(filtered);
   }, [regionalViews]);
 
+  useEffect(() => {
+    const filtered = solutionMfdOptions.filter((option) => {
+      return nonRegionalViews.includes(option.displayName);
+    });
+    setNonRegionalViewSelections(filtered);
+  }, [nonRegionalViews]);
+
   const getRegionalMfdUrl = (id: string, finalPath: string): string => {
     return buildUrl(process.env.REACT_APP_REPORTS_URL, {
       path: `/opensha/DATA/${id}/solution_report/resources/${finalPath}`,
@@ -57,26 +74,58 @@ const RegionalMfdView: React.FC<RegionalMfdViewProps> = ({
   };
 
   const regionalSolutionMfdDisplayNames: string[] = [];
+  const solutionMfdDisplayNames: string[] = [];
 
   regionalSolutionMfdOptions.map((option) => {
     regionalSolutionMfdDisplayNames.push(option.displayName);
   });
 
-  return (
-    <Root>
-      <MultiSelect
-        name="Regional Solution MFD"
-        selected={regionalViews}
-        options={regionalSolutionMfdDisplayNames}
-        setOptions={setRegionalViews}
-      />
-      <div className={classes.imageContainer}>
-        {regionalViewSelections.map((option) => (
-          <img key={option.path} className={classes.image} src={getRegionalMfdUrl(id, option.path)} alt={option.path} />
-        ))}
-      </div>
-    </Root>
-  );
+  solutionMfdOptions.map((option) => {
+    solutionMfdDisplayNames.push(option.displayName);
+  });
+
+  if (regional) {
+    return (
+      <Root>
+        <MultiSelect
+          name="Regional Solution MFD"
+          selected={regionalViews}
+          options={regionalSolutionMfdDisplayNames}
+          setOptions={setRegionalViews}
+        />
+        <div className={classes.imageContainer}>
+          {regionalViewSelections.map((option) => (
+            <img
+              key={option.path}
+              className={classes.image}
+              src={getRegionalMfdUrl(id, option.path)}
+              alt={option.path}
+            />
+          ))}
+        </div>
+      </Root>
+    );
+  } else
+    return (
+      <Root>
+        <MultiSelect
+          name="Solution MFD"
+          selected={nonRegionalViews}
+          options={solutionMfdDisplayNames}
+          setOptions={setNonRegionalViews}
+        />
+        <div className={classes.imageContainer}>
+          {nonRegionalViewSelections.map((option) => (
+            <img
+              key={option.path}
+              className={classes.image}
+              src={getRegionalMfdUrl(id, option.path)}
+              alt={option.path}
+            />
+          ))}
+        </div>
+      </Root>
+    );
 };
 
 export default RegionalMfdView;

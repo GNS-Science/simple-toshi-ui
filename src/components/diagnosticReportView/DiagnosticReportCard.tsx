@@ -76,6 +76,8 @@ interface DiagnosticReportCardProps {
   setNamedFaultsLocations: (selection: string[]) => void;
   regionalViews: string[];
   setRegionalViews: (views: string[]) => void;
+  nonRegionalViews: string[];
+  setNonRegionalViews: (views: string[]) => void;
   changeCurrentImage?: (index: number) => void;
   reportTab?: number;
   setReportTab?: (tab: number) => void;
@@ -100,6 +102,8 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   setNamedFaultsLocations,
   regionalViews,
   setRegionalViews,
+  nonRegionalViews,
+  setNonRegionalViews,
   changeCurrentImage,
   reportTab,
   setReportTab,
@@ -114,6 +118,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   const [currentTab, setCurrentTab] = useState<number>(0);
   const [hazardId, setHazardId] = useState<string>('');
   const [filteredMeta, setFilteredMeta] = useState<MetaArguments>([]);
+  const [regional, setRegional] = useState<boolean>(true);
 
   useEffect(() => {
     setCurrentImage(0);
@@ -121,11 +126,24 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
 
   useEffect(() => {
     if (reportTab !== 0) setCurrentTab(reportTab ?? 0);
-  }, []);
+  }, [reportTab]);
 
   useEffect(() => {
     setReportTab && setReportTab(currentTab);
-  }, [currentTab]);
+  }, [setReportTab, currentTab]);
+
+  useEffect(() => {
+    if (automationTasks[currentImage]) {
+      const tvzValue = automationTasks[currentImage].inversion_solution?.meta?.filter(
+        (kv) => kv?.k && kv?.k === 'enable_tvz_mfd',
+      )[0]?.v;
+      if (tvzValue === 'False') {
+        setRegional(false);
+      } else if (tvzValue === 'True') {
+        setRegional(true);
+      }
+    }
+  }, [automationTasks]);
 
   useEffect(() => {
     if (automationTasks[currentImage] && automationTasks[currentImage].inversion_solution.tables) {
@@ -141,7 +159,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       }
       setFilteredMeta(metaList);
     }
-  }, [automationTasks, currentImage]);
+  }, [sweepArgs, sweepList, automationTasks, currentImage]);
 
   const nextImage = () => {
     if (currentImage < automationTasks.length - 1) {
@@ -221,6 +239,9 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
               id={automationTasks[currentImage].inversion_solution.id}
               regionalViews={regionalViews}
               setRegionalViews={setRegionalViews}
+              nonRegionalViews={nonRegionalViews}
+              setNonRegionalViews={setNonRegionalViews}
+              regional={regional}
             />
           </DiagnosticReportTabPanel>
         );
@@ -323,7 +344,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
           </div>
           <Tabs value={currentTab} onChange={handleTabChange}>
             <Tab label="General" id="simple-tab-0" disableFocusRipple />
-            <Tab label="Regional Solutions" id="simple-tab-1" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
+            <Tab label="MFD Solutions" id="simple-tab-1" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
             <Tab label="Named Faults" id="simple-tab-2" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
             <Tab label="Parent Faults" id="simple-tab-3" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
             <Tab label="Hazard Charts" id="simple-tab-4" disabled={!hazardId.length} disableFocusRipple />

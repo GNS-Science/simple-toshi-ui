@@ -7,6 +7,8 @@ const LocalStorageContext = createContext<LocalStorageContextInterface>({
   setISFavourites: noop,
   localStorageRegionalViews: [],
   setLocalStorageRegionalViews: noop,
+  localStorageNonRegionalViews: [],
+  setLocalStorageNonRegionalViews: noop,
   localStorageGeneralViews: [],
   setLocalStorageGeneralViews: noop,
   localStorageNamedFaultsView: '',

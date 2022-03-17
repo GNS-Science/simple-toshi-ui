@@ -32,6 +32,7 @@ import SweepArgumentFilter from './SweepArgumentFilter';
 import CommonModal from '../common/Modal/CommonModal';
 import { mfdPlotOptions, namedFaultsOptions } from '../../constants/nameFaultsMfds';
 import { regionalSolutionMfdOptions } from '../../constants/regionalSolutionMfd';
+import { solutionMfdOptions } from '../../constants/solutionMfd';
 import ControlsBar from '../common/ControlsBar';
 import { parentFaultsOptions, parentViewsOptions } from '../../constants/parentFault';
 
@@ -92,6 +93,8 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     setLocalStorageNamedFaultsLocations,
     localStorageRegionalViews,
     setLocalStorageRegionalViews,
+    localStorageNonRegionalViews,
+    setLocalStorageNonRegionalViews,
     localStorageParentFaultViews,
     setLocalStorageParentFaultViews,
     localStorageParentFault,
@@ -102,6 +105,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const [namedFaultsView, setNamedFaultsView] = useState<string>(mfdPlotOptions[0].displayName);
   const [namedFaultsLocations, setNamedFaultsLocations] = useState<string[]>([namedFaultsOptions[0].displayName]);
   const [regionalViews, setRegionalViews] = useState<string[]>([regionalSolutionMfdOptions[0].displayName]);
+  const [nonRegionalViews, setNonRegionalViews] = useState<string[]>([solutionMfdOptions[0].displayName]);
   const [reportTab, setReportTab] = useState<number>(0);
   const [parentFaultViews, setParentFaultViews] = useState<string[]>([parentViewsOptions[0].displayName]);
   const [parentFault, setParentFault] = useState<string | null>(parentFaultsOptions[0]);
@@ -172,6 +176,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     const namedFaultsViewOption: string = isClipBoard ? namedFaultsView : localStorageNamedFaultsView;
     const namedFaultsLocationsOption: string[] = isClipBoard ? namedFaultsLocations : localStorageNamedFaultsLocations;
     const regionalViewsOption: string[] = isClipBoard ? regionalViews : localStorageRegionalViews;
+    const nonRegionalViewsOption: string[] = isClipBoard ? nonRegionalViews : localStorageNonRegionalViews;
     const parentFaultOption: string = isClipBoard ? (parentFault as string) : (localStorageParentFault as string);
     const parentFaultViewsOption: string[] = isClipBoard ? parentFaultViews : localStorageParentFaultViews;
 
@@ -183,6 +188,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
       namedFaultsView: namedFaultsViewOption,
       namedFaultsLocations: namedFaultsLocationsOption,
       regionalViews: regionalViewsOption,
+      nonRegionalViews: nonRegionalViewsOption,
       reportTab,
       parentFault: parentFaultOption,
       parentFaultViews: parentFaultViewsOption,
@@ -302,6 +308,8 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
             setNamedFaultsLocations={isClipBoard ? setNamedFaultsLocations : setLocalStorageNamedFaultsLocations}
             regionalViews={isClipBoard ? regionalViews : localStorageRegionalViews}
             setRegionalViews={isClipBoard ? setRegionalViews : setLocalStorageRegionalViews}
+            nonRegionalViews={isClipBoard ? nonRegionalViews : localStorageNonRegionalViews}
+            setNonRegionalViews={isClipBoard ? setNonRegionalViews : setLocalStorageNonRegionalViews}
             reportTab={reportTab}
             setReportTab={setReportTab}
             parentFault={isClipBoard ? (parentFault as string) : (localStorageParentFault as string)}
