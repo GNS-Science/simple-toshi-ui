@@ -139,10 +139,6 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
   }, [locationSelections, radiiSelection, magRange, rateRange]);
 
   useEffect(() => {
-    locationSelections.length && radiiSelection.length && getGeoJson();
-  }, [getGeoJson, locationSelections, radiiSelection, id]);
-
-  useEffect(() => {
     solvisApiService.getLocationList().then((response) => {
       setLocationOptions(response.data);
     });
