@@ -45,7 +45,7 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
     const currentSeries: string[] = [];
 
     regionalizedMfdSeries.map((option) => {
-      series.push(option.path);
+      currentSeries.push(option.path);
     });
 
     return currentSeries;
