@@ -23,6 +23,7 @@ import HazardCurves from './charts/HazardCurves';
 import SpectralAccelerationChart from './charts/SpectralAccelerationChart';
 import { ParentSize } from '@visx/responsive';
 import { useReactToPrint } from 'react-to-print';
+import { CSVLink } from 'react-csv';
 
 interface InversionSolutionHazardChartsProps {
   id: string;
@@ -147,9 +148,24 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
     content: () => targetRef.current,
   });
 
+  const getCSVData = () => {
+    let xydata: XY[] = [];
+
+    for (const key in filteredData) {
+      xydata = xydata.concat(filteredData[key]);
+    }
+
+    return xydata;
+  };
+
+  useEffect(() => {
+    console.log(filteredData);
+  }, [filteredData]);
+
   return (
     <>
       <div style={{ width: '100%', padding: '1rem', display: 'flex', flexWrap: 'wrap' }}>
+        <CSVLink data={getCSVData()}>CSV</CSVLink>
         <SelectControl name="Location" options={options.location} setOptions={setLocation} />
         <MultiSelect name="PGA/SA Period" selected={PGA} options={options.PGA} setOptions={handleSetPGA} />
         <SelectControl name="Forecast Timespan" options={options.forecastTime} setOptions={setForecastTime} />
