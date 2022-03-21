@@ -20,6 +20,7 @@ interface GeneralViewMfdProps {
     | undefined;
   parentWidth: number;
   cumulative: boolean;
+  dialog: boolean;
   parentRef: HTMLDivElement | null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   resizeParent: (state: any) => void;
@@ -30,6 +31,7 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({
   meta,
   parentWidth,
   cumulative,
+  dialog,
 }: GeneralViewMfdProps) => {
   const data = useLazyLoadQuery<GeneralViewMfdQuery>(generalViewMfdQuery, { id: mfdTableId });
 
@@ -147,7 +149,7 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({
           })}
           orientation="left"
         />
-        <RectClipPath id="clip" x={50} y={-50} width={parentWidth} height={parentWidth * 0.75} />
+        {dialog && <RectClipPath id="clip" x={50} y={-50} width={parentWidth} height={parentWidth * 0.75} />}
         <Group clipPath="url(#clip)">
           {series.map((e, idx) => {
             return (

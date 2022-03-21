@@ -11,7 +11,7 @@ import Tooltip from '@mui/material/Tooltip';
 // import json
 import FavouriteControls from '../common/FavouriteControls';
 import DiagnosticReportTabPanel from './DiagnosticReportTabPanel';
-import GeneralView from './GeneralView';
+import { GeneralView } from './GeneralView';
 import NamedFaultsView from './NamedFaultsView';
 import RegionalMfdView from './RegionalMfdView';
 import InversionSolutionHazardCharts from '../inversionSolution/InversionSolutionHazardCharts';
