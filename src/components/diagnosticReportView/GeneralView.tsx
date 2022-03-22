@@ -106,4 +106,4 @@ const GeneralView: React.FC<GeneralViewProps> = ({
   );
 };
 
-export { GeneralView, Root, classes };
+export { GeneralView, classes };

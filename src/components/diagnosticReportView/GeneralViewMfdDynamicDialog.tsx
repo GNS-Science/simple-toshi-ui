@@ -3,7 +3,7 @@ import { SolutionDiagnosticsOption } from '../../interfaces/generaltask';
 import { Card, CircularProgress, Dialog, DialogContent } from '@mui/material';
 import { ParentSize } from '@visx/responsive';
 import GeneralViewMfd from './GeneralViewMfd';
-import { Root, classes } from './GeneralView';
+import { classes } from './GeneralView';
 
 interface GeneralViewMfdDynamicDialogProps {
   mfdTableId: string;
@@ -31,9 +31,9 @@ const GeneralViewMfdDynamicDialog: React.FC<GeneralViewMfdDynamicDialogProps> = 
   };
 
   return (
-    <Root>
-      <Card onClick={handleClickOpen} key={option.finalPath} className={classes.card}>
-        <div className={classes.image}>
+    <>
+      <Card className={classes.card}>
+        <div onClick={handleClickOpen} key={option.finalPath} className={classes.image}>
           <React.Suspense fallback={<CircularProgress />}>
             <ParentSize>
               {(parent) => (
@@ -42,7 +42,7 @@ const GeneralViewMfdDynamicDialog: React.FC<GeneralViewMfdDynamicDialogProps> = 
                   meta={meta}
                   parentWidth={parent.width}
                   parentRef={parent.ref}
-                  dialog={true}
+                  dialog={false}
                   cumulative={option.finalPath === 'mfd_plot_Total_MFD_cumulative.png'}
                   resizeParent={parent.resize}
                 />
@@ -56,7 +56,7 @@ const GeneralViewMfdDynamicDialog: React.FC<GeneralViewMfdDynamicDialogProps> = 
         maxWidth={'lg'}
         open={open}
         onClick={handleClose}
-        PaperProps={{ sx: { width: '60%', height: '100%' } }}
+        PaperProps={{ sx: { width: '120vh', height: '95vh' } }}
       >
         <DialogContent>
           <div className={classes.image}>
@@ -78,7 +78,7 @@ const GeneralViewMfdDynamicDialog: React.FC<GeneralViewMfdDynamicDialogProps> = 
           </div>
         </DialogContent>
       </Dialog>
-    </Root>
+    </>
   );
 };
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { SolutionDiagnosticsOption } from '../../interfaces/generaltask';
 import { Card, Dialog, DialogContent } from '@mui/material';
 import buildUrl from 'build-url-ts';
-import { Root, classes } from './GeneralView';
+import { classes } from './GeneralView';
 
 interface GeneralViewMfdStaticDialogProps {
   id: string;
@@ -27,7 +27,7 @@ const GeneralViewMfdStaticDialog: React.FC<GeneralViewMfdStaticDialogProps> = ({
   };
 
   return (
-    <Root>
+    <>
       <Card onClick={handleClickOpen} key={option.finalPath} className={classes.card}>
         <img
           key={option.finalPath}
@@ -53,14 +53,8 @@ const GeneralViewMfdStaticDialog: React.FC<GeneralViewMfdStaticDialogProps> = ({
           }}
         />
       </Card>
-      <Dialog
-        fullWidth={true}
-        maxWidth={'lg'}
-        open={open}
-        onClick={handleClose}
-        PaperProps={{ sx: { width: '60%', height: '100%' } }}
-      >
-        <DialogContent>
+      <Dialog fullWidth={true} maxWidth={'lg'} open={open} onClick={handleClose}>
+        <DialogContent style={{ objectFit: 'scale-down' }}>
           <Card key={option.finalPath} className={classes.card}>
             <img
               key={option.finalPath}
@@ -88,7 +82,7 @@ const GeneralViewMfdStaticDialog: React.FC<GeneralViewMfdStaticDialogProps> = ({
           </Card>
         </DialogContent>
       </Dialog>
-    </Root>
+    </>
   );
 };
 
