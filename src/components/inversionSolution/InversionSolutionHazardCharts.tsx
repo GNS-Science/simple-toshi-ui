@@ -5,6 +5,7 @@ import { graphql } from 'babel-plugin-relay/macro';
 import SelectControl from '../common/SelectControl';
 import { XY } from '../../interfaces/common';
 import {
+  creatCSVdata,
   cropCurves,
   filterMultipleCurves,
   getHazardTableOptions,
@@ -149,23 +150,13 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
   });
 
   const getCSVData = () => {
-    let xydata: XY[] = [];
-
-    for (const key in filteredData) {
-      xydata = xydata.concat(filteredData[key]);
-    }
-
-    return xydata;
+    const allCurves = filterMultipleCurves(options.PGA, data, location, forecastTime, gmpe, backgroundSeismicity);
+    return creatCSVdata(options.PGA, allCurves);
   };
-
-  useEffect(() => {
-    console.log(filteredData);
-  }, [filteredData]);
 
   return (
     <>
       <div style={{ width: '100%', padding: '1rem', display: 'flex', flexWrap: 'wrap' }}>
-        <CSVLink data={getCSVData()}>CSV</CSVLink>
         <SelectControl name="Location" options={options.location} setOptions={setLocation} />
         <MultiSelect name="PGA/SA Period" selected={PGA} options={options.PGA} setOptions={handleSetPGA} />
         <SelectControl name="Forecast Timespan" options={options.forecastTime} setOptions={setForecastTime} />
@@ -220,6 +211,9 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
             <Button variant="contained" onClick={handlePrint}>
               Print Figures
             </Button>
+            <CSVLink data={getCSVData()}>
+              <Button variant="contained">Download CSV</Button>
+            </CSVLink>
           </div>
         </Card>
       </Box>

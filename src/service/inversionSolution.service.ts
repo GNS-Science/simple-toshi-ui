@@ -189,3 +189,33 @@ export const generateSolutionAnalysisTable = (data: string): RowData[] => {
   });
   return rows;
 };
+
+export const creatCSVdata = (PGAoptions: string[], allCurves: HazardTableFilteredData): string[][] => {
+  const CSVdata: string[][] = [];
+  CSVdata[0] = getCSVheadings(PGAoptions);
+
+  allCurves.PGA.map((xy) => {
+    const row: string[] = [];
+    row.push(xy.x.toExponential());
+
+    for (const key in allCurves) {
+      const position = CSVdata[0].findIndex((acceleration) => acceleration.includes(key));
+      const currentPoint = allCurves[key].find((curve) => curve.x === xy.x);
+      row.splice(position, 0, (currentPoint?.y as number).toExponential());
+    }
+
+    CSVdata.push(row);
+  });
+
+  return CSVdata;
+};
+
+const getCSVheadings = (PGAoptions: string[]): string[] => {
+  const headings: string[] = [];
+  headings[0] = 'acceleration';
+  PGAoptions.map((item) => {
+    headings.push(`PoE(${item})`);
+  });
+
+  return headings;
+};
