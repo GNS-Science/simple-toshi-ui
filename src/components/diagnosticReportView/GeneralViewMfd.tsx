@@ -149,8 +149,14 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({
           })}
           orientation="left"
         />
-        {dialog && <RectClipPath id="clip" x={50} y={-50} width={parentWidth} height={parentWidth * 0.75} />}
-        <Group clipPath="url(#clip)">
+        <RectClipPath
+          id={dialog == true ? 'dialog-clip' : 'clip'}
+          x={50}
+          y={-50}
+          width={parentWidth}
+          height={parentWidth * 0.75}
+        />
+        <Group clipPath={dialog == true ? 'url(#dialog-clip)' : 'url(#clip)'}>
           {series.map((e, idx) => {
             return (
               <AnimatedLineSeries
