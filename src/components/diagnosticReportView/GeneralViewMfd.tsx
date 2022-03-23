@@ -120,7 +120,7 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({
   return (
     <div style={{ position: 'relative', width: '100%' }}>
       <XYChart
-        height={parentWidth * 0.75}
+        height={dialog ? parentWidth * 0.7 : parentWidth * 0.75}
         width={parentWidth}
         xScale={{ type: 'linear', domain: [minMagnitude, maxMagnitude], zero: false }}
         yScale={{ type: 'log', domain: [1e-6, 1] }}
@@ -154,7 +154,7 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({
           x={50}
           y={-50}
           width={parentWidth}
-          height={parentWidth * 0.75}
+          height={dialog ? parentWidth * 0.7 : parentWidth * 0.75}
         />
         <Group clipPath={dialog == true ? 'url(#dialog-clip)' : 'url(#clip)'}>
           {series.map((e, idx) => {
@@ -171,6 +171,10 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({
           })}
         </Group>
         <Tooltip
+          // style={{ position: 'absolute' }}
+          // unstyled={true}
+          // applyPositionStyle={true}
+          // zIndex={100000}
           snapTooltipToDatumX
           snapTooltipToDatumY
           showDatumGlyph

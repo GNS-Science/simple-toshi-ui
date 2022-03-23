@@ -12,6 +12,7 @@ const classes = {
   imageContainer: `${PREFIX}-imageContainer`,
   image: `${PREFIX}-image`,
   card: `${PREFIX}-card`,
+  title: `${PREFIX}-title`,
 };
 
 const Root = styled('div')(() => ({
@@ -24,16 +25,20 @@ const Root = styled('div')(() => ({
       flexGrow: 1,
     },
   },
-
   [`& .${classes.image}`]: {
     padding: '5px',
-    maxHeight: '80vh',
+    maxHeight: '100%',
     width: '100%',
     objectFit: 'contain',
   },
+  [`& .${classes.title}`]: {
+    display: 'flex',
+    justifyContent: 'center',
+    fontWeight: 'bold',
+  },
   [`& .${classes.card}`]: {
     padding: '0px',
-    maxHeight: '80vh',
+    maxHeight: '100%',
     width: '33%',
     objectFit: 'contain',
     display: 'flex',
@@ -55,6 +60,8 @@ interface GeneralViewProps {
     | undefined;
   mfdTableId: string;
   generalViews: string[];
+  currentImage: number;
+  automationTasksLength: number;
   setGeneralViews: (selection: string[]) => void;
 }
 
@@ -64,6 +71,8 @@ const GeneralView: React.FC<GeneralViewProps> = ({
   meta,
   generalViews,
   setGeneralViews,
+  currentImage,
+  automationTasksLength,
 }: GeneralViewProps) => {
   const [generalViewSelections, setGeneralViewSelections] = useState<SolutionDiagnosticsOption[]>([
     diagnosticReportViewOptions[0],
@@ -96,9 +105,24 @@ const GeneralView: React.FC<GeneralViewProps> = ({
             option.finalPath === 'mfd_plot_Total_MFD.png' ||
             option.finalPath === 'mfd_plot_Total_MFD_cumulative.png'
           ) {
-            return <GeneralViewMfdDynamicDialog mfdTableId={mfdTableId} meta={meta} option={option} />;
+            return (
+              <GeneralViewMfdDynamicDialog
+                mfdTableId={mfdTableId}
+                meta={meta}
+                option={option}
+                currentImage={currentImage}
+                automationTasksLength={automationTasksLength}
+              />
+            );
           } else {
-            return <GeneralViewMfdStaticDialog id={id} option={option} />;
+            return (
+              <GeneralViewMfdStaticDialog
+                id={id}
+                option={option}
+                currentImage={currentImage}
+                automationTasksLength={automationTasksLength}
+              />
+            );
           }
         })}
       </div>
