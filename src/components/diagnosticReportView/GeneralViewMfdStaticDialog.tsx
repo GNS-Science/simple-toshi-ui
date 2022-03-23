@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
 import { SolutionDiagnosticsOption } from '../../interfaces/generaltask';
-import { Card, Dialog, DialogContent } from '@mui/material';
+import { Card, Dialog, DialogContent, DialogTitle, Typography } from '@mui/material';
 import buildUrl from 'build-url-ts';
 import { classes } from './GeneralView';
 
 interface GeneralViewMfdStaticDialogProps {
   id: string;
   option: SolutionDiagnosticsOption;
+  currentImage: number;
+  automationTasksLength: number;
 }
 
 const GeneralViewMfdStaticDialog: React.FC<GeneralViewMfdStaticDialogProps> = ({
   id,
   option,
+  currentImage,
+  automationTasksLength,
 }: GeneralViewMfdStaticDialogProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const handleClickOpen = () => {
@@ -53,12 +57,26 @@ const GeneralViewMfdStaticDialog: React.FC<GeneralViewMfdStaticDialogProps> = ({
           }}
         />
       </Card>
-      <Dialog fullWidth={true} maxWidth={'lg'} open={open} onClick={handleClose}>
-        <DialogContent style={{ objectFit: 'scale-down' }}>
-          <Card key={option.finalPath} className={classes.card}>
+      <Dialog
+        fullWidth={true}
+        maxWidth={'lg'}
+        open={open}
+        onClick={handleClose}
+        PaperProps={{
+          className: classes.image,
+        }}
+      >
+        <DialogTitle>
+          <Typography className={classes.title}>
+            {currentImage + 1}&nbsp;of&nbsp;{automationTasksLength}
+          </Typography>
+        </DialogTitle>
+        <DialogContent>
+          <Card key={option.finalPath} className={classes.card} style={{ display: 'flex', justifyContent: 'center' }}>
             <img
               key={option.finalPath}
               className={classes.image}
+              style={{ height: '80vh' }}
               src={reportUrl(option.finalPath, id)}
               alt={option.finalPath}
               onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SolutionDiagnosticsOption } from '../../interfaces/generaltask';
-import { Card, CircularProgress, Dialog, DialogContent } from '@mui/material';
+import { Card, CircularProgress, Dialog, DialogContent, DialogTitle, Typography } from '@mui/material';
 import { ParentSize } from '@visx/responsive';
 import GeneralViewMfd from './GeneralViewMfd';
 import { classes } from './GeneralView';
@@ -14,6 +14,8 @@ interface GeneralViewMfdDynamicDialogProps {
       } | null)[]
     | null
     | undefined;
+  currentImage: number;
+  automationTasksLength: number;
   option: SolutionDiagnosticsOption;
 }
 
@@ -21,6 +23,8 @@ const GeneralViewMfdDynamicDialog: React.FC<GeneralViewMfdDynamicDialogProps> = 
   mfdTableId,
   meta,
   option,
+  currentImage,
+  automationTasksLength,
 }: GeneralViewMfdDynamicDialogProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const handleClickOpen = () => {
@@ -56,8 +60,13 @@ const GeneralViewMfdDynamicDialog: React.FC<GeneralViewMfdDynamicDialogProps> = 
         maxWidth={'lg'}
         open={open}
         onClick={handleClose}
-        PaperProps={{ sx: { width: '120vh', height: '95vh' } }}
+        PaperProps={{ sx: { width: '120vh', height: '90vh' } }}
       >
+        <DialogTitle>
+          <Typography className={classes.title}>
+            {currentImage + 1}&nbsp;of&nbsp;{automationTasksLength}
+          </Typography>
+        </DialogTitle>
         <DialogContent>
           <div className={classes.image}>
             <React.Suspense fallback={<CircularProgress />}>

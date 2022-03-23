@@ -227,6 +227,8 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
               id={automationTasks[currentImage].inversion_solution.id}
               mfdTableId={automationTasks[currentImage].inversion_solution.mfd_table_id}
               meta={automationTasks[currentImage].inversion_solution.meta}
+              currentImage={currentImage}
+              automationTasksLength={automationTasks.length}
               generalViews={generalViews}
               setGeneralViews={setGeneralViews}
             />
