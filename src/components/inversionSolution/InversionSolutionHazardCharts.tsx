@@ -212,7 +212,10 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
             <Button variant="contained" onClick={handlePrint}>
               Print Figures
             </Button>
-            <CSVLink data={getCSVData()}>
+            <CSVLink
+              data={getCSVData()}
+              filename={`hazard-${location}-${forecastTime}-${backgroundSeismicity}-${gmpe}.csv`}
+            >
               <Button variant="contained">Download CSV</Button>
             </CSVLink>
           </ControlsBar>
