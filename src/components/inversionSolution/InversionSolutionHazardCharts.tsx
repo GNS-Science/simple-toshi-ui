@@ -25,6 +25,7 @@ import SpectralAccelerationChart from './charts/SpectralAccelerationChart';
 import { ParentSize } from '@visx/responsive';
 import { useReactToPrint } from 'react-to-print';
 import { CSVLink } from 'react-csv';
+import ControlsBar from '../common/ControlsBar';
 
 interface InversionSolutionHazardChartsProps {
   id: string;
@@ -207,14 +208,14 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
               )}
             </div>
           </div>
-          <div style={{ padding: 20 }}>
+          <ControlsBar>
             <Button variant="contained" onClick={handlePrint}>
               Print Figures
             </Button>
             <CSVLink data={getCSVData()}>
               <Button variant="contained">Download CSV</Button>
             </CSVLink>
-          </div>
+          </ControlsBar>
         </Card>
       </Box>
       <Snackbar
