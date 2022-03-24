@@ -5,6 +5,7 @@ import { graphql } from 'babel-plugin-relay/macro';
 import SelectControl from '../common/SelectControl';
 import { XY } from '../../interfaces/common';
 import {
+  creatCSVdata,
   cropCurves,
   filterMultipleCurves,
   getHazardTableOptions,
@@ -23,6 +24,8 @@ import HazardCurves from './charts/HazardCurves';
 import SpectralAccelerationChart from './charts/SpectralAccelerationChart';
 import { ParentSize } from '@visx/responsive';
 import { useReactToPrint } from 'react-to-print';
+import { CSVLink } from 'react-csv';
+import ControlsBar from '../common/ControlsBar';
 
 interface InversionSolutionHazardChartsProps {
   id: string;
@@ -147,6 +150,11 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
     content: () => targetRef.current,
   });
 
+  const getCSVData = () => {
+    const allCurves = filterMultipleCurves(options.PGA, data, location, forecastTime, gmpe, backgroundSeismicity);
+    return creatCSVdata(options.PGA, allCurves);
+  };
+
   return (
     <>
       <div style={{ width: '100%', padding: '1rem', display: 'flex', flexWrap: 'wrap' }}>
@@ -200,11 +208,17 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
               )}
             </div>
           </div>
-          <div style={{ padding: 20 }}>
+          <ControlsBar>
             <Button variant="contained" onClick={handlePrint}>
               Print Figures
             </Button>
-          </div>
+            <CSVLink
+              data={getCSVData()}
+              filename={`hazard-${location}-${forecastTime}-${backgroundSeismicity}-${gmpe}.csv`}
+            >
+              <Button variant="contained">Download CSV</Button>
+            </CSVLink>
+          </ControlsBar>
         </Card>
       </Box>
       <Snackbar
