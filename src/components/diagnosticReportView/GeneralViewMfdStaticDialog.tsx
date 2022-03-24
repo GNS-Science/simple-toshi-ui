@@ -3,12 +3,15 @@ import { SolutionDiagnosticsOption } from '../../interfaces/generaltask';
 import { Card, Dialog, DialogContent, DialogTitle, Typography } from '@mui/material';
 import buildUrl from 'build-url-ts';
 import { classes } from './GeneralView';
+import { MetaToolTip } from '../common/MetaToolTip';
+import { MetaArguments } from '../../interfaces/mySolutions';
 
 interface GeneralViewMfdStaticDialogProps {
   id: string;
   option: SolutionDiagnosticsOption;
   currentImage: number;
   automationTasksLength: number;
+  filteredMeta: MetaArguments;
 }
 
 const GeneralViewMfdStaticDialog: React.FC<GeneralViewMfdStaticDialogProps> = ({
@@ -16,6 +19,7 @@ const GeneralViewMfdStaticDialog: React.FC<GeneralViewMfdStaticDialogProps> = ({
   option,
   currentImage,
   automationTasksLength,
+  filteredMeta,
 }: GeneralViewMfdStaticDialogProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const handleClickOpen = () => {
@@ -70,6 +74,7 @@ const GeneralViewMfdStaticDialog: React.FC<GeneralViewMfdStaticDialogProps> = ({
           <Typography className={classes.title}>
             {currentImage + 1}&nbsp;of&nbsp;{automationTasksLength}
           </Typography>
+          <MetaToolTip meta={filteredMeta} />
         </DialogTitle>
         <DialogContent>
           <Card key={option.finalPath} className={classes.card} style={{ display: 'flex', justifyContent: 'center' }}>
