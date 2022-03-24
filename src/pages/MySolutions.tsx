@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState, useEffect, useMemo } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
 import { Button, ButtonGroup, Tooltip, Typography } from '@mui/material';
 import { graphql } from 'babel-plugin-relay/macro';
@@ -48,8 +48,8 @@ const MySolutions: React.FC = () => {
 
   const id = getMySolutionIdsArray(ISFavourites);
   const data = useLazyLoadQuery<MySolutionsQuery>(mySolutionsQuery, { id });
-  const listItems = validateListItems(data);
-  const reportItems = getReportItems(listItems);
+  const listItems = useMemo(() => validateListItems(data), [data]);
+  const reportItems = useMemo(() => getReportItems(listItems), [listItems]);
 
   const [currentGeneralTask, setCurrentGeneralTask] = useState<GeneralTaskDetails>(
     getGeneralTaskDetails(listItems, reportItems, 0),
