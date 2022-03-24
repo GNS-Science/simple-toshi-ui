@@ -5,6 +5,7 @@ import { SolutionDiagnosticsOption } from '../../interfaces/generaltask';
 import MultiSelect from '../common/MultiSelect';
 import GeneralViewMfdDynamicDialog from './GeneralViewMfdDynamicDialog';
 import GeneralViewMfdStaticDialog from './GeneralViewMfdStaticDialog';
+import { MetaArguments } from '../../interfaces/mySolutions';
 
 const PREFIX = 'GeneralView';
 
@@ -59,6 +60,7 @@ interface GeneralViewProps {
     | null
     | undefined;
   mfdTableId: string;
+  filteredMeta: MetaArguments;
   generalViews: string[];
   currentImage: number;
   automationTasksLength: number;
@@ -70,6 +72,7 @@ const GeneralView: React.FC<GeneralViewProps> = ({
   mfdTableId,
   meta,
   generalViews,
+  filteredMeta,
   setGeneralViews,
   currentImage,
   automationTasksLength,
@@ -112,6 +115,7 @@ const GeneralView: React.FC<GeneralViewProps> = ({
                 option={option}
                 currentImage={currentImage}
                 automationTasksLength={automationTasksLength}
+                filteredMeta={filteredMeta}
               />
             );
           } else {
@@ -121,6 +125,7 @@ const GeneralView: React.FC<GeneralViewProps> = ({
                 option={option}
                 currentImage={currentImage}
                 automationTasksLength={automationTasksLength}
+                filteredMeta={filteredMeta}
               />
             );
           }

@@ -3,7 +3,9 @@ import { SolutionDiagnosticsOption } from '../../interfaces/generaltask';
 import { Card, CircularProgress, Dialog, DialogContent, DialogTitle, Typography } from '@mui/material';
 import { ParentSize } from '@visx/responsive';
 import GeneralViewMfd from './GeneralViewMfd';
+import { MetaToolTip } from '../common/MetaToolTip';
 import { classes } from './GeneralView';
+import { MetaArguments } from '../../interfaces/mySolutions';
 
 interface GeneralViewMfdDynamicDialogProps {
   mfdTableId: string;
@@ -17,6 +19,7 @@ interface GeneralViewMfdDynamicDialogProps {
   currentImage: number;
   automationTasksLength: number;
   option: SolutionDiagnosticsOption;
+  filteredMeta: MetaArguments;
 }
 
 const GeneralViewMfdDynamicDialog: React.FC<GeneralViewMfdDynamicDialogProps> = ({
@@ -25,6 +28,7 @@ const GeneralViewMfdDynamicDialog: React.FC<GeneralViewMfdDynamicDialogProps> = 
   option,
   currentImage,
   automationTasksLength,
+  filteredMeta,
 }: GeneralViewMfdDynamicDialogProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const handleClickOpen = () => {
@@ -62,10 +66,11 @@ const GeneralViewMfdDynamicDialog: React.FC<GeneralViewMfdDynamicDialogProps> = 
         onClick={handleClose}
         PaperProps={{ sx: { width: '120vh', height: '90vh' } }}
       >
-        <DialogTitle>
+        <DialogTitle style={{ display: 'flex', flexWrap: 'wrap', fontSize: 16 }}>
           <Typography className={classes.title}>
             {currentImage + 1}&nbsp;of&nbsp;{automationTasksLength}
           </Typography>
+          <MetaToolTip meta={filteredMeta} />
         </DialogTitle>
         <DialogContent>
           <div className={classes.image}>
