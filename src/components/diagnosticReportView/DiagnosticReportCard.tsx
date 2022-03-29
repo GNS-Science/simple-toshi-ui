@@ -5,13 +5,12 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Card, CardContent, Typography, Tabs, Tab, CircularProgress } from '@mui/material';
 import { IconButton } from '@mui/material';
-import InfoIcon from '@mui/icons-material/Info';
 import Tooltip from '@mui/material/Tooltip';
 
 // import json
 import FavouriteControls from '../common/FavouriteControls';
 import DiagnosticReportTabPanel from './DiagnosticReportTabPanel';
-import GeneralView from './GeneralView';
+import { GeneralView } from './GeneralView';
 import NamedFaultsView from './NamedFaultsView';
 import RegionalMfdView from './RegionalMfdView';
 import InversionSolutionHazardCharts from '../inversionSolution/InversionSolutionHazardCharts';
@@ -20,6 +19,7 @@ import { SweepArguments, ValidatedSubtask } from '../../interfaces/generaltask';
 import { MetaArguments } from '../../interfaces/mySolutions';
 import { filteredMetaGT, filterMetaArguments } from '../../service/diagnosticReports.service';
 import SolutionAnalysisTab from '../inversionSolution/SolutionAnalysisTab';
+import { MetaToolTip } from '../common/MetaToolTip';
 
 const PREFIX = 'DiagnosticReportCard';
 
@@ -49,19 +49,6 @@ const Root = styled('div')(() => ({
     paddingRight: 70,
   },
 }));
-
-const Info = styled(Typography)(() => ({
-  display: 'flex',
-  flexWrap: 'wrap',
-  alignItems: 'center',
-  flexDirection: 'row',
-  alignContent: 'space-between',
-}));
-
-const infoStyle = {
-  padding: 0,
-  margin: 0,
-};
 
 interface DiagnosticReportCardProps {
   sweepArgs?: SweepArguments;
@@ -187,28 +174,6 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
     }
   };
 
-  const tagToolTip = (v: string | null) => {
-    if (v) {
-      try {
-        const cleanedJson = JSON.parse(v?.replaceAll("'", '"').replaceAll('False', 'false').replaceAll('True', 'true'));
-        if (v && 'tag' in cleanedJson) {
-          return (
-            <Tooltip title={v}>
-              <span style={{ display: 'inline-flex' }}>
-                {cleanedJson.tag}
-                <InfoIcon sx={{ fontSize: 20, position: 'relative', top: 1, left: 2 }} color="disabled" />
-              </span>
-            </Tooltip>
-          );
-        } else {
-          return <span>{v}</span>;
-        }
-      } catch {
-        return <span>{v}</span>;
-      }
-    }
-  };
-
   useEffect(() => {
     window.addEventListener('keyup', hotkeyHandler);
     return () => window.removeEventListener('keyup', hotkeyHandler);
@@ -227,6 +192,9 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
               id={automationTasks[currentImage].inversion_solution.id}
               mfdTableId={automationTasks[currentImage].inversion_solution.mfd_table_id}
               meta={automationTasks[currentImage].inversion_solution.meta}
+              filteredMeta={filteredMeta}
+              currentImage={currentImage}
+              automationTasksLength={automationTasks.length}
               generalViews={generalViews}
               setGeneralViews={setGeneralViews}
             />
@@ -303,13 +271,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             Inversion Solution {automationTasks[currentImage].inversion_solution.id}&nbsp;&nbsp;&nbsp;
             <Link to={`/InversionSolution/${automationTasks[currentImage].inversion_solution.id}`}>[more]</Link>
           </h4>
-          <Info>
-            {filteredMeta.map((kv) => (
-              <p style={infoStyle} key={kv?.k}>
-                <strong>{kv?.k}:</strong> {tagToolTip(kv?.v)} &nbsp;
-              </p>
-            ))}
-          </Info>
+          <MetaToolTip meta={filteredMeta} />
           <div className={classes.buttonContainer}>
             <Tooltip title="use (<,) (>.) or arrow keys to navigate">
               <IconButton
