@@ -19,6 +19,8 @@ interface InversionSolutionDiagnosticContainerProps {
   setNamedFaultsLocations: (locations: string[]) => void;
   regionalViews: string[];
   setRegionalViews: (views: string[]) => void;
+  nonRegionalViews: string[];
+  setNonRegionalViews: (views: string[]) => void;
   reportTab: number;
   setReportTab: (tab: number) => void;
   parentFaultViews: string[];
@@ -41,6 +43,8 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   setNamedFaultsLocations,
   regionalViews,
   setRegionalViews,
+  nonRegionalViews,
+  setNonRegionalViews,
   reportTab,
   setReportTab,
   parentFaultViews,
@@ -74,6 +78,8 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
         automationTasks={automationTasks}
         regionalViews={regionalViews}
         setRegionalViews={setRegionalViews}
+        nonRegionalViews={nonRegionalViews}
+        setNonRegionalViews={setNonRegionalViews}
         reportTab={reportTab}
         setReportTab={setReportTab}
         parentFaultViews={parentFaultViews}

@@ -18,16 +18,15 @@ interface MfdChartProps {
 const MfdChart: React.FC<MfdChartProps> = ({ mfdProps, rows, isV2 }: MfdChartProps) => {
   const [colors, setColors] = useState<Record<string, string>>({});
 
-  if (!rows) {
-    return <>There is no mfd curve</>;
-  }
-
   const getMfdCurve = (series: string[], index: number): Array<IMagRate> => {
-    return magRateData(
-      rows
-        .filter((row) => row && row[1] == series[index])
-        .map((r) => (r ? [parseFloat(r[2] ?? ''), parseFloat(r[3] ?? '')] : [])),
-    );
+    let curves: Array<IMagRate> = [];
+    if (rows)
+      curves = magRateData(
+        rows
+          .filter((row) => row && row[1] == series[index])
+          .map((r) => (r ? [parseFloat(r[2] ?? ''), parseFloat(r[3] ?? '')] : [])),
+      );
+    return curves;
   };
 
   useEffect(() => {
@@ -59,6 +58,10 @@ const MfdChart: React.FC<MfdChartProps> = ({ mfdProps, rows, isV2 }: MfdChartPro
       range: [...currentColors],
     });
   };
+
+  if (!rows) {
+    return <>There is no mfd curve</>;
+  }
 
   return (
     <Box style={{ border: '1px solid', width: 'fit-content', position: 'relative' }}>

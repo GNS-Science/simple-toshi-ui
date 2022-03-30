@@ -24,7 +24,7 @@ const DialogAlert: React.FC<DialogAlertProps> = ({ open, title, text, handleClos
         search: searchParams.toString(),
       });
     };
-  }, []);
+  }, [history]);
 
   return (
     <>

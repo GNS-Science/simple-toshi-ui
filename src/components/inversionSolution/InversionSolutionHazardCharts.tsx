@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
 import { Box, Button, Card, Snackbar } from '@mui/material';
 import { graphql } from 'babel-plugin-relay/macro';
 import SelectControl from '../common/SelectControl';
 import { XY } from '../../interfaces/common';
 import {
+  creatCSVdata,
   cropCurves,
   filterMultipleCurves,
   getHazardTableOptions,
@@ -15,11 +16,16 @@ import Alert from '@mui/material/Alert';
 
 import { HazardTableFilteredData } from '../../interfaces/inversionSolutions';
 import { toProperCase } from '../../utils';
-import { InversionSolutionHazardChartsQuery } from './__generated__/InversionSolutionHazardChartsQuery.graphql';
+import {
+  InversionSolutionHazardChartsQuery,
+  InversionSolutionHazardChartsQueryResponse,
+} from './__generated__/InversionSolutionHazardChartsQuery.graphql';
 import HazardCurves from './charts/HazardCurves';
 import SpectralAccelerationChart from './charts/SpectralAccelerationChart';
 import { ParentSize } from '@visx/responsive';
 import { useReactToPrint } from 'react-to-print';
+import { CSVLink } from 'react-csv';
+import ControlsBar from '../common/ControlsBar';
 
 interface InversionSolutionHazardChartsProps {
   id: string;
@@ -30,7 +36,7 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
 }: InversionSolutionHazardChartsProps) => {
   const targetRef = useRef<HTMLDivElement>(null);
   const data = useLazyLoadQuery<InversionSolutionHazardChartsQuery>(inversionSolutionHazardChartsQuery, { id });
-  const options = getHazardTableOptions(data);
+  const options = useMemo(() => getHazardTableOptions(data), [data]);
 
   const [location, setLocation] = useState<string>(options.location[0]);
   const [PGA, setPGA] = useState<string[]>([options.PGA[0]]);
@@ -46,33 +52,66 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
 
   const [showUHSA, setShowUHSA] = useState<boolean>(false);
 
+  interface GetSAdataArguments {
+    data: InversionSolutionHazardChartsQueryResponse;
+    location: string;
+    forecastTime: string;
+    gmpe: string;
+    backgroundSeismicity: string;
+    POE: string;
+  }
+
+  const getSAdataCallback = useCallback(
+    ({ data, location, forecastTime, gmpe, backgroundSeismicity, POE }: GetSAdataArguments) => {
+      const xValue = POE === '2%' ? 0.02 : 0.1;
+      const allCurves = filterMultipleCurves(options.PGA, data, location, forecastTime, gmpe, backgroundSeismicity);
+      return getSpectralAccelerationData(options.PGA, xValue, allCurves);
+    },
+    [options.PGA],
+  );
+
   useEffect(() => {
     const filteredCurves = filterMultipleCurves(PGA, data, location, forecastTime, gmpe, backgroundSeismicity);
     const croppedFilteredCurves = cropCurves(filteredCurves);
     setFilteredData(croppedFilteredCurves);
 
-    const SAplot = getSAdata();
+    const SAplot = getSAdataCallback({
+      data,
+      location,
+      forecastTime,
+      gmpe,
+      backgroundSeismicity,
+      POE,
+    });
     setSAdata(SAplot);
-  }, [data, location, PGA, forecastTime, gmpe, backgroundSeismicity]);
+  }, [getSAdataCallback, data, location, PGA, forecastTime, gmpe, backgroundSeismicity, POE]);
 
   useEffect(() => {
+    const getPoE = () => {
+      const yValue = POE === '2%' ? 0.02 : 0.1;
+      return [
+        { x: 1e-3, y: yValue },
+        { x: 10, y: yValue },
+      ];
+    };
     if (POE !== 'None') {
-      const data = getPoE();
-      setPOEdata(data);
-      const SAplot = getSAdata();
+      const POEdata = getPoE();
+      setPOEdata(POEdata);
+      const SAplot = getSAdataCallback({
+        data,
+        location,
+        forecastTime,
+        gmpe,
+        backgroundSeismicity,
+        POE,
+      });
       setSAdata(SAplot);
       setShowUHSA(true);
     }
     if (POE === 'None') {
       setShowUHSA(false);
     }
-  }, [POE]);
-
-  const getSAdata = (): XY[] => {
-    const xValue = POE === '2%' ? 0.02 : 0.1;
-    const allCurves = filterMultipleCurves(options.PGA, data, location, forecastTime, gmpe, backgroundSeismicity);
-    return getSpectralAccelerationData(options.PGA, xValue, allCurves);
-  };
+  }, [getSAdataCallback, data, location, forecastTime, gmpe, backgroundSeismicity, POE]);
 
   const handleSetPGA = (selections: string[]) => {
     if (selections.length > 8) {
@@ -97,14 +136,6 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
     setPGA(sorted);
   };
 
-  const getPoE = () => {
-    const yValue = POE === '2%' ? 0.02 : 0.1;
-    return [
-      { x: 1e-3, y: yValue },
-      { x: 10, y: yValue },
-    ];
-  };
-
   const getHazardCurvesSubHeading = (): string => {
     return `GMM: ${gmpe}. Background: ${toProperCase(backgroundSeismicity)}d. Time-span: ${forecastTime} years.`;
   };
@@ -118,6 +149,11 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
   const handlePrint = useReactToPrint({
     content: () => targetRef.current,
   });
+
+  const getCSVData = () => {
+    const allCurves = filterMultipleCurves(options.PGA, data, location, forecastTime, gmpe, backgroundSeismicity);
+    return creatCSVdata(options.PGA, allCurves);
+  };
 
   return (
     <>
@@ -172,11 +208,17 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
               )}
             </div>
           </div>
-          <div style={{ padding: 20 }}>
+          <ControlsBar>
             <Button variant="contained" onClick={handlePrint}>
               Print Figures
             </Button>
-          </div>
+            <CSVLink
+              data={getCSVData()}
+              filename={`hazard-${location}-${forecastTime}-${backgroundSeismicity}-${gmpe}.csv`}
+            >
+              <Button variant="contained">Download CSV</Button>
+            </CSVLink>
+          </ControlsBar>
         </Card>
       </Box>
       <Snackbar

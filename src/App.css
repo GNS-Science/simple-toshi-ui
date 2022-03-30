@@ -24,6 +24,10 @@
   color: white;
 }
 
+.visx-tooltip {
+  z-index: 1301;
+}
+
 .App-link {
   color: #61dafb;
 }

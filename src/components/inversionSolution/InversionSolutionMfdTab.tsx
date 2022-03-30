@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
 import { graphql } from 'babel-plugin-relay/macro';
 import { Box, Typography } from '@mui/material';
@@ -41,10 +41,15 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
     options.push(option.displayName);
   });
 
-  const series: string[] = [];
-  regionalizedMfdSeries.map((option) => {
-    series.push(option.path);
-  });
+  const series: string[] = useMemo(() => {
+    const currentSeries: string[] = [];
+
+    regionalizedMfdSeries.map((option) => {
+      currentSeries.push(option.path);
+    });
+
+    return currentSeries;
+  }, []);
 
   const [region, setRegion] = useState<string>('Both');
   const [mfdCurveNames, setMfdCurveNames] = useState<string[]>(options);
@@ -95,7 +100,7 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
         minMagnitude: 5.0,
       });
     }
-  }, [isV2]);
+  }, [config_type, rows, isV2]);
 
   useEffect(() => {
     const selections: string[] = [];
@@ -133,7 +138,7 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
         minMagnitude: 5,
       });
     }
-  }, [region, mfdCurvePaths]);
+  }, [isV2, mfdProps.colours, series, region, mfdCurvePaths]);
 
   return (
     <>

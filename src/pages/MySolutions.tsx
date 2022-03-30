@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState, useEffect, useMemo } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
 import { Button, ButtonGroup, Tooltip, Typography } from '@mui/material';
 import { graphql } from 'babel-plugin-relay/macro';
@@ -31,6 +31,8 @@ const MySolutions: React.FC = () => {
     setLocalStorageNamedFaultsLocations,
     localStorageRegionalViews,
     setLocalStorageRegionalViews,
+    localStorageNonRegionalViews,
+    setLocalStorageNonRegionalViews,
     localStorageParentFault,
     setLocalStorageParentFault,
     localStorageParentFaultViews,
@@ -46,8 +48,8 @@ const MySolutions: React.FC = () => {
 
   const id = getMySolutionIdsArray(ISFavourites);
   const data = useLazyLoadQuery<MySolutionsQuery>(mySolutionsQuery, { id });
-  const listItems = validateListItems(data);
-  const reportItems = getReportItems(listItems);
+  const listItems = useMemo(() => validateListItems(data), [data]);
+  const reportItems = useMemo(() => getReportItems(listItems), [listItems]);
 
   const [currentGeneralTask, setCurrentGeneralTask] = useState<GeneralTaskDetails>(
     getGeneralTaskDetails(listItems, reportItems, 0),
@@ -59,7 +61,7 @@ const MySolutions: React.FC = () => {
 
   useEffect(() => {
     setCurrentGeneralTask(getGeneralTaskDetails(listItems, reportItems, currentImage));
-  }, [currentImage]);
+  }, [listItems, reportItems, currentImage]);
 
   useShortcut(() => setShowList((v) => !v), ['s'], disableHotkey);
   useShortcut(() => setOpenDrawer((v) => !v), ['d'], disableHotkey);
@@ -126,6 +128,8 @@ const MySolutions: React.FC = () => {
           setNamedFaultsLocations={setLocalStorageNamedFaultsLocations}
           regionalViews={localStorageRegionalViews}
           setRegionalViews={setLocalStorageRegionalViews}
+          nonRegionalViews={localStorageNonRegionalViews}
+          setNonRegionalViews={setLocalStorageNonRegionalViews}
           parentFaultViews={localStorageParentFaultViews}
           setParentFaultViews={setLocalStorageParentFaultViews}
           parentFault={localStorageParentFault as string}

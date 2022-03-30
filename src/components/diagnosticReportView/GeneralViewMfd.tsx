@@ -20,6 +20,7 @@ interface GeneralViewMfdProps {
     | undefined;
   parentWidth: number;
   cumulative: boolean;
+  dialog: boolean;
   parentRef: HTMLDivElement | null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   resizeParent: (state: any) => void;
@@ -30,6 +31,7 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({
   meta,
   parentWidth,
   cumulative,
+  dialog,
 }: GeneralViewMfdProps) => {
   const data = useLazyLoadQuery<GeneralViewMfdQuery>(generalViewMfdQuery, { id: mfdTableId });
 
@@ -40,7 +42,7 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({
 
   useEffect(() => {
     parentWidth * 0.035 >= 18 ? setHeadingSize(18) : setHeadingSize(parentWidth * 0.035);
-  });
+  }, [parentWidth]);
 
   if (!rows) {
     return <></>;
@@ -118,7 +120,7 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({
   return (
     <div style={{ position: 'relative', width: '100%' }}>
       <XYChart
-        height={parentWidth * 0.75}
+        height={dialog ? parentWidth * 0.65 : parentWidth * 0.75}
         width={parentWidth}
         xScale={{ type: 'linear', domain: [minMagnitude, maxMagnitude], zero: false }}
         yScale={{ type: 'log', domain: [1e-6, 1] }}
@@ -147,8 +149,14 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({
           })}
           orientation="left"
         />
-        <RectClipPath id="clip" x={50} y={-50} width={parentWidth} height={parentWidth * 0.75} />
-        <Group clipPath="url(#clip)">
+        <RectClipPath
+          id={dialog == true ? 'dialog-clip' : 'clip'}
+          x={50}
+          y={-50}
+          width={parentWidth}
+          height={dialog ? parentWidth * 0.65 : parentWidth * 0.75}
+        />
+        <Group clipPath={dialog == true ? 'url(#dialog-clip)' : 'url(#clip)'}>
           {series.map((e, idx) => {
             return (
               <AnimatedLineSeries
@@ -163,6 +171,10 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({
           })}
         </Group>
         <Tooltip
+          // style={{ position: 'absolute' }}
+          // unstyled={true}
+          // applyPositionStyle={true}
+          // zIndex={100000}
           snapTooltipToDatumX
           snapTooltipToDatumY
           showDatumGlyph

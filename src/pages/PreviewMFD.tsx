@@ -16,40 +16,37 @@ function PreviewMFD(props: { width: number; height: number; bar_width: number })
   console.log('DATA', data);
   useEffect(() => {
     d3.select(ref.current).attr('width', width).attr('height', height).style('border', '1px solid black');
-  }, []);
+  }, [width, height]);
 
   useEffect(() => {
-    draw();
-  }, [data]);
+    const draw = () => {
+      const svg = d3.select(ref.current);
+      const selection = svg.selectAll('rect').data(data);
+      const yScale = d3
+        .scaleLog()
+        .domain([10e-9, maxData])
+        .range([0, height - 100]);
 
-  const draw = () => {
-    const svg = d3.select(ref.current);
-    const selection = svg.selectAll('rect').data(data);
-    const yScale = d3
-      .scaleLog()
-      .domain([10e-9, maxData])
-      .range([0, height - 100]);
+      selection.transition().duration(300);
+      selection.attr('height', (d) => yScale(d));
+      selection.attr('y', (d) => height - yScale(d));
 
-    selection.transition().duration(300);
-    selection.attr('height', (d) => yScale(d));
-    selection.attr('y', (d) => height - yScale(d));
+      selection
+        .enter()
+        .append('rect')
+        .attr('x', (d, i) => i * bar_width)
+        // eslint-disable-next-line
+        .attr('y', (d) => height)
+        .attr('width', bar_width - 1)
+        .attr('height', 0)
+        .attr('fill', 'orange')
+        .transition()
+        .duration(800)
+        .attr('height', (d) => yScale(d))
+        .attr('y', (d) => height - yScale(d));
 
-    selection
-      .enter()
-      .append('rect')
-      .attr('x', (d, i) => i * bar_width)
-      // eslint-disable-next-line
-      .attr('y', (d) => height)
-      .attr('width', bar_width - 1)
-      .attr('height', 0)
-      .attr('fill', 'orange')
-      .transition()
-      .duration(800)
-      .attr('height', (d) => yScale(d))
-      .attr('y', (d) => height - yScale(d));
-
-    // prettier-ignore
-    selection
+      // prettier-ignore
+      selection
       .exit()
       .transition()
       .duration(300)
@@ -58,18 +55,21 @@ function PreviewMFD(props: { width: number; height: number; bar_width: number })
       .attr('height', 0)
       .remove();
 
-    // Handmade legend
-    // prettier-ignore
-    svg.append('circle').attr('cx', width-150).attr('cy', 30).attr('r', 6).style('fill', 'orange');
-    // prettier-ignore
-    svg.append('circle').attr('cx', width-150).attr('cy', 60).attr('r', 6).style('fill', '#404080');
-    // prettier-ignore
-    svg.append('text').attr('x', width-130).attr('y', 36).text('variable A').style('font-size', '15px');
-    svg.attr('alignment-baseline', 'middle');
-    // prettier-ignore
-    svg.append('text').attr('x', width-130).attr('y', 66).text('variable B').style('font-size', '15px');
-    svg.attr('alignment-baseline', 'middle');
-  };
+      // Handmade legend
+      // prettier-ignore
+      svg.append('circle').attr('cx', width-150).attr('cy', 30).attr('r', 6).style('fill', 'orange');
+      // prettier-ignore
+      svg.append('circle').attr('cx', width-150).attr('cy', 60).attr('r', 6).style('fill', '#404080');
+      // prettier-ignore
+      svg.append('text').attr('x', width-130).attr('y', 36).text('variable A').style('font-size', '15px');
+      svg.attr('alignment-baseline', 'middle');
+      // prettier-ignore
+      svg.append('text').attr('x', width-130).attr('y', 66).text('variable B').style('font-size', '15px');
+      svg.attr('alignment-baseline', 'middle');
+    };
+
+    draw();
+  }, [data, bar_width, height, maxData, width]);
 
   return (
     <>

@@ -5,13 +5,12 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Card, CardContent, Typography, Tabs, Tab, CircularProgress } from '@mui/material';
 import { IconButton } from '@mui/material';
-import InfoIcon from '@mui/icons-material/Info';
 import Tooltip from '@mui/material/Tooltip';
 
 // import json
 import FavouriteControls from '../common/FavouriteControls';
 import DiagnosticReportTabPanel from './DiagnosticReportTabPanel';
-import GeneralView from './GeneralView';
+import { GeneralView } from './GeneralView';
 import NamedFaultsView from './NamedFaultsView';
 import RegionalMfdView from './RegionalMfdView';
 import InversionSolutionHazardCharts from '../inversionSolution/InversionSolutionHazardCharts';
@@ -20,6 +19,7 @@ import { SweepArguments, ValidatedSubtask } from '../../interfaces/generaltask';
 import { MetaArguments } from '../../interfaces/mySolutions';
 import { filteredMetaGT, filterMetaArguments } from '../../service/diagnosticReports.service';
 import SolutionAnalysisTab from '../inversionSolution/SolutionAnalysisTab';
+import { MetaToolTip } from '../common/MetaToolTip';
 
 const PREFIX = 'DiagnosticReportCard';
 
@@ -50,19 +50,6 @@ const Root = styled('div')(() => ({
   },
 }));
 
-const Info = styled(Typography)(() => ({
-  display: 'flex',
-  flexWrap: 'wrap',
-  alignItems: 'center',
-  flexDirection: 'row',
-  alignContent: 'space-between',
-}));
-
-const infoStyle = {
-  padding: 0,
-  margin: 0,
-};
-
 interface DiagnosticReportCardProps {
   sweepArgs?: SweepArguments;
   sweepList?: string[];
@@ -76,6 +63,8 @@ interface DiagnosticReportCardProps {
   setNamedFaultsLocations: (selection: string[]) => void;
   regionalViews: string[];
   setRegionalViews: (views: string[]) => void;
+  nonRegionalViews: string[];
+  setNonRegionalViews: (views: string[]) => void;
   changeCurrentImage?: (index: number) => void;
   reportTab?: number;
   setReportTab?: (tab: number) => void;
@@ -100,6 +89,8 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   setNamedFaultsLocations,
   regionalViews,
   setRegionalViews,
+  nonRegionalViews,
+  setNonRegionalViews,
   changeCurrentImage,
   reportTab,
   setReportTab,
@@ -114,6 +105,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   const [currentTab, setCurrentTab] = useState<number>(0);
   const [hazardId, setHazardId] = useState<string>('');
   const [filteredMeta, setFilteredMeta] = useState<MetaArguments>([]);
+  const [regional, setRegional] = useState<boolean>(true);
 
   useEffect(() => {
     setCurrentImage(0);
@@ -121,11 +113,24 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
 
   useEffect(() => {
     if (reportTab !== 0) setCurrentTab(reportTab ?? 0);
-  }, []);
+  }, [reportTab]);
 
   useEffect(() => {
     setReportTab && setReportTab(currentTab);
-  }, [currentTab]);
+  }, [setReportTab, currentTab]);
+
+  useEffect(() => {
+    if (automationTasks[currentImage]) {
+      const tvzValue = automationTasks[currentImage].inversion_solution?.meta?.filter(
+        (kv) => kv?.k && kv?.k === 'enable_tvz_mfd',
+      )[0]?.v;
+      if (tvzValue === 'False') {
+        setRegional(false);
+      } else if (tvzValue === 'True') {
+        setRegional(true);
+      }
+    }
+  }, [currentImage, automationTasks]);
 
   useEffect(() => {
     if (automationTasks[currentImage] && automationTasks[currentImage].inversion_solution.tables) {
@@ -141,7 +146,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       }
       setFilteredMeta(metaList);
     }
-  }, [automationTasks, currentImage]);
+  }, [sweepArgs, sweepList, automationTasks, currentImage]);
 
   const nextImage = () => {
     if (currentImage < automationTasks.length - 1) {
@@ -169,28 +174,6 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
     }
   };
 
-  const tagToolTip = (v: string | null) => {
-    if (v) {
-      try {
-        const cleanedJson = JSON.parse(v?.replaceAll("'", '"').replaceAll('False', 'false').replaceAll('True', 'true'));
-        if (v && 'tag' in cleanedJson) {
-          return (
-            <Tooltip title={v}>
-              <span style={{ display: 'inline-flex' }}>
-                {cleanedJson.tag}
-                <InfoIcon sx={{ fontSize: 20, position: 'relative', top: 1, left: 2 }} color="disabled" />
-              </span>
-            </Tooltip>
-          );
-        } else {
-          return <span>{v}</span>;
-        }
-      } catch {
-        return <span>{v}</span>;
-      }
-    }
-  };
-
   useEffect(() => {
     window.addEventListener('keyup', hotkeyHandler);
     return () => window.removeEventListener('keyup', hotkeyHandler);
@@ -209,6 +192,9 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
               id={automationTasks[currentImage].inversion_solution.id}
               mfdTableId={automationTasks[currentImage].inversion_solution.mfd_table_id}
               meta={automationTasks[currentImage].inversion_solution.meta}
+              filteredMeta={filteredMeta}
+              currentImage={currentImage}
+              automationTasksLength={automationTasks.length}
               generalViews={generalViews}
               setGeneralViews={setGeneralViews}
             />
@@ -221,6 +207,9 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
               id={automationTasks[currentImage].inversion_solution.id}
               regionalViews={regionalViews}
               setRegionalViews={setRegionalViews}
+              nonRegionalViews={nonRegionalViews}
+              setNonRegionalViews={setNonRegionalViews}
+              regional={regional}
             />
           </DiagnosticReportTabPanel>
         );
@@ -282,13 +271,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             Inversion Solution {automationTasks[currentImage].inversion_solution.id}&nbsp;&nbsp;&nbsp;
             <Link to={`/InversionSolution/${automationTasks[currentImage].inversion_solution.id}`}>[more]</Link>
           </h4>
-          <Info>
-            {filteredMeta.map((kv) => (
-              <p style={infoStyle} key={kv?.k}>
-                <strong>{kv?.k}:</strong> {tagToolTip(kv?.v)} &nbsp;
-              </p>
-            ))}
-          </Info>
+          <MetaToolTip meta={filteredMeta} />
           <div className={classes.buttonContainer}>
             <Tooltip title="use (<,) (>.) or arrow keys to navigate">
               <IconButton
@@ -323,7 +306,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
           </div>
           <Tabs value={currentTab} onChange={handleTabChange}>
             <Tab label="General" id="simple-tab-0" disableFocusRipple />
-            <Tab label="Regional Solutions" id="simple-tab-1" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
+            <Tab label="MFD Solutions" id="simple-tab-1" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
             <Tab label="Named Faults" id="simple-tab-2" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
             <Tab label="Parent Faults" id="simple-tab-3" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
             <Tab label="Hazard Charts" id="simple-tab-4" disabled={!hazardId.length} disableFocusRipple />

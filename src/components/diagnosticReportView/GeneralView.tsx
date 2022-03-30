@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
-import buildUrl from 'build-url-ts';
 import { diagnosticReportViewOptions } from '../../constants/diagnosticReport';
 import { SolutionDiagnosticsOption } from '../../interfaces/generaltask';
 import MultiSelect from '../common/MultiSelect';
-import { Card, CircularProgress } from '@mui/material';
-import { ParentSize } from '@visx/responsive';
-import GeneralViewMfd from './GeneralViewMfd';
+import GeneralViewMfdDynamicDialog from './GeneralViewMfdDynamicDialog';
+import GeneralViewMfdStaticDialog from './GeneralViewMfdStaticDialog';
+import { MetaArguments } from '../../interfaces/mySolutions';
 
 const PREFIX = 'GeneralView';
 
@@ -14,6 +13,7 @@ const classes = {
   imageContainer: `${PREFIX}-imageContainer`,
   image: `${PREFIX}-image`,
   card: `${PREFIX}-card`,
+  title: `${PREFIX}-title`,
 };
 
 const Root = styled('div')(() => ({
@@ -26,16 +26,20 @@ const Root = styled('div')(() => ({
       flexGrow: 1,
     },
   },
-
   [`& .${classes.image}`]: {
     padding: '5px',
-    maxHeight: '80vh',
+    maxHeight: '100%',
     width: '100%',
     objectFit: 'contain',
   },
+  [`& .${classes.title}`]: {
+    display: 'flex',
+    justifyContent: 'center',
+    fontWeight: 'bold',
+  },
   [`& .${classes.card}`]: {
     padding: '0px',
-    maxHeight: '80vh',
+    maxHeight: '100%',
     width: '33%',
     objectFit: 'contain',
     display: 'flex',
@@ -56,7 +60,10 @@ interface GeneralViewProps {
     | null
     | undefined;
   mfdTableId: string;
+  filteredMeta: MetaArguments;
   generalViews: string[];
+  currentImage: number;
+  automationTasksLength: number;
   setGeneralViews: (selection: string[]) => void;
 }
 
@@ -65,7 +72,10 @@ const GeneralView: React.FC<GeneralViewProps> = ({
   mfdTableId,
   meta,
   generalViews,
+  filteredMeta,
   setGeneralViews,
+  currentImage,
+  automationTasksLength,
 }: GeneralViewProps) => {
   const [generalViewSelections, setGeneralViewSelections] = useState<SolutionDiagnosticsOption[]>([
     diagnosticReportViewOptions[0],
@@ -77,12 +87,6 @@ const GeneralView: React.FC<GeneralViewProps> = ({
     });
     setGeneralViewSelections(filtered);
   }, [generalViews]);
-
-  const reportUrl = (path: string, id: string) => {
-    return buildUrl(process.env.REACT_APP_REPORTS_URL, {
-      path: `/opensha/DATA/${id}/solution_report/resources/${path}`,
-    });
-  };
 
   const generalViewDisplayNames: string[] = [];
 
@@ -105,52 +109,24 @@ const GeneralView: React.FC<GeneralViewProps> = ({
             option.finalPath === 'mfd_plot_Total_MFD_cumulative.png'
           ) {
             return (
-              <Card key={option.finalPath} className={classes.card}>
-                <div className={classes.image}>
-                  <React.Suspense fallback={<CircularProgress />}>
-                    <ParentSize>
-                      {(parent) => (
-                        <GeneralViewMfd
-                          mfdTableId={mfdTableId}
-                          meta={meta}
-                          parentWidth={parent.width}
-                          parentRef={parent.ref}
-                          cumulative={option.finalPath === 'mfd_plot_Total_MFD_cumulative.png'}
-                          resizeParent={parent.resize}
-                        />
-                      )}
-                    </ParentSize>
-                  </React.Suspense>
-                </div>
-              </Card>
+              <GeneralViewMfdDynamicDialog
+                mfdTableId={mfdTableId}
+                meta={meta}
+                option={option}
+                currentImage={currentImage}
+                automationTasksLength={automationTasksLength}
+                filteredMeta={filteredMeta}
+              />
             );
           } else {
             return (
-              <Card key={option.finalPath} className={classes.card}>
-                <img
-                  key={option.finalPath}
-                  className={classes.image}
-                  src={reportUrl(option.finalPath, id)}
-                  alt={option.finalPath}
-                  onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-                    let newUrl;
-
-                    switch (option.finalPath) {
-                      case 'rate_dist.png':
-                        newUrl = reportUrl('sa_progress_rate_dist.png', id);
-                        break;
-                      default:
-                        newUrl = '/img-placeholder.jpg';
-                    }
-
-                    if (e.currentTarget.src !== newUrl && e.currentTarget.src !== '/imgPlaceholder.jpeg') {
-                      e.currentTarget.src = newUrl;
-                    } else if (e.currentTarget.src === newUrl && e.currentTarget.src !== '/imgPlaceholder.jpeg') {
-                      e.currentTarget.src = '/img-placeholder.jpg';
-                    }
-                  }}
-                />
-              </Card>
+              <GeneralViewMfdStaticDialog
+                id={id}
+                option={option}
+                currentImage={currentImage}
+                automationTasksLength={automationTasksLength}
+                filteredMeta={filteredMeta}
+              />
             );
           }
         })}
@@ -159,4 +135,4 @@ const GeneralView: React.FC<GeneralViewProps> = ({
   );
 };
 
-export default GeneralView;
+export { GeneralView, classes };

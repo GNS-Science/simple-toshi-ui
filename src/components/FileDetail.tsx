@@ -82,7 +82,7 @@ const FileDetail: React.FC = () => {
     if (tab === undefined || tab === 'FileDetail') {
       loadQuery({ id });
     }
-  }, [tab]);
+  }, [loadQuery, id, tab]);
 
   if (!data?.node) {
     return (
