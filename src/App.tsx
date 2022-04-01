@@ -13,6 +13,7 @@ import Search from './components/Search';
 import GeneralTask from './pages/GeneralTask';
 import MenuBar from './components/MenuBar';
 import InversionSolution from './pages/InversionSolution';
+import ScaledInversionSolution from './pages/ScaledInversionSolution';
 
 /* preview views (with no test coverage...) */
 import Preview from './pages/Preview';
@@ -115,6 +116,9 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
                   </Route>
                   <Route path="/InversionSolution/:id/:tab?">
                     <InversionSolution />
+                  </Route>
+                  <Route path="/ScaledInversionSolution/:id/:tab?">
+                    <ScaledInversionSolution />
                   </Route>
                   <Route path="/Search">
                     <Search />

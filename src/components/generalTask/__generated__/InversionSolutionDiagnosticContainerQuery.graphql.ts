@@ -5,7 +5,7 @@
 import { ConcreteRequest } from "relay-runtime";
 
 export type TableType = "GENERAL" | "HAZARD_GRIDDED" | "HAZARD_SITES" | "MFD_CURVES" | "MFD_CURVES_V2" | "%future added value";
-export type TaskSubType = "HAZARD" | "INVERSION" | "REPORT" | "RUPTURE_SET" | "%future added value";
+export type TaskSubType = "HAZARD" | "INVERSION" | "REPORT" | "RUPTURE_SET" | "SCALE_SOLUTION" | "SOLUTION_TO_NRML" | "%future added value";
 export type InversionSolutionDiagnosticContainerQueryVariables = {
     id?: Array<string> | null | undefined;
 };
