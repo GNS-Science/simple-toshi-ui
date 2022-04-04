@@ -3,8 +3,12 @@ import { useLazyLoadQuery } from 'react-relay';
 import { graphql } from 'babel-plugin-relay/macro';
 
 import { InversionSolutionDiagnosticContainerQuery } from './__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
-import { SweepArguments, ValidatedSubtask } from '../../interfaces/generaltask';
-import { validateSubtask } from '../../service/generalTask.service';
+import {
+  SweepArguments,
+  ValidatedInversionSolution,
+  ValidatedScaleInversionSolution,
+} from '../../interfaces/generaltask';
+import { validateInversionSolutions, validateScaleInversionSolutions } from '../../service/generalTask.service';
 import DiagnosticReportCard from '../diagnosticReportView/DiagnosticReportCard';
 
 interface InversionSolutionDiagnosticContainerProps {
@@ -56,15 +60,21 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   setDisableHotkey,
   isScaleSolution,
 }: InversionSolutionDiagnosticContainerProps) => {
-  const [automationTasks, setAutomationTasks] = useState<ValidatedSubtask[]>([]);
+  const [automationTasks, setAutomationTasks] = useState<ValidatedInversionSolution[]>([]);
+  const [scaleInversionSolutions, setScaleInversionSolutions] = useState<ValidatedScaleInversionSolution[]>([]);
   const data = useLazyLoadQuery<InversionSolutionDiagnosticContainerQuery>(inversionSolutionDiagnosticContainerQuery, {
     id: ids,
   });
 
   useEffect(() => {
-    const validatedSubtasks = validateSubtask(data);
-    setAutomationTasks(validatedSubtasks);
-  }, [data]);
+    if (isScaleSolution) {
+      const validatedScaleInversionSolutions = validateScaleInversionSolutions(data);
+      setScaleInversionSolutions(validatedScaleInversionSolutions);
+    } else {
+      const validatedInversionSolutions = validateInversionSolutions(data);
+      setAutomationTasks(validatedInversionSolutions);
+    }
+  }, [isScaleSolution, data]);
 
   return (
     <>

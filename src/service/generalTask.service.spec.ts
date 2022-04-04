@@ -1,12 +1,5 @@
 import { GeneralTaskChildrenTabQueryResponse } from '../components/generalTask/__generated__/GeneralTaskChildrenTabQuery.graphql';
-import { InversionSolutionDiagnosticContainerQueryResponse } from '../components/generalTask/__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
-import {
-  ValidatedChildren,
-  FilteredArguments,
-  GeneralTaskKeyValueListPairs,
-  SweepArguments,
-  ValidatedSubtask,
-} from '../interfaces/generaltask';
+import { ValidatedChildren, FilteredArguments, GeneralTaskKeyValueListPairs } from '../interfaces/generaltask';
 import * as generalTaskService from './generalTask.service';
 
 describe('sweepList function', () => {
