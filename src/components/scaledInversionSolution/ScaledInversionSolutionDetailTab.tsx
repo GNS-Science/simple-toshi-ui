@@ -15,6 +15,9 @@ export const scaledInversionSolutionDetailTabQuery = graphql`
       ... on ScaledInversionSolution {
         file_name
         created
+        produced_by {
+          id
+        }
         meta {
           k
           v
@@ -52,6 +55,10 @@ const ScaledInversionSolutionDetailTab: React.FC<ScaledInversionSolutionDetailTa
       <Typography>
         <strong>Source Solution:</strong> {data?.node?.source_solution?.id}{' '}
         <Link to={`/InversionSolution/${data?.node?.source_solution?.id}`}>[more]</Link>
+      </Typography>
+      <Typography>
+        <strong>Produced By:</strong> {data?.node?.produced_by?.id}{' '}
+        <Link to={`/AutomationTask/${data?.node?.produced_by?.id}`}>[more]</Link>
       </Typography>
       {data?.node?.meta && <KeyValueTable header="Meta" data={data?.node?.meta} />}
     </>

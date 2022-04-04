@@ -88,7 +88,7 @@ const ScaledInversionSolution: React.FC = () => {
     <Root>
       <Typography variant="h5" gutterBottom>
         ScaledInversionSolution: {data?.node?.id}&nbsp;
-        <FavouriteControls id={data?.node?.id as string} producedBy={data?.node?.source_solution?.id as string} />
+        <FavouriteControls id={data?.node?.id as string} producedBy={data?.node?.produced_by?.id as string} />
       </Typography>
       <Box className={classes.root}>
         <Tabs
@@ -118,6 +118,9 @@ const scaledInversionSolutionQuery = graphql`
       ... on ScaledInversionSolution {
         file_name
         created
+        produced_by {
+          id
+        }
         meta {
           k
           v

@@ -13,6 +13,9 @@ export type ScaledInversionSolutionDetailTabQueryResponse = {
         readonly id: string;
         readonly file_name?: string | null | undefined;
         readonly created?: unknown | null | undefined;
+        readonly produced_by?: {
+            readonly id: string;
+        } | null | undefined;
         readonly meta?: ReadonlyArray<{
             readonly k: string | null;
             readonly v: string | null;
@@ -43,6 +46,9 @@ query ScaledInversionSolutionDetailTabQuery(
     ... on ScaledInversionSolution {
       file_name
       created
+      produced_by {
+        id
+      }
       meta {
         k
         v
@@ -115,6 +121,18 @@ v3 = [
             "storageKey": null
           },
           (v2/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "AutomationTask",
+            "kind": "LinkedField",
+            "name": "produced_by",
+            "plural": false,
+            "selections": [
+              (v1/*: any*/)
+            ],
+            "storageKey": null
+          },
           {
             "alias": null,
             "args": null,
@@ -197,14 +215,14 @@ return {
     "selections": (v3/*: any*/)
   },
   "params": {
-    "cacheID": "0d212f3dd1e0d184e319c0691c8ba0ec",
+    "cacheID": "fb0f49a5dd8dde9b1dfdd578a07cdcb3",
     "id": null,
     "metadata": {},
     "name": "ScaledInversionSolutionDetailTabQuery",
     "operationKind": "query",
-    "text": "query ScaledInversionSolutionDetailTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    id\n    ... on ScaledInversionSolution {\n      file_name\n      created\n      meta {\n        k\n        v\n      }\n      source_solution {\n        id\n        created\n      }\n      relations {\n        total_count\n      }\n    }\n  }\n}\n"
+    "text": "query ScaledInversionSolutionDetailTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    id\n    ... on ScaledInversionSolution {\n      file_name\n      created\n      produced_by {\n        id\n      }\n      meta {\n        k\n        v\n      }\n      source_solution {\n        id\n        created\n      }\n      relations {\n        total_count\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '549332ffcb25065e5ac4626bce307f67';
+(node as any).hash = '37090609b9708389157003fdfc8d9ef0';
 export default node;
