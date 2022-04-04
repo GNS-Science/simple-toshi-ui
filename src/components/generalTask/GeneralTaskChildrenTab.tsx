@@ -318,6 +318,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
             setParentFaultViews={isClipBoard ? setParentFaultViews : setLocalStorageParentFaultViews}
             disableHotkey={disableHotkey}
             setDisableHotkey={setDisableHotkey}
+            isScaleSolution={generalTaskData.node?.subtask_type === 'SCALE_SOLUTION'}
           />
         )}
       </React.Suspense>

@@ -15,7 +15,7 @@ import NamedFaultsView from './NamedFaultsView';
 import RegionalMfdView from './RegionalMfdView';
 import InversionSolutionHazardCharts from '../inversionSolution/InversionSolutionHazardCharts';
 import ParentFaultView from './ParentFaultViews';
-import { SweepArguments, ValidatedSubtask } from '../../interfaces/generaltask';
+import { SweepArguments, ValidatedInversionSolution } from '../../interfaces/generaltask';
 import { MetaArguments } from '../../interfaces/mySolutions';
 import { filteredMetaGT, filterMetaArguments } from '../../service/diagnosticReports.service';
 import SolutionAnalysisTab from '../inversionSolution/SolutionAnalysisTab';
@@ -54,7 +54,7 @@ interface DiagnosticReportCardProps {
   sweepArgs?: SweepArguments;
   sweepList?: string[];
   modelType: string;
-  automationTasks: ValidatedSubtask[];
+  automationTasks: ValidatedInversionSolution[];
   generalViews: string[];
   setGeneralViews: (selection: string[]) => void;
   namedFaultsView: string;
@@ -74,6 +74,7 @@ interface DiagnosticReportCardProps {
   setParentFault: (fault: string) => void;
   disableHotkey: boolean;
   setDisableHotkey: Dispatch<SetStateAction<boolean>>;
+  isScaleSolution?: boolean;
 }
 
 const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
@@ -100,6 +101,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   setParentFault,
   disableHotkey,
   setDisableHotkey,
+  isScaleSolution,
 }: DiagnosticReportCardProps) => {
   const [currentImage, setCurrentImage] = useState<number>(0);
   const [currentTab, setCurrentTab] = useState<number>(0);
@@ -197,6 +199,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
               automationTasksLength={automationTasks.length}
               generalViews={generalViews}
               setGeneralViews={setGeneralViews}
+              isScaleSolution={isScaleSolution ?? false}
             />
           </DiagnosticReportTabPanel>
         );
