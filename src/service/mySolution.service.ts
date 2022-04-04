@@ -1,5 +1,5 @@
 import { GeneralTaskDetails, ReportItem } from '../interfaces/diagnosticReport';
-import { IStables, ValidatedSubtask } from '../interfaces/generaltask';
+import { IStables, ValidatedInversionSolution } from '../interfaces/generaltask';
 import { ISFavouritesInstance } from '../interfaces/localStorage';
 import { SolutionItem } from '../interfaces/mySolutions';
 import { MySolutionsQueryResponse } from '../pages/__generated__/MySolutionsQuery.graphql';
@@ -34,8 +34,8 @@ export const validateListItems = (data: MySolutionsQueryResponse): SolutionItem[
   return listItems;
 };
 
-export const getReportItems = (listItems: SolutionItem[]): ValidatedSubtask[] => {
-  const reportItems: ValidatedSubtask[] = [];
+export const getReportItems = (listItems: SolutionItem[]): ValidatedInversionSolution[] => {
+  const reportItems: ValidatedInversionSolution[] = [];
   listItems.map((task) => {
     const taskMeta = task.inversion_solution?.meta ?? [];
     // const sweepArguments = (task?.parents?.edges[0]?.node?.parent?.swept_arguments as string[]) ?? [];
@@ -45,7 +45,7 @@ export const getReportItems = (listItems: SolutionItem[]): ValidatedSubtask[] =>
       if (new_mfd_table) return new_mfd_table.table_id || '';
       return '';
     };
-    const validatedTask: ValidatedSubtask = {
+    const validatedTask: ValidatedInversionSolution = {
       __typename: 'AutomationTask',
       id: task.id,
       inversion_solution: {
