@@ -10,6 +10,7 @@ import {
 } from '../../interfaces/generaltask';
 import { validateInversionSolutions, validateScaleInversionSolutions } from '../../service/generalTask.service';
 import DiagnosticReportCard from '../diagnosticReportView/DiagnosticReportCard';
+import ScaleDiagnosticReportCard from '../diagnosticReportView/ScaleDiagnosticReportCard';
 
 interface InversionSolutionDiagnosticContainerProps {
   readonly sweepArgs?: SweepArguments;
@@ -78,30 +79,34 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
 
   return (
     <>
-      <DiagnosticReportCard
-        sweepArgs={sweepArgs}
-        modelType={modelType}
-        generalViews={generalViews}
-        setGeneralViews={setGeneralViews}
-        namedFaultsView={namedFaultsView}
-        setNamedFaultsView={setNamedFaultsView}
-        namedFaultsLocations={namedFaultsLocations}
-        setNamedFaultsLocations={setNamedFaultsLocations}
-        automationTasks={automationTasks}
-        regionalViews={regionalViews}
-        setRegionalViews={setRegionalViews}
-        nonRegionalViews={nonRegionalViews}
-        setNonRegionalViews={setNonRegionalViews}
-        reportTab={reportTab}
-        setReportTab={setReportTab}
-        parentFaultViews={parentFaultViews}
-        setParentFaultViews={setParentFaultViews}
-        parentFault={parentFault}
-        setParentFault={setParentFault}
-        disableHotkey={disableHotkey}
-        setDisableHotkey={setDisableHotkey}
-        isScaleSolution={isScaleSolution}
-      />
+      {isScaleSolution ? (
+        <ScaleDiagnosticReportCard scaleInversionSolutions={scaleInversionSolutions} />
+      ) : (
+        <DiagnosticReportCard
+          sweepArgs={sweepArgs}
+          modelType={modelType}
+          generalViews={generalViews}
+          setGeneralViews={setGeneralViews}
+          namedFaultsView={namedFaultsView}
+          setNamedFaultsView={setNamedFaultsView}
+          namedFaultsLocations={namedFaultsLocations}
+          setNamedFaultsLocations={setNamedFaultsLocations}
+          automationTasks={automationTasks}
+          regionalViews={regionalViews}
+          setRegionalViews={setRegionalViews}
+          nonRegionalViews={nonRegionalViews}
+          setNonRegionalViews={setNonRegionalViews}
+          reportTab={reportTab}
+          setReportTab={setReportTab}
+          parentFaultViews={parentFaultViews}
+          setParentFaultViews={setParentFaultViews}
+          parentFault={parentFault}
+          setParentFault={setParentFault}
+          disableHotkey={disableHotkey}
+          setDisableHotkey={setDisableHotkey}
+          isScaleSolution={isScaleSolution}
+        />
+      )}
     </>
   );
 };
