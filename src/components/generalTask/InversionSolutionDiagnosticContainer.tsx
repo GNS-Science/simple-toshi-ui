@@ -29,6 +29,7 @@ interface InversionSolutionDiagnosticContainerProps {
   setParentFault: (fault: string) => void;
   disableHotkey: boolean;
   setDisableHotkey: Dispatch<SetStateAction<boolean>>;
+  isScaleSolution: boolean;
 }
 
 const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnosticContainerProps> = ({
@@ -53,6 +54,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   setParentFault,
   disableHotkey,
   setDisableHotkey,
+  isScaleSolution,
 }: InversionSolutionDiagnosticContainerProps) => {
   const [automationTasks, setAutomationTasks] = useState<ValidatedSubtask[]>([]);
   const data = useLazyLoadQuery<InversionSolutionDiagnosticContainerQuery>(inversionSolutionDiagnosticContainerQuery, {
@@ -88,6 +90,7 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
         setParentFault={setParentFault}
         disableHotkey={disableHotkey}
         setDisableHotkey={setDisableHotkey}
+        isScaleSolution={isScaleSolution}
       />
     </>
   );
@@ -106,6 +109,30 @@ export const inversionSolutionDiagnosticContainerQuery = graphql`
               created
               task_type
               id
+              files {
+                edges {
+                  node {
+                    file {
+                      #for ScaledInversionSolutions
+                      ... on ScaledInversionSolution {
+                        id
+                        meta {
+                          k
+                          v
+                        }
+                        source_solution {
+                          id
+                          meta {
+                            k
+                            v
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              #for InversionSolutions
               inversion_solution {
                 id
                 file_name
