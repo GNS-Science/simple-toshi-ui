@@ -74,16 +74,31 @@ export interface SolutionDiagnosticsOption {
   imgHght: number | undefined;
 }
 
-export type ValidatedSubtask = {
+type Meta = Array<{
+  readonly k: string | null;
+  readonly v: string | null;
+} | null>;
+
+export type ValidatedScaleInversionSolution = {
+  __typename: 'AutomtaionTask';
+  id: string;
+  scale_inversion_solution: {
+    id: string;
+    meta: Meta;
+    source_solution: {
+      id: string;
+      meta: Meta;
+    };
+  };
+};
+
+export type ValidatedInversionSolution = {
   __typename: 'AutomationTask';
   id: string;
   inversion_solution: {
     id: string;
     mfd_table_id: string;
-    meta: Array<{
-      readonly k: string | null;
-      readonly v: string | null;
-    } | null>;
+    meta: Meta;
     tables: IStables;
   };
 };
