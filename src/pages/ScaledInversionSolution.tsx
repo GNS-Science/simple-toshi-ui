@@ -1,40 +1,112 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import { useHistory, useParams } from 'react-router-dom';
 import { useLazyLoadQuery, useQueryLoader } from 'react-relay';
 import { graphql } from 'babel-plugin-relay/macro';
-import { Box, CircularProgress, Tab, Tabs, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Box, Tab, Tabs, Typography } from '@mui/material';
+import FavouriteControls from '../components/common/FavouriteControls';
 
+import DiagnosticReportTab from '../components/inversionSolution/DiagnosticReportTab';
 import { ScaledInversionSolutionQuery } from './__generated__/ScaledInversionSolutionQuery.graphql';
 import { ScaledInversionSolutionDetailTabQuery } from '../components/scaledInversionSolution/__generated__/ScaledInversionSolutionDetailTabQuery.graphql';
 import ScaledInversionSolutionDetailTab, {
   scaledInversionSolutionDetailTabQuery,
 } from '../components/scaledInversionSolution/ScaledInversionSolutionDetailTab';
-import KeyValueTable from '../components/common/KeyValueTable';
 
 interface ScaledInversionSolutionParams {
   id: string;
   tab: string;
 }
 
+const PREFIX = 'ScaledInversionSolution';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  tabPanel: `${PREFIX}-tabPanel`,
+  tab: `${PREFIX}-tab`,
+};
+
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classes.root}`]: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.paper,
+    display: 'flex',
+  },
+
+  [`& .${classes.tabPanel}`]: {
+    width: '80%',
+    padding: theme.spacing(2),
+  },
+
+  [`& .${classes.tab}`]: {
+    width: '20%',
+    borderRight: `1px solid ${theme.palette.divider}`,
+  },
+}));
+
 const ScaledInversionSolution: React.FC = () => {
   const { id, tab } = useParams<ScaledInversionSolutionParams>();
   const data = useLazyLoadQuery<ScaledInversionSolutionQuery>(scaledInversionSolutionQuery, { id });
-  // const [queryRef, loadQuery] = useQueryLoader<ScaledInversionSolutionDetailTabQuery>(
-  //   scaledInversionSolutionDetailTabQuery,
-  // );
+  const [queryRef, loadQuery] = useQueryLoader<ScaledInversionSolutionDetailTabQuery>(
+    scaledInversionSolutionDetailTabQuery,
+  );
+  const history = useHistory();
+
+  useEffect(() => {
+    if (tab === undefined || tab === 'ScaledInversionSolutionDetailTab') {
+      loadQuery({ id });
+    }
+  }, [id, loadQuery, tab]);
+
+  const renderTab = () => {
+    switch (tab) {
+      default:
+        return (
+          // prettier-ignore
+          <Box className={classes.tabPanel}>
+            {queryRef && <ScaledInversionSolutionDetailTab queryRef={queryRef} />}           
+          </Box>
+        );
+      case 'DiagnosticReportTab':
+        return (
+          <Box className={classes.tabPanel}>
+            <DiagnosticReportTab id={id} />
+          </Box>
+        );
+    }
+  };
+
+  if (!data?.node) {
+    return (
+      <Typography variant="h5" gutterBottom>
+        File ID Not Found
+      </Typography>
+    );
+  }
+
   return (
-    <>
-      <Typography>
-        <strong>File name:</strong> {data?.node?.file_name}
+    <Root>
+      <Typography variant="h5" gutterBottom>
+        ScaledInversionSolution: {data?.node?.id}&nbsp;
+        <FavouriteControls id={data?.node?.id as string} producedBy={data?.node?.source_solution?.id as string} />
       </Typography>
-      <Typography>
-        <strong>Source Solution:</strong> {data?.node?.source_solution?.id}{' '}
-        <Link to={`/InversionSolution/${data?.node?.source_solution?.id}`}>[more]</Link>
-      </Typography>
-      {data?.node?.meta && <KeyValueTable header="Meta" data={data?.node?.meta} />}
-    </>
+      <Box className={classes.root}>
+        <Tabs
+          orientation="vertical"
+          value={tab ?? 'ScaledInversionSolutionDetailTab'}
+          onChange={(e, val) => history.push(`/ScaledInversionSolution/${id}/${val}`)}
+        >
+          <Tab
+            label="Detail"
+            id="ScaledInversionSolutionDetailTab"
+            value="ScaledInversionSolutionDetailTab"
+            className={classes.tab}
+          />
+          <Tab label="Solution Diags" id="DiagnosticReportTab" value="DiagnosticReportTab" className={classes.tab} />
+        </Tabs>
+        {renderTab()}
+      </Box>
+    </Root>
   );
 };
 
