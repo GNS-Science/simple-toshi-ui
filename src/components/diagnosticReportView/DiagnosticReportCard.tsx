@@ -1,14 +1,8 @@
 import { styled } from '@mui/material/styles';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Card, CardContent, Typography, Tabs, Tab, CircularProgress } from '@mui/material';
-import { IconButton } from '@mui/material';
-import Tooltip from '@mui/material/Tooltip';
 
-// import json
-import FavouriteControls from '../common/FavouriteControls';
 import DiagnosticReportTabPanel from './DiagnosticReportTabPanel';
 import { GeneralView } from './GeneralView';
 import NamedFaultsView from './NamedFaultsView';
@@ -20,6 +14,7 @@ import { MetaArguments } from '../../interfaces/mySolutions';
 import { filteredMetaGT, filterMetaArguments } from '../../service/diagnosticReports.service';
 import SolutionAnalysisTab from '../inversionSolution/SolutionAnalysisTab';
 import { MetaToolTip } from '../common/MetaToolTip';
+import FlipChartControls from './utils/FlipChartControls';
 
 const PREFIX = 'DiagnosticReportCard';
 
@@ -275,38 +270,15 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             <Link to={`/InversionSolution/${automationTasks[currentImage].inversion_solution.id}`}>[more]</Link>
           </h4>
           <MetaToolTip meta={filteredMeta} />
-          <div className={classes.buttonContainer}>
-            <Tooltip title="use (<,) (>.) or arrow keys to navigate">
-              <IconButton
-                className={classes.button}
-                color="primary"
-                onClick={prevImage}
-                disabled={currentImage === 0}
-                size="large"
-              >
-                <ArrowBackIosIcon />
-              </IconButton>
-            </Tooltip>
-            <Typography>
-              {currentImage + 1}&nbsp;of&nbsp;{automationTasks.length}
-            </Typography>
-            <Tooltip title="use (<,) (>.) or arrow keys to navigate">
-              <IconButton
-                className={classes.button}
-                color="primary"
-                onClick={nextImage}
-                disabled={currentImage === automationTasks.length - 1}
-                size="large"
-              >
-                <ArrowForwardIosIcon />
-              </IconButton>
-            </Tooltip>
-            <FavouriteControls
-              id={automationTasks[currentImage].inversion_solution.id}
-              producedBy={automationTasks[currentImage].id}
-              disableHotkey={disableHotkey}
-            />
-          </div>
+          <FlipChartControls
+            id={automationTasks[currentImage].inversion_solution.id}
+            producedBy={automationTasks[currentImage].id}
+            currentImage={currentImage}
+            handlePrev={prevImage}
+            handleNext={nextImage}
+            totalLength={automationTasks.length}
+            disableHotkey={disableHotkey}
+          />
           <Tabs value={currentTab} onChange={handleTabChange}>
             <Tab label="General" id="simple-tab-0" disableFocusRipple />
             <Tab label="MFD Solutions" id="simple-tab-1" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
