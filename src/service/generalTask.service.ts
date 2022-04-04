@@ -1,7 +1,12 @@
 import { GeneralTaskChildrenTabQueryResponse } from '../components/generalTask/__generated__/GeneralTaskChildrenTabQuery.graphql';
 import { InversionSolutionDiagnosticContainerQueryResponse } from '../components/generalTask/__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
 import { GeneralTaskDetails } from '../interfaces/diagnosticReport';
-import { ValidatedChildren, ValidatedSubtask, ClipBoardObject } from '../interfaces/generaltask';
+import {
+  ValidatedChildren,
+  ValidatedInversionSolution,
+  ClipBoardObject,
+  ValidatedScaleInversionSolution,
+} from '../interfaces/generaltask';
 import { FilteredArguments, GeneralTaskKeyValueListPairs } from '../interfaces/generaltask';
 import { GeneralTaskQueryResponse } from '../pages/__generated__/GeneralTaskQuery.graphql';
 
@@ -37,9 +42,46 @@ export const updateFilteredArguments = (
   };
 };
 
-export const validateSubtask = (data: InversionSolutionDiagnosticContainerQueryResponse): ValidatedSubtask[] => {
+export const validateScaleInversionSolutions = (
+  data: InversionSolutionDiagnosticContainerQueryResponse,
+): ValidatedScaleInversionSolution[] => {
   const subtasks = data?.nodes?.result?.edges.map((subtask) => subtask?.node);
-  const validatedSubtasks: ValidatedSubtask[] = [];
+  const validatedScaleInversionSolutions: ValidatedScaleInversionSolution[] = [];
+
+  subtasks?.map((subtask) => {
+    if (subtask && subtask.__typename === 'AutomationTask') {
+      const scaleFile = subtask.files?.edges.filter((file) => file?.node?.file?.source_solution);
+      const scaleIS = scaleFile && scaleFile[0]?.node?.file;
+      const newSubtask: ValidatedScaleInversionSolution = {
+        __typename: 'AutomtaionTask',
+        id: subtask.id,
+        scale_inversion_solution: {
+          id: scaleIS?.id as string,
+          meta: [],
+          source_solution: {
+            id: scaleIS?.source_solution?.id as string,
+            meta: [],
+          },
+        },
+      };
+      scaleIS?.meta?.map((kv) => {
+        kv !== null && newSubtask.scale_inversion_solution.meta.push(kv);
+      });
+      scaleIS?.source_solution?.meta?.map((kv) => {
+        kv !== null && newSubtask.scale_inversion_solution.source_solution.meta.push(kv);
+      });
+      validatedScaleInversionSolutions.push(newSubtask);
+    }
+  });
+
+  return validatedScaleInversionSolutions;
+};
+
+export const validateInversionSolutions = (
+  data: InversionSolutionDiagnosticContainerQueryResponse,
+): ValidatedInversionSolution[] => {
+  const subtasks = data?.nodes?.result?.edges.map((subtask) => subtask?.node);
+  const validatedSubtasks: ValidatedInversionSolution[] = [];
 
   subtasks?.map((subtask) => {
     if (
@@ -54,7 +96,7 @@ export const validateSubtask = (data: InversionSolutionDiagnosticContainerQueryR
         if (new_mfd_table) return new_mfd_table.table_id || '';
         return '';
       };
-      const newSubtask: ValidatedSubtask = {
+      const newSubtask: ValidatedInversionSolution = {
         __typename: 'AutomationTask',
         id: subtask.id,
 
