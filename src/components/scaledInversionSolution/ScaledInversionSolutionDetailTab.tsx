@@ -1,10 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
-import { Typography } from '@mui/material';
 import { graphql } from 'babel-plugin-relay/macro';
+import { Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
 
-import { formatBytes } from '../FileDetail';
 import { ScaledInversionSolutionDetailTabQuery } from './__generated__/ScaledInversionSolutionDetailTabQuery.graphql';
 import KeyValueTable from '../common/KeyValueTable';
 
@@ -51,7 +50,8 @@ const ScaledInversionSolutionDetailTab: React.FC<ScaledInversionSolutionDetailTa
         <strong>File name:</strong> {data?.node?.file_name}
       </Typography>
       <Typography>
-        <strong>Source Solution:</strong> {data?.node?.source_solution?.id}
+        <strong>Source Solution:</strong> {data?.node?.source_solution?.id}{' '}
+        <Link to={`/InversionSolution/${data?.node?.source_solution?.id}`}>[more]</Link>
       </Typography>
       {data?.node?.meta && <KeyValueTable header="Meta" data={data?.node?.meta} />}
     </>
