@@ -3,9 +3,9 @@ import { InversionSolutionDiagnosticContainerQueryResponse } from '../components
 import { GeneralTaskDetails } from '../interfaces/diagnosticReport';
 import {
   ValidatedChildren,
-  ValidatedInversionSolution,
   ClipBoardObject,
-  ValidatedScaleInversionSolution,
+  UnifiedInversionSolution,
+  UnifiedInversionSolutionType,
 } from '../interfaces/generaltask';
 import { FilteredArguments, GeneralTaskKeyValueListPairs } from '../interfaces/generaltask';
 import { GeneralTaskQueryResponse } from '../pages/__generated__/GeneralTaskQuery.graphql';
@@ -42,82 +42,73 @@ export const updateFilteredArguments = (
   };
 };
 
-export const validateScaleInversionSolutions = (
+export const validateUnifiedInversionSolutions = (
   data: InversionSolutionDiagnosticContainerQueryResponse,
-): ValidatedScaleInversionSolution[] => {
+): UnifiedInversionSolution[] => {
   const subtasks = data?.nodes?.result?.edges.map((subtask) => subtask?.node);
-  const validatedScaleInversionSolutions: ValidatedScaleInversionSolution[] = [];
+  const unifiedInversionSolutions: UnifiedInversionSolution[] = [];
 
   subtasks?.map((subtask) => {
     if (subtask && subtask.__typename === 'AutomationTask') {
-      const scaleFile = subtask.files?.edges.filter((file) => file?.node?.file?.source_solution);
-      const scaleIS = scaleFile && scaleFile[0]?.node?.file;
-      const newSubtask: ValidatedScaleInversionSolution = {
-        __typename: 'AutomtaionTask',
-        id: subtask.id,
-        scale_inversion_solution: {
-          id: scaleIS?.id as string,
-          meta: [],
-          source_solution: {
-            id: scaleIS?.source_solution?.id as string,
+      const scaledFile = subtask.files?.edges.filter((file) => file?.node?.file?.source_solution);
+      const scaledIS = scaledFile && scaledFile[0]?.node?.file;
+
+      if (subtask.inversion_solution) {
+        const hazardTable = subtask.inversion_solution.tables?.find((table) => table?.table_type === 'HAZARD_SITES');
+        const hazardId = hazardTable ? hazardTable?.table_id : '';
+
+        const mfdTableId = (): string => {
+          if (subtask.inversion_solution?.mfd_table_id) return subtask.inversion_solution?.mfd_table_id;
+          const new_mfd_table = subtask.inversion_solution?.tables?.filter((ltr) => ltr?.table_type == 'MFD_CURVES')[0];
+          if (new_mfd_table) return new_mfd_table.table_id || '';
+          return '';
+        };
+
+        const newUnifiedInversionSolution: UnifiedInversionSolution = {
+          type: UnifiedInversionSolutionType.INVERSION_SOLUTION,
+          id: subtask.id,
+          solution: {
+            id: subtask.inversion_solution.id,
             meta: [],
+            hazardId,
+            mfdTableId: mfdTableId(),
+            source_solution: null,
           },
-        },
-      };
-      scaleIS?.meta?.map((kv) => {
-        kv !== null && newSubtask.scale_inversion_solution.meta.push(kv);
-      });
-      scaleIS?.source_solution?.meta?.map((kv) => {
-        kv !== null && newSubtask.scale_inversion_solution.source_solution.meta.push(kv);
-      });
-      validatedScaleInversionSolutions.push(newSubtask);
+        };
+        subtask.inversion_solution.meta &&
+          subtask.inversion_solution.meta.map((kv) => {
+            kv !== null && newUnifiedInversionSolution.solution.meta.push(kv);
+          });
+        unifiedInversionSolutions.push(newUnifiedInversionSolution);
+      } else if (scaledIS && scaledIS.source_solution) {
+        const newUnifiedInversionSolution: UnifiedInversionSolution = {
+          type: UnifiedInversionSolutionType.SCALED_INVERSION_SOLUTION,
+          id: subtask.id,
+          solution: {
+            id: scaledIS.id as string,
+            meta: [],
+            hazardId: null,
+            mfdTableId: null,
+            source_solution: {
+              id: scaledIS.source_solution.id,
+              meta: [],
+            },
+          },
+        };
+        scaledIS?.meta?.map((kv) => {
+          kv !== null && newUnifiedInversionSolution.solution.meta.push(kv);
+        });
+        scaledIS?.source_solution?.meta?.map((kv) => {
+          kv !== null &&
+            newUnifiedInversionSolution.solution.source_solution &&
+            newUnifiedInversionSolution.solution.source_solution.meta.push(kv);
+        });
+        unifiedInversionSolutions.push(newUnifiedInversionSolution);
+      }
     }
   });
 
-  return validatedScaleInversionSolutions;
-};
-
-export const validateInversionSolutions = (
-  data: InversionSolutionDiagnosticContainerQueryResponse,
-): ValidatedInversionSolution[] => {
-  const subtasks = data?.nodes?.result?.edges.map((subtask) => subtask?.node);
-  const validatedSubtasks: ValidatedInversionSolution[] = [];
-
-  subtasks?.map((subtask) => {
-    if (
-      subtask &&
-      subtask.__typename === 'AutomationTask' &&
-      subtask.inversion_solution &&
-      subtask.inversion_solution.meta
-    ) {
-      const mfdTableId = (): string => {
-        if (subtask.inversion_solution?.mfd_table_id) return subtask.inversion_solution?.mfd_table_id;
-        const new_mfd_table = subtask.inversion_solution?.tables?.filter((ltr) => ltr?.table_type == 'MFD_CURVES')[0];
-        if (new_mfd_table) return new_mfd_table.table_id || '';
-        return '';
-      };
-      const newSubtask: ValidatedInversionSolution = {
-        __typename: 'AutomationTask',
-        id: subtask.id,
-
-        inversion_solution: {
-          id: subtask.inversion_solution.id,
-          meta: [],
-          tables: subtask.inversion_solution.tables,
-          mfd_table_id: mfdTableId(),
-        },
-      };
-      subtask.inversion_solution.meta.map((kv) => {
-        kv !== null &&
-          // sweepArgs?.some((argument) => {
-          //   return argument?.k?.includes(kv.k as string) || pluralCompare(argument?.k as string, kv.k as string);
-          // }) &&
-          newSubtask.inversion_solution.meta.push(kv);
-      });
-      validatedSubtasks.push(newSubtask);
-    }
-  });
-  return validatedSubtasks;
+  return unifiedInversionSolutions;
 };
 
 export const validateChildTasks = (data: GeneralTaskChildrenTabQueryResponse): ValidatedChildren => {
