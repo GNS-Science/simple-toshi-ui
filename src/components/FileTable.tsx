@@ -84,6 +84,8 @@ const FileTable: React.FC<FileTableProps> = ({ data }: FileTableProps) => {
               <TableCell className={classes.tableCell}>
                 {e?.node?.file?.__typename == 'InversionSolution' ? (
                   <Link to={`/InversionSolution/${e?.node?.file?.id}`}>[more]</Link>
+                ) : e?.node?.file?.__typename == 'ScaledInversionSolution' ? (
+                  <Link to={`/ScaledInversionSolution/${e?.node?.file?.id}`}>[more]</Link>
                 ) : (
                   <Link to={`/FileDetail/${e?.node?.file?.id}`}>[more]</Link>
                 )}

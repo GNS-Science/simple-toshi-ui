@@ -203,6 +203,32 @@ input CreateInversionSolutionInput {
   clientMutationId: String
 }
 
+input CreateInversionSolutionNrmlInput {
+  """The name of the file"""
+  file_name: String
+
+  """The base64-encoded md5 digest of the file"""
+  md5_digest: String
+
+  """The size of the file in bytes"""
+  file_size: Int
+
+  """additional file meta data, as a list of Key Value pairs."""
+  meta: [KeyValuePairInput]
+
+  """When the scaled solution file was created"""
+  created: DateTime
+  source_solution: ID
+  clientMutationId: String
+}
+
+"""Create a InversionSolutionNrml file"""
+type CreateInversionSolutionNrmlPayload {
+  inversion_solution_nrml: InversionSolutionNrml
+  ok: Boolean
+  clientMutationId: String
+}
+
 """Create an Inversion Solution file"""
 type CreateInversionSolutionPayload {
   inversion_solution: InversionSolution
@@ -210,8 +236,81 @@ type CreateInversionSolutionPayload {
   clientMutationId: String
 }
 
+input CreateOpenquakeHazardConfigInput {
+  """When the thing was created"""
+  created: DateTime
+
+  """List of Soource NRML"""
+  source_models: [ID]
+  clientMutationId: String
+}
+
+type CreateOpenquakeHazardConfigPayload {
+  config: OpenquakeHazardConfig
+  ok: Boolean
+  clientMutationId: String
+}
+
+input CreateOpenquakeHazardOutputInput {
+  """The name of the file"""
+  file_name: String
+
+  """The base64-encoded md5 digest of the file"""
+  md5_digest: String
+
+  """The size of the file in bytes"""
+  file_size: Int
+
+  """additional file meta data, as a list of Key Value pairs."""
+  meta: [KeyValuePairInput]
+
+  """When the scaled solution file was created"""
+  created: DateTime
+  produced_by: ID
+  clientMutationId: String
+}
+
+"""Create a OpenquakeHazardOutput file"""
+type CreateOpenquakeHazardOutputPayload {
+  openquake_hazard_output: OpenquakeHazardOutput
+  ok: Boolean
+  clientMutationId: String
+}
+
+type CreateOpenquakeHazardTask {
+  ok: Boolean
+  openquake_hazard_task: OpenquakeHazardTask
+}
+
 type CreateRuptureGenerationTask {
   task_result: RuptureGenerationTask
+}
+
+input CreateScaledInversionSolutionInput {
+  """The name of the file"""
+  file_name: String
+
+  """The base64-encoded md5 digest of the file"""
+  md5_digest: String
+
+  """The size of the file in bytes"""
+  file_size: Int
+
+  """additional file meta data, as a list of Key Value pairs."""
+  meta: [KeyValuePairInput]
+
+  """When the scaled solution file was created"""
+  created: DateTime
+  source_solution: ID
+  produced_by: ID
+  clientMutationId: String
+}
+
+"""Create a ScaledInversionSolution file"""
+type CreateScaledInversionSolutionPayload {
+  solution: ScaledInversionSolution
+  ok: Boolean
+  clientMutationId: String
 }
 
 type CreateSmsFile {
@@ -421,7 +520,7 @@ enum FileRole {
   UNDEFINED
 }
 
-union FileUnion = SmsFile | File | InversionSolution
+union FileUnion = SmsFile | File | InversionSolution | ScaledInversionSolution | InversionSolutionNrml
 
 """
 A General Task capture metadata and related inputs/outputs for arbitrary tasks
@@ -520,6 +619,45 @@ type InversionSolution implements Node & FileInterface {
   """deprecated"""
   mfd_table: Table
   produced_by: RuptureGenerationTask
+}
+
+"""
+Represents a InversionSolutionNrml archive file
+
+This is a zip archive containing two XML source files that have been converted from the source_solution
+
+NB any arguments used to generate this object should be captured as in meta field.
+"""
+type InversionSolutionNrml implements Node & FileInterface {
+  """The ID of the object."""
+  id: ID!
+
+  """The name of the file"""
+  file_name: String
+
+  """The base64-encoded md5 digest of the file"""
+  md5_digest: String
+
+  """The size of the file in bytes"""
+  file_size: Int
+
+  """A pre-signed URL to download the file from s3"""
+  file_url: String
+
+  """A pre-signed URL to post the data to s3"""
+  post_url: String
+
+  """additional file meta data, as a list of Key Value pairs."""
+  meta: [KeyValuePair]
+
+  """things related to this data file"""
+  relations(before: String, after: String, first: Int, last: Int): FileRelationConnection
+
+  """When the scaled solution file was created"""
+  created: DateTime
+
+  """The original soloution as produced by opensha"""
+  source_solution: InversionSolution
 }
 
 """Simple container for KVL lists of strings"""
@@ -637,6 +775,18 @@ type MutationRoot {
   update_automation_task(input: AutomationTaskUpdateInput!): UpdateAutomationTask
   update_general_task(input: UpdateGeneralTaskInput!): UpdateGeneralTaskPayload
   update_rupture_generation_task(input: AutomationTaskUpdateInput!): UpdateRuptureGenerationTask
+
+  """Create a ScaledInversionSolution file"""
+  create_scaled_inversion_solution(input: CreateScaledInversionSolutionInput!): CreateScaledInversionSolutionPayload
+
+  """Create a InversionSolutionNrml file"""
+  create_inversion_solution_nrml(input: CreateInversionSolutionNrmlInput!): CreateInversionSolutionNrmlPayload
+
+  """Create a OpenquakeHazardOutput file"""
+  create_openquake_hazard_output(input: CreateOpenquakeHazardOutputInput!): CreateOpenquakeHazardOutputPayload
+  create_openquake_hazard_config(input: CreateOpenquakeHazardConfigInput!): CreateOpenquakeHazardConfigPayload
+  create_openquake_hazard_task(input: OpenquakeHazardTaskInput!): CreateOpenquakeHazardTask
+  update_openquake_hazard_task(input: AutomationTaskUpdateInput!): UpdateOpenquakeHazardTask
 }
 
 input NewAutomationTaskInput {
@@ -672,6 +822,126 @@ interface Node {
 type NodeFilter {
   ok: Boolean
   result(before: String, after: String, first: Int, last: Int): SearchResultConnection
+}
+
+"""An OpenquakeHazardConfig in the NSHM process"""
+type OpenquakeHazardConfig implements Node & Thing {
+  """The ID of the object."""
+  id: ID!
+
+  """When the thing was created"""
+  created: DateTime
+
+  """Files associated with this object."""
+  files(before: String, after: String, first: Int, last: Int): FileRelationConnection
+
+  """Parents of this thing"""
+  parents(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
+
+  """Children of this thing"""
+  children(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
+
+  """List of Source NRML"""
+  source_models: [InversionSolutionNrml]
+}
+
+"""
+Represents a OpenquakeHazardOutput archive file
+
+This is a zip archive containing hazard outputs (`oq engine --export ....)
+
+NB any arguments used to generate this object should be captured as in meta field.
+"""
+type OpenquakeHazardOutput implements Node & FileInterface {
+  """The ID of the object."""
+  id: ID!
+
+  """The name of the file"""
+  file_name: String
+
+  """The base64-encoded md5 digest of the file"""
+  md5_digest: String
+
+  """The size of the file in bytes"""
+  file_size: Int
+
+  """A pre-signed URL to download the file from s3"""
+  file_url: String
+
+  """A pre-signed URL to post the data to s3"""
+  post_url: String
+
+  """additional file meta data, as a list of Key Value pairs."""
+  meta: [KeyValuePair]
+
+  """things related to this data file"""
+  relations(before: String, after: String, first: Int, last: Int): FileRelationConnection
+
+  """When the scaled solution file was created"""
+  created: DateTime
+
+  """The original soloution as produced by opensha"""
+  produced_by: InversionSolution
+}
+
+"""An OpenquakeHazardTask in the NSHM process"""
+type OpenquakeHazardTask implements Node & Thing & AutomationTaskInterface {
+  """The ID of the object."""
+  id: ID!
+
+  """The time the event was created"""
+  created: DateTime
+
+  """Files associated with this object."""
+  files(before: String, after: String, first: Int, last: Int): FileRelationConnection
+
+  """parent task(s) of this task"""
+  parents(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
+
+  """Children of this thing"""
+  children(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
+  result: EventResult
+  state: EventState
+
+  """the final duration of the event in seconds"""
+  duration: Float
+
+  """
+  input arguments for the rupture generation task, as a list of Key Value pairs.
+  """
+  arguments: [KeyValuePair]
+
+  """execution environment details, as a list of Key Value pairs."""
+  environment: [KeyValuePair]
+
+  """result metrics from the task, as a list of Key Value pairs."""
+  metrics: [KeyValuePair]
+
+  """The task configuration"""
+  config: OpenquakeHazardConfig
+}
+
+input OpenquakeHazardTaskInput {
+  result: EventResult!
+  state: EventState!
+
+  """The time the task was created"""
+  created: DateTime!
+
+  """The final duraton of the task in seconds"""
+  duration: Float
+
+  """
+  input arguments for the rupture generation task, as a list of Key Value pairs.
+  """
+  arguments: [KeyValuePairInput]
+
+  """execution environment details, as a list of Key Value pairs."""
+  environment: [KeyValuePairInput]
+
+  """result metrics from the task, as a list of Key Value pairs."""
+  metrics: [KeyValuePairInput]
+  config: ID!
 }
 
 """
@@ -769,6 +1039,47 @@ type RuptureGenerationTaskEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+"""
+Represents a Scaled Inversion Solution file
+
+NB the  arguments used to scaling this solution (relatve to the source_solution)
+should be captured as in meta field.
+"""
+type ScaledInversionSolution implements Node & FileInterface {
+  """The ID of the object."""
+  id: ID!
+
+  """The name of the file"""
+  file_name: String
+
+  """The base64-encoded md5 digest of the file"""
+  md5_digest: String
+
+  """The size of the file in bytes"""
+  file_size: Int
+
+  """A pre-signed URL to download the file from s3"""
+  file_url: String
+
+  """A pre-signed URL to post the data to s3"""
+  post_url: String
+
+  """additional file meta data, as a list of Key Value pairs."""
+  meta: [KeyValuePair]
+
+  """things related to this data file"""
+  relations(before: String, after: String, first: Int, last: Int): FileRelationConnection
+
+  """When the scaled solution file was created"""
+  created: DateTime
+
+  """The original soloution as produced by opensha"""
+  source_solution: InversionSolution
+
+  """The task creating this"""
+  produced_by: AutomationTask
 }
 
 type Search {
@@ -959,6 +1270,8 @@ enum TaskSubType {
   INVERSION
   HAZARD
   REPORT
+  SCALE_SOLUTION
+  SOLUTION_TO_NRML
 }
 
 type TaskTaskRelation {
@@ -1043,6 +1356,11 @@ type UpdateGeneralTaskPayload {
   general_task: GeneralTask
   ok: Boolean
   clientMutationId: String
+}
+
+type UpdateOpenquakeHazardTask {
+  ok: Boolean
+  openquake_hazard_task: OpenquakeHazardTask
 }
 
 type UpdateRuptureGenerationTask {
