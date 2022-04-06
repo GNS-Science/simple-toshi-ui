@@ -69,7 +69,6 @@ interface DiagnosticReportCardProps {
   setParentFault: (fault: string) => void;
   disableHotkey: boolean;
   setDisableHotkey: Dispatch<SetStateAction<boolean>>;
-  isScaleSolution?: boolean;
 }
 
 const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
@@ -96,7 +95,6 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   setParentFault,
   disableHotkey,
   setDisableHotkey,
-  isScaleSolution,
 }: DiagnosticReportCardProps) => {
   const [currentImage, setCurrentImage] = useState<number>(0);
   const [currentTab, setCurrentTab] = useState<number>(0);
@@ -192,7 +190,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
               automationTasksLength={unifiedInversionSolutions.length}
               generalViews={generalViews}
               setGeneralViews={setGeneralViews}
-              isScaleSolution={
+              isScaledSolution={
                 unifiedInversionSolutions[currentImage].type === UnifiedInversionSolutionType.SCALED_INVERSION_SOLUTION
               }
             />
