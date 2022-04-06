@@ -3,14 +3,9 @@ import { useLazyLoadQuery } from 'react-relay';
 import { graphql } from 'babel-plugin-relay/macro';
 
 import { InversionSolutionDiagnosticContainerQuery } from './__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
-import {
-  SweepArguments,
-  ValidatedInversionSolution,
-  ValidatedScaleInversionSolution,
-} from '../../interfaces/generaltask';
-import { validateInversionSolutions, validateScaleInversionSolutions } from '../../service/generalTask.service';
+import { SweepArguments, UnifiedInversionSolution } from '../../interfaces/generaltask';
+import { validateUnifiedInversionSolutions } from '../../service/generalTask.service';
 import DiagnosticReportCard from '../diagnosticReportView/DiagnosticReportCard';
-import ScaleDiagnosticReportCard from '../diagnosticReportView/ScaleDiagnosticReportCard';
 
 interface InversionSolutionDiagnosticContainerProps {
   readonly sweepArgs?: SweepArguments;
@@ -61,52 +56,46 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   setDisableHotkey,
   isScaleSolution,
 }: InversionSolutionDiagnosticContainerProps) => {
-  const [automationTasks, setAutomationTasks] = useState<ValidatedInversionSolution[]>([]);
-  const [scaleInversionSolutions, setScaleInversionSolutions] = useState<ValidatedScaleInversionSolution[]>([]);
+  const [unifiedInversionSolutions, setUnifiedInversionSolutions] = useState<UnifiedInversionSolution[]>([]);
   const data = useLazyLoadQuery<InversionSolutionDiagnosticContainerQuery>(inversionSolutionDiagnosticContainerQuery, {
     id: ids,
   });
 
   useEffect(() => {
-    if (isScaleSolution) {
-      const validatedScaleInversionSolutions = validateScaleInversionSolutions(data);
-      setScaleInversionSolutions(validatedScaleInversionSolutions);
-    } else {
-      const validatedInversionSolutions = validateInversionSolutions(data);
-      setAutomationTasks(validatedInversionSolutions);
-    }
-  }, [isScaleSolution, data]);
+    const unifiedInversionSolutions = validateUnifiedInversionSolutions(data);
+    setUnifiedInversionSolutions(unifiedInversionSolutions);
+  }, [data]);
+
+  useEffect(() => {
+    console.log(unifiedInversionSolutions);
+  }, [unifiedInversionSolutions]);
 
   return (
     <>
-      {isScaleSolution ? (
-        <ScaleDiagnosticReportCard scaleInversionSolutions={scaleInversionSolutions} />
-      ) : (
-        <DiagnosticReportCard
-          sweepArgs={sweepArgs}
-          modelType={modelType}
-          generalViews={generalViews}
-          setGeneralViews={setGeneralViews}
-          namedFaultsView={namedFaultsView}
-          setNamedFaultsView={setNamedFaultsView}
-          namedFaultsLocations={namedFaultsLocations}
-          setNamedFaultsLocations={setNamedFaultsLocations}
-          automationTasks={automationTasks}
-          regionalViews={regionalViews}
-          setRegionalViews={setRegionalViews}
-          nonRegionalViews={nonRegionalViews}
-          setNonRegionalViews={setNonRegionalViews}
-          reportTab={reportTab}
-          setReportTab={setReportTab}
-          parentFaultViews={parentFaultViews}
-          setParentFaultViews={setParentFaultViews}
-          parentFault={parentFault}
-          setParentFault={setParentFault}
-          disableHotkey={disableHotkey}
-          setDisableHotkey={setDisableHotkey}
-          isScaleSolution={isScaleSolution}
-        />
-      )}
+      <DiagnosticReportCard
+        unifiedInversionSolutions={unifiedInversionSolutions}
+        sweepArgs={sweepArgs}
+        modelType={modelType}
+        generalViews={generalViews}
+        setGeneralViews={setGeneralViews}
+        namedFaultsView={namedFaultsView}
+        setNamedFaultsView={setNamedFaultsView}
+        namedFaultsLocations={namedFaultsLocations}
+        setNamedFaultsLocations={setNamedFaultsLocations}
+        regionalViews={regionalViews}
+        setRegionalViews={setRegionalViews}
+        nonRegionalViews={nonRegionalViews}
+        setNonRegionalViews={setNonRegionalViews}
+        reportTab={reportTab}
+        setReportTab={setReportTab}
+        parentFaultViews={parentFaultViews}
+        setParentFaultViews={setParentFaultViews}
+        parentFault={parentFault}
+        setParentFault={setParentFault}
+        disableHotkey={disableHotkey}
+        setDisableHotkey={setDisableHotkey}
+        isScaleSolution={isScaleSolution}
+      />
     </>
   );
 };
