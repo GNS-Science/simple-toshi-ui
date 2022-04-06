@@ -9,7 +9,7 @@ import NamedFaultsView from './NamedFaultsView';
 import RegionalMfdView from './RegionalMfdView';
 import InversionSolutionHazardCharts from '../inversionSolution/InversionSolutionHazardCharts';
 import ParentFaultView from './ParentFaultViews';
-import { SweepArguments, ValidatedInversionSolution } from '../../interfaces/generaltask';
+import { SweepArguments, UnifiedInversionSolution, UnifiedInversionSolutionType } from '../../interfaces/generaltask';
 import { MetaArguments } from '../../interfaces/mySolutions';
 import { filteredMetaGT, filterMetaArguments } from '../../service/diagnosticReports.service';
 import SolutionAnalysisTab from '../inversionSolution/SolutionAnalysisTab';
@@ -46,10 +46,10 @@ const Root = styled('div')(() => ({
 }));
 
 interface DiagnosticReportCardProps {
+  unifiedInversionSolutions: UnifiedInversionSolution[];
   sweepArgs?: SweepArguments;
   sweepList?: string[];
   modelType: string;
-  automationTasks: ValidatedInversionSolution[];
   generalViews: string[];
   setGeneralViews: (selection: string[]) => void;
   namedFaultsView: string;
@@ -76,7 +76,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   sweepArgs,
   sweepList,
   modelType,
-  automationTasks,
+  unifiedInversionSolutions,
   generalViews,
   setGeneralViews,
   namedFaultsView,
@@ -106,7 +106,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
 
   useEffect(() => {
     setCurrentImage(0);
-  }, [automationTasks]);
+  }, [unifiedInversionSolutions]);
 
   useEffect(() => {
     if (reportTab !== 0) setCurrentTab(reportTab ?? 0);
@@ -117,8 +117,8 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   }, [setReportTab, currentTab]);
 
   useEffect(() => {
-    if (automationTasks[currentImage]) {
-      const tvzValue = automationTasks[currentImage].inversion_solution?.meta?.filter(
+    if (unifiedInversionSolutions[currentImage]) {
+      const tvzValue = unifiedInversionSolutions[currentImage].solution?.meta?.filter(
         (kv) => kv?.k && kv?.k === 'enable_tvz_mfd',
       )[0]?.v;
       if (tvzValue === 'False') {
@@ -127,26 +127,24 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
         setRegional(true);
       }
     }
-  }, [currentImage, automationTasks]);
+  }, [currentImage, unifiedInversionSolutions]);
 
   useEffect(() => {
-    if (automationTasks[currentImage] && automationTasks[currentImage].inversion_solution.tables) {
-      const hazardTable = automationTasks[currentImage].inversion_solution.tables?.find(
-        (table) => table?.table_type === 'HAZARD_SITES',
-      );
-      hazardTable ? setHazardId(hazardTable?.table_id as string) : setHazardId('');
+    if (unifiedInversionSolutions[currentImage]) {
+      const hazardTableId = unifiedInversionSolutions[currentImage].solution.hazardId;
+      hazardTableId ? setHazardId(hazardTableId) : setHazardId('');
       let metaList: MetaArguments = [];
       if (sweepArgs) {
-        metaList = filteredMetaGT(automationTasks[currentImage].inversion_solution.meta, sweepArgs);
+        metaList = filteredMetaGT(unifiedInversionSolutions[currentImage].solution.meta, sweepArgs);
       } else if (sweepList) {
-        metaList = filterMetaArguments(automationTasks[currentImage].inversion_solution.meta, sweepList);
+        metaList = filterMetaArguments(unifiedInversionSolutions[currentImage].solution.meta, sweepList);
       }
       setFilteredMeta(metaList);
     }
-  }, [sweepArgs, sweepList, automationTasks, currentImage]);
+  }, [currentImage, sweepList, sweepArgs, unifiedInversionSolutions]);
 
   const nextImage = () => {
-    if (currentImage < automationTasks.length - 1) {
+    if (currentImage < unifiedInversionSolutions.length - 1) {
       setCurrentImage(currentImage + 1);
       changeCurrentImage && changeCurrentImage(currentImage + 1);
     }
@@ -176,7 +174,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
     return () => window.removeEventListener('keyup', hotkeyHandler);
   });
 
-  if (!automationTasks[currentImage]) {
+  if (!unifiedInversionSolutions[currentImage]) {
     return <Typography> There are no valid reports to show. </Typography>;
   }
 
@@ -186,15 +184,17 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
         return (
           <DiagnosticReportTabPanel value={currentTab} index={0}>
             <GeneralView
-              id={automationTasks[currentImage].inversion_solution.id}
-              mfdTableId={automationTasks[currentImage].inversion_solution.mfd_table_id}
-              meta={automationTasks[currentImage].inversion_solution.meta}
+              id={unifiedInversionSolutions[currentImage].solution.id}
+              mfdTableId={unifiedInversionSolutions[currentImage].solution.mfdTableId as string}
+              meta={unifiedInversionSolutions[currentImage].solution.meta}
               filteredMeta={filteredMeta}
               currentImage={currentImage}
-              automationTasksLength={automationTasks.length}
+              automationTasksLength={unifiedInversionSolutions.length}
               generalViews={generalViews}
               setGeneralViews={setGeneralViews}
-              isScaleSolution={isScaleSolution ?? false}
+              isScaleSolution={
+                unifiedInversionSolutions[currentImage].type === UnifiedInversionSolutionType.SCALED_INVERSION_SOLUTION
+              }
             />
           </DiagnosticReportTabPanel>
         );
@@ -202,7 +202,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
         return (
           <DiagnosticReportTabPanel value={currentTab} index={1}>
             <RegionalMfdView
-              id={automationTasks[currentImage].inversion_solution.id}
+              id={unifiedInversionSolutions[currentImage].solution.id}
               regionalViews={regionalViews}
               setRegionalViews={setRegionalViews}
               nonRegionalViews={nonRegionalViews}
@@ -215,7 +215,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
         return (
           <DiagnosticReportTabPanel value={currentTab} index={2}>
             <NamedFaultsView
-              id={automationTasks[currentImage].inversion_solution.id}
+              id={unifiedInversionSolutions[currentImage].solution.id}
               namedFaultsView={namedFaultsView}
               setNamedFaultsView={setNamedFaultsView}
               namedFaultsLocations={namedFaultsLocations}
@@ -228,7 +228,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
         return (
           <DiagnosticReportTabPanel value={currentTab} index={3}>
             <ParentFaultView
-              id={automationTasks[currentImage].inversion_solution.id}
+              id={unifiedInversionSolutions[currentImage].solution.id}
               parentFaultViews={parentFaultViews}
               setParentFaultViews={setParentFaultViews}
               parentFault={parentFault}
@@ -253,7 +253,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
         return (
           <DiagnosticReportTabPanel value={currentTab} index={5}>
             <SolutionAnalysisTab
-              id={automationTasks[currentImage].inversion_solution.id}
+              id={unifiedInversionSolutions[currentImage].solution.id}
               setDisableHotkey={setDisableHotkey}
             />
           </DiagnosticReportTabPanel>
@@ -266,17 +266,17 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       <Card className={classes.root}>
         <CardContent>
           <h4>
-            Inversion Solution {automationTasks[currentImage].inversion_solution.id}&nbsp;&nbsp;&nbsp;
-            <Link to={`/InversionSolution/${automationTasks[currentImage].inversion_solution.id}`}>[more]</Link>
+            Inversion Solution {unifiedInversionSolutions[currentImage].solution.id}&nbsp;&nbsp;&nbsp;
+            <Link to={`/InversionSolution/${unifiedInversionSolutions[currentImage].solution.id}`}>[more]</Link>
           </h4>
           <MetaToolTip meta={filteredMeta} />
           <FlipChartControls
-            id={automationTasks[currentImage].inversion_solution.id}
-            producedBy={automationTasks[currentImage].id}
+            id={unifiedInversionSolutions[currentImage].solution.id}
+            producedBy={unifiedInversionSolutions[currentImage].id}
             currentImage={currentImage}
             handlePrev={prevImage}
             handleNext={nextImage}
-            totalLength={automationTasks.length}
+            totalLength={unifiedInversionSolutions.length}
             disableHotkey={disableHotkey}
           />
           <Tabs value={currentTab} onChange={handleTabChange}>
