@@ -79,16 +79,26 @@ type Meta = Array<{
   readonly v: string | null;
 } | null>;
 
-export type ValidatedScaleInversionSolution = {
-  __typename: 'AutomtaionTask';
+export enum UnifiedInversionSolutionType {
+  SCALED_INVERSION_SOLUTION,
+  INVERSION_SOLUTION,
+}
+
+export type ScaledSourceSolution = {
   id: string;
-  scale_inversion_solution: {
+  meta: Meta;
+};
+
+//Common inversion solution for flipchart - accomadates both scaled and normal
+export type UnifiedInversionSolution = {
+  type: UnifiedInversionSolutionType;
+  id: string;
+  solution: {
     id: string;
     meta: Meta;
-    source_solution: {
-      id: string;
-      meta: Meta;
-    };
+    hazardId: string | null;
+    mfdTableId: string | null;
+    source_solution: ScaledSourceSolution | null;
   };
 };
 
