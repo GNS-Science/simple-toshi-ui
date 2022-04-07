@@ -32,7 +32,8 @@ const MySolutionsListItem: React.FC<MySolutionsListItemProps> = ({ automationTas
       <Card className={classes.card}>
         <CardContent>
           <Typography variant="h5">
-            {inversionSolution ? 'Inversion solution' : 'Scaled Inversion Solution'}: {inversionSolution?.id}
+            {inversionSolution ? 'Inversion solution' : 'Scaled Inversion Solution'}:&nbsp;
+            {inversionSolution && !scaledInversionSolution ? inversionSolution?.id : scaledInversionSolution?.id}
             &nbsp;&nbsp;
             <Link
               to={`/${inversionSolution ? 'InversionSolution' : 'ScaledInversionSolution'}/${

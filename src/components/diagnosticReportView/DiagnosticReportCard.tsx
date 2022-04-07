@@ -270,7 +270,8 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       <Card className={classes.root}>
         <CardContent>
           <h4>
-            Inversion Solution {unifiedInversionSolutions[currentImage].solution.id}&nbsp;&nbsp;&nbsp;
+            {isScaledSolution ? 'Scaled Inversion Solution' : 'Inversion Solution'}:&nbsp;
+            {unifiedInversionSolutions[currentImage].solution.id}&nbsp;&nbsp;&nbsp;
             <Link to={`/InversionSolution/${unifiedInversionSolutions[currentImage].solution.id}`}>[more]</Link>
           </h4>
           <MetaToolTip meta={filteredMeta} />
