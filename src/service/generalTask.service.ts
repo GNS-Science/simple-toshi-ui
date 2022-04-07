@@ -9,6 +9,7 @@ import {
 } from '../interfaces/generaltask';
 import { FilteredArguments, GeneralTaskKeyValueListPairs } from '../interfaces/generaltask';
 import { GeneralTaskQueryResponse } from '../pages/__generated__/GeneralTaskQuery.graphql';
+import { MySolutionsQueryResponse } from '../pages/__generated__/MySolutionsQuery.graphql';
 
 export const maxLength = parseInt(process.env.REACT_APP_REPORTS_LIMIT ?? '24');
 export const sweepsList = (
@@ -43,7 +44,7 @@ export const updateFilteredArguments = (
 };
 
 export const validateUnifiedInversionSolutions = (
-  data: InversionSolutionDiagnosticContainerQueryResponse,
+  data: InversionSolutionDiagnosticContainerQueryResponse | MySolutionsQueryResponse,
 ): UnifiedInversionSolution[] => {
   const subtasks = data?.nodes?.result?.edges.map((subtask) => subtask?.node);
   const unifiedInversionSolutions: UnifiedInversionSolution[] = [];

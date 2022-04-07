@@ -10,14 +10,10 @@ import ControlsBar from '../components/common/ControlsBar';
 import LocalStorageContext from '../contexts/localStorage';
 import { GeneralTaskDetails } from '../interfaces/diagnosticReport';
 import { MySolutionsQuery } from './__generated__/MySolutionsQuery.graphql';
-import {
-  getGeneralTaskDetails,
-  getMySolutionIdsArray,
-  getReportItems,
-  validateListItems,
-} from '../service/mySolution.service';
+import { getGeneralTaskDetails, getMySolutionIdsArray, validateListItems } from '../service/mySolution.service';
 import CommonModal from '../components/common/Modal/CommonModal';
 import { useShortcut } from '../hooks/useShortcut';
+import { validateUnifiedInversionSolutions } from '../service/generalTask.service';
 
 const MySolutions: React.FC = () => {
   const {
@@ -49,7 +45,7 @@ const MySolutions: React.FC = () => {
   const id = getMySolutionIdsArray(ISFavourites);
   const data = useLazyLoadQuery<MySolutionsQuery>(mySolutionsQuery, { id });
   const listItems = useMemo(() => validateListItems(data), [data]);
-  const reportItems = useMemo(() => getReportItems(data), [data]);
+  const reportItems = useMemo(() => validateUnifiedInversionSolutions(data), [data]);
 
   const [currentGeneralTask, setCurrentGeneralTask] = useState<GeneralTaskDetails>(
     getGeneralTaskDetails(listItems, reportItems, 0),
