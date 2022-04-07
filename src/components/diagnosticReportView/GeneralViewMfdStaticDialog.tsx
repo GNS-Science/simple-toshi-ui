@@ -49,6 +49,12 @@ const GeneralViewMfdStaticDialog: React.FC<GeneralViewMfdStaticDialogProps> = ({
               case 'rate_dist.png':
                 newUrl = reportUrl('sa_progress_rate_dist.png', id);
                 break;
+              case 'mfd_plot_Total_MFD.png':
+                newUrl = reportUrl('mfd_plot_Total_Target_MFDs.png', id);
+                break;
+              case 'mfd_plot_Total_MFD_cumulative.png':
+                newUrl = reportUrl('mfd_plot_Total_Target_MFDs_cumulative.png', id);
+                break;
               default:
                 newUrl = '/img-placeholder.jpg';
             }
@@ -85,11 +91,18 @@ const GeneralViewMfdStaticDialog: React.FC<GeneralViewMfdStaticDialogProps> = ({
               src={reportUrl(option.finalPath, id)}
               alt={option.finalPath}
               onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                console.log('print source', e.currentTarget.src);
                 let newUrl;
 
                 switch (option.finalPath) {
                   case 'rate_dist.png':
                     newUrl = reportUrl('sa_progress_rate_dist.png', id);
+                    break;
+                  case 'mfd_plot_Total_MFD.png':
+                    newUrl = reportUrl('mfd_plot_Total_Target_MFDs.png', id);
+                    break;
+                  case 'mfd_plot_Total_MFD_cumulative.png':
+                    newUrl = reportUrl('mfd_plot_Total_Target_MFDs_cumulative.png', id);
                     break;
                   default:
                     newUrl = '/img-placeholder.jpg';

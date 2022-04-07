@@ -64,10 +64,6 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
     setUnifiedInversionSolutions(unifiedInversionSolutions);
   }, [data]);
 
-  useEffect(() => {
-    console.log(unifiedInversionSolutions);
-  }, [unifiedInversionSolutions]);
-
   return (
     <>
       <DiagnosticReportCard
