@@ -27,7 +27,7 @@ export const validateListItems = (data: MySolutionsQueryResponse): SolutionItem[
   const automationTasks = data?.nodes?.result?.edges.map((e) => e?.node) ?? [];
   const listItems: SolutionItem[] = [];
   automationTasks.map((item) => {
-    if (item && item !== null && item.__typename === 'AutomationTask' && item.inversion_solution !== null) {
+    if (item && item !== null && item.__typename === 'AutomationTask') {
       listItems.push(item);
     }
   });
