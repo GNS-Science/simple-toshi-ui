@@ -49,7 +49,7 @@ const MySolutions: React.FC = () => {
   const id = getMySolutionIdsArray(ISFavourites);
   const data = useLazyLoadQuery<MySolutionsQuery>(mySolutionsQuery, { id });
   const listItems = useMemo(() => validateListItems(data), [data]);
-  const reportItems = useMemo(() => getReportItems(listItems), [listItems]);
+  const reportItems = useMemo(() => getReportItems(data), [data]);
 
   const [currentGeneralTask, setCurrentGeneralTask] = useState<GeneralTaskDetails>(
     getGeneralTaskDetails(listItems, reportItems, 0),
@@ -119,7 +119,7 @@ const MySolutions: React.FC = () => {
           sweepList={currentGeneralTask.swept_arguments}
           modelType={currentGeneralTask.model_type}
           changeCurrentImage={handleChangeCurrentImage}
-          automationTasks={reportItems}
+          unifiedInversionSolutions={reportItems}
           generalViews={localStorageGeneralViews}
           setGeneralViews={setLocalStorageGeneralViews}
           namedFaultsView={localStorageNamedFaultsView}
@@ -169,6 +169,28 @@ export const mySolutionsQuery = graphql`
                         argument_lists {
                           k
                           v
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              files {
+                edges {
+                  node {
+                    file {
+                      ... on ScaledInversionSolution {
+                        id
+                        meta {
+                          k
+                          v
+                        }
+                        source_solution {
+                          id
+                          meta {
+                            k
+                            v
+                          }
                         }
                       }
                     }
