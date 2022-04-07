@@ -102,17 +102,6 @@ export type UnifiedInversionSolution = {
   };
 };
 
-export type ValidatedInversionSolution = {
-  __typename: 'AutomationTask';
-  id: string;
-  inversion_solution: {
-    id: string;
-    mfd_table_id: string;
-    meta: Meta;
-    tables: IStables;
-  };
-};
-
 export type IStables = ReadonlyArray<{
   readonly table_id: string | null;
   readonly table_type: TableType | null;
