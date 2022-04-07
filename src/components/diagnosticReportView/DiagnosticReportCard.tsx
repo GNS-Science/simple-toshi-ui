@@ -101,6 +101,14 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   const [hazardId, setHazardId] = useState<string>('');
   const [filteredMeta, setFilteredMeta] = useState<MetaArguments>([]);
   const [regional, setRegional] = useState<boolean>(true);
+  const [isScaledSolution, setIsScaledSolution] = useState<boolean>(false);
+
+  useEffect(() => {
+    unifiedInversionSolutions[currentImage] &&
+      setIsScaledSolution(
+        unifiedInversionSolutions[currentImage].type === UnifiedInversionSolutionType.SCALED_INVERSION_SOLUTION,
+      );
+  }, [unifiedInversionSolutions, currentImage]);
 
   useEffect(() => {
     setCurrentImage(0);
@@ -190,9 +198,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
               automationTasksLength={unifiedInversionSolutions.length}
               generalViews={generalViews}
               setGeneralViews={setGeneralViews}
-              isScaledSolution={
-                unifiedInversionSolutions[currentImage].type === UnifiedInversionSolutionType.SCALED_INVERSION_SOLUTION
-              }
+              isScaledSolution={isScaledSolution}
             />
           </DiagnosticReportTabPanel>
         );
@@ -279,9 +285,24 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
           />
           <Tabs value={currentTab} onChange={handleTabChange}>
             <Tab label="General" id="simple-tab-0" disableFocusRipple />
-            <Tab label="MFD Solutions" id="simple-tab-1" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
-            <Tab label="Named Faults" id="simple-tab-2" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
-            <Tab label="Parent Faults" id="simple-tab-3" disabled={modelType !== 'CRUSTAL'} disableFocusRipple />
+            <Tab
+              label="MFD Solutions"
+              id="simple-tab-1"
+              disabled={modelType !== 'CRUSTAL' || isScaledSolution}
+              disableFocusRipple
+            />
+            <Tab
+              label="Named Faults"
+              id="simple-tab-2"
+              disabled={modelType !== 'CRUSTAL' || isScaledSolution}
+              disableFocusRipple
+            />
+            <Tab
+              label="Parent Faults"
+              id="simple-tab-3"
+              disabled={modelType !== 'CRUSTAL' || isScaledSolution}
+              disableFocusRipple
+            />
             <Tab label="Hazard Charts" id="simple-tab-4" disabled={!hazardId.length} disableFocusRipple />
             <Tab label="Solution Analysis" id="simple-tab-5" disableFocusRipple />
           </Tabs>
