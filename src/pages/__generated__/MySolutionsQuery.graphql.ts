@@ -4,7 +4,7 @@
 
 import { ConcreteRequest } from "relay-runtime";
 
-export type ModelType = "CRUSTAL" | "SUBDUCTION" | "%future added value";
+export type ModelType = "COMPOSITE" | "CRUSTAL" | "SUBDUCTION" | "%future added value";
 export type TableType = "GENERAL" | "HAZARD_GRIDDED" | "HAZARD_SITES" | "MFD_CURVES" | "MFD_CURVES_V2" | "%future added value";
 export type MySolutionsQueryVariables = {
     id?: Array<string> | null | undefined;

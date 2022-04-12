@@ -123,7 +123,7 @@ input AutomationTaskUpdateInput {
   metrics: [KeyValuePairInput]
 }
 
-union ChildTaskUnion = GeneralTask | RuptureGenerationTask | AutomationTask
+union ChildTaskUnion = GeneralTask | RuptureGenerationTask | AutomationTask | OpenquakeHazardTask
 
 type CreateAutomationTask {
   task_result: AutomationTask
@@ -240,8 +240,11 @@ input CreateOpenquakeHazardConfigInput {
   """When the thing was created"""
   created: DateTime
 
-  """List of Soource NRML"""
+  """List of Source NRML"""
   source_models: [ID]
+
+  """ID of an archive file, containing the config inputs."""
+  template_archive: ID
   clientMutationId: String
 }
 
@@ -251,28 +254,25 @@ type CreateOpenquakeHazardConfigPayload {
   clientMutationId: String
 }
 
-input CreateOpenquakeHazardOutputInput {
-  """The name of the file"""
-  file_name: String
-
-  """The base64-encoded md5 digest of the file"""
-  md5_digest: String
-
-  """The size of the file in bytes"""
-  file_size: Int
+input CreateOpenquakeHazardSolutionInput {
+  """When it was created (UTZ)"""
+  created: DateTime
+  config: ID!
+  produced_by: ID!
+  csv_archive: ID
+  hdf5_archive: ID
 
   """additional file meta data, as a list of Key Value pairs."""
   meta: [KeyValuePairInput]
 
-  """When the scaled solution file was created"""
-  created: DateTime
-  produced_by: ID
+  """result metrics from the solution, as a list of Key Value pairs."""
+  metrics: [KeyValuePairInput]
   clientMutationId: String
 }
 
-"""Create a OpenquakeHazardOutput file"""
-type CreateOpenquakeHazardOutputPayload {
-  openquake_hazard_output: OpenquakeHazardOutput
+"""Create an OpenquakeHazardSolution"""
+type CreateOpenquakeHazardSolutionPayload {
+  openquake_hazard_solution: OpenquakeHazardSolution
   ok: Boolean
   clientMutationId: String
 }
@@ -748,6 +748,7 @@ input LabelledTableRelationInput {
 enum ModelType {
   CRUSTAL
   SUBDUCTION
+  COMPOSITE
 }
 
 type MutationRoot {
@@ -782,11 +783,11 @@ type MutationRoot {
   """Create a InversionSolutionNrml file"""
   create_inversion_solution_nrml(input: CreateInversionSolutionNrmlInput!): CreateInversionSolutionNrmlPayload
 
-  """Create a OpenquakeHazardOutput file"""
-  create_openquake_hazard_output(input: CreateOpenquakeHazardOutputInput!): CreateOpenquakeHazardOutputPayload
+  """Create an OpenquakeHazardSolution"""
+  create_openquake_hazard_solution(input: CreateOpenquakeHazardSolutionInput!): CreateOpenquakeHazardSolutionPayload
   create_openquake_hazard_config(input: CreateOpenquakeHazardConfigInput!): CreateOpenquakeHazardConfigPayload
   create_openquake_hazard_task(input: OpenquakeHazardTaskInput!): CreateOpenquakeHazardTask
-  update_openquake_hazard_task(input: AutomationTaskUpdateInput!): UpdateOpenquakeHazardTask
+  update_openquake_hazard_task(input: OpenquakeHazardTaskUpdateInput!): UpdateOpenquakeHazardTask
 }
 
 input NewAutomationTaskInput {
@@ -843,45 +844,58 @@ type OpenquakeHazardConfig implements Node & Thing {
 
   """List of Source NRML"""
   source_models: [InversionSolutionNrml]
+
+  """
+  An archive of all the configuration files (besides those in source_models
+  """
+  template_archive: File
 }
 
 """
-Represents a OpenquakeHazardOutput archive file
+Represents a OpenquakeHazardSolution
 
-This is a zip archive containing hazard outputs (`oq engine --export ....)
+This has :
+ - config an OpenquakeHazardConfig
+ - export_archive File a zip archive containing hazard outputs (`oq engine --export ....)
+ - hdf5_archive File a zip archive containing the raw hdf5 compressed
 
 NB any arguments used to generate this object should be captured as in meta field.
 """
-type OpenquakeHazardOutput implements Node & FileInterface {
+type OpenquakeHazardSolution implements Node & Thing {
   """The ID of the object."""
   id: ID!
 
-  """The name of the file"""
-  file_name: String
-
-  """The base64-encoded md5 digest of the file"""
-  md5_digest: String
-
-  """The size of the file in bytes"""
-  file_size: Int
-
-  """A pre-signed URL to download the file from s3"""
-  file_url: String
-
-  """A pre-signed URL to post the data to s3"""
-  post_url: String
-
-  """additional file meta data, as a list of Key Value pairs."""
-  meta: [KeyValuePair]
-
-  """things related to this data file"""
-  relations(before: String, after: String, first: Int, last: Int): FileRelationConnection
-
-  """When the scaled solution file was created"""
+  """When it was created (UTZ)"""
   created: DateTime
 
-  """The original soloution as produced by opensha"""
-  produced_by: InversionSolution
+  """Files associated with this object."""
+  files(before: String, after: String, first: Int, last: Int): FileRelationConnection
+
+  """Parents of this thing"""
+  parents(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
+
+  """Children of this thing"""
+  children(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
+
+  """the configuration used to produce this solution"""
+  config: OpenquakeHazardConfig
+
+  """
+  a zip archive containing hazard csv outputs (`oq engine --export-outputs ....)
+  """
+  csv_archive: File
+
+  """a zip archive containing containing the raw hdf5"""
+  hdf5_archive: File
+
+  """result metrics from the solution, as a list of Key Value pairs."""
+  metrics: [KeyValuePair]
+
+  """result metrics from the solution, as a list of Key Value pairs."""
+  meta: [KeyValuePair]
+
+  """The task that produced this solution"""
+  produced_by: OpenquakeHazardTask
 }
 
 """An OpenquakeHazardTask in the NSHM process"""
@@ -919,6 +933,10 @@ type OpenquakeHazardTask implements Node & Thing & AutomationTaskInterface {
 
   """The task configuration"""
   config: OpenquakeHazardConfig
+
+  """The openquake solution"""
+  hazard_solution: OpenquakeHazardSolution
+  model_type: ModelType
 }
 
 input OpenquakeHazardTaskInput {
@@ -942,6 +960,28 @@ input OpenquakeHazardTaskInput {
   """result metrics from the task, as a list of Key Value pairs."""
   metrics: [KeyValuePairInput]
   config: ID!
+  model_type: ModelType!
+}
+
+input OpenquakeHazardTaskUpdateInput {
+  task_id: ID!
+  result: EventResult
+  state: EventState
+
+  """The final duraton of the task in seconds"""
+  duration: Float
+
+  """
+  input arguments for the rupture generation task, as a list of Key Value pairs.
+  """
+  arguments: [KeyValuePairInput]
+
+  """execution environment details, as a list of Key Value pairs."""
+  environment: [KeyValuePairInput]
+
+  """result metrics from the task, as a list of Key Value pairs."""
+  metrics: [KeyValuePairInput]
+  hazard_solution: ID
 }
 
 """
@@ -1272,6 +1312,7 @@ enum TaskSubType {
   REPORT
   SCALE_SOLUTION
   SOLUTION_TO_NRML
+  OPENQUAKE_HAZARD
 }
 
 type TaskTaskRelation {
