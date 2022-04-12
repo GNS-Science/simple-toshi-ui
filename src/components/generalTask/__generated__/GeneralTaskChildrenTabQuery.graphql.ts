@@ -6,7 +6,7 @@ import { ConcreteRequest } from "relay-runtime";
 
 export type EventResult = "FAILURE" | "PARTIAL" | "SUCCESS" | "UNDEFINED" | "%future added value";
 export type EventState = "DONE" | "SCHEDULED" | "STARTED" | "UNDEFINED" | "%future added value";
-export type ModelType = "CRUSTAL" | "SUBDUCTION" | "%future added value";
+export type ModelType = "COMPOSITE" | "CRUSTAL" | "SUBDUCTION" | "%future added value";
 export type GeneralTaskChildrenTabQueryVariables = {
     id: string;
 };
