@@ -3,8 +3,8 @@ import { useLazyLoadQuery } from 'react-relay';
 import { graphql } from 'babel-plugin-relay/macro';
 
 import { InversionSolutionDiagnosticContainerQuery } from './__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
-import { SweepArguments, ValidatedSubtask } from '../../interfaces/generaltask';
-import { validateSubtask } from '../../service/generalTask.service';
+import { SweepArguments, UnifiedInversionSolution } from '../../interfaces/generaltask';
+import { validateUnifiedInversionSolutions } from '../../service/generalTask.service';
 import DiagnosticReportCard from '../diagnosticReportView/DiagnosticReportCard';
 
 interface InversionSolutionDiagnosticContainerProps {
@@ -54,19 +54,20 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
   disableHotkey,
   setDisableHotkey,
 }: InversionSolutionDiagnosticContainerProps) => {
-  const [automationTasks, setAutomationTasks] = useState<ValidatedSubtask[]>([]);
+  const [unifiedInversionSolutions, setUnifiedInversionSolutions] = useState<UnifiedInversionSolution[]>([]);
   const data = useLazyLoadQuery<InversionSolutionDiagnosticContainerQuery>(inversionSolutionDiagnosticContainerQuery, {
     id: ids,
   });
 
   useEffect(() => {
-    const validatedSubtasks = validateSubtask(data);
-    setAutomationTasks(validatedSubtasks);
+    const unifiedInversionSolutions = validateUnifiedInversionSolutions(data);
+    setUnifiedInversionSolutions(unifiedInversionSolutions);
   }, [data]);
 
   return (
     <>
       <DiagnosticReportCard
+        unifiedInversionSolutions={unifiedInversionSolutions}
         sweepArgs={sweepArgs}
         modelType={modelType}
         generalViews={generalViews}
@@ -75,7 +76,6 @@ const InversionSolutionDiagnosticContainer: React.FC<InversionSolutionDiagnostic
         setNamedFaultsView={setNamedFaultsView}
         namedFaultsLocations={namedFaultsLocations}
         setNamedFaultsLocations={setNamedFaultsLocations}
-        automationTasks={automationTasks}
         regionalViews={regionalViews}
         setRegionalViews={setRegionalViews}
         nonRegionalViews={nonRegionalViews}
@@ -106,6 +106,30 @@ export const inversionSolutionDiagnosticContainerQuery = graphql`
               created
               task_type
               id
+              files {
+                edges {
+                  node {
+                    file {
+                      #for ScaledInversionSolutions
+                      ... on ScaledInversionSolution {
+                        id
+                        meta {
+                          k
+                          v
+                        }
+                        source_solution {
+                          id
+                          meta {
+                            k
+                            v
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              #for InversionSolutions
               inversion_solution {
                 id
                 file_name

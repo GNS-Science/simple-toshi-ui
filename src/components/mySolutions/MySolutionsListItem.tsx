@@ -24,13 +24,24 @@ interface MySolutionsListItemProps {
 const MySolutionsListItem: React.FC<MySolutionsListItemProps> = ({ automationTask }: MySolutionsListItemProps) => {
   const parentTask = automationTask?.parents?.edges[0]?.node?.parent;
   const inversionSolution = automationTask?.inversion_solution;
+  const scaledInversionSolutionFile = automationTask?.files?.edges.filter((file) => file?.node?.file?.source_solution);
+  const scaledInversionSolution = scaledInversionSolutionFile && scaledInversionSolutionFile[0]?.node?.file;
+
   return (
     <Root>
       <Card className={classes.card}>
         <CardContent>
           <Typography variant="h5">
-            Inversion solution: {inversionSolution?.id}&nbsp;&nbsp;
-            <Link to={`/InversionSolution/${inversionSolution?.id}`}>[more]</Link>
+            {inversionSolution ? 'Inversion solution' : 'Scaled Inversion Solution'}:&nbsp;
+            {inversionSolution && !scaledInversionSolution ? inversionSolution?.id : scaledInversionSolution?.id}
+            &nbsp;&nbsp;
+            <Link
+              to={`/${inversionSolution ? 'InversionSolution' : 'ScaledInversionSolution'}/${
+                inversionSolution && !scaledInversionSolution ? inversionSolution?.id : scaledInversionSolution?.id
+              }`}
+            >
+              [more]
+            </Link>
           </Typography>
           <Grid container spacing={1}>
             <Grid item xs={5}>
