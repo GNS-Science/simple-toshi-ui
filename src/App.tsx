@@ -14,6 +14,7 @@ import GeneralTask from './pages/GeneralTask';
 import MenuBar from './components/MenuBar';
 import InversionSolution from './pages/InversionSolution';
 import ScaledInversionSolution from './pages/ScaledInversionSolution';
+import OpenquakeHazardTask from './pages/OpenquakeHazardTask';
 
 /* preview views (with no test coverage...) */
 import Preview from './pages/Preview';
@@ -128,6 +129,9 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
                   </Route>
                   <Route path="/AutomationTask/:id">
                     <AutomationTask />
+                  </Route>
+                  <Route path="/OpenquakeHazardTask/:id">
+                    <OpenquakeHazardTask />
                   </Route>
                   <Route path="/Find/:id?">
                     <Find />
