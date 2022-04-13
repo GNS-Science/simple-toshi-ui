@@ -365,25 +365,15 @@ const generalTaskChildrenTabQuery = graphql`
           edges {
             node {
               child {
-                ... on AutomationTask {
-                  __typename
+                __typename
+                ... on Node {
                   id
-                  created
-                  duration
-                  state
-                  result
-                  arguments {
-                    k
-                    v
-                  }
                 }
-                ... on RuptureGenerationTask {
-                  __typename
-                  id
-                  created
-                  duration
+                ... on AutomationTaskInterface {
                   state
                   result
+                  created
+                  duration
                   arguments {
                     k
                     v
