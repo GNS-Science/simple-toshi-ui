@@ -246,6 +246,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
             color="inherit"
             variant="contained"
             onClick={() => setShowFilter((v) => !v)}
+            disabled={filteredChildren?.data && filteredChildren.data[0].__typename === 'OpenquakeHazardTask'}
           >
             <span>
               Filter&nbsp;
@@ -256,7 +257,13 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
           </Button>
         </Tooltip>
         <Tooltip title="use (s/S) to toggle between views">
-          <Button color="inherit" className={classes.control} variant="contained" onClick={handleViewChange}>
+          <Button
+            color="inherit"
+            className={classes.control}
+            variant="contained"
+            onClick={handleViewChange}
+            disabled={filteredChildren?.data && filteredChildren.data[0].__typename === 'OpenquakeHazardTask'}
+          >
             {showList ? 'Show Report' : 'Show List'}
           </Button>
         </Tooltip>
