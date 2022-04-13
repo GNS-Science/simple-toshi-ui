@@ -124,12 +124,19 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
 
   const [filteredArguments, setFilteredArguments] = useState<FilteredArguments>({ data: [] });
   const [filteredChildren, setFilteredChildren] = useState<ValidatedChildren>(childTasks);
+  const [isOpenquakeHazardTask, setIsOpenQuakeHazardTask] = useState<boolean>(false);
 
   const search = useLocation().search;
   const history = useHistory();
 
   const baseUrl = `${process.env.REACT_APP_ROOT_PATH}/GeneralTask/${id}/ChildTasks`;
   const isClipBoard: boolean = determineClipBoard(search);
+
+  useEffect(() => {
+    filteredChildren.data &&
+      filteredChildren.data[0].__typename === 'OpenquakeHazardTask' &&
+      setIsOpenQuakeHazardTask(true);
+  }, [filteredChildren]);
 
   useEffect(() => {
     if (isClipBoard) {
@@ -240,33 +247,36 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   return (
     <Root>
       <div className={classes.controlsContainer}>
-        <Tooltip title="use (f/F) to open/close filters">
-          <Button
-            className={classes.control}
-            color="inherit"
-            variant="contained"
-            onClick={() => setShowFilter((v) => !v)}
-            disabled={filteredChildren?.data && filteredChildren.data[0].__typename === 'OpenquakeHazardTask'}
-          >
-            <span>
-              Filter&nbsp;
-              {`${filteredArguments.data.length ? filteredChildren.data?.length ?? 0 : childTasks.data?.length ?? 0}/${
-                childTasks.data?.length ?? 0
-              }`}
-            </span>
-          </Button>
-        </Tooltip>
-        <Tooltip title="use (s/S) to toggle between views">
-          <Button
-            color="inherit"
-            className={classes.control}
-            variant="contained"
-            onClick={handleViewChange}
-            disabled={filteredChildren?.data && filteredChildren.data[0].__typename === 'OpenquakeHazardTask'}
-          >
-            {showList ? 'Show Report' : 'Show List'}
-          </Button>
-        </Tooltip>
+        {!isOpenquakeHazardTask && (
+          <>
+            <Tooltip title="use (f/F) to open/close filters">
+              <Button
+                className={classes.control}
+                color="inherit"
+                variant="contained"
+                onClick={() => setShowFilter((v) => !v)}
+              >
+                <span>
+                  Filter&nbsp;
+                  {`${
+                    filteredArguments.data.length ? filteredChildren.data?.length ?? 0 : childTasks.data?.length ?? 0
+                  }/${childTasks.data?.length ?? 0}`}
+                </span>
+              </Button>
+            </Tooltip>
+            <Tooltip title="use (s/S) to toggle between views">
+              <Button
+                color="inherit"
+                className={classes.control}
+                variant="contained"
+                onClick={handleViewChange}
+                disabled={filteredChildren?.data && filteredChildren.data[0].__typename === 'OpenquakeHazardTask'}
+              >
+                {showList ? 'Show Report' : 'Show List'}
+              </Button>
+            </Tooltip>
+          </>
+        )}
         <Tooltip title="use (d/D) to open/close details">
           <Button
             color="inherit"
