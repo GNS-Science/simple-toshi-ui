@@ -116,8 +116,24 @@ export const validateChildTasks = (data: GeneralTaskChildrenTabQueryResponse): V
   const childTasks = data?.node?.children?.edges?.map((e) => e?.node?.child);
   const validatedChildTasks: ValidatedChildren = { data: [] };
   childTasks?.map((task) => {
-    if (task && task.__typename !== '%other') {
-      validatedChildTasks.data?.push(task);
+    if (
+      task &&
+      task.__typename !== '%other' &&
+      task.id &&
+      task.duration &&
+      task.state &&
+      task.result &&
+      task.arguments
+    ) {
+      validatedChildTasks.data?.push({
+        __typename: task.__typename,
+        id: task.id,
+        created: task.created,
+        duration: task.duration,
+        state: task.state,
+        result: task.result,
+        arguments: task.arguments,
+      });
     }
   });
 
