@@ -272,7 +272,15 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
           <h4>
             {isScaledSolution ? 'Scaled Inversion Solution' : 'Inversion Solution'}:&nbsp;
             {unifiedInversionSolutions[currentImage].solution.id}&nbsp;&nbsp;&nbsp;
-            <Link to={`/InversionSolution/${unifiedInversionSolutions[currentImage].solution.id}`}>[more]</Link>
+            <Link
+              to={
+                isScaledSolution
+                  ? `/ScaledInversionSolution/${unifiedInversionSolutions[currentImage].id}`
+                  : `/InversionSolution/${unifiedInversionSolutions[currentImage].solution.id}`
+              }
+            >
+              [more]
+            </Link>
           </h4>
           <MetaToolTip meta={filteredMeta} />
           <FlipChartControls
