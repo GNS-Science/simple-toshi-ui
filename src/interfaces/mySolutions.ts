@@ -23,6 +23,32 @@ export interface SolutionItem {
       } | null;
     } | null>;
   } | null;
+  readonly files: {
+    readonly edges: ReadonlyArray<{
+      readonly node: {
+        readonly file: {
+          readonly id?: string | undefined;
+          readonly meta?:
+            | ReadonlyArray<{
+                readonly k: string | null;
+                readonly v: string | null;
+              } | null>
+            | null
+            | undefined;
+          readonly source_solution?:
+            | {
+                readonly id: string;
+                readonly meta: ReadonlyArray<{
+                  readonly k: string | null;
+                  readonly v: string | null;
+                } | null> | null;
+              }
+            | null
+            | undefined;
+        } | null;
+      } | null;
+    } | null>;
+  } | null;
   readonly inversion_solution: {
     readonly id: string;
     readonly mfd_table_id: string | null;

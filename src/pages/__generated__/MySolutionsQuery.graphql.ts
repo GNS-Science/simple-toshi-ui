@@ -4,7 +4,7 @@
 
 import { ConcreteRequest } from "relay-runtime";
 
-export type ModelType = "CRUSTAL" | "SUBDUCTION" | "%future added value";
+export type ModelType = "COMPOSITE" | "CRUSTAL" | "SUBDUCTION" | "%future added value";
 export type TableType = "GENERAL" | "HAZARD_GRIDDED" | "HAZARD_SITES" | "MFD_CURVES" | "MFD_CURVES_V2" | "%future added value";
 export type MySolutionsQueryVariables = {
     id?: Array<string> | null | undefined;
@@ -31,6 +31,26 @@ export type MySolutionsQueryResponse = {
                                         readonly k: string | null;
                                         readonly v: ReadonlyArray<string | null> | null;
                                     } | null> | null;
+                                } | null;
+                            } | null;
+                        } | null>;
+                    } | null;
+                    readonly files: {
+                        readonly edges: ReadonlyArray<{
+                            readonly node: {
+                                readonly file: {
+                                    readonly id?: string | undefined;
+                                    readonly meta?: ReadonlyArray<{
+                                        readonly k: string | null;
+                                        readonly v: string | null;
+                                    } | null> | null | undefined;
+                                    readonly source_solution?: {
+                                        readonly id: string;
+                                        readonly meta: ReadonlyArray<{
+                                            readonly k: string | null;
+                                            readonly v: string | null;
+                                        } | null> | null;
+                                    } | null | undefined;
                                 } | null;
                             } | null;
                         } | null>;
@@ -88,6 +108,33 @@ query MySolutionsQuery(
                     argument_lists {
                       k
                       v
+                    }
+                  }
+                }
+              }
+            }
+            files {
+              edges {
+                node {
+                  file {
+                    __typename
+                    ... on ScaledInversionSolution {
+                      id
+                      meta {
+                        k
+                        v
+                      }
+                      source_solution {
+                        id
+                        meta {
+                          k
+                          v
+                        }
+                      }
+                    }
+                    ... on Node {
+                      __isNode: __typename
+                      id
                     }
                   }
                 }
@@ -163,95 +210,88 @@ v4 = [
   }
 ],
 v5 = {
-  "kind": "InlineFragment",
+  "alias": null,
+  "args": null,
+  "concreteType": "TaskTaskRelationConnection",
+  "kind": "LinkedField",
+  "name": "parents",
+  "plural": false,
   "selections": [
-    (v3/*: any*/),
     {
       "alias": null,
       "args": null,
-      "concreteType": "TaskTaskRelationConnection",
+      "concreteType": "TaskTaskRelationEdge",
       "kind": "LinkedField",
-      "name": "parents",
-      "plural": false,
+      "name": "edges",
+      "plural": true,
       "selections": [
         {
           "alias": null,
           "args": null,
-          "concreteType": "TaskTaskRelationEdge",
+          "concreteType": "TaskTaskRelation",
           "kind": "LinkedField",
-          "name": "edges",
-          "plural": true,
+          "name": "node",
+          "plural": false,
           "selections": [
             {
               "alias": null,
               "args": null,
-              "concreteType": "TaskTaskRelation",
+              "concreteType": "GeneralTask",
               "kind": "LinkedField",
-              "name": "node",
+              "name": "parent",
               "plural": false,
               "selections": [
+                (v3/*: any*/),
                 {
                   "alias": null,
                   "args": null,
-                  "concreteType": "GeneralTask",
+                  "kind": "ScalarField",
+                  "name": "created",
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "title",
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "description",
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "model_type",
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "swept_arguments",
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "notes",
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "KeyValueListPair",
                   "kind": "LinkedField",
-                  "name": "parent",
-                  "plural": false,
-                  "selections": [
-                    (v3/*: any*/),
-                    {
-                      "alias": null,
-                      "args": null,
-                      "kind": "ScalarField",
-                      "name": "created",
-                      "storageKey": null
-                    },
-                    {
-                      "alias": null,
-                      "args": null,
-                      "kind": "ScalarField",
-                      "name": "title",
-                      "storageKey": null
-                    },
-                    {
-                      "alias": null,
-                      "args": null,
-                      "kind": "ScalarField",
-                      "name": "description",
-                      "storageKey": null
-                    },
-                    {
-                      "alias": null,
-                      "args": null,
-                      "kind": "ScalarField",
-                      "name": "model_type",
-                      "storageKey": null
-                    },
-                    {
-                      "alias": null,
-                      "args": null,
-                      "kind": "ScalarField",
-                      "name": "swept_arguments",
-                      "storageKey": null
-                    },
-                    {
-                      "alias": null,
-                      "args": null,
-                      "kind": "ScalarField",
-                      "name": "notes",
-                      "storageKey": null
-                    },
-                    {
-                      "alias": null,
-                      "args": null,
-                      "concreteType": "KeyValueListPair",
-                      "kind": "LinkedField",
-                      "name": "argument_lists",
-                      "plural": true,
-                      "selections": (v4/*: any*/),
-                      "storageKey": null
-                    }
-                  ],
+                  "name": "argument_lists",
+                  "plural": true,
+                  "selections": (v4/*: any*/),
                   "storageKey": null
                 }
               ],
@@ -262,64 +302,94 @@ v5 = {
         }
       ],
       "storageKey": null
-    },
+    }
+  ],
+  "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "KeyValuePair",
+  "kind": "LinkedField",
+  "name": "meta",
+  "plural": true,
+  "selections": (v4/*: any*/),
+  "storageKey": null
+},
+v7 = {
+  "kind": "InlineFragment",
+  "selections": [
+    (v3/*: any*/),
+    (v6/*: any*/),
     {
       "alias": null,
       "args": null,
       "concreteType": "InversionSolution",
       "kind": "LinkedField",
-      "name": "inversion_solution",
+      "name": "source_solution",
       "plural": false,
       "selections": [
         (v3/*: any*/),
+        (v6/*: any*/)
+      ],
+      "storageKey": null
+    }
+  ],
+  "type": "ScaledInversionSolution",
+  "abstractKey": null
+},
+v8 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "InversionSolution",
+  "kind": "LinkedField",
+  "name": "inversion_solution",
+  "plural": false,
+  "selections": [
+    (v3/*: any*/),
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "mfd_table_id",
+      "storageKey": null
+    },
+    (v6/*: any*/),
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "LabelledTableRelation",
+      "kind": "LinkedField",
+      "name": "tables",
+      "plural": true,
+      "selections": [
         {
           "alias": null,
           "args": null,
           "kind": "ScalarField",
-          "name": "mfd_table_id",
+          "name": "table_id",
           "storageKey": null
         },
         {
           "alias": null,
           "args": null,
-          "concreteType": "KeyValuePair",
-          "kind": "LinkedField",
-          "name": "meta",
-          "plural": true,
-          "selections": (v4/*: any*/),
-          "storageKey": null
-        },
-        {
-          "alias": null,
-          "args": null,
-          "concreteType": "LabelledTableRelation",
-          "kind": "LinkedField",
-          "name": "tables",
-          "plural": true,
-          "selections": [
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "table_id",
-              "storageKey": null
-            },
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "table_type",
-              "storageKey": null
-            }
-          ],
+          "kind": "ScalarField",
+          "name": "table_type",
           "storageKey": null
         }
       ],
       "storageKey": null
     }
   ],
-  "type": "AutomationTask",
-  "abstractKey": null
+  "storageKey": null
+},
+v9 = {
+  "kind": "InlineFragment",
+  "selections": [
+    (v3/*: any*/)
+  ],
+  "type": "Node",
+  "abstractKey": "__isNode"
 };
 return {
   "fragment": {
@@ -361,7 +431,61 @@ return {
                     "plural": false,
                     "selections": [
                       (v2/*: any*/),
-                      (v5/*: any*/)
+                      {
+                        "kind": "InlineFragment",
+                        "selections": [
+                          (v3/*: any*/),
+                          (v5/*: any*/),
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "FileRelationConnection",
+                            "kind": "LinkedField",
+                            "name": "files",
+                            "plural": false,
+                            "selections": [
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "FileRelationEdge",
+                                "kind": "LinkedField",
+                                "name": "edges",
+                                "plural": true,
+                                "selections": [
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "concreteType": "FileRelation",
+                                    "kind": "LinkedField",
+                                    "name": "node",
+                                    "plural": false,
+                                    "selections": [
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "concreteType": null,
+                                        "kind": "LinkedField",
+                                        "name": "file",
+                                        "plural": false,
+                                        "selections": [
+                                          (v7/*: any*/)
+                                        ],
+                                        "storageKey": null
+                                      }
+                                    ],
+                                    "storageKey": null
+                                  }
+                                ],
+                                "storageKey": null
+                              }
+                            ],
+                            "storageKey": null
+                          },
+                          (v8/*: any*/)
+                        ],
+                        "type": "AutomationTask",
+                        "abstractKey": null
+                      }
                     ],
                     "storageKey": null
                   }
@@ -417,15 +541,64 @@ return {
                     "plural": false,
                     "selections": [
                       (v2/*: any*/),
-                      (v5/*: any*/),
                       {
                         "kind": "InlineFragment",
                         "selections": [
-                          (v3/*: any*/)
+                          (v3/*: any*/),
+                          (v5/*: any*/),
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "FileRelationConnection",
+                            "kind": "LinkedField",
+                            "name": "files",
+                            "plural": false,
+                            "selections": [
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "FileRelationEdge",
+                                "kind": "LinkedField",
+                                "name": "edges",
+                                "plural": true,
+                                "selections": [
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "concreteType": "FileRelation",
+                                    "kind": "LinkedField",
+                                    "name": "node",
+                                    "plural": false,
+                                    "selections": [
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "concreteType": null,
+                                        "kind": "LinkedField",
+                                        "name": "file",
+                                        "plural": false,
+                                        "selections": [
+                                          (v2/*: any*/),
+                                          (v7/*: any*/),
+                                          (v9/*: any*/)
+                                        ],
+                                        "storageKey": null
+                                      }
+                                    ],
+                                    "storageKey": null
+                                  }
+                                ],
+                                "storageKey": null
+                              }
+                            ],
+                            "storageKey": null
+                          },
+                          (v8/*: any*/)
                         ],
-                        "type": "Node",
-                        "abstractKey": "__isNode"
-                      }
+                        "type": "AutomationTask",
+                        "abstractKey": null
+                      },
+                      (v9/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -441,14 +614,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "1a077b4a118aa6a21bd48864475b42e8",
+    "cacheID": "5cfbe06f958003add0258d064329872f",
     "id": null,
     "metadata": {},
     "name": "MySolutionsQuery",
     "operationKind": "query",
-    "text": "query MySolutionsQuery(\n  $id: [ID!]\n) {\n  nodes(id_in: $id) {\n    result {\n      edges {\n        node {\n          __typename\n          ... on AutomationTask {\n            id\n            parents {\n              edges {\n                node {\n                  parent {\n                    id\n                    created\n                    title\n                    description\n                    model_type\n                    swept_arguments\n                    notes\n                    argument_lists {\n                      k\n                      v\n                    }\n                  }\n                }\n              }\n            }\n            inversion_solution {\n              id\n              mfd_table_id\n              meta {\n                k\n                v\n              }\n              tables {\n                table_id\n                table_type\n              }\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query MySolutionsQuery(\n  $id: [ID!]\n) {\n  nodes(id_in: $id) {\n    result {\n      edges {\n        node {\n          __typename\n          ... on AutomationTask {\n            id\n            parents {\n              edges {\n                node {\n                  parent {\n                    id\n                    created\n                    title\n                    description\n                    model_type\n                    swept_arguments\n                    notes\n                    argument_lists {\n                      k\n                      v\n                    }\n                  }\n                }\n              }\n            }\n            files {\n              edges {\n                node {\n                  file {\n                    __typename\n                    ... on ScaledInversionSolution {\n                      id\n                      meta {\n                        k\n                        v\n                      }\n                      source_solution {\n                        id\n                        meta {\n                          k\n                          v\n                        }\n                      }\n                    }\n                    ... on Node {\n                      __isNode: __typename\n                      id\n                    }\n                  }\n                }\n              }\n            }\n            inversion_solution {\n              id\n              mfd_table_id\n              meta {\n                k\n                v\n              }\n              tables {\n                table_id\n                table_type\n              }\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '46ce7880050c16a1f35ed728a70d7695';
+(node as any).hash = 'dfb5faea838fffff26a28177c228979b';
 export default node;

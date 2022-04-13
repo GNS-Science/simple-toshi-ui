@@ -74,17 +74,31 @@ export interface SolutionDiagnosticsOption {
   imgHght: number | undefined;
 }
 
-export type ValidatedSubtask = {
-  __typename: 'AutomationTask';
+type Meta = Array<{
+  readonly k: string | null;
+  readonly v: string | null;
+} | null>;
+
+export enum UnifiedInversionSolutionType {
+  SCALED_INVERSION_SOLUTION,
+  INVERSION_SOLUTION,
+}
+
+export type ScaledSourceSolution = {
   id: string;
-  inversion_solution: {
+  meta: Meta;
+};
+
+//Common inversion solution for flipchart - accomadates both scaled and normal
+export type UnifiedInversionSolution = {
+  type: UnifiedInversionSolutionType;
+  id: string;
+  solution: {
     id: string;
-    mfd_table_id: string;
-    meta: Array<{
-      readonly k: string | null;
-      readonly v: string | null;
-    } | null>;
-    tables: IStables;
+    meta: Meta;
+    hazardId: string | null;
+    mfdTableId: string | null;
+    source_solution: ScaledSourceSolution | null;
   };
 };
 

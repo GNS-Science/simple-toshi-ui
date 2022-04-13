@@ -65,6 +65,7 @@ interface GeneralViewProps {
   currentImage: number;
   automationTasksLength: number;
   setGeneralViews: (selection: string[]) => void;
+  isScaledSolution: boolean;
 }
 
 const GeneralView: React.FC<GeneralViewProps> = ({
@@ -76,21 +77,35 @@ const GeneralView: React.FC<GeneralViewProps> = ({
   setGeneralViews,
   currentImage,
   automationTasksLength,
+  isScaledSolution,
 }: GeneralViewProps) => {
-  const [generalViewSelections, setGeneralViewSelections] = useState<SolutionDiagnosticsOption[]>([
-    diagnosticReportViewOptions[0],
-  ]);
+  const [viewOptions, setViewOptions] = useState<SolutionDiagnosticsOption[]>([diagnosticReportViewOptions[0]]);
+  const [generalViewSelections, setGeneralViewSelections] = useState<SolutionDiagnosticsOption[]>([viewOptions[0]]);
 
   useEffect(() => {
-    const filtered = diagnosticReportViewOptions.filter((option) => {
-      return generalViews.includes(option.displayName);
-    });
+    let scaledReportViewOptions: SolutionDiagnosticsOption[] = [];
+    if (isScaledSolution) {
+      scaledReportViewOptions = diagnosticReportViewOptions.filter(
+        (option) =>
+          option.displayName !== 'Perturbations & Non-Zero Rates' &&
+          option.displayName !== 'Energy vs Time' &&
+          option.displayName !== 'Misfit Progress' &&
+          option.displayName !== 'Re-Weighting',
+      );
+      setViewOptions(scaledReportViewOptions);
+    } else {
+      setViewOptions(diagnosticReportViewOptions);
+    }
+  }, [isScaledSolution]);
+
+  useEffect(() => {
+    const filtered = viewOptions.filter((option) => generalViews.includes(option.displayName));
     setGeneralViewSelections(filtered);
-  }, [generalViews]);
+  }, [viewOptions, generalViews]);
 
   const generalViewDisplayNames: string[] = [];
 
-  diagnosticReportViewOptions.map((option) => {
+  viewOptions.map((option) => {
     generalViewDisplayNames.push(option.displayName);
   });
 
@@ -103,33 +118,35 @@ const GeneralView: React.FC<GeneralViewProps> = ({
         setOptions={setGeneralViews}
       />
       <div className={classes.imageContainer}>
-        {generalViewSelections.map((option) => {
-          if (
-            option.finalPath === 'mfd_plot_Total_MFD.png' ||
-            option.finalPath === 'mfd_plot_Total_MFD_cumulative.png'
-          ) {
-            return (
-              <GeneralViewMfdDynamicDialog
-                mfdTableId={mfdTableId}
-                meta={meta}
-                option={option}
-                currentImage={currentImage}
-                automationTasksLength={automationTasksLength}
-                filteredMeta={filteredMeta}
-              />
-            );
-          } else {
-            return (
-              <GeneralViewMfdStaticDialog
-                id={id}
-                option={option}
-                currentImage={currentImage}
-                automationTasksLength={automationTasksLength}
-                filteredMeta={filteredMeta}
-              />
-            );
-          }
-        })}
+        {generalViewSelections.length &&
+          generalViewSelections.map((option) => {
+            if (
+              (option.finalPath === 'mfd_plot_Total_MFD.png' ||
+                option.finalPath === 'mfd_plot_Total_MFD_cumulative.png') &&
+              isScaledSolution === false
+            ) {
+              return (
+                <GeneralViewMfdDynamicDialog
+                  mfdTableId={mfdTableId}
+                  meta={meta}
+                  option={option}
+                  currentImage={currentImage}
+                  automationTasksLength={automationTasksLength}
+                  filteredMeta={filteredMeta}
+                />
+              );
+            } else {
+              return (
+                <GeneralViewMfdStaticDialog
+                  id={id}
+                  option={option}
+                  currentImage={currentImage}
+                  automationTasksLength={automationTasksLength}
+                  filteredMeta={filteredMeta}
+                />
+              );
+            }
+          })}
       </div>
     </Root>
   );
