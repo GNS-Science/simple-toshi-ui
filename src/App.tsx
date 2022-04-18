@@ -40,7 +40,7 @@ import Loading from './components/common/Loading';
 import theme from './theme';
 import { ThemeProvider } from '@mui/material';
 import { parentViewsOptions } from './constants/parentFault';
-import InversionSolutionNrmlObject from './pages/InversionSolutionNrml';
+import InversionSolutionNrmlObject from './pages/InversionSolutionNrmlObject';
 
 // Immediately load the query as our app starts. For a real app, we'd move this
 // into our routing configuration, preloading data as we transition to new routes.
