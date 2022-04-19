@@ -13,33 +13,18 @@ export type GeneralTaskKeyValueListPairs = readonly ({
 } | null)[];
 
 export interface ValidatedChildren {
-  data?:
-    | (
-        | {
-            readonly __typename: 'RuptureGenerationTask';
-            readonly id: string;
-            readonly created: unknown | null;
-            readonly duration: number | null;
-            readonly state: EventState | null;
-            readonly result: EventResult | null;
-            readonly arguments: ReadonlyArray<{
-              readonly k: string | null;
-              readonly v: string | null;
-            } | null> | null;
-          }
-        | {
-            readonly __typename: 'AutomationTask';
-            readonly id: string;
-            readonly created: unknown | null;
-            readonly duration: number | null;
-            readonly state: EventState | null;
-            readonly result: EventResult | null;
-            readonly arguments: ReadonlyArray<{
-              readonly k: string | null;
-              readonly v: string | null;
-            } | null> | null;
-          }
-      )[];
+  data?: {
+    __typename: string;
+    id: string;
+    created: unknown;
+    duration: number;
+    state: EventState;
+    result: EventResult;
+    arguments: ReadonlyArray<{
+      readonly k: string | null;
+      readonly v: string | null;
+    } | null>;
+  }[];
 }
 
 export type SweepArgument = {

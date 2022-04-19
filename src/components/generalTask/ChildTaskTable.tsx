@@ -122,7 +122,7 @@ const ChildTaskTable: React.FC<ChildTaskTableProps> = ({ data }: ChildTaskTableP
                     </TableCell>
                   </AlternatingRow>
                 );
-              } else if (e?.__typename === 'AutomationTask') {
+              } else if (e?.__typename === 'AutomationTask' || 'OpenquakeHazardTask') {
                 return (
                   <AlternatingRow
                     key={e?.id}
@@ -150,7 +150,15 @@ const ChildTaskTable: React.FC<ChildTaskTableProps> = ({ data }: ChildTaskTableP
                       <span className={e?.result === 'SUCCESS' ? classes.success : classes.failure}> {e?.result}</span>
                     </TableCell>
                     <TableCell className={classes.tableCell}>
-                      <Link to={`/AutomationTask/${e?.id}`}>[more]</Link>
+                      <Link
+                        to={
+                          e?.__typename === 'AutomationTask'
+                            ? `/AutomationTask/${e?.id}`
+                            : `/OpenquakeHazardTask/${e?.id}`
+                        }
+                      >
+                        [more]
+                      </Link>
                     </TableCell>
                     <TableCell className={classes.tableCell}>
                       <FavouriteStatus id={e?.id} />
