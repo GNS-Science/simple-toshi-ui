@@ -4,6 +4,7 @@ import { Box, Typography } from '@mui/material';
 import { graphql } from 'babel-plugin-relay/macro';
 import { useLazyLoadQuery } from 'react-relay';
 import { InversionSolutionNrmlQuery } from './__generated__/InversionSolutionNrmlQuery.graphql';
+
 import KeyValueTable from '../components/common/KeyValueTable';
 import { UnifiedInversionSolutionType } from '../interfaces/generaltask';
 
@@ -15,6 +16,7 @@ const InversionSolutionNrml: React.FC = () => {
   const [sourceSolutionType, setSourceSolutionType] = useState<UnifiedInversionSolutionType>(
     UnifiedInversionSolutionType.INVERSION_SOLUTION,
   );
+
   const { id } = useParams<InversionSolutionNrmlParams>();
   const data = useLazyLoadQuery<InversionSolutionNrmlQuery>(inversionSolutionNrmlQuery, { id });
 
