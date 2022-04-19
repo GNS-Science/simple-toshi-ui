@@ -36,6 +36,9 @@ const FindResult: React.FC<FindResultProps> = ({ queryRef }: FindResultProps) =>
         case 'OpenquakeHazardTask':
           history.push(`/OpenquakeHazardTask/${data?.node?.id}`);
           break;
+        case 'OpenquakeHazardSolution':
+          history.push(`/HazardSolution/${data?.node?.id}`);
+          break;
         default:
           break;
       }

@@ -15,6 +15,7 @@ import MenuBar from './components/MenuBar';
 import InversionSolution from './pages/InversionSolution';
 import ScaledInversionSolution from './pages/ScaledInversionSolution';
 import OpenquakeHazardTask from './pages/OpenquakeHazardTask';
+import OpenquakeHazardSolution from './pages/OpenquakeHazardSolution';
 
 /* preview views (with no test coverage...) */
 import Preview from './pages/Preview';
@@ -132,6 +133,9 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
                   </Route>
                   <Route path="/OpenquakeHazardTask/:id">
                     <OpenquakeHazardTask />
+                  </Route>
+                  <Route path="/HazardSolution/:id">
+                    <OpenquakeHazardSolution />
                   </Route>
                   <Route path="/Find/:id?">
                     <Find />
