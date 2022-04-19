@@ -138,7 +138,7 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
                   <Route path="/HazardSolution/:id">
                     <OpenquakeHazardSolution />
                   <Route path="/InversionSolutionNrmlObject/:id/:tab?">
-                    <InversionSolutionNrmlObject />
+                    <InversionSolutionNrml />
                   </Route>
                   <Route path="/InversionSolutionNrml/:id">
                     <InversionSolutionNrml />
