@@ -18,6 +18,8 @@ export type InversionSolutionNrmlQueryResponse = {
             readonly k: string | null;
             readonly v: string | null;
         } | null> | null;
+        readonly file_size: number | null;
+        readonly md5_digest: string | null;
         readonly file_name: string | null;
         readonly file_url: string | null;
     } | {
@@ -48,6 +50,8 @@ query InversionSolutionNrmlQuery(
         k
         v
       }
+      file_size
+      md5_digest
       file_name
       file_url
     }
@@ -126,10 +130,24 @@ v6 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "file_name",
+  "name": "file_size",
   "storageKey": null
 },
 v7 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "md5_digest",
+  "storageKey": null
+},
+v8 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "file_name",
+  "storageKey": null
+},
+v9 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -159,7 +177,9 @@ return {
               (v4/*: any*/),
               (v5/*: any*/),
               (v6/*: any*/),
-              (v7/*: any*/)
+              (v7/*: any*/),
+              (v8/*: any*/),
+              (v9/*: any*/)
             ],
             "type": "InversionSolutionNrml",
             "abstractKey": null
@@ -193,7 +213,9 @@ return {
               (v4/*: any*/),
               (v5/*: any*/),
               (v6/*: any*/),
-              (v7/*: any*/)
+              (v7/*: any*/),
+              (v8/*: any*/),
+              (v9/*: any*/)
             ],
             "type": "InversionSolutionNrml",
             "abstractKey": null
@@ -204,14 +226,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "cd95f6c52ec7589c4ea1994ece9ecf83",
+    "cacheID": "ed836dd91ae835a0007311df0fc42873",
     "id": null,
     "metadata": {},
     "name": "InversionSolutionNrmlQuery",
     "operationKind": "query",
-    "text": "query InversionSolutionNrmlQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on InversionSolutionNrml {\n      id\n      source_solution {\n        id\n      }\n      meta {\n        k\n        v\n      }\n      file_name\n      file_url\n    }\n    id\n  }\n}\n"
+    "text": "query InversionSolutionNrmlQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on InversionSolutionNrml {\n      id\n      source_solution {\n        id\n      }\n      meta {\n        k\n        v\n      }\n      file_size\n      md5_digest\n      file_name\n      file_url\n    }\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'ccea2c1909e0f33f472332cfe3a794ee';
+(node as any).hash = 'f226e164e47d5e03275bbc57adfa1b58';
 export default node;
