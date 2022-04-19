@@ -4,12 +4,9 @@ import { useParams } from 'react-router-dom';
 import { useLazyLoadQuery } from 'react-relay';
 import { Typography, Grid, List, ListItem, ListItemText } from '@mui/material';
 import { OpenquakeHazardSolutionQuery } from './__generated__/OpenquakeHazardSolutionQuery.graphql';
-import { format, formatDuration, intervalToDuration, secondsToMilliseconds } from 'date-fns';
+import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
-import InfoTable from '../components/InfoTable';
-import KeyValueTable from '../components/common/KeyValueTable';
 import HazardTable, { HazardTableProps } from '../components/openquakeHazard/HazardTable';
-import TemplateArchiveTable from '../components/openquakeHazard/TemplateArchiveTable';
 import ConfigTable from '../components/openquakeHazard/ConfigTable';
 
 interface OpenquakeHazardSolutionParams {
