@@ -1,14 +1,15 @@
 import React from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { Box, Tabs, Tab } from '@mui/material';
+import { graphql } from 'babel-plugin-relay/macro';
 
-interface InversionSolutionNrmlObjectParams {
+interface InversionSolutionNrmlParams {
   id: string;
   tab: string;
 }
 
-const InversionSolutionNrmlObject: React.FC = () => {
-  const { id, tab } = useParams<InversionSolutionNrmlObjectParams>();
+const InversionSolutionNrml: React.FC = () => {
+  const { id, tab } = useParams<InversionSolutionNrmlParams>();
   const history = useHistory();
   return (
     <>
@@ -26,4 +27,24 @@ const InversionSolutionNrmlObject: React.FC = () => {
   );
 };
 
-export default InversionSolutionNrmlObject;
+export default InversionSolutionNrml;
+
+const inversionSolutionNrmlQuery = graphql`
+  query InversionSolutionNrmlQuery($id: ID!) {
+    node(id: $id) {
+      __typename
+      ... on InversionSolutionNrml {
+        id
+        source_solution {
+          id
+        }
+        meta {
+          k
+          v
+        }
+        file_name
+        file_url
+      }
+    }
+  }
+`;
