@@ -46,7 +46,12 @@ const OpenquakeHazardSolution: React.FC = () => {
           </ListItem>
           <ListItem>
             <ListItemText primary="Produced By" secondary={data?.node?.produced_by?.id} />
-            <Link to={`/OpenquakeHazardTask/${data?.node?.produced_by?.id}`}>[more]</Link>
+            <Link
+              style={{ position: 'relative', top: 8, left: 10 }}
+              to={`/OpenquakeHazardTask/${data?.node?.produced_by?.id}`}
+            >
+              [more]
+            </Link>
           </ListItem>
         </List>
       </Grid>

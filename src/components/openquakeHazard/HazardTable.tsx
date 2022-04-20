@@ -73,7 +73,7 @@ const HazardTable: React.FC<HazardTableProps> = ({ hazard_solution }: HazardTabl
               root: classes.root,
             }}
           >
-            <TableCell colSpan={2}>Hazard Solution</TableCell>
+            <TableCell colSpan={3}>Hazard Solution</TableCell>
           </AlternatingRow>
         </TableHead>
         <TableBody>
