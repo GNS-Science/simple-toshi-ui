@@ -35,7 +35,6 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({
   dialog,
 }: GeneralViewMfdProps) => {
   const data = useLazyLoadQuery<GeneralViewMfdQuery>(generalViewMfdQuery, { id: mfdTableId });
-  console.log(data);
 
   const rows = replaceMissingValues(data?.node?.rows);
   const [headingSize, setHeadingSize] = useState<number>(0);
