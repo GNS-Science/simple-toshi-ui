@@ -14,6 +14,7 @@ export const scaledInversionSolutionDetailTabQuery = graphql`
       id
       ... on ScaledInversionSolution {
         file_name
+        file_url
         created
         produced_by {
           id
@@ -50,7 +51,8 @@ const ScaledInversionSolutionDetailTab: React.FC<ScaledInversionSolutionDetailTa
   return (
     <>
       <Typography>
-        <strong>File name:</strong> {data?.node?.file_name}
+        <strong>File name:</strong> {data?.node?.file_name}{' '}
+        <a href={data?.node?.file_url ? data?.node?.file_url : ''}>Get file</a>
       </Typography>
       <Typography>
         <strong>Source Solution:</strong> {data?.node?.source_solution?.id}{' '}
