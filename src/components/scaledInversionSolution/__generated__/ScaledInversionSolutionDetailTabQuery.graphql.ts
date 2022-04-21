@@ -12,6 +12,7 @@ export type ScaledInversionSolutionDetailTabQueryResponse = {
         readonly __typename: string;
         readonly id: string;
         readonly file_name?: string | null | undefined;
+        readonly file_url?: string | null | undefined;
         readonly created?: unknown | null | undefined;
         readonly produced_by?: {
             readonly id: string;
@@ -45,6 +46,7 @@ query ScaledInversionSolutionDetailTabQuery(
     id
     ... on ScaledInversionSolution {
       file_name
+      file_url
       created
       produced_by {
         id
@@ -118,6 +120,13 @@ v3 = [
             "args": null,
             "kind": "ScalarField",
             "name": "file_name",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "file_url",
             "storageKey": null
           },
           (v2/*: any*/),
@@ -215,14 +224,14 @@ return {
     "selections": (v3/*: any*/)
   },
   "params": {
-    "cacheID": "fb0f49a5dd8dde9b1dfdd578a07cdcb3",
+    "cacheID": "27ad7d403001e0f9ceee837e156e5dcc",
     "id": null,
     "metadata": {},
     "name": "ScaledInversionSolutionDetailTabQuery",
     "operationKind": "query",
-    "text": "query ScaledInversionSolutionDetailTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    id\n    ... on ScaledInversionSolution {\n      file_name\n      created\n      produced_by {\n        id\n      }\n      meta {\n        k\n        v\n      }\n      source_solution {\n        id\n        created\n      }\n      relations {\n        total_count\n      }\n    }\n  }\n}\n"
+    "text": "query ScaledInversionSolutionDetailTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    id\n    ... on ScaledInversionSolution {\n      file_name\n      file_url\n      created\n      produced_by {\n        id\n      }\n      meta {\n        k\n        v\n      }\n      source_solution {\n        id\n        created\n      }\n      relations {\n        total_count\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '37090609b9708389157003fdfc8d9ef0';
+(node as any).hash = '583a350c3e6337201cff1dd88751e3ae';
 export default node;
