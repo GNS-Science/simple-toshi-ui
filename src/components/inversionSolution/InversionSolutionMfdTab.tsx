@@ -18,7 +18,6 @@ import {
   subductionMFDprops,
   v1MFDseries,
 } from '../../constants/mfdSeries';
-import { replaceMissingValues } from '../../service/dynamicMfd.service';
 
 interface InversionSolutionMfdTabProps {
   mfdTableId: string;
@@ -58,7 +57,7 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
   const [mfdProps, setMfdProps] = useState<MfdProps>({ series: [], colours: [], maxMagnitude: 10.0, minMagnitude: 0 });
 
   const data = useLazyLoadQuery<InversionSolutionMfdTabQuery>(inversionSolutionMfdTabQuery, { id: mfdTableId });
-  const rows = replaceMissingValues(data?.node?.rows);
+  const rows = data?.node?.rows;
 
   const config_type = meta?.filter((kv) => kv?.k == 'config_type')[0]?.v;
 

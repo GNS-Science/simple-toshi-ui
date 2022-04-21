@@ -8,6 +8,7 @@ import { MfdProps } from '../../../interfaces/inversionSolutions';
 import { IMagRate, magRateData } from '../../PreviewMFD_data';
 import { regionalizedMfdSeries } from '../../../constants/mfdSeries';
 import { mapMFDcurveColors } from '../../../service/inversionSolution.service';
+import { replaceMissingValues } from '../../../service/dynamicMfd.service';
 
 interface MfdChartProps {
   mfdProps: MfdProps;
@@ -26,7 +27,7 @@ const MfdChart: React.FC<MfdChartProps> = ({ mfdProps, rows, isV2 }: MfdChartPro
           .filter((row) => row && row[1] == series[index])
           .map((r) => (r ? [parseFloat(r[2] ?? ''), parseFloat(r[3] ?? '')] : [])),
       );
-    return curves;
+    return replaceMissingValues(curves);
   };
 
   useEffect(() => {
