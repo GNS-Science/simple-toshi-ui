@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { Link } from 'react-router-dom';
 import TruncateText from '../TruncateText';
+import { format } from 'date-fns';
 
 const PREFIX = 'ConfigTable';
 
@@ -63,6 +64,8 @@ export interface ConfigTableProps {
 }
 
 const ConfigTable: React.FC<ConfigTableProps> = ({ config }) => {
+  const created = config?.created ? (config?.created as string) : undefined;
+  const formattedDate = created ? format(new Date(created), 'PPPppp') : '';
   return (
     <StyledPaper className={classes.root}>
       <Table stickyHeader size="small" className={classes.table}>
@@ -85,7 +88,7 @@ const ConfigTable: React.FC<ConfigTableProps> = ({ config }) => {
           </AlternatingRow>
           <AlternatingRow classes={{ root: classes.root }}>
             <TableCell>Created</TableCell>
-            <TableCell colSpan={2}>{(config?.created as string) ?? ''}</TableCell>
+            <TableCell colSpan={2}>{formattedDate}</TableCell>
           </AlternatingRow>
           <TableHead>
             <AlternatingRow

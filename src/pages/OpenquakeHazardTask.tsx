@@ -6,9 +6,9 @@ import { Typography } from '@mui/material';
 import { OpenquakeHazardTaskQuery } from './__generated__/OpenquakeHazardTaskQuery.graphql';
 import InfoTable from '../components/InfoTable';
 import KeyValueTable from '../components/common/KeyValueTable';
-import HazardTable from '../components/openquakeHazardTask/HazardTable';
-import TemplateArchiveTable from '../components/openquakeHazardTask/TemplateArchiveTable';
-import ConfigTable from '../components/openquakeHazardTask/ConfigTable';
+import HazardTable from '../components/openquakeHazard/HazardTable';
+import TemplateArchiveTable from '../components/openquakeHazard/TemplateArchiveTable';
+import ConfigTable from '../components/openquakeHazard/ConfigTable';
 
 interface OpenquakeHazardTaskParams {
   id: string;
