@@ -134,6 +134,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
 
   useEffect(() => {
     filteredChildren.data &&
+      filteredChildren.data.length > 0 &&
       filteredChildren.data[0].__typename === 'OpenquakeHazardTask' &&
       setIsOpenQuakeHazardTask(true);
   }, [filteredChildren]);
@@ -160,6 +161,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     }
   }, [childTasks, isClipBoard, search]);
 
+  console.log(childTasks);
   const handleChange = (event: SelectChangeEvent<string[]>) => {
     const newFilteredArguments = updateFilteredArguments(
       filteredArguments,
@@ -270,7 +272,11 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
                 className={classes.control}
                 variant="contained"
                 onClick={handleViewChange}
-                disabled={filteredChildren?.data && filteredChildren.data[0].__typename === 'OpenquakeHazardTask'}
+                disabled={
+                  filteredChildren?.data &&
+                  filteredChildren?.data.length > 0 &&
+                  filteredChildren.data[0].__typename === 'OpenquakeHazardTask'
+                }
               >
                 {showList ? 'Show Report' : 'Show List'}
               </Button>
