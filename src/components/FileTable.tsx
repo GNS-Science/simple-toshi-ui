@@ -49,6 +49,19 @@ export interface FileTableProps {
 }
 
 const FileTable: React.FC<FileTableProps> = ({ data }: FileTableProps) => {
+  const renderLink = (type: string, id: string) => {
+    switch (type) {
+      case 'InversionSolution':
+        return <Link to={`/InversionSolution/${id}`}>[more]</Link>;
+      case 'ScaledInversionSolution':
+        return <Link to={`/ScaledInversionSolution/${id}`}>[more]</Link>;
+      case 'InversionSolutionNrml':
+        return <Link to={`/InversionSolutionNrml/${id}`}>[more]</Link>;
+      default:
+        return <Link to={`/FileDetail/${id}`}>[more]</Link>;
+    }
+  };
+
   return (
     <StyledPaper className={classes.root}>
       <Table stickyHeader size="small" className={classes.table}>
@@ -82,13 +95,7 @@ const FileTable: React.FC<FileTableProps> = ({ data }: FileTableProps) => {
                 <a href={e?.node?.file?.file_url ?? ''}>Get file</a>
               </TableCell>
               <TableCell className={classes.tableCell}>
-                {e?.node?.file?.__typename == 'InversionSolution' ? (
-                  <Link to={`/InversionSolution/${e?.node?.file?.id}`}>[more]</Link>
-                ) : e?.node?.file?.__typename == 'ScaledInversionSolution' ? (
-                  <Link to={`/ScaledInversionSolution/${e?.node?.file?.id}`}>[more]</Link>
-                ) : (
-                  <Link to={`/FileDetail/${e?.node?.file?.id}`}>[more]</Link>
-                )}
+                {renderLink(e?.node?.file?.__typename as string, e?.node?.file?.id as string)}
               </TableCell>
             </AlternatingRow>
           ))}
