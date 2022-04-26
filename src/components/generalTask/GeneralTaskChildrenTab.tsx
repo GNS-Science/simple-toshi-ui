@@ -161,7 +161,6 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
     }
   }, [childTasks, isClipBoard, search]);
 
-  console.log(childTasks);
   const handleChange = (event: SelectChangeEvent<string[]>) => {
     const newFilteredArguments = updateFilteredArguments(
       filteredArguments,
