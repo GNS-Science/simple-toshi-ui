@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useMemo } from 'react';
 import { styled } from '@mui/material/styles';
 import { useLocation, useParams, useHistory } from 'react-router-dom';
 import { graphql } from 'babel-plugin-relay/macro';
@@ -120,17 +120,18 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   const [disableHotkey, setDisableHotkey] = useState<boolean>(false);
 
   const data = useLazyLoadQuery<GeneralTaskChildrenTabQuery>(generalTaskChildrenTabQuery, { id });
-  const childTasks = validateChildTasks(data);
+  const childTasks = useMemo(() => validateChildTasks(data), [data]);
 
   const [filteredArguments, setFilteredArguments] = useState<FilteredArguments>({ data: [] });
   const [filteredChildren, setFilteredChildren] = useState<ValidatedChildren>(childTasks);
   const [isOpenquakeHazardTask, setIsOpenQuakeHazardTask] = useState<boolean>(false);
 
-  const search = useLocation().search;
+  const search: string = useLocation().search;
+  const searchMemo: string = useMemo(() => search, [search]);
   const history = useHistory();
 
   const baseUrl = `${process.env.REACT_APP_ROOT_PATH}/GeneralTask/${id}/ChildTasks`;
-  const isClipBoard: boolean = determineClipBoard(search);
+  const isClipBoard: boolean = useMemo(() => determineClipBoard(search), [search]);
 
   useEffect(() => {
     filteredChildren.data &&
@@ -140,8 +141,8 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
   }, [filteredChildren]);
 
   useEffect(() => {
-    if (isClipBoard) {
-      getClipBoardObject(search)
+    isClipBoard &&
+      getClipBoardObject(searchMemo)
         .then((res) => {
           setShowList(res.showList);
           setShowFilter(res.showFilter);
@@ -158,8 +159,7 @@ const GeneralTaskChildrenTab: React.FC<GeneralTaskChildrenTabProps> = ({
         .catch(() => {
           setOpenNotification(true);
         });
-    }
-  }, [childTasks, isClipBoard, search]);
+  }, [childTasks, isClipBoard, searchMemo]);
 
   const handleChange = (event: SelectChangeEvent<string[]>) => {
     const newFilteredArguments = updateFilteredArguments(
