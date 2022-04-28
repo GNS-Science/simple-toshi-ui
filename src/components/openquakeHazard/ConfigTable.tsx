@@ -109,7 +109,7 @@ const ConfigTable: React.FC<ConfigTableProps> = ({ config }) => {
                   <a href={source_model?.file_url ?? ''}>Get file</a>
                 </TableCell>
                 <TableCell>
-                  <Link to={`/FileDetail/${source_model?.id}`}>[more]</Link>
+                  <Link to={`/InversionSolutionNrml/${source_model?.id}`}>[more]</Link>
                 </TableCell>
               </AlternatingRow>
               {source_model?.meta?.map((meta) => (
