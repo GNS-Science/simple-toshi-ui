@@ -141,9 +141,6 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
                   <Route path="/InversionSolutionNrml/:id">
                     <InversionSolutionNrml />
                   </Route>
-                  <Route path="/InversionSolutionNrml/:id">
-                    <InversionSolutionNrml />
-                  </Route>
                   <Route path="/Find/:id?">
                     <Find />
                   </Route>
