@@ -58,7 +58,7 @@ const InversionSolutionNrml: React.FC = () => {
             </a>
           </Typography>
           <Typography>
-            <a href={data?.node?.file_url ?? ''}>Downlaod</a>
+            <a href={data?.node?.file_url ?? ''}>Download</a>
           </Typography>
           {data?.node?.meta && <KeyValueTable header="Meta" data={data?.node?.meta} />}
         </Box>
