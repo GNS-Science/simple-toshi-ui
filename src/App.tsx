@@ -15,6 +15,7 @@ import MenuBar from './components/MenuBar';
 import InversionSolution from './pages/InversionSolution';
 import ScaledInversionSolution from './pages/ScaledInversionSolution';
 import OpenquakeHazardTask from './pages/OpenquakeHazardTask';
+import OpenquakeHazardSolution from './pages/OpenquakeHazardSolution';
 
 /* preview views (with no test coverage...) */
 import Preview from './pages/Preview';
@@ -39,6 +40,7 @@ import Loading from './components/common/Loading';
 import theme from './theme';
 import { ThemeProvider } from '@mui/material';
 import { parentViewsOptions } from './constants/parentFault';
+import InversionSolutionNrml from './pages/InversionSolutionNrml';
 
 // Immediately load the query as our app starts. For a real app, we'd move this
 // into our routing configuration, preloading data as we transition to new routes.
@@ -132,6 +134,12 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
                   </Route>
                   <Route path="/OpenquakeHazardTask/:id">
                     <OpenquakeHazardTask />
+                  </Route>
+                  <Route path="/HazardSolution/:id">
+                    <OpenquakeHazardSolution />
+                  </Route>
+                  <Route path="/InversionSolutionNrml/:id">
+                    <InversionSolutionNrml />
                   </Route>
                   <Route path="/Find/:id?">
                     <Find />

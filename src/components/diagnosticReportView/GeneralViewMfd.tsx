@@ -8,6 +8,7 @@ import { LegendOrdinal } from '@visx/legend';
 import { scaleOrdinal } from '@visx/scale';
 import { RectClipPath } from '@visx/clip-path';
 import { Group } from '@visx/group';
+import { replaceMissingValues } from '../../service/dynamicMfd.service';
 
 interface GeneralViewMfdProps {
   mfdTableId: string;
@@ -35,9 +36,9 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({
 }: GeneralViewMfdProps) => {
   const data = useLazyLoadQuery<GeneralViewMfdQuery>(generalViewMfdQuery, { id: mfdTableId });
 
+  const rows = data?.node?.rows;
   const [headingSize, setHeadingSize] = useState<number>(0);
 
-  const rows = data?.node?.rows;
   const config_type = meta?.filter((kv) => kv?.k == 'config_type')[0]?.v;
 
   useEffect(() => {
@@ -102,10 +103,11 @@ const GeneralViewMfd: React.FC<GeneralViewMfdProps> = ({
   };
 
   const magRateData = (data: number[][]): Array<IMagRate> => {
-    return magAndRate(data).map((mr) => {
+    const iMagRates = magAndRate(data).map((mr) => {
       const min = 1e-20; //log scales cannot include 0
       return { mag: mr[0], rate: Math.max(mr[1], min) } as IMagRate;
     });
+    return replaceMissingValues(iMagRates);
   };
 
   const magAndRate = (data: number[][]): number[][] => {

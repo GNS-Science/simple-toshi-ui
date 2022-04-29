@@ -275,7 +275,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             <Link
               to={
                 isScaledSolution
-                  ? `/ScaledInversionSolution/${unifiedInversionSolutions[currentImage].id}`
+                  ? `/ScaledInversionSolution/${unifiedInversionSolutions[currentImage].solution.id}`
                   : `/InversionSolution/${unifiedInversionSolutions[currentImage].solution.id}`
               }
             >

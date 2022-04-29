@@ -87,7 +87,7 @@ const ScaledInversionSolution: React.FC = () => {
   return (
     <Root>
       <Typography variant="h5" gutterBottom>
-        ScaledInversionSolution: {data?.node?.id}&nbsp;
+        ScaledInversionSolution: {id}&nbsp;
         <FavouriteControls id={data?.node?.id as string} producedBy={data?.node?.produced_by?.id as string} />
       </Typography>
       <Box className={classes.root}>

@@ -37,18 +37,24 @@ export interface HazardTableProps {
   readonly hazard_solution?:
     | {
         readonly created: unknown | null;
-        readonly csv_archive: {
-          readonly id: string;
-          readonly file_name: string | null;
-          readonly file_size: number | null;
-          readonly file_url: string | null;
-        } | null;
-        readonly hdf5_archive: {
-          readonly id: string;
-          readonly file_name: string | null;
-          readonly file_size: number | null;
-          readonly file_url: string | null;
-        } | null;
+        readonly csv_archive:
+          | {
+              readonly id: string;
+              readonly file_name: string | null;
+              readonly file_size: number | null;
+              readonly file_url: string | null;
+            }
+          | null
+          | undefined;
+        readonly hdf5_archive:
+          | {
+              readonly id: string;
+              readonly file_name: string | null;
+              readonly file_size: number | null;
+              readonly file_url: string | null;
+            }
+          | null
+          | undefined;
       }
     | null
     | undefined;
@@ -67,7 +73,7 @@ const HazardTable: React.FC<HazardTableProps> = ({ hazard_solution }: HazardTabl
               root: classes.root,
             }}
           >
-            <TableCell colSpan={2}>Hazard Solution</TableCell>
+            <TableCell colSpan={3}>Hazard Solution</TableCell>
           </AlternatingRow>
         </TableHead>
         <TableBody>
