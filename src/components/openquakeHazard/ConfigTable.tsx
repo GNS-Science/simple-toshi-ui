@@ -66,6 +66,7 @@ export interface ConfigTableProps {
 const ConfigTable: React.FC<ConfigTableProps> = ({ config }) => {
   const created = config?.created ? (config?.created as string) : undefined;
   const formattedDate = created ? format(new Date(created), 'PPPppp') : '';
+  console.log(config);
   return (
     <StyledPaper className={classes.root}>
       <Table stickyHeader size="small" className={classes.table}>
@@ -109,7 +110,15 @@ const ConfigTable: React.FC<ConfigTableProps> = ({ config }) => {
                   <a href={source_model?.file_url ?? ''}>Get file</a>
                 </TableCell>
                 <TableCell>
-                  <Link to={`/InversionSolutionNrml/${source_model?.id}`}>[more]</Link>
+                  <Link
+                    to={
+                      source_model?.file_name && source_model?.file_name.includes('xml')
+                        ? `/FileDetail/${source_model?.id}`
+                        : `/InversionSolutionNrml/${source_model?.id}`
+                    }
+                  >
+                    [more]
+                  </Link>
                 </TableCell>
               </AlternatingRow>
               {source_model?.meta?.map((meta) => (
