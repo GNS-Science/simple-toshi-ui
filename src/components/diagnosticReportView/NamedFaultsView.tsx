@@ -3,7 +3,8 @@ import buildUrl from 'build-url-ts';
 import React, { useEffect, useState } from 'react';
 import { mfdPlotOptions, NamedFaultsOption, namedFaultsOptions, PlotOption } from '../../constants/nameFaultsMfds';
 import MultiSelect from '../common/MultiSelect';
-import SelectControl from '../common/SelectControl';
+// import SelectControl from '../common/SelectControl';
+import { SelectControl } from '@gns-science/toshi-nest';
 
 const PREFIX = 'NamedFaultsView';
 
@@ -93,7 +94,12 @@ const NamedFaultsView: React.FC<NamedFaultsViewProps> = ({
           options={faultOptions}
           setOptions={setNamedFaultsLocations}
         />
-        <SelectControl name="Mfd Plot Views" options={mfdPlot} setOptions={setNamedFaultsView} />
+        <SelectControl
+          name="Mfd Plot Views"
+          options={mfdPlot}
+          selection={namedFaultsView}
+          setSelection={setNamedFaultsView}
+        />
       </div>
       <div className={classes.imageContainer}>
         {namedFaultsSelection?.map((item) => (

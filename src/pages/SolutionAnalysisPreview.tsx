@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import axios from 'axios';
 import SelectControl from '../components/common/SelectControl';
+import { SelectControl } from '@gns-science/toshi-nest';
 import { Alert, Button, Card, Slider, Typography } from '@mui/material';
 import { styled } from '@mui/styles';
 import MultiSelect from '../components/common/MultiSelect';
@@ -164,7 +165,12 @@ const SolutionAnalysisPreview: React.FC = () => {
             setOptions={setLocationSelections}
             name="Location"
           />
-          <SelectControl name="Radius" options={radiiOptions} setOptions={setRadiiSelection} />
+          <SelectControl
+            name="Radius"
+            options={radiiOptions}
+            selection={radiiSelection}
+            setSelection={setRadiiSelection}
+          />
           <Button variant="outlined" onClick={getGeoJson}>
             Fetch
           </Button>

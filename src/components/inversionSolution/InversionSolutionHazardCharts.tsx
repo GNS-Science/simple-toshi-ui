@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react'
 import { useLazyLoadQuery } from 'react-relay';
 import { Box, Button, Card, Snackbar } from '@mui/material';
 import { graphql } from 'babel-plugin-relay/macro';
-import SelectControl from '../common/SelectControl';
+// import SelectControl from '../common/SelectControl';
+import { SelectControl } from '@gns-science/toshi-nest';
 import { XY } from '../../interfaces/common';
 import {
   creatCSVdata,
@@ -158,16 +159,27 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
   return (
     <>
       <div style={{ width: '100%', padding: '1rem', display: 'flex', flexWrap: 'wrap' }}>
-        <SelectControl name="Location" options={options.location} setOptions={setLocation} />
+        <SelectControl name="Location" options={options.location} selection={location} setSelection={setLocation} />
         <MultiSelect name="PGA/SA Period" selected={PGA} options={options.PGA} setOptions={handleSetPGA} />
-        <SelectControl name="Forecast Timespan" options={options.forecastTime} setOptions={setForecastTime} />
+        <SelectControl
+          name="Forecast Timespan"
+          options={options.forecastTime}
+          selection={forecastTime}
+          setSelection={setForecastTime}
+        />
         <SelectControl
           name="Background Seismicity"
           options={options.backgroundSeismicity}
-          setOptions={setBackgroundSeismicity}
+          selection={backgroundSeismicity}
+          setSelection={setBackgroundSeismicity}
         />
-        <SelectControl name="Ground Motion Model" options={options.gmpe} setOptions={setGmpe} />
-        <SelectControl name="Probability of Exceedence" options={['None', '2%', '10%']} setOptions={setPOE} />
+        <SelectControl name="Ground Motion Model" options={options.gmpe} selection={gmpe} setSelection={setGmpe} />
+        <SelectControl
+          name="Probability of Exceedence"
+          options={['None', '2%', '10%']}
+          selection={POE}
+          setSelection={setPOE}
+        />
       </div>
       <Box>
         <Card>

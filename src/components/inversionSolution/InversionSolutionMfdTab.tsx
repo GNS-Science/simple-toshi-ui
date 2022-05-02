@@ -6,7 +6,8 @@ import { Box, Typography } from '@mui/material';
 import { InversionSolutionMfdTabQuery } from './__generated__/InversionSolutionMfdTabQuery.graphql';
 
 import ControlsBar from '../common/ControlsBar';
-import SelectControl from '../common/SelectControl';
+// import SelectControl from '../common/SelectControl';
+import { SelectControl } from '@gns-science/toshi-nest';
 import MultiSelect from '../common/MultiSelect';
 import { MfdProps } from '../../interfaces/inversionSolutions';
 import MfdChart from './charts/MfdChart';
@@ -149,7 +150,12 @@ const InversionSolutionMfdTab: React.FC<InversionSolutionMfdTabProps> = ({
       {isV2 && (
         <>
           <ControlsBar>
-            <SelectControl name="Region" options={['Both', 'TVZ', 'SansTVZ']} setOptions={setRegion} />
+            <SelectControl
+              name="Region"
+              options={['Both', 'TVZ', 'SansTVZ']}
+              selection={region}
+              setSelection={setRegion}
+            />
             <MultiSelect name="MFD Curves" options={options} selected={mfdCurveNames} setOptions={setMfdCurveNames} />
           </ControlsBar>
         </>
