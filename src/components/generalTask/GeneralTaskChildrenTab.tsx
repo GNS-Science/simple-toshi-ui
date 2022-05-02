@@ -33,7 +33,7 @@ import CommonModal from '../common/Modal/CommonModal';
 import { mfdPlotOptions, namedFaultsOptions } from '../../constants/nameFaultsMfds';
 import { regionalSolutionMfdOptions } from '../../constants/regionalSolutionMfd';
 import { solutionMfdOptions } from '../../constants/solutionMfd';
-import ControlsBar from '../common/ControlsBar';
+import { ControlsBar } from '@gns-science/toshi-nest';
 import { parentFaultsOptions, parentViewsOptions } from '../../constants/parentFault';
 
 const PREFIX = 'GeneralTaskChildrenTab';

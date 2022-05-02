@@ -2,11 +2,11 @@ import React, { useContext, useState, useEffect, useMemo } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
 import { Button, ButtonGroup, Tooltip, Typography } from '@mui/material';
 import { graphql } from 'babel-plugin-relay/macro';
+import { ControlsBar } from '@gns-science/toshi-nest';
 
 import GeneralTaskDetailDrawer from '../components/diagnosticReportView/GeneralTaskDetailDrawer';
 import DiagnosticReportCard from '../components/diagnosticReportView/DiagnosticReportCard';
 import MySolutionsList from '../components/mySolutions/MySolutionsList';
-import ControlsBar from '../components/common/ControlsBar';
 import LocalStorageContext from '../contexts/localStorage';
 import { GeneralTaskDetails } from '../interfaces/diagnosticReport';
 import { MySolutionsQuery } from './__generated__/MySolutionsQuery.graphql';

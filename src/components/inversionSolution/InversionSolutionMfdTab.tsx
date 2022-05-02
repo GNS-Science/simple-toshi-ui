@@ -2,10 +2,10 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useLazyLoadQuery } from 'react-relay';
 import { graphql } from 'babel-plugin-relay/macro';
 import { Box, Typography } from '@mui/material';
+import { ControlsBar } from '@gns-science/toshi-nest';
 
 import { InversionSolutionMfdTabQuery } from './__generated__/InversionSolutionMfdTabQuery.graphql';
 
-import ControlsBar from '../common/ControlsBar';
 import SelectControl from '../common/SelectControl';
 import MultiSelect from '../common/MultiSelect';
 import { MfdProps } from '../../interfaces/inversionSolutions';

@@ -13,6 +13,7 @@ import {
 } from '../../service/inversionSolution.service';
 import MultiSelect from '../common/MultiSelect';
 import Alert from '@mui/material/Alert';
+import { ControlsBar } from '@gns-science/toshi-nest';
 
 import { HazardTableFilteredData } from '../../interfaces/inversionSolutions';
 import { toProperCase } from '../../utils';
@@ -25,7 +26,6 @@ import SpectralAccelerationChart from './charts/SpectralAccelerationChart';
 import { ParentSize } from '@visx/responsive';
 import { useReactToPrint } from 'react-to-print';
 import { CSVLink } from 'react-csv';
-import ControlsBar from '../common/ControlsBar';
 
 interface InversionSolutionHazardChartsProps {
   id: string;

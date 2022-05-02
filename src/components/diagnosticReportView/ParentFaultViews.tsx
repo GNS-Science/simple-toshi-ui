@@ -1,10 +1,11 @@
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Autocomplete, TextField } from '@mui/material';
 import buildUrl from 'build-url-ts';
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { parentFaultsOptions, ParentViewsOption, parentViewsOptions } from '../../constants/parentFault';
-import ControlsBar from '../common/ControlsBar';
-import MultiSelect from '../common/MultiSelect';
 import { styled } from '@mui/system';
+import { ControlsBar } from '@gns-science/toshi-nest';
+
+import { parentFaultsOptions, ParentViewsOption, parentViewsOptions } from '../../constants/parentFault';
+import MultiSelect from '../common/MultiSelect';
 
 const ImageContainer = styled('div')({
   display: 'flex',
