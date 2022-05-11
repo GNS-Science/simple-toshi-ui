@@ -2,6 +2,12 @@ import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react'
 import { useLazyLoadQuery } from 'react-relay';
 import { Box, Button, Card, Snackbar } from '@mui/material';
 import { graphql } from 'babel-plugin-relay/macro';
+import { ControlsBar, ResponsiveHazardCurves } from '@gns-science/toshi-nest';
+import Alert from '@mui/material/Alert';
+import { ParentSize } from '@visx/responsive';
+import { useReactToPrint } from 'react-to-print';
+import { CSVLink } from 'react-csv';
+
 import SelectControl from '../common/SelectControl';
 import { XY } from '../../interfaces/common';
 import {
@@ -12,20 +18,13 @@ import {
   getSpectralAccelerationData,
 } from '../../service/inversionSolution.service';
 import MultiSelect from '../common/MultiSelect';
-import Alert from '@mui/material/Alert';
-import { ControlsBar } from '@gns-science/toshi-nest';
-
 import { HazardTableFilteredData } from '../../interfaces/inversionSolutions';
 import { toProperCase } from '../../utils';
 import {
   InversionSolutionHazardChartsQuery,
   InversionSolutionHazardChartsQueryResponse,
 } from './__generated__/InversionSolutionHazardChartsQuery.graphql';
-import HazardCurves from './charts/HazardCurves';
 import SpectralAccelerationChart from './charts/SpectralAccelerationChart';
-import { ParentSize } from '@visx/responsive';
-import { useReactToPrint } from 'react-to-print';
-import { CSVLink } from 'react-csv';
 
 interface InversionSolutionHazardChartsProps {
   id: string;
@@ -46,6 +45,9 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
   const [POE, setPOE] = useState<string>('None');
   const [POEdata, setPOEdata] = useState<XY[]>([]);
   const [SAdata, setSAdata] = useState<XY[]>([]);
+  const [currentColors, setCurrentColors] = useState<Record<string, string>>({});
+
+  type POEtype = 'None' | '2%' | '10%';
 
   const [filteredData, setFilteredData] = useState<HazardTableFilteredData>({});
   const [openNotification, setOpenNotification] = useState<boolean>(false);
@@ -60,6 +62,25 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
     backgroundSeismicity: string;
     POE: string;
   }
+
+  const curveColors: Record<string, string> = useMemo(() => {
+    const colors = ['#000000', '#FE1100', '#73d629', '#ffd700', '#7fe5f0', '#003366', '#ff7f50', '#047806', '#4ca3dd'];
+    const currentColors: Record<string, string> = {};
+
+    options.PGA.map((value, index) => {
+      currentColors[value] = colors[index];
+    });
+
+    return currentColors;
+  }, [options.PGA]);
+
+  useEffect(() => {
+    const currentColorsRecord: Record<string, string> = {};
+    PGA.map((value) => {
+      currentColorsRecord[value] = curveColors[value];
+    });
+    setCurrentColors(currentColorsRecord);
+  }, [curveColors, PGA]);
 
   const getSAdataCallback = useCallback(
     ({ data, location, forecastTime, gmpe, backgroundSeismicity, POE }: GetSAdataArguments) => {
@@ -173,23 +194,19 @@ const InversionSolutionHazardCharts: React.FC<InversionSolutionHazardChartsProps
         <Card>
           <div style={{ width: '100%', padding: '1rem', display: 'flex' }} ref={targetRef}>
             <div style={{ width: '50%', minWidth: 350 }}>
-              <ParentSize>
-                {(parent) => (
-                  <HazardCurves
-                    parentWidth={parent.width}
-                    parentRef={parent.ref}
-                    resizeParent={parent.resize}
-                    data={filteredData}
-                    POE={POE}
-                    PGA={PGA}
-                    PGAoptions={options.PGA}
-                    POEdata={POEdata}
-                    subHeading={getHazardCurvesSubHeading()}
-                    location={location}
-                    timeSpan={forecastTime}
-                  />
-                )}
-              </ParentSize>
+              <ResponsiveHazardCurves
+                curves={filteredData}
+                scalesConfig={{
+                  x: { type: 'log', domain: [1e-3, 10] },
+                  y: { type: 'log', domain: [1e-5, 1] },
+                }}
+                colors={currentColors}
+                heading={`${location} Hazard (opensha)`}
+                subHeading={getHazardCurvesSubHeading()}
+                gridNumTicks={5}
+                POE={POE as POEtype}
+                width={0}
+              />
             </div>
             <div style={{ width: '50%', minWidth: 350 }}>
               {showUHSA && (
