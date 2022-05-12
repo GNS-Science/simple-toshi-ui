@@ -15,6 +15,14 @@ export interface LocalStorageContextInterface {
   setLocalStorageParentFaultViews: (newValue: string[]) => void;
   localStorageParentFault: string | null;
   setLocalStorageParentFault: (newValue: string | null) => void;
+  localStorageRuptureMapLocation: string | null;
+  setLocalStorageRuptureMapLocation: (newValue: string | null) => void;
+  localStorageRuptureMapRadii: string | null;
+  setLocalStorageRuptureMapRadii: (newValue: string | null) => void;
+  localStorageRuptureMapMagRange: number[];
+  setLocalStorageRuptureMapMagRange: (newValue: number[]) => void;
+  localStorageRuptureMapRateRange: number[];
+  setLocalStorageRuptureMapRateRange: (newValue: number[]) => void;
 }
 
 export type ISFavouritesInstance = Record<string, ISFavouriteValue> | null;
