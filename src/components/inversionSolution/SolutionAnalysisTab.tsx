@@ -15,7 +15,6 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { styled } from '@mui/styles';
-import { LatLngExpression } from 'leaflet';
 import { GeoJsonObject } from 'geojson';
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
@@ -25,7 +24,13 @@ import SelectControl from '../common/SelectControl';
 import { solvisApiService } from '../../service/api';
 import SolutionAnalysisTable from './SolutionAnalysisTable';
 import RangeSliderWithInputs from '../common/RangeSliderWithInputs';
-import { solutionRuptureMapLocationOptions, solutionRuptureMapRadiiOptions } from '../../constants/solutionRuptureMap';
+import {
+  nz_centre,
+  zoom,
+  provider_url,
+  solutionRuptureMapLocationOptions,
+  solutionRuptureMapRadiiOptions,
+} from '../../constants/solutionRuptureMap';
 import LocalStorageContext from '../../contexts/localStorage';
 
 const StyledAccordion = styled(Accordion)({
@@ -63,10 +68,6 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
   id,
   setDisableHotkey,
 }: SolutionAnalysisTabProps) => {
-  const nz_centre: LatLngExpression = [-40.946, 174.167];
-  const zoom = 5;
-  const provider_url = 'https://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}';
-
   const {
     localStorageRuptureMapLocation,
     setLocalStorageRuptureMapLocation,
@@ -92,15 +93,9 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
   const [inputValue, setInputValue] = React.useState('');
 
   const radiiInKm = useCallback(() => {
-    if (localStorageRuptureMapRadii) {
-      if (localStorageRuptureMapRadii === '100km') {
-        return localStorageRuptureMapRadii.slice(0, 3);
-      } else {
-        return localStorageRuptureMapRadii.slice(0, 2);
-      }
-    } else {
-      return '';
-    }
+    return localStorageRuptureMapRadii === '100km'
+      ? localStorageRuptureMapRadii.slice(0, 3)
+      : localStorageRuptureMapRadii.slice(0, 2);
   }, [localStorageRuptureMapRadii]);
 
   const getGeoJson = useCallback(() => {

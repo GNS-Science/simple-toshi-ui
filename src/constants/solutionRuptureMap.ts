@@ -1,3 +1,5 @@
+import { LatLngExpression } from 'leaflet';
+
 interface SolutionAnalysisLocationOption {
   id: string;
   name: string;
@@ -5,6 +7,11 @@ interface SolutionAnalysisLocationOption {
   longitude: number;
   population: number;
 }
+
+export const nz_centre: LatLngExpression = [-40.946, 174.167];
+export const zoom = 5;
+export const provider_url =
+  'https://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}';
 
 export const solutionRuptureMapRadiiOptions = {
   id: '6',

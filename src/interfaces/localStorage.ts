@@ -17,8 +17,8 @@ export interface LocalStorageContextInterface {
   setLocalStorageParentFault: (newValue: string | null) => void;
   localStorageRuptureMapLocation: string[];
   setLocalStorageRuptureMapLocation: (newValue: string[]) => void;
-  localStorageRuptureMapRadii: string | null;
-  setLocalStorageRuptureMapRadii: (newValue: string | null) => void;
+  localStorageRuptureMapRadii: string;
+  setLocalStorageRuptureMapRadii: (newValue: string) => void;
   localStorageRuptureMapMagRange: number[];
   setLocalStorageRuptureMapMagRange: (newValue: number[]) => void;
   localStorageRuptureMapRateRange: number[];

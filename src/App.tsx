@@ -85,9 +85,9 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
     'rupture-map-location',
     [],
   );
-  const [localStorageRuptureMapRadii, setLocalStorageRuptureMapRadii] = useLocalStorage<string | null>(
+  const [localStorageRuptureMapRadii, setLocalStorageRuptureMapRadii] = useLocalStorage<string>(
     'rupture-map-radii',
-    null,
+    '10km',
   );
   const [localStorageRuptureMapMagRange, setLocalStorageRuptureMapMagRange] = useLocalStorage<number[]>(
     'rupture-map-mag-range',
