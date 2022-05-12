@@ -19,7 +19,7 @@ const LocalStorageContext = createContext<LocalStorageContextInterface>({
   setLocalStorageParentFaultViews: noop,
   localStorageParentFault: null,
   setLocalStorageParentFault: noop,
-  localStorageRuptureMapLocation: null,
+  localStorageRuptureMapLocation: [],
   setLocalStorageRuptureMapLocation: noop,
   localStorageRuptureMapRadii: null,
   setLocalStorageRuptureMapRadii: noop,

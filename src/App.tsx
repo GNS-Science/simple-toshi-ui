@@ -81,9 +81,9 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
     [parentViewsOptions[0].displayName],
   );
   const [localStorageParentFault, setLocalStorageParentFault] = useLocalStorage<string | null>('parent-fault', null);
-  const [localStorageRuptureMapLocation, setLocalStorageRuptureMapLocation] = useLocalStorage<string | null>(
+  const [localStorageRuptureMapLocation, setLocalStorageRuptureMapLocation] = useLocalStorage<string[]>(
     'rupture-map-location',
-    null,
+    [],
   );
   const [localStorageRuptureMapRadii, setLocalStorageRuptureMapRadii] = useLocalStorage<string | null>(
     'rupture-map-radii',
