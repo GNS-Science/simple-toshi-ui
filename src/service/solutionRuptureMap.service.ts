@@ -1,7 +1,5 @@
 import { solutionRuptureMapLocationOptions, solutionRuptureMapRadiiOptions } from '../constants/solutionRuptureMap';
 
-export const lol = 1;
-
 export const rateLabelFormat = (value: number): string => {
   return `1e${value}`;
 };
