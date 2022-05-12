@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect, Dispatch, SetStateAction, useCallback } from 'react';
+import React, { useState, useEffect, Dispatch, SetStateAction, useCallback, useContext } from 'react';
 import {
   Alert,
   Accordion,
@@ -26,6 +26,7 @@ import { solvisApiService } from '../../service/api';
 import SolutionAnalysisTable from './SolutionAnalysisTable';
 import RangeSliderWithInputs from '../common/RangeSliderWithInputs';
 import { solutionRuptureMapLocationOptions, solutionRuptureMapRadiiOptions } from '../../constants/solutionRuptureMap';
+import LocalStorageContext from '../../contexts/localStorage';
 
 const StyledAccordion = styled(Accordion)({
   borderRadius: '1px',
@@ -66,16 +67,22 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
   const zoom = 5;
   const provider_url = 'https://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}';
 
-  const [locationSelections, setLocationSelections] = useState<string[]>([]);
-  const [radiiSelection, setRadiiSelection] = useState<string>('');
+  const {
+    localStorageRuptureMapLocation,
+    setLocalStorageRuptureMapLocation,
+    localStorageRuptureMapRadii,
+    setLocalStorageRuptureMapRadii,
+    localStorageRuptureMapMagRange,
+    setLocalStorageRuptureMapMagRange,
+    localStorageRuptureMapRateRange,
+    setLocalStorageRuptureMapRateRange,
+  } = useContext(LocalStorageContext);
+
   const [locationIDs, setLocationIDs] = useState<string[]>([]);
 
   const [rupturesData, setRupturesData] = useState<GeoJsonObject>();
   const [locationsData, setLocationsData] = useState<GeoJsonObject>();
   const [tableData, setTableData] = useState<string | null>(null);
-
-  const [magRange, setMagRange] = useState<number[]>([5, 10]);
-  const [rateRange, setRateRange] = useState<number[]>([-20, 0]);
 
   const [showLocation, setShowLocation] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -85,18 +92,28 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
   const [inputValue, setInputValue] = React.useState('');
 
   const radiiInKm = useCallback(() => {
-    if (radiiSelection === '100km') {
-      return radiiSelection.slice(0, 3);
+    if (localStorageRuptureMapRadii) {
+      if (localStorageRuptureMapRadii === '100km') {
+        return localStorageRuptureMapRadii.slice(0, 3);
+      } else {
+        return localStorageRuptureMapRadii.slice(0, 2);
+      }
     } else {
-      return radiiSelection.slice(0, 2);
+      return '';
     }
-  }, [radiiSelection]);
+  }, [localStorageRuptureMapRadii]);
 
   const getGeoJson = useCallback(() => {
     setShowLoading(true);
     const locationSelectionsString = locationIDs.join('%2C');
     solvisApiService
-      .getSolutionAnalysis(id, locationSelectionsString, radiiInKm(), magRange, rateRange)
+      .getSolutionAnalysis(
+        id,
+        locationSelectionsString,
+        radiiInKm(),
+        localStorageRuptureMapMagRange,
+        localStorageRuptureMapRateRange,
+      )
       .then((response) => {
         setShowLoading(false);
         setShowLoading(false);
@@ -120,22 +137,16 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
         }
         setShowLoading(false);
       });
-  }, [setShowLoading, locationIDs, id, magRange, radiiInKm, rateRange]);
-
-  useEffect(() => {
-    const filteredLocations = solutionRuptureMapLocationOptions.filter((location) =>
-      locationSelections.includes(location.name),
-    );
-    const filteredLocationIDs: string[] = [];
-    filteredLocations.map((location) => {
-      filteredLocationIDs.push(location.id);
-    });
-    setLocationIDs(filteredLocationIDs);
-  }, [locationSelections]);
+  }, [setShowLoading, locationIDs, id, radiiInKm, localStorageRuptureMapMagRange, localStorageRuptureMapRateRange]);
 
   useEffect(() => {
     setDisableFetch(false);
-  }, [locationSelections, radiiSelection, magRange, rateRange]);
+  }, [
+    localStorageRuptureMapLocation,
+    localStorageRuptureMapRadii,
+    localStorageRuptureMapMagRange,
+    localStorageRuptureMapRateRange,
+  ]);
 
   const getOptions = (): string[] => {
     const locations: string[] = [];
@@ -156,25 +167,38 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
     setShowLocation(event.target.checked);
   };
 
+  useEffect(() => {
+    const filteredLocations = solutionRuptureMapLocationOptions.filter((location) =>
+      localStorageRuptureMapLocation.includes(location.name),
+    );
+    const filteredLocationIDs: string[] = [];
+    filteredLocations.map((location) => {
+      filteredLocationIDs.push(location.id);
+    });
+    setLocationIDs(filteredLocationIDs);
+  }, [localStorageRuptureMapLocation]);
+
   return (
     <>
       {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
       <StyledAccordion defaultExpanded={true}>
         <StyledAccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
           <Typography>
-            <strong>Locations:</strong> {locationSelections.length > 0 ? locationSelections.join(', ') : 'None'}{' '}
+            <strong>Locations:</strong>{' '}
+            {localStorageRuptureMapLocation.length > 0 ? localStorageRuptureMapLocation.join(', ') : 'None'}{' '}
             <strong>Radii: </strong>
-            {radiiSelection || 'None'} <strong>Mag Range:</strong> {magRange[0]} - {magRange[1]}{' '}
-            <strong>Rate Range:</strong> {`1e${rateRange[0]} - 1e${rateRange[1]}`}
+            {localStorageRuptureMapRadii || 'None'} <strong>Mag Range:</strong> {localStorageRuptureMapMagRange[0]} -{' '}
+            {localStorageRuptureMapMagRange[1]} <strong>Rate Range:</strong>{' '}
+            {`1e${localStorageRuptureMapRateRange[0]} - 1e${localStorageRuptureMapRateRange[1]}`}
           </Typography>
         </StyledAccordionSummary>
         <StyledAccordionDetails>
           <ControlsBar>
             <Autocomplete
               multiple
-              value={locationSelections}
+              value={localStorageRuptureMapLocation}
               onChange={(event: any, newValue: string[] | null) => {
-                setLocationSelections(newValue as string[]);
+                setLocalStorageRuptureMapLocation(newValue as string[]);
               }}
               inputValue={inputValue}
               onInputChange={(event, newInputValue) => {
@@ -192,7 +216,7 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
               }}
               limitTags={1}
             />
-            <SelectControl name="Radius" options={radiiFormatted} setOptions={setRadiiSelection} />
+            <SelectControl name="Radius" options={radiiFormatted} setOptions={setLocalStorageRuptureMapRadii} />
             <FormControlLabel control={<Switch defaultChecked onChange={handleSwitchChange} />} label="Show Location" />
             {showLoading ? (
               <CircularProgress />
@@ -206,14 +230,14 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
             <RangeSliderWithInputs
               label="Magtitude Range"
               inputProps={{ step: 0.1, min: 5, max: 10, type: 'number' }}
-              valuesRange={magRange}
-              setValues={setMagRange}
+              valuesRange={localStorageRuptureMapMagRange}
+              setValues={setLocalStorageRuptureMapMagRange}
             />
             <RangeSliderWithInputs
               label="Rate Range"
               inputProps={{ step: 1, min: -20, max: 0, type: 'number' }}
-              valuesRange={rateRange}
-              setValues={setRateRange}
+              valuesRange={localStorageRuptureMapRateRange}
+              setValues={setLocalStorageRuptureMapRateRange}
               valueLabelFormat={rateLabelFormat}
             />
           </ControlsBar>
