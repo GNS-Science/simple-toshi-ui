@@ -140,6 +140,10 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
   }, [setShowLoading, locationIDs, id, radiiInKm, localStorageRuptureMapMagRange, localStorageRuptureMapRateRange]);
 
   useEffect(() => {
+    getGeoJson();
+  }, [getGeoJson]);
+
+  useEffect(() => {
     setDisableFetch(false);
   }, [
     localStorageRuptureMapLocation,
