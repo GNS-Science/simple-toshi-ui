@@ -21,11 +21,11 @@ import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import { AxiosError } from 'axios';
 
-import { LocationData } from '../../interfaces/inversionSolutions';
 import SelectControl from '../common/SelectControl';
 import { solvisApiService } from '../../service/api';
 import SolutionAnalysisTable from './SolutionAnalysisTable';
 import RangeSliderWithInputs from '../common/RangeSliderWithInputs';
+import { solutionRuptureMapLocationOptions, solutionRuptureMapRadiiOptions } from '../../constants/solutionRuptureMap';
 
 const StyledAccordion = styled(Accordion)({
   borderRadius: '1px',
@@ -66,12 +66,9 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
   const zoom = 5;
   const provider_url = 'https://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}';
 
-  const [locationOptions, setLocationOptions] = useState<LocationData[]>([]);
   const [locationSelections, setLocationSelections] = useState<string[]>([]);
-  const [locationIDs, setLocationIDs] = useState<string[]>([]);
-
-  const [radiiOptions, setRadiiOptions] = useState<string[]>([]);
   const [radiiSelection, setRadiiSelection] = useState<string>('');
+  const [locationIDs, setLocationIDs] = useState<string[]>([]);
 
   const [rupturesData, setRupturesData] = useState<GeoJsonObject>();
   const [locationsData, setLocationsData] = useState<GeoJsonObject>();
@@ -126,38 +123,30 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
   }, [setShowLoading, locationIDs, id, magRange, radiiInKm, rateRange]);
 
   useEffect(() => {
-    const filteredLocations = locationOptions.filter((location) => locationSelections.includes(location.name));
+    const filteredLocations = solutionRuptureMapLocationOptions.filter((location) =>
+      locationSelections.includes(location.name),
+    );
     const filteredLocationIDs: string[] = [];
     filteredLocations.map((location) => {
       filteredLocationIDs.push(location.id);
     });
     setLocationIDs(filteredLocationIDs);
-  }, [locationOptions, locationSelections]);
+  }, [locationSelections]);
 
   useEffect(() => {
     setDisableFetch(false);
   }, [locationSelections, radiiSelection, magRange, rateRange]);
 
-  useEffect(() => {
-    solvisApiService.getLocationList().then((response) => {
-      setLocationOptions(response.data);
-    });
-
-    solvisApiService.getRadiiList().then((response) => {
-      const radii = response.data.radii;
-      const radiiFormatted = radii.map((radius: number) => `${radius / 1000}km`);
-      setRadiiOptions(radiiFormatted);
-    });
-  }, []);
-
   const getOptions = (): string[] => {
     const locations: string[] = [];
-    locationOptions.map((locationOption) => {
+    solutionRuptureMapLocationOptions.map((locationOption) => {
       locations.push(locationOption.name);
     });
     locations.sort();
     return locations;
   };
+
+  const radiiFormatted = solutionRuptureMapRadiiOptions.radii.map((radius: number) => `${radius / 1000}km`);
 
   const rateLabelFormat = (value: number): string => {
     return `1e${value}`;
@@ -203,7 +192,7 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
               }}
               limitTags={1}
             />
-            <SelectControl name="Radius" options={radiiOptions} setOptions={setRadiiSelection} />
+            <SelectControl name="Radius" options={radiiFormatted} setOptions={setRadiiSelection} />
             <FormControlLabel control={<Switch defaultChecked onChange={handleSwitchChange} />} label="Show Location" />
             {showLoading ? (
               <CircularProgress />
