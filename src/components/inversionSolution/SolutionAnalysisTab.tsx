@@ -24,14 +24,15 @@ import SelectControl from '../common/SelectControl';
 import { solvisApiService } from '../../service/api';
 import SolutionAnalysisTable from './SolutionAnalysisTable';
 import RangeSliderWithInputs from '../common/RangeSliderWithInputs';
-import {
-  nz_centre,
-  zoom,
-  provider_url,
-  solutionRuptureMapLocationOptions,
-  solutionRuptureMapRadiiOptions,
-} from '../../constants/solutionRuptureMap';
+import { nz_centre, zoom, provider_url } from '../../constants/solutionRuptureMap';
 import LocalStorageContext from '../../contexts/localStorage';
+import {
+  getLocationIdString,
+  rateLabelFormat,
+  getRadiiInKm,
+  getLocationOptions,
+  radiiOptions,
+} from '../../service/solutionRuptureMap.service';
 
 const StyledAccordion = styled(Accordion)({
   borderRadius: '1px',
@@ -79,8 +80,6 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
     setLocalStorageRuptureMapRateRange,
   } = useContext(LocalStorageContext);
 
-  const [locationIDs, setLocationIDs] = useState<string[]>([]);
-
   const [rupturesData, setRupturesData] = useState<GeoJsonObject>();
   const [locationsData, setLocationsData] = useState<GeoJsonObject>();
   const [tableData, setTableData] = useState<string | null>(null);
@@ -92,20 +91,13 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
   const [disableFetch, setDisableFetch] = useState<boolean>(false);
   const [inputValue, setInputValue] = React.useState('');
 
-  const radiiInKm = useCallback(() => {
-    return localStorageRuptureMapRadii === '100km'
-      ? localStorageRuptureMapRadii.slice(0, 3)
-      : localStorageRuptureMapRadii.slice(0, 2);
-  }, [localStorageRuptureMapRadii]);
-
   const getGeoJson = useCallback(() => {
     setShowLoading(true);
-    const locationSelectionsString = locationIDs.join('%2C');
     solvisApiService
       .getSolutionAnalysis(
         id,
-        locationSelectionsString,
-        radiiInKm(),
+        getLocationIdString(localStorageRuptureMapLocation),
+        getRadiiInKm(localStorageRuptureMapRadii),
         localStorageRuptureMapMagRange,
         localStorageRuptureMapRateRange,
       )
@@ -132,7 +124,14 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
         }
         setShowLoading(false);
       });
-  }, [setShowLoading, locationIDs, id, radiiInKm, localStorageRuptureMapMagRange, localStorageRuptureMapRateRange]);
+  }, [
+    setShowLoading,
+    id,
+    localStorageRuptureMapRadii,
+    localStorageRuptureMapLocation,
+    localStorageRuptureMapMagRange,
+    localStorageRuptureMapRateRange,
+  ]);
 
   useEffect(() => {
     getGeoJson();
@@ -147,35 +146,9 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
     localStorageRuptureMapRateRange,
   ]);
 
-  const getOptions = (): string[] => {
-    const locations: string[] = [];
-    solutionRuptureMapLocationOptions.map((locationOption) => {
-      locations.push(locationOption.name);
-    });
-    locations.sort();
-    return locations;
-  };
-
-  const radiiFormatted = solutionRuptureMapRadiiOptions.radii.map((radius: number) => `${radius / 1000}km`);
-
-  const rateLabelFormat = (value: number): string => {
-    return `1e${value}`;
-  };
-
   const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setShowLocation(event.target.checked);
   };
-
-  useEffect(() => {
-    const filteredLocations = solutionRuptureMapLocationOptions.filter((location) =>
-      localStorageRuptureMapLocation.includes(location.name),
-    );
-    const filteredLocationIDs: string[] = [];
-    filteredLocations.map((location) => {
-      filteredLocationIDs.push(location.id);
-    });
-    setLocationIDs(filteredLocationIDs);
-  }, [localStorageRuptureMapLocation]);
 
   return (
     <>
@@ -203,7 +176,7 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
               onInputChange={(event, newInputValue) => {
                 setInputValue(newInputValue);
               }}
-              options={getOptions()}
+              options={getLocationOptions()}
               style={{ width: 500, marginLeft: 16 }}
               renderInput={(params) => <TextField {...params} label="Locations" variant="standard" />}
               blurOnSelect={true}
@@ -215,7 +188,7 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
               }}
               limitTags={1}
             />
-            <SelectControl name="Radius" options={radiiFormatted} setOptions={setLocalStorageRuptureMapRadii} />
+            <SelectControl name="Radius" options={radiiOptions} setOptions={setLocalStorageRuptureMapRadii} />
             <FormControlLabel control={<Switch defaultChecked onChange={handleSwitchChange} />} label="Show Location" />
             {showLoading ? (
               <CircularProgress />
