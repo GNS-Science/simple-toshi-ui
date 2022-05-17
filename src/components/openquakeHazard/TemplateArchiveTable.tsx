@@ -39,7 +39,7 @@ export interface TemplateArchiveTableProps {
           readonly v: string | null;
         } | null> | null;
         readonly file_name: string | null;
-        readonly file_size: number | null;
+        readonly file_size: unknown | null;
         readonly file_url: string | null;
         readonly md5_digest: string | null;
       }

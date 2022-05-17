@@ -18,7 +18,7 @@ export type InversionSolutionNrmlQueryResponse = {
             readonly k: string | null;
             readonly v: string | null;
         } | null> | null;
-        readonly file_size: number | null;
+        readonly file_size: unknown | null;
         readonly md5_digest: string | null;
         readonly file_name: string | null;
         readonly file_url: string | null;

@@ -41,7 +41,7 @@ export interface HazardTableProps {
           | {
               readonly id: string;
               readonly file_name: string | null;
-              readonly file_size: number | null;
+              readonly file_size: unknown | null;
               readonly file_url: string | null;
             }
           | null
@@ -50,7 +50,7 @@ export interface HazardTableProps {
           | {
               readonly id: string;
               readonly file_name: string | null;
-              readonly file_size: number | null;
+              readonly file_size: unknown | null;
               readonly file_url: string | null;
             }
           | null

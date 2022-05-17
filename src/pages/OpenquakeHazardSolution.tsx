@@ -108,6 +108,20 @@ const openquakeHazardSolutionQuery = graphql`
           file_size
           file_url
         }
+        predecessors {
+          id
+          typename
+          depth
+          node {
+            ... on FileInterface {
+              file_name
+              meta {
+                k
+                v
+              }
+            }
+          }
+        }
       }
     }
   }
