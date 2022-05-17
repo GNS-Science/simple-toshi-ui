@@ -12,7 +12,7 @@ export type InversionSolutionDetailTabQueryResponse = {
         readonly id?: string | undefined;
         readonly produced_by_id?: string | null | undefined;
         readonly file_name?: string | null | undefined;
-        readonly file_size?: number | null | undefined;
+        readonly file_size?: unknown | null | undefined;
         readonly file_url?: string | null | undefined;
         readonly md5_digest?: string | null | undefined;
         readonly meta?: ReadonlyArray<{

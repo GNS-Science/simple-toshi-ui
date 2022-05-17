@@ -20,7 +20,7 @@ export type SearchQueryResponse = {
                     readonly __typename: string;
                     readonly id?: string | undefined;
                     readonly file_name?: string | null | undefined;
-                    readonly file_size?: number | null | undefined;
+                    readonly file_size?: unknown | null | undefined;
                     readonly created?: unknown | null | undefined;
                     readonly duration?: number | null | undefined;
                     readonly state?: EventState | null | undefined;
