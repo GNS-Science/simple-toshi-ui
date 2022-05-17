@@ -20,7 +20,7 @@ import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import { AxiosError } from 'axios';
 
-import { SelectControl } from '@gns-science/toshi-nest';
+import SelectControl from '../common/SelectControl';
 import { solvisApiService } from '../../service/api';
 import SolutionAnalysisTable from './SolutionAnalysisTable';
 import RangeSliderWithInputs from '../common/RangeSliderWithInputs';
@@ -161,7 +161,7 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
               }}
               limitTags={1}
             />
-            <SelectControl name="Radius" options={radiiOptions} selection={radii} setSelection={setRadii} />
+            <SelectControl name="Radius" options={radiiOptions} setOptions={setRadii} />
             <FormControlLabel control={<Switch defaultChecked onChange={handleSwitchChange} />} label="Show Location" />
             {showLoading ? (
               <CircularProgress />
