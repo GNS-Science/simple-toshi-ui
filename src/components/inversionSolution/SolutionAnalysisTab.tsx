@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect, Dispatch, SetStateAction, useCallback, useContext } from 'react';
+import React, { useState, useEffect, Dispatch, SetStateAction, useCallback } from 'react';
 import {
   Alert,
   Accordion,
@@ -20,12 +20,11 @@ import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import { AxiosError } from 'axios';
 
-import SelectControl from '../common/SelectControl';
+import { SelectControl } from '@gns-science/toshi-nest';
 import { solvisApiService } from '../../service/api';
 import SolutionAnalysisTable from './SolutionAnalysisTable';
 import RangeSliderWithInputs from '../common/RangeSliderWithInputs';
 import { nz_centre, zoom, provider_url } from '../../constants/solutionRuptureMap';
-import LocalStorageContext from '../../contexts/localStorage';
 import {
   getLocationIdString,
   rateLabelFormat,
@@ -69,17 +68,6 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
   id,
   setDisableHotkey,
 }: SolutionAnalysisTabProps) => {
-  const {
-    localStorageRuptureMapLocation,
-    setLocalStorageRuptureMapLocation,
-    localStorageRuptureMapRadii,
-    setLocalStorageRuptureMapRadii,
-    localStorageRuptureMapMagRange,
-    setLocalStorageRuptureMapMagRange,
-    localStorageRuptureMapRateRange,
-    setLocalStorageRuptureMapRateRange,
-  } = useContext(LocalStorageContext);
-
   const [rupturesData, setRupturesData] = useState<GeoJsonObject>();
   const [locationsData, setLocationsData] = useState<GeoJsonObject>();
   const [tableData, setTableData] = useState<string | null>(null);
@@ -91,16 +79,15 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
   const [disableFetch, setDisableFetch] = useState<boolean>(false);
   const [inputValue, setInputValue] = React.useState('');
 
+  const [location, setLocation] = useState<string[]>([]);
+  const [radii, setRadii] = useState<string>('10km');
+  const [magRange, setMagRange] = useState<number[]>([5, 10]);
+  const [rateRange, setRateRange] = useState<number[]>([-20, 0]);
+
   const getGeoJson = useCallback(() => {
     setShowLoading(true);
     solvisApiService
-      .getSolutionAnalysis(
-        id,
-        getLocationIdString(localStorageRuptureMapLocation),
-        getRadiiInKm(localStorageRuptureMapRadii),
-        localStorageRuptureMapMagRange,
-        localStorageRuptureMapRateRange,
-      )
+      .getSolutionAnalysis(id, getLocationIdString(location), getRadiiInKm(radii), magRange, rateRange)
       .then((response) => {
         setShowLoading(false);
         setShowLoading(false);
@@ -124,27 +111,16 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
         }
         setShowLoading(false);
       });
-  }, [
-    setShowLoading,
-    id,
-    localStorageRuptureMapRadii,
-    localStorageRuptureMapLocation,
-    localStorageRuptureMapMagRange,
-    localStorageRuptureMapRateRange,
-  ]);
+  }, [setShowLoading, id, radii, location, magRange, rateRange]);
 
   useEffect(() => {
-    getGeoJson();
-  }, [getGeoJson]);
+    if (location.length) getGeoJson();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   useEffect(() => {
     setDisableFetch(false);
-  }, [
-    localStorageRuptureMapLocation,
-    localStorageRuptureMapRadii,
-    localStorageRuptureMapMagRange,
-    localStorageRuptureMapRateRange,
-  ]);
+  }, [location, radii, magRange, rateRange]);
 
   const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setShowLocation(event.target.checked);
@@ -156,21 +132,18 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
       <StyledAccordion defaultExpanded={true}>
         <StyledAccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
           <Typography>
-            <strong>Locations:</strong>{' '}
-            {localStorageRuptureMapLocation.length > 0 ? localStorageRuptureMapLocation.join(', ') : 'None'}{' '}
-            <strong>Radii: </strong>
-            {localStorageRuptureMapRadii || 'None'} <strong>Mag Range:</strong> {localStorageRuptureMapMagRange[0]} -{' '}
-            {localStorageRuptureMapMagRange[1]} <strong>Rate Range:</strong>{' '}
-            {`1e${localStorageRuptureMapRateRange[0]} - 1e${localStorageRuptureMapRateRange[1]}`}
+            <strong>Locations:</strong> {location.length > 0 ? location.join(', ') : 'None'} <strong>Radii: </strong>
+            {radii || 'None'} <strong>Mag Range:</strong> {magRange[0]} - {magRange[1]} <strong>Rate Range:</strong>{' '}
+            {`1e${rateRange[0]} - 1e${rateRange[1]}`}
           </Typography>
         </StyledAccordionSummary>
         <StyledAccordionDetails>
           <ControlsBar>
             <Autocomplete
               multiple
-              value={localStorageRuptureMapLocation}
+              value={location}
               onChange={(event: any, newValue: string[] | null) => {
-                setLocalStorageRuptureMapLocation(newValue as string[]);
+                setLocation(newValue as string[]);
               }}
               inputValue={inputValue}
               onInputChange={(event, newInputValue) => {
@@ -188,7 +161,7 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
               }}
               limitTags={1}
             />
-            <SelectControl name="Radius" options={radiiOptions} setOptions={setLocalStorageRuptureMapRadii} />
+            <SelectControl name="Radius" options={radiiOptions} selection={radii} setSelection={setRadii} />
             <FormControlLabel control={<Switch defaultChecked onChange={handleSwitchChange} />} label="Show Location" />
             {showLoading ? (
               <CircularProgress />
@@ -202,14 +175,14 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
             <RangeSliderWithInputs
               label="Magtitude Range"
               inputProps={{ step: 0.1, min: 5, max: 10, type: 'number' }}
-              valuesRange={localStorageRuptureMapMagRange}
-              setValues={setLocalStorageRuptureMapMagRange}
+              valuesRange={magRange}
+              setValues={setMagRange}
             />
             <RangeSliderWithInputs
               label="Rate Range"
               inputProps={{ step: 1, min: -20, max: 0, type: 'number' }}
-              valuesRange={localStorageRuptureMapRateRange}
-              setValues={setLocalStorageRuptureMapRateRange}
+              valuesRange={rateRange}
+              setValues={setRateRange}
               valueLabelFormat={rateLabelFormat}
             />
           </ControlsBar>
