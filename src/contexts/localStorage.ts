@@ -19,14 +19,6 @@ const LocalStorageContext = createContext<LocalStorageContextInterface>({
   setLocalStorageParentFaultViews: noop,
   localStorageParentFault: null,
   setLocalStorageParentFault: noop,
-  localStorageRuptureMapLocation: [],
-  setLocalStorageRuptureMapLocation: noop,
-  localStorageRuptureMapRadii: '10km',
-  setLocalStorageRuptureMapRadii: noop,
-  localStorageRuptureMapMagRange: [5, 10],
-  setLocalStorageRuptureMapMagRange: noop,
-  localStorageRuptureMapRateRange: [-20, 0],
-  setLocalStorageRuptureMapRateRange: noop,
 });
 
 export default LocalStorageContext;

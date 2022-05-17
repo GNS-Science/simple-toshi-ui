@@ -81,22 +81,6 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
     [parentViewsOptions[0].displayName],
   );
   const [localStorageParentFault, setLocalStorageParentFault] = useLocalStorage<string | null>('parent-fault', null);
-  const [localStorageRuptureMapLocation, setLocalStorageRuptureMapLocation] = useLocalStorage<string[]>(
-    'rupture-map-location',
-    [],
-  );
-  const [localStorageRuptureMapRadii, setLocalStorageRuptureMapRadii] = useLocalStorage<string>(
-    'rupture-map-radii',
-    '10km',
-  );
-  const [localStorageRuptureMapMagRange, setLocalStorageRuptureMapMagRange] = useLocalStorage<number[]>(
-    'rupture-map-mag-range',
-    [5, 10],
-  );
-  const [localStorageRuptureMapRateRange, setLocalStorageRuptureMapRateRange] = useLocalStorage<number[]>(
-    'rupture-map-rate-range',
-    [-20, 0],
-  );
 
   const LocalStorageProvider = LocalStorageContext.Provider;
 
@@ -123,14 +107,6 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
                 setLocalStorageParentFaultViews,
                 localStorageParentFault,
                 setLocalStorageParentFault,
-                localStorageRuptureMapLocation,
-                setLocalStorageRuptureMapLocation,
-                localStorageRuptureMapRadii,
-                setLocalStorageRuptureMapRadii,
-                localStorageRuptureMapMagRange,
-                setLocalStorageRuptureMapMagRange,
-                localStorageRuptureMapRateRange,
-                setLocalStorageRuptureMapRateRange,
               }}
             >
               <MenuBar />
