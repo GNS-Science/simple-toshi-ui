@@ -26,7 +26,7 @@ const SearchResult: React.FC<SearchResultProps> = ({ queryRef }: SearchResultPro
                   key={edge?.node?.id}
                   id={edge?.node?.id}
                   __typename={searchType}
-                  file_size={edge?.node?.file_size}
+                  file_size={edge?.node?.file_size as number}
                   file_name={edge?.node?.file_name}
                 />
               );

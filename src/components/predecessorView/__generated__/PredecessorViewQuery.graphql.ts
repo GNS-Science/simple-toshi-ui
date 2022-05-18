@@ -4,10 +4,10 @@
 
 import { ConcreteRequest } from "relay-runtime";
 
-export type PrecessorsViewQueryVariables = {
+export type PredecessorViewQueryVariables = {
     id: string;
 };
-export type PrecessorsViewQueryResponse = {
+export type PredecessorViewQueryResponse = {
     readonly node: {
         readonly id: string;
         readonly predecessors?: ReadonlyArray<{
@@ -24,15 +24,15 @@ export type PrecessorsViewQueryResponse = {
         } | null> | null | undefined;
     } | null;
 };
-export type PrecessorsViewQuery = {
-    readonly response: PrecessorsViewQueryResponse;
-    readonly variables: PrecessorsViewQueryVariables;
+export type PredecessorViewQuery = {
+    readonly response: PredecessorViewQueryResponse;
+    readonly variables: PredecessorViewQueryVariables;
 };
 
 
 
 /*
-query PrecessorsViewQuery(
+query PredecessorViewQuery(
   $id: ID!
 ) {
   node(id: $id) {
@@ -152,7 +152,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "PrecessorsViewQuery",
+    "name": "PredecessorViewQuery",
     "selections": [
       {
         "alias": null,
@@ -207,7 +207,7 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "PrecessorsViewQuery",
+    "name": "PredecessorViewQuery",
     "selections": [
       {
         "alias": null,
@@ -267,14 +267,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "64f6bf022addd6be3efae8764a67e166",
+    "cacheID": "37c92221366c35c7eebe52896dbbb5fd",
     "id": null,
     "metadata": {},
-    "name": "PrecessorsViewQuery",
+    "name": "PredecessorViewQuery",
     "operationKind": "query",
-    "text": "query PrecessorsViewQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    id\n    ... on OpenquakeHazardSolution {\n      id\n      predecessors {\n        id\n        typename\n        depth\n        node {\n          __typename\n          ... on FileInterface {\n            __isFileInterface: __typename\n            file_name\n            meta {\n              k\n              v\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query PredecessorViewQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    id\n    ... on OpenquakeHazardSolution {\n      id\n      predecessors {\n        id\n        typename\n        depth\n        node {\n          __typename\n          ... on FileInterface {\n            __isFileInterface: __typename\n            file_name\n            meta {\n              k\n              v\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '18b6ac2c3aa8d7bf10b5f0ad538df5e5';
+(node as any).hash = '9a0f4f055e402912c027964d45afd840';
 export default node;

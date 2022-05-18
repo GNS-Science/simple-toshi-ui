@@ -53,7 +53,7 @@ const InversionSolutionDetailTab: React.FC<InversionSolutionDetailTabProps> = ({
         </Link>
       </Typography>
       <Typography>
-        <strong>File size:</strong> {formatBytes(data?.node?.file_size ?? 0)}
+        <strong>File size:</strong> {formatBytes((data?.node?.file_size as number) ?? 0)}
       </Typography>
       <Typography>
         <strong>MD5 digest:</strong> {data?.node?.md5_digest}
