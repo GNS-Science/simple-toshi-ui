@@ -58,6 +58,7 @@ const openquakeHazardTaskQuery = graphql`
         created
         model_type
         hazard_solution {
+          id
           created
           csv_archive {
             id

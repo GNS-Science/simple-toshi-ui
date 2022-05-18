@@ -90,15 +90,17 @@ const ConfigTable: React.FC<ConfigTableProps> = ({ config }) => {
             <TableCell>Created</TableCell>
             <TableCell colSpan={2}>{formattedDate}</TableCell>
           </AlternatingRow>
-          <TableHead>
-            <AlternatingRow
-              classes={{
-                root: classes.root,
-              }}
-            >
-              <TableCell colSpan={3}>Source Models</TableCell>
-            </AlternatingRow>
-          </TableHead>
+        </TableBody>
+        <TableHead>
+          <AlternatingRow
+            classes={{
+              root: classes.root,
+            }}
+          >
+            <TableCell colSpan={3}>Source Models</TableCell>
+          </AlternatingRow>
+        </TableHead>
+        <TableBody>
           {config?.source_models?.map((source_model) => (
             <>
               <AlternatingRow key={source_model?.id} classes={{ root: classes.root }}>
@@ -112,12 +114,6 @@ const ConfigTable: React.FC<ConfigTableProps> = ({ config }) => {
                   <Link to={`/InversionSolutionNrml/${source_model?.id}`}>[more]</Link>
                 </TableCell>
               </AlternatingRow>
-              {source_model?.meta?.map((meta) => (
-                <AlternatingRow key={meta?.k} classes={{ root: classes.root }}>
-                  <TableCell>{meta?.k}</TableCell>
-                  <TableCell colSpan={2}>{meta?.v}</TableCell>
-                </AlternatingRow>
-              ))}
             </>
           ))}
         </TableBody>

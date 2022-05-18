@@ -36,6 +36,7 @@ const AlternatingRow = styled(TableRow)(({ theme }) => ({
 export interface HazardTableProps {
   readonly hazard_solution?:
     | {
+        readonly id: string | undefined;
         readonly created: unknown | null;
         readonly csv_archive:
           | {
@@ -77,6 +78,16 @@ const HazardTable: React.FC<HazardTableProps> = ({ hazard_solution }: HazardTabl
           </AlternatingRow>
         </TableHead>
         <TableBody>
+          <AlternatingRow
+            classes={{
+              root: classes.root,
+            }}
+          >
+            <TableCell colSpan={2}>{hazard_solution?.id}</TableCell>
+            <TableCell>
+              <Link to={`/HazardSolution/${hazard_solution?.id}`}>[more]</Link>
+            </TableCell>
+          </AlternatingRow>
           <AlternatingRow
             classes={{
               root: classes.root,
