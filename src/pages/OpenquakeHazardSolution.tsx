@@ -53,7 +53,7 @@ const OpenquakeHazardSolution: React.FC = () => {
   const history = useHistory();
 
   React.useEffect(() => {
-    if (tab === undefined || tab === '0') {
+    if (tab === undefined || tab === 'Detail') {
       loadQuery({ id });
     }
   }, [id, loadQuery, tab]);
@@ -64,7 +64,7 @@ const OpenquakeHazardSolution: React.FC = () => {
         return (
           <Box className={classes.tabPanel}>{queryRef && <OpenquakeHazardSolutionDetailTab queryRef={queryRef} />}</Box>
         );
-      case '1':
+      case 'DiagnosticReport':
         return (
           <React.Suspense fallback={<CircularProgress />}>
             <Box className={classes.tabPanel}>
@@ -90,13 +90,9 @@ const OpenquakeHazardSolution: React.FC = () => {
         <FavouriteControls id={data?.node?.id as string} producedBy={data?.node?.produced_by?.id as string} />
       </Typography>
       <Box className={classes.root}>
-        <Tabs
-          orientation="vertical"
-          value={tab ?? '0'}
-          onChange={(e, val) => history.push(`/HazardSolution/${id}/${val}`)}
-        >
-          <Tab label="Detail" id="openquakeHazardDetailTab" value={'0'} className={classes.tab} />
-          <Tab label="Static Report" id="DiagnosticReport" value={'1'} className={classes.tab} />
+        <Tabs orientation="vertical" value={tab} onChange={(e, val) => history.push(`/HazardSolution/${id}/${val}`)}>
+          <Tab label="Detail" id="openquakeHazardDetailTab" value={'Detail'} className={classes.tab} />
+          <Tab label="Rupture Diags" id="DiagnosticReport" value={'DiagnosticReport'} className={classes.tab} />
         </Tabs>
         {renderTab()}
       </Box>
