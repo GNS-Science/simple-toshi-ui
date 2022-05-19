@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Card, Accordion, AccordionDetails, AccordionSummary, Typography, styled } from '@mui/material';
+import { Card, Accordion, AccordionDetails, AccordionSummary, Typography, styled } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import KeyValueTable from '../common/KeyValueTable';
 
@@ -25,6 +25,11 @@ export type Predecessor =
 
 const PredecessorCard = styled(Card)({
   marginBottom: 10,
+});
+
+const PredecessorContainer = styled(Card)({
+  padding: 10,
+  borderRadius: 5,
 });
 
 interface PredecessorViewProps {
@@ -60,7 +65,7 @@ const getType = (type: string) => {
 const PredecessorView: React.FC<PredecessorViewProps> = ({ predecessors }: PredecessorViewProps) => {
   return (
     <>
-      <Box>
+      <PredecessorContainer>
         <Typography>
           <strong>Predecessors</strong>
         </Typography>
@@ -68,7 +73,7 @@ const PredecessorView: React.FC<PredecessorViewProps> = ({ predecessors }: Prede
           predecessors.map((predecessor) => {
             if (predecessor !== null) {
               return (
-                <PredecessorCard>
+                <PredecessorCard key={Math.random()}>
                   <Accordion>
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
@@ -89,7 +94,7 @@ const PredecessorView: React.FC<PredecessorViewProps> = ({ predecessors }: Prede
               );
             }
           })}
-      </Box>
+      </PredecessorContainer>
     </>
   );
 };

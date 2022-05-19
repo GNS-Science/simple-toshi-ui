@@ -90,7 +90,11 @@ const OpenquakeHazardSolution: React.FC = () => {
         <FavouriteControls id={data?.node?.id as string} producedBy={data?.node?.produced_by?.id as string} />
       </Typography>
       <Box className={classes.root}>
-        <Tabs orientation="vertical" value={tab} onChange={(e, val) => history.push(`/HazardSolution/${id}/${val}`)}>
+        <Tabs
+          orientation="vertical"
+          value={tab ?? 'Detail'}
+          onChange={(e, val) => history.push(`/HazardSolution/${id}/${val}`)}
+        >
           <Tab label="Detail" id="openquakeHazardDetailTab" value={'Detail'} className={classes.tab} />
           <Tab label="Rupture Diags" id="DiagnosticReport" value={'DiagnosticReport'} className={classes.tab} />
         </Tabs>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql } from 'babel-plugin-relay/macro';
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
-import { Grid, List, ListItem, ListItemText, Box } from '@mui/material';
+import { Grid, List, ListItem, ListItemText } from '@mui/material';
 import { OpenquakeHazardSolutionDetailTabQuery } from './__generated__/OpenquakeHazardSolutionDetailTabQuery.graphql';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
@@ -68,9 +68,7 @@ const OpenquakeHazardSolutionDetailTab: React.FC<OpenquakeHazardSolutionDetailTa
       <ConfigTable config={data?.node?.config} />
       <TaskArgsTable task_args={data?.node?.task_args} />
       <HazardTable hazard_solution={hazard_solution.hazard_solution} />
-      <Box>
-        <PredecessorView predecessors={data?.node?.predecessors} />
-      </Box>
+      <PredecessorView predecessors={data?.node?.predecessors} />
     </>
   );
 };
@@ -105,7 +103,9 @@ export const openquakeHazardSolutionDetailTabQuery = graphql`
               v
             }
             source_solution {
-              id
+              ... on Node {
+                id
+              }
             }
           }
           template_archive {

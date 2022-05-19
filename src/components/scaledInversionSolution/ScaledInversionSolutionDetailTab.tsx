@@ -17,14 +17,18 @@ export const scaledInversionSolutionDetailTabQuery = graphql`
         file_url
         created
         produced_by {
-          id
+          ... on Node {
+            id
+          }
         }
         meta {
           k
           v
         }
         source_solution {
-          id
+          ... on Node {
+            id
+          }
           ... on InversionSolution {
             created
           }

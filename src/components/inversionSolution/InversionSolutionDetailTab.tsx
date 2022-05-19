@@ -13,7 +13,11 @@ export const inversionSolutionDetailTabQuery = graphql`
     node(id: $id) {
       ... on InversionSolution {
         id
-        produced_by_id
+        produced_by {
+          ... on Node {
+            id
+          }
+        }
         file_name
         file_size
         file_url
@@ -39,7 +43,7 @@ const InversionSolutionDetailTab: React.FC<InversionSolutionDetailTabProps> = ({
   queryRef,
 }: InversionSolutionDetailTabProps) => {
   const data = usePreloadedQuery<InversionSolutionDetailTabQuery>(inversionSolutionDetailTabQuery, queryRef);
-  const producedByIdString = Buffer.from(data?.node?.produced_by_id ?? '', 'base64').toString();
+  const producedByIdString = Buffer.from(data?.node?.produced_by?.id ?? '', 'base64').toString();
   const producedByType = producedByIdString.slice(0, producedByIdString.indexOf(':'));
   return (
     <>
@@ -48,8 +52,8 @@ const InversionSolutionDetailTab: React.FC<InversionSolutionDetailTabProps> = ({
       </Typography>
       <Typography>
         <strong>Produced by:</strong>{' '}
-        <Link to={`/${producedByType}/${data?.node?.produced_by_id}`}>
-          {Buffer.from(data?.node?.produced_by_id ?? '', 'base64').toString()}
+        <Link to={`/${producedByType}/${data?.node?.produced_by?.id}`}>
+          {Buffer.from(data?.node?.produced_by?.id ?? '', 'base64').toString()}
         </Link>
       </Typography>
       <Typography>

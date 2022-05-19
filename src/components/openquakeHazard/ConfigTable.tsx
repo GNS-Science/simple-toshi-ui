@@ -103,7 +103,7 @@ const ConfigTable: React.FC<ConfigTableProps> = ({ config }) => {
         <TableBody>
           {config?.source_models?.map((source_model) => (
             <>
-              <AlternatingRow key={source_model?.id} classes={{ root: classes.root }}>
+              <AlternatingRow key={Math.random()} classes={{ root: classes.root }}>
                 <TableCell>
                   <TruncateText text={source_model?.file_name ?? ''} />
                 </TableCell>

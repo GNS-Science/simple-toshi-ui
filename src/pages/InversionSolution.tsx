@@ -136,7 +136,7 @@ const InversionSolution: React.FC = () => {
     <Root>
       <Typography variant="h5" gutterBottom>
         InversionSolution: {data?.node?.id}&nbsp;
-        <FavouriteControls id={data?.node?.id as string} producedBy={data?.node?.produced_by_id as string} />
+        <FavouriteControls id={data?.node?.id as string} producedBy={data?.node?.produced_by?.id as string} />
       </Typography>
       <Box className={classes.root}>
         <Tabs
@@ -173,8 +173,12 @@ const inversionSolutionQuery = graphql`
         id
         mfd_table_id
         hazard_table_id
-        produced_by_id
         created
+        produced_by {
+          ... on Node {
+            id
+          }
+        }
         meta {
           k
           v
