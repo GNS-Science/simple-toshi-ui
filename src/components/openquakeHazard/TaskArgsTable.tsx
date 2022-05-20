@@ -1,8 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 
-const PREFIX = 'TemplateArchiveTable';
+const PREFIX = 'TaskArgsTable';
 
 const classes = {
   root: `${PREFIX}-root`,
@@ -31,23 +32,18 @@ const AlternatingRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export interface TemplateArchiveTableProps {
-  readonly template_archive:
+export interface TaskArgsTableProps {
+  readonly task_args?:
     | {
-        readonly meta: ReadonlyArray<{
-          readonly k: string | null;
-          readonly v: string | null;
-        } | null> | null;
         readonly file_name: string | null;
-        readonly file_size: unknown | null;
         readonly file_url: string | null;
-        readonly md5_digest: string | null;
+        readonly id: string;
       }
     | null
     | undefined;
 }
 
-const TemplateArchiveTable: React.FC<TemplateArchiveTableProps> = ({ template_archive }: TemplateArchiveTableProps) => {
+const TaskArgsTable: React.FC<TaskArgsTableProps> = ({ task_args }: TaskArgsTableProps) => {
   return (
     <StyledPaper className={classes.root}>
       <Table stickyHeader size="small" className={classes.table}>
@@ -62,26 +58,18 @@ const TemplateArchiveTable: React.FC<TemplateArchiveTableProps> = ({ template_ar
         </TableHead>
         <TableBody>
           <AlternatingRow classes={{ root: classes.root }}>
-            <TableCell className={classes.tableCell}>{template_archive?.file_name}</TableCell>
+            <TableCell className={classes.tableCell}>{task_args?.file_name}</TableCell>
             <TableCell className={classes.tableCell}>
-              <a href={template_archive?.file_url ?? ''}>Get file</a>
+              <a href={task_args?.file_url ?? ''}>Get file</a>
+              <Link style={{ marginLeft: '45%' }} to={`/FileDetail/${task_args?.id}`}>
+                [more]
+              </Link>
             </TableCell>
           </AlternatingRow>
-          {template_archive?.meta?.map((meta, index) => (
-            <AlternatingRow
-              key={index}
-              classes={{
-                root: classes.root,
-              }}
-            >
-              <TableCell className={classes.tableCell}>{meta?.k}</TableCell>
-              <TableCell className={classes.tableCell}>{meta?.v}</TableCell>
-            </AlternatingRow>
-          ))}
         </TableBody>
       </Table>
     </StyledPaper>
   );
 };
 
-export default TemplateArchiveTable;
+export default TaskArgsTable;

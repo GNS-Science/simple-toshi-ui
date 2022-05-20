@@ -54,7 +54,7 @@ export interface ConfigTableProps {
             readonly v: string | null;
           } | null> | null;
           readonly file_name: string | null;
-          readonly file_size: number | null;
+          readonly file_size: unknown | null;
           readonly file_url: string | null;
           readonly md5_digest: string | null;
         } | null;
@@ -90,18 +90,20 @@ const ConfigTable: React.FC<ConfigTableProps> = ({ config }) => {
             <TableCell>Created</TableCell>
             <TableCell colSpan={2}>{formattedDate}</TableCell>
           </AlternatingRow>
-          <TableHead>
-            <AlternatingRow
-              classes={{
-                root: classes.root,
-              }}
-            >
-              <TableCell colSpan={3}>Source Models</TableCell>
-            </AlternatingRow>
-          </TableHead>
+        </TableBody>
+        <TableHead>
+          <AlternatingRow
+            classes={{
+              root: classes.root,
+            }}
+          >
+            <TableCell colSpan={3}>Source Models</TableCell>
+          </AlternatingRow>
+        </TableHead>
+        <TableBody>
           {config?.source_models?.map((source_model) => (
             <>
-              <AlternatingRow key={source_model?.id} classes={{ root: classes.root }}>
+              <AlternatingRow key={Math.random()} classes={{ root: classes.root }}>
                 <TableCell>
                   <TruncateText text={source_model?.file_name ?? ''} />
                 </TableCell>
@@ -112,12 +114,6 @@ const ConfigTable: React.FC<ConfigTableProps> = ({ config }) => {
                   <Link to={`/InversionSolutionNrml/${source_model?.id}`}>[more]</Link>
                 </TableCell>
               </AlternatingRow>
-              {source_model?.meta?.map((meta) => (
-                <AlternatingRow key={meta?.k} classes={{ root: classes.root }}>
-                  <TableCell>{meta?.k}</TableCell>
-                  <TableCell colSpan={2}>{meta?.v}</TableCell>
-                </AlternatingRow>
-              ))}
             </>
           ))}
         </TableBody>

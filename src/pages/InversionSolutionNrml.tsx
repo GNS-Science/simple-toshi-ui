@@ -78,7 +78,9 @@ const inversionSolutionNrmlQuery = graphql`
       ... on InversionSolutionNrml {
         id
         source_solution {
-          id
+          ... on Node {
+            id
+          }
         }
         meta {
           k

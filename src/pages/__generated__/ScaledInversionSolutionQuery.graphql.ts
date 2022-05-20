@@ -14,14 +14,14 @@ export type ScaledInversionSolutionQueryResponse = {
         readonly file_name?: string | null | undefined;
         readonly created?: unknown | null | undefined;
         readonly produced_by?: {
-            readonly id: string;
+            readonly id?: string | undefined;
         } | null | undefined;
         readonly meta?: ReadonlyArray<{
             readonly k: string | null;
             readonly v: string | null;
         } | null> | null | undefined;
         readonly source_solution?: {
-            readonly id: string;
+            readonly id?: string | undefined;
             readonly created: unknown | null;
         } | null | undefined;
         readonly relations?: {
@@ -47,15 +47,23 @@ query ScaledInversionSolutionQuery(
       file_name
       created
       produced_by {
-        id
+        __typename
+        ... on Node {
+          __isNode: __typename
+          id
+        }
       }
       meta {
         k
         v
       }
       source_solution {
-        id
+        ... on Node {
+          __isNode: __typename
+          id
+        }
         created
+        id
       }
       relations {
         total_count
@@ -73,137 +81,149 @@ var v0 = [
     "name": "id"
   }
 ],
-v1 = {
+v1 = [
+  {
+    "kind": "Variable",
+    "name": "id",
+    "variableName": "id"
+  }
+],
+v2 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "__typename",
+  "storageKey": null
+},
+v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v2 = {
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "file_name",
+  "storageKey": null
+},
+v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "created",
   "storageKey": null
 },
-v3 = [
-  {
-    "alias": null,
-    "args": [
-      {
-        "kind": "Variable",
-        "name": "id",
-        "variableName": "id"
-      }
-    ],
-    "concreteType": null,
-    "kind": "LinkedField",
-    "name": "node",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "__typename",
-        "storageKey": null
-      },
-      (v1/*: any*/),
-      {
-        "kind": "InlineFragment",
-        "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "file_name",
-            "storageKey": null
-          },
-          (v2/*: any*/),
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "AutomationTask",
-            "kind": "LinkedField",
-            "name": "produced_by",
-            "plural": false,
-            "selections": [
-              (v1/*: any*/)
-            ],
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "KeyValuePair",
-            "kind": "LinkedField",
-            "name": "meta",
-            "plural": true,
-            "selections": [
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "k",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "v",
-                "storageKey": null
-              }
-            ],
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "InversionSolution",
-            "kind": "LinkedField",
-            "name": "source_solution",
-            "plural": false,
-            "selections": [
-              (v1/*: any*/),
-              (v2/*: any*/)
-            ],
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "FileRelationConnection",
-            "kind": "LinkedField",
-            "name": "relations",
-            "plural": false,
-            "selections": [
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "total_count",
-                "storageKey": null
-              }
-            ],
-            "storageKey": null
-          }
-        ],
-        "type": "ScaledInversionSolution",
-        "abstractKey": null
-      }
-    ],
-    "storageKey": null
-  }
-];
+v6 = {
+  "kind": "InlineFragment",
+  "selections": [
+    (v3/*: any*/)
+  ],
+  "type": "Node",
+  "abstractKey": "__isNode"
+},
+v7 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "KeyValuePair",
+  "kind": "LinkedField",
+  "name": "meta",
+  "plural": true,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "k",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "v",
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+},
+v8 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "FileRelationConnection",
+  "kind": "LinkedField",
+  "name": "relations",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "total_count",
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+};
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
     "name": "ScaledInversionSolutionQuery",
-    "selections": (v3/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": null,
+        "kind": "LinkedField",
+        "name": "node",
+        "plural": false,
+        "selections": [
+          (v2/*: any*/),
+          (v3/*: any*/),
+          {
+            "kind": "InlineFragment",
+            "selections": [
+              (v4/*: any*/),
+              (v5/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": null,
+                "kind": "LinkedField",
+                "name": "produced_by",
+                "plural": false,
+                "selections": [
+                  (v6/*: any*/)
+                ],
+                "storageKey": null
+              },
+              (v7/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "InversionSolution",
+                "kind": "LinkedField",
+                "name": "source_solution",
+                "plural": false,
+                "selections": [
+                  (v5/*: any*/),
+                  (v6/*: any*/)
+                ],
+                "storageKey": null
+              },
+              (v8/*: any*/)
+            ],
+            "type": "ScaledInversionSolution",
+            "abstractKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "QueryRoot",
     "abstractKey": null
   },
@@ -212,17 +232,72 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "ScaledInversionSolutionQuery",
-    "selections": (v3/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": null,
+        "kind": "LinkedField",
+        "name": "node",
+        "plural": false,
+        "selections": [
+          (v2/*: any*/),
+          (v3/*: any*/),
+          {
+            "kind": "InlineFragment",
+            "selections": [
+              (v4/*: any*/),
+              (v5/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": null,
+                "kind": "LinkedField",
+                "name": "produced_by",
+                "plural": false,
+                "selections": [
+                  (v2/*: any*/),
+                  (v6/*: any*/)
+                ],
+                "storageKey": null
+              },
+              (v7/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "InversionSolution",
+                "kind": "LinkedField",
+                "name": "source_solution",
+                "plural": false,
+                "selections": [
+                  (v5/*: any*/),
+                  (v3/*: any*/),
+                  {
+                    "kind": "TypeDiscriminator",
+                    "abstractKey": "__isNode"
+                  }
+                ],
+                "storageKey": null
+              },
+              (v8/*: any*/)
+            ],
+            "type": "ScaledInversionSolution",
+            "abstractKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "35a7a13315a285fb388b8cfe0421d28a",
+    "cacheID": "21360443af952b3511426f7a4f2e93e7",
     "id": null,
     "metadata": {},
     "name": "ScaledInversionSolutionQuery",
     "operationKind": "query",
-    "text": "query ScaledInversionSolutionQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    id\n    ... on ScaledInversionSolution {\n      file_name\n      created\n      produced_by {\n        id\n      }\n      meta {\n        k\n        v\n      }\n      source_solution {\n        id\n        created\n      }\n      relations {\n        total_count\n      }\n    }\n  }\n}\n"
+    "text": "query ScaledInversionSolutionQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    id\n    ... on ScaledInversionSolution {\n      file_name\n      created\n      produced_by {\n        __typename\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n      meta {\n        k\n        v\n      }\n      source_solution {\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        created\n        id\n      }\n      relations {\n        total_count\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '37bea5e7d9f5cc5021a4eead0d526fb7';
+(node as any).hash = '9240fd5deae66b48f11e4cd12c270055';
 export default node;

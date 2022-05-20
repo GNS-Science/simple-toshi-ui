@@ -13,8 +13,10 @@ export type InversionSolutionQueryResponse = {
         readonly id?: string | undefined;
         readonly mfd_table_id?: string | null | undefined;
         readonly hazard_table_id?: string | null | undefined;
-        readonly produced_by_id?: string | null | undefined;
         readonly created?: unknown | null | undefined;
+        readonly produced_by?: {
+            readonly id?: string | undefined;
+        } | null | undefined;
         readonly meta?: ReadonlyArray<{
             readonly k: string | null;
             readonly v: string | null;
@@ -43,8 +45,14 @@ query InversionSolutionQuery(
       id
       mfd_table_id
       hazard_table_id
-      produced_by_id
       created
+      produced_by {
+        __typename
+        ... on Node {
+          __isNode: __typename
+          id
+        }
+      }
       meta {
         k
         v
@@ -100,15 +108,16 @@ v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "produced_by_id",
+  "name": "created",
   "storageKey": null
 },
 v6 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "created",
-  "storageKey": null
+  "kind": "InlineFragment",
+  "selections": [
+    (v2/*: any*/)
+  ],
+  "type": "Node",
+  "abstractKey": "__isNode"
 },
 v7 = {
   "alias": null,
@@ -157,8 +166,15 @@ v8 = {
       "name": "table_type",
       "storageKey": null
     },
-    (v6/*: any*/)
+    (v5/*: any*/)
   ],
+  "storageKey": null
+},
+v9 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "__typename",
   "storageKey": null
 };
 return {
@@ -183,7 +199,18 @@ return {
               (v3/*: any*/),
               (v4/*: any*/),
               (v5/*: any*/),
-              (v6/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": null,
+                "kind": "LinkedField",
+                "name": "produced_by",
+                "plural": false,
+                "selections": [
+                  (v6/*: any*/)
+                ],
+                "storageKey": null
+              },
               (v7/*: any*/),
               (v8/*: any*/)
             ],
@@ -211,13 +238,7 @@ return {
         "name": "node",
         "plural": false,
         "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "__typename",
-            "storageKey": null
-          },
+          (v9/*: any*/),
           (v2/*: any*/),
           {
             "kind": "InlineFragment",
@@ -225,7 +246,19 @@ return {
               (v3/*: any*/),
               (v4/*: any*/),
               (v5/*: any*/),
-              (v6/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": null,
+                "kind": "LinkedField",
+                "name": "produced_by",
+                "plural": false,
+                "selections": [
+                  (v9/*: any*/),
+                  (v6/*: any*/)
+                ],
+                "storageKey": null
+              },
               (v7/*: any*/),
               (v8/*: any*/)
             ],
@@ -238,14 +271,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "7225ec519ae92509857f2e84edade747",
+    "cacheID": "c5b3870e11ee9bfb3ac3aecd1be9d9d8",
     "id": null,
     "metadata": {},
     "name": "InversionSolutionQuery",
     "operationKind": "query",
-    "text": "query InversionSolutionQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on InversionSolution {\n      id\n      mfd_table_id\n      hazard_table_id\n      produced_by_id\n      created\n      meta {\n        k\n        v\n      }\n      tables {\n        table_id\n        table_type\n        created\n      }\n    }\n    id\n  }\n}\n"
+    "text": "query InversionSolutionQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on InversionSolution {\n      id\n      mfd_table_id\n      hazard_table_id\n      created\n      produced_by {\n        __typename\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n      meta {\n        k\n        v\n      }\n      tables {\n        table_id\n        table_type\n        created\n      }\n    }\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '68c37e9c4c1dddd8e04e28b21955c0e4';
+(node as any).hash = 'b0dda5042ddaaaa6a80d2ebcafa0cbe1';
 export default node;
