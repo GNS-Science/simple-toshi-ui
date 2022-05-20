@@ -3,6 +3,70 @@ schema {
   mutation: MutationRoot
 }
 
+"""
+Represents a Aggregate Inversion Solution file produced fby applying the 
+aggregate_fn to the rates of each source solution. 
+"""
+type AggregateInversionSolution implements Node & FileInterface & PredecessorsInterface & InversionSolutionInterface {
+  """The ID of the object."""
+  id: ID!
+
+  """The name of the file"""
+  file_name: String
+
+  """The base64-encoded md5 digest of the file"""
+  md5_digest: String
+
+  """The size of the file in bytes"""
+  file_size: BigInt
+
+  """A pre-signed URL to download the file from s3"""
+  file_url: String
+
+  """A pre-signed URL to post the data to s3"""
+  post_url: String
+
+  """additional file meta data, as a list of Key Value pairs."""
+  meta: [KeyValuePair]
+
+  """things related to this data file"""
+  relations(before: String, after: String, first: Int, last: Int): FileRelationConnection
+
+  """list of predecessor info"""
+  predecessors: [Predecessor]
+
+  """When the solution was created"""
+  created: DateTime
+
+  """result metrics from the task, as a list of Key Value pairs."""
+  metrics: [KeyValuePair]
+
+  """deprecated"""
+  mfd_table_id: ID
+  hazard_table_id: ID
+  tables: [LabelledTableRelation]
+
+  """deprecated"""
+  hazard_table: Table
+
+  """deprecated"""
+  mfd_table: Table
+  produced_by: AutomationTaskUnion
+
+  """aggregations must use solutions based on the saem rupture set."""
+  common_rupture_set: ID
+
+  """The solutions used to build the aggregate"""
+  source_solutions: [SourceSolutionUnion]
+
+  """aggregation function on rupture rates."""
+  aggregation_fn: AggregationFn
+}
+
+enum AggregationFn {
+  MEAN
+}
+
 input AppendInversionSolutionTablesInput {
   id: ID
   tables: [LabelledTableRelationInput]!
@@ -103,6 +167,8 @@ interface AutomationTaskInterface {
   metrics: [KeyValuePair]
 }
 
+union AutomationTaskUnion = RuptureGenerationTask | AutomationTask
+
 input AutomationTaskUpdateInput {
   task_id: ID!
   result: EventResult
@@ -131,6 +197,42 @@ BigInt is an extension of the regular Int field
 scalar BigInt
 
 union ChildTaskUnion = GeneralTask | RuptureGenerationTask | AutomationTask | OpenquakeHazardTask
+
+input CreateAggregateInversionSolutionInput {
+  """The name of the file"""
+  file_name: String
+
+  """The base64-encoded md5 digest of the file"""
+  md5_digest: String
+
+  """The size of the file in bytes"""
+  file_size: BigInt
+
+  """additional file meta data, as a list of Key Value pairs."""
+  meta: [KeyValuePairInput]
+
+  """aggregations must use solutions based on the saem rupture set."""
+  common_rupture_set: ID
+
+  """aggregation function on rupture rates."""
+  aggregation_fn: AggregationFn
+  source_solutions: [ID]
+  produced_by: ID
+
+  """When the solution was created"""
+  created: DateTime
+
+  """list of predecessors"""
+  predecessors: [PredecessorInput]
+  clientMutationId: String
+}
+
+"""Create a AggregateInversionSolution file"""
+type CreateAggregateInversionSolutionPayload {
+  solution: AggregateInversionSolution
+  ok: Boolean
+  clientMutationId: String
+}
 
 type CreateAutomationTask {
   task_result: AutomationTask
@@ -194,15 +296,13 @@ input CreateInversionSolutionInput {
   """additional file meta data, as a list of Key Value pairs."""
   meta: [KeyValuePairInput]
 
-  """When the task record was created"""
+  """When the solution was created"""
   created: DateTime
-
-  """deprecated"""
-  produced_by_id: ID
 
   """deprecated"""
   mfd_table_id: ID
   hazard_table_id: ID
+  produced_by: ID
 
   """list of predecessors"""
   predecessors: [PredecessorInput]
@@ -316,11 +416,11 @@ input CreateScaledInversionSolutionInput {
 
   """additional file meta data, as a list of Key Value pairs."""
   meta: [KeyValuePairInput]
-
-  """When the scaled solution file was created"""
-  created: DateTime
   source_solution: ID
   produced_by: ID
+
+  """When the solution was created"""
+  created: DateTime
 
   """list of predecessors"""
   predecessors: [PredecessorInput]
@@ -598,9 +698,27 @@ type GeneralTask implements Node & Thing {
 }
 
 """Represents an Inversion Solution file"""
-type InversionSolution implements Node & FileInterface & PredecessorsInterface {
+type InversionSolution implements Node & InversionSolutionInterface & FileInterface & PredecessorsInterface {
   """The ID of the object."""
   id: ID!
+
+  """When the solution was created"""
+  created: DateTime
+
+  """result metrics from the task, as a list of Key Value pairs."""
+  metrics: [KeyValuePair]
+
+  """deprecated"""
+  mfd_table_id: ID
+  hazard_table_id: ID
+  tables: [LabelledTableRelation]
+
+  """deprecated"""
+  hazard_table: Table
+
+  """deprecated"""
+  mfd_table: Table
+  produced_by: AutomationTaskUnion
 
   """The name of the file"""
   file_name: String
@@ -625,15 +743,15 @@ type InversionSolution implements Node & FileInterface & PredecessorsInterface {
 
   """list of predecessor info"""
   predecessors: [Predecessor]
+}
 
-  """When the task record was created"""
+"""A interface for things like Inversion Solution"""
+interface InversionSolutionInterface {
+  """When the solution was created"""
   created: DateTime
 
   """result metrics from the task, as a list of Key Value pairs."""
   metrics: [KeyValuePair]
-
-  """deprecated"""
-  produced_by_id: ID
 
   """deprecated"""
   mfd_table_id: ID
@@ -645,7 +763,7 @@ type InversionSolution implements Node & FileInterface & PredecessorsInterface {
 
   """deprecated"""
   mfd_table: Table
-  produced_by: RuptureGenerationTask
+  produced_by: AutomationTaskUnion
 }
 
 """
@@ -686,8 +804,8 @@ type InversionSolutionNrml implements Node & FileInterface & PredecessorsInterfa
   """When the scaled solution file was created"""
   created: DateTime
 
-  """The original soloution as produced by opensha"""
-  source_solution: InversionSolution
+  """The original solution."""
+  source_solution: SourceSolutionUnion
 }
 
 """Simple container for KVL lists of strings"""
@@ -809,6 +927,9 @@ type MutationRoot {
   update_automation_task(input: AutomationTaskUpdateInput!): UpdateAutomationTask
   update_general_task(input: UpdateGeneralTaskInput!): UpdateGeneralTaskPayload
   update_rupture_generation_task(input: AutomationTaskUpdateInput!): UpdateRuptureGenerationTask
+
+  """Create a AggregateInversionSolution file"""
+  create_aggregate_inversion_solution(input: CreateAggregateInversionSolutionInput!): CreateAggregateInversionSolutionPayload
 
   """Create a ScaledInversionSolution file"""
   create_scaled_inversion_solution(input: CreateScaledInversionSolutionInput!): CreateScaledInversionSolutionPayload
@@ -1162,7 +1283,7 @@ Represents a Scaled Inversion Solution file
 NB the  arguments used to scaling this solution (relatve to the source_solution)
 should be captured as in meta field.
 """
-type ScaledInversionSolution implements Node & FileInterface & PredecessorsInterface {
+type ScaledInversionSolution implements Node & FileInterface & PredecessorsInterface & InversionSolutionInterface {
   """The ID of the object."""
   id: ID!
 
@@ -1190,14 +1311,26 @@ type ScaledInversionSolution implements Node & FileInterface & PredecessorsInter
   """list of predecessor info"""
   predecessors: [Predecessor]
 
-  """When the scaled solution file was created"""
+  """When the solution was created"""
   created: DateTime
+
+  """result metrics from the task, as a list of Key Value pairs."""
+  metrics: [KeyValuePair]
+
+  """deprecated"""
+  mfd_table_id: ID
+  hazard_table_id: ID
+  tables: [LabelledTableRelation]
+
+  """deprecated"""
+  hazard_table: Table
+
+  """deprecated"""
+  mfd_table: Table
+  produced_by: AutomationTaskUnion
 
   """The original soloution as produced by opensha"""
   source_solution: InversionSolution
-
-  """The task creating this"""
-  produced_by: AutomationTask
 }
 
 type Search {
@@ -1275,6 +1408,8 @@ enum SmsSiteClassBasis {
   SPT
   su
 }
+
+union SourceSolutionUnion = InversionSolution | ScaledInversionSolution
 
 """A Strong Motion Station """
 type StrongMotionStation implements Node & Thing {
@@ -1389,6 +1524,7 @@ enum TaskSubType {
   HAZARD
   REPORT
   SCALE_SOLUTION
+  AGGREGATE_SOLUTION
   SOLUTION_TO_NRML
   OPENQUAKE_HAZARD
 }

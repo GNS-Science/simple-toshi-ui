@@ -88,6 +88,7 @@ const HazardTable: React.FC<HazardTableProps> = ({ hazard_solution }: HazardTabl
               <Link to={`/HazardSolution/${hazard_solution?.id}`}>[more]</Link>
             </TableCell>
           </AlternatingRow>
+
           <AlternatingRow
             classes={{
               root: classes.root,

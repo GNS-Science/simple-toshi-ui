@@ -24,7 +24,7 @@ const OpenquakeHazardSolutionDiagnosticReportTab: React.FC<OpenquakeHazardSoluti
   const baseUrl = process.env.REACT_APP_REPORTS_URL;
   return (
     <Root>
-      <iframe className={classes.iframe} src={`${baseUrl}/opensha/DATA/${id}/hazard_report/index.html`} />
+      <iframe className={classes.iframe} src={`${baseUrl}/openquake/DATA/${id}/hazard_report/index.html`} />
     </Root>
   );
 };

@@ -5,7 +5,6 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useLazyLoadQuery, useQueryLoader } from 'react-relay';
 import { CircularProgress, Typography, Box, Tab, Tabs } from '@mui/material';
 
-import FavouriteControls from '../components/common/FavouriteControls';
 import { OpenquakeHazardSolutionQuery } from './__generated__/OpenquakeHazardSolutionQuery.graphql';
 import { OpenquakeHazardSolutionDetailTabQuery } from '../components/openquakeHazard/__generated__/OpenquakeHazardSolutionDetailTabQuery.graphql';
 import OpenquakeHazardSolutionDetailTab, {
@@ -87,7 +86,6 @@ const OpenquakeHazardSolution: React.FC = () => {
     <Root>
       <Typography variant="h5" gutterBottom>
         Openquake Hazard Solution (id:{data?.node?.id})
-        <FavouriteControls id={data?.node?.id as string} producedBy={data?.node?.produced_by?.id as string} />
       </Typography>
       <Box className={classes.root}>
         <Tabs
