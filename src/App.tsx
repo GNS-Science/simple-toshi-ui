@@ -81,6 +81,7 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
     [parentViewsOptions[0].displayName],
   );
   const [localStorageParentFault, setLocalStorageParentFault] = useLocalStorage<string | null>('parent-fault', null);
+
   const LocalStorageProvider = LocalStorageContext.Provider;
 
   return (
