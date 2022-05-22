@@ -12,13 +12,13 @@ export type InversionSolutionNrmlQueryResponse = {
         readonly __typename: "InversionSolutionNrml";
         readonly id: string;
         readonly source_solution: {
-            readonly id: string;
+            readonly id?: string | undefined;
         } | null;
         readonly meta: ReadonlyArray<{
             readonly k: string | null;
             readonly v: string | null;
         } | null> | null;
-        readonly file_size: number | null;
+        readonly file_size: unknown | null;
         readonly md5_digest: string | null;
         readonly file_name: string | null;
         readonly file_url: string | null;
@@ -44,7 +44,11 @@ query InversionSolutionNrmlQuery(
     ... on InversionSolutionNrml {
       id
       source_solution {
-        id
+        __typename
+        ... on Node {
+          __isNode: __typename
+          id
+        }
       }
       meta {
         k
@@ -90,16 +94,12 @@ v3 = {
   "storageKey": null
 },
 v4 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "InversionSolution",
-  "kind": "LinkedField",
-  "name": "source_solution",
-  "plural": false,
+  "kind": "InlineFragment",
   "selections": [
     (v3/*: any*/)
   ],
-  "storageKey": null
+  "type": "Node",
+  "abstractKey": "__isNode"
 },
 v5 = {
   "alias": null,
@@ -174,7 +174,18 @@ return {
             "kind": "InlineFragment",
             "selections": [
               (v3/*: any*/),
-              (v4/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": null,
+                "kind": "LinkedField",
+                "name": "source_solution",
+                "plural": false,
+                "selections": [
+                  (v4/*: any*/)
+                ],
+                "storageKey": null
+              },
               (v5/*: any*/),
               (v6/*: any*/),
               (v7/*: any*/),
@@ -210,7 +221,19 @@ return {
           {
             "kind": "InlineFragment",
             "selections": [
-              (v4/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": null,
+                "kind": "LinkedField",
+                "name": "source_solution",
+                "plural": false,
+                "selections": [
+                  (v2/*: any*/),
+                  (v4/*: any*/)
+                ],
+                "storageKey": null
+              },
               (v5/*: any*/),
               (v6/*: any*/),
               (v7/*: any*/),
@@ -226,14 +249,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "ed836dd91ae835a0007311df0fc42873",
+    "cacheID": "4755ec981b070d3cbba075a546b60527",
     "id": null,
     "metadata": {},
     "name": "InversionSolutionNrmlQuery",
     "operationKind": "query",
-    "text": "query InversionSolutionNrmlQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on InversionSolutionNrml {\n      id\n      source_solution {\n        id\n      }\n      meta {\n        k\n        v\n      }\n      file_size\n      md5_digest\n      file_name\n      file_url\n    }\n    id\n  }\n}\n"
+    "text": "query InversionSolutionNrmlQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on InversionSolutionNrml {\n      id\n      source_solution {\n        __typename\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n      meta {\n        k\n        v\n      }\n      file_size\n      md5_digest\n      file_name\n      file_url\n    }\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'f226e164e47d5e03275bbc57adfa1b58';
+(node as any).hash = '7346537fee0485370c9f56c1ed5190cc';
 export default node;

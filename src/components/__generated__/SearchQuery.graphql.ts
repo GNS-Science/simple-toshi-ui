@@ -7,7 +7,7 @@ import { ConcreteRequest } from "relay-runtime";
 export type EventResult = "FAILURE" | "PARTIAL" | "SUCCESS" | "UNDEFINED" | "%future added value";
 export type EventState = "DONE" | "SCHEDULED" | "STARTED" | "UNDEFINED" | "%future added value";
 export type ModelType = "COMPOSITE" | "CRUSTAL" | "SUBDUCTION" | "%future added value";
-export type TaskSubType = "HAZARD" | "INVERSION" | "OPENQUAKE_HAZARD" | "REPORT" | "RUPTURE_SET" | "SCALE_SOLUTION" | "SOLUTION_TO_NRML" | "%future added value";
+export type TaskSubType = "AGGREGATE_SOLUTION" | "HAZARD" | "INVERSION" | "OPENQUAKE_HAZARD" | "REPORT" | "RUPTURE_SET" | "SCALE_SOLUTION" | "SOLUTION_TO_NRML" | "%future added value";
 export type SearchQueryVariables = {
     search: string;
 };
@@ -20,7 +20,7 @@ export type SearchQueryResponse = {
                     readonly __typename: string;
                     readonly id?: string | undefined;
                     readonly file_name?: string | null | undefined;
-                    readonly file_size?: number | null | undefined;
+                    readonly file_size?: unknown | null | undefined;
                     readonly created?: unknown | null | undefined;
                     readonly duration?: number | null | undefined;
                     readonly state?: EventState | null | undefined;

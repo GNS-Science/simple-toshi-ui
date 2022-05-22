@@ -15,17 +15,23 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { styled } from '@mui/styles';
-import { LatLngExpression } from 'leaflet';
 import { GeoJsonObject } from 'geojson';
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import { AxiosError } from 'axios';
 
-import { LocationData } from '../../interfaces/inversionSolutions';
 import SelectControl from '../common/SelectControl';
 import { solvisApiService } from '../../service/api';
 import SolutionAnalysisTable from './SolutionAnalysisTable';
 import RangeSliderWithInputs from '../common/RangeSliderWithInputs';
+import { nz_centre, zoom, provider_url } from '../../constants/solutionRuptureMap';
+import {
+  getLocationIdString,
+  rateLabelFormat,
+  getRadiiInKm,
+  getLocationOptions,
+  radiiOptions,
+} from '../../service/solutionRuptureMap.service';
 
 const StyledAccordion = styled(Accordion)({
   borderRadius: '1px',
@@ -62,23 +68,9 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
   id,
   setDisableHotkey,
 }: SolutionAnalysisTabProps) => {
-  const nz_centre: LatLngExpression = [-40.946, 174.167];
-  const zoom = 5;
-  const provider_url = 'https://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}';
-
-  const [locationOptions, setLocationOptions] = useState<LocationData[]>([]);
-  const [locationSelections, setLocationSelections] = useState<string[]>([]);
-  const [locationIDs, setLocationIDs] = useState<string[]>([]);
-
-  const [radiiOptions, setRadiiOptions] = useState<string[]>([]);
-  const [radiiSelection, setRadiiSelection] = useState<string>('');
-
   const [rupturesData, setRupturesData] = useState<GeoJsonObject>();
   const [locationsData, setLocationsData] = useState<GeoJsonObject>();
   const [tableData, setTableData] = useState<string | null>(null);
-
-  const [magRange, setMagRange] = useState<number[]>([5, 10]);
-  const [rateRange, setRateRange] = useState<number[]>([-20, 0]);
 
   const [showLocation, setShowLocation] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -87,19 +79,15 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
   const [disableFetch, setDisableFetch] = useState<boolean>(false);
   const [inputValue, setInputValue] = React.useState('');
 
-  const radiiInKm = useCallback(() => {
-    if (radiiSelection === '100km') {
-      return radiiSelection.slice(0, 3);
-    } else {
-      return radiiSelection.slice(0, 2);
-    }
-  }, [radiiSelection]);
+  const [location, setLocation] = useState<string[]>([]);
+  const [radii, setRadii] = useState<string>('10km');
+  const [magRange, setMagRange] = useState<number[]>([5, 10]);
+  const [rateRange, setRateRange] = useState<number[]>([-20, 0]);
 
   const getGeoJson = useCallback(() => {
     setShowLoading(true);
-    const locationSelectionsString = locationIDs.join('%2C');
     solvisApiService
-      .getSolutionAnalysis(id, locationSelectionsString, radiiInKm(), magRange, rateRange)
+      .getSolutionAnalysis(id, getLocationIdString(location), getRadiiInKm(radii), magRange, rateRange)
       .then((response) => {
         setShowLoading(false);
         setShowLoading(false);
@@ -123,45 +111,16 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
         }
         setShowLoading(false);
       });
-  }, [setShowLoading, locationIDs, id, magRange, radiiInKm, rateRange]);
+  }, [setShowLoading, id, radii, location, magRange, rateRange]);
 
   useEffect(() => {
-    const filteredLocations = locationOptions.filter((location) => locationSelections.includes(location.name));
-    const filteredLocationIDs: string[] = [];
-    filteredLocations.map((location) => {
-      filteredLocationIDs.push(location.id);
-    });
-    setLocationIDs(filteredLocationIDs);
-  }, [locationOptions, locationSelections]);
+    if (location.length) getGeoJson();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   useEffect(() => {
     setDisableFetch(false);
-  }, [locationSelections, radiiSelection, magRange, rateRange]);
-
-  useEffect(() => {
-    solvisApiService.getLocationList().then((response) => {
-      setLocationOptions(response.data);
-    });
-
-    solvisApiService.getRadiiList().then((response) => {
-      const radii = response.data.radii;
-      const radiiFormatted = radii.map((radius: number) => `${radius / 1000}km`);
-      setRadiiOptions(radiiFormatted);
-    });
-  }, []);
-
-  const getOptions = (): string[] => {
-    const locations: string[] = [];
-    locationOptions.map((locationOption) => {
-      locations.push(locationOption.name);
-    });
-    locations.sort();
-    return locations;
-  };
-
-  const rateLabelFormat = (value: number): string => {
-    return `1e${value}`;
-  };
+  }, [location, radii, magRange, rateRange]);
 
   const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setShowLocation(event.target.checked);
@@ -173,25 +132,24 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
       <StyledAccordion defaultExpanded={true}>
         <StyledAccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
           <Typography>
-            <strong>Locations:</strong> {locationSelections.length > 0 ? locationSelections.join(', ') : 'None'}{' '}
-            <strong>Radii: </strong>
-            {radiiSelection || 'None'} <strong>Mag Range:</strong> {magRange[0]} - {magRange[1]}{' '}
-            <strong>Rate Range:</strong> {`1e${rateRange[0]} - 1e${rateRange[1]}`}
+            <strong>Locations:</strong> {location.length > 0 ? location.join(', ') : 'None'} <strong>Radii: </strong>
+            {radii || 'None'} <strong>Mag Range:</strong> {magRange[0]} - {magRange[1]} <strong>Rate Range:</strong>{' '}
+            {`1e${rateRange[0]} - 1e${rateRange[1]}`}
           </Typography>
         </StyledAccordionSummary>
         <StyledAccordionDetails>
           <ControlsBar>
             <Autocomplete
               multiple
-              value={locationSelections}
+              value={location}
               onChange={(event: any, newValue: string[] | null) => {
-                setLocationSelections(newValue as string[]);
+                setLocation(newValue as string[]);
               }}
               inputValue={inputValue}
               onInputChange={(event, newInputValue) => {
                 setInputValue(newInputValue);
               }}
-              options={getOptions()}
+              options={getLocationOptions()}
               style={{ width: 500, marginLeft: 16 }}
               renderInput={(params) => <TextField {...params} label="Locations" variant="standard" />}
               blurOnSelect={true}
@@ -203,7 +161,7 @@ const SolutionAnalysisTab: React.FC<SolutionAnalysisTabProps> = ({
               }}
               limitTags={1}
             />
-            <SelectControl name="Radius" options={radiiOptions} setOptions={setRadiiSelection} />
+            <SelectControl name="Radius" options={radiiOptions} setOptions={setRadii} />
             <FormControlLabel control={<Switch defaultChecked onChange={handleSwitchChange} />} label="Show Location" />
             {showLoading ? (
               <CircularProgress />

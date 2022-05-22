@@ -81,6 +81,7 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
     [parentViewsOptions[0].displayName],
   );
   const [localStorageParentFault, setLocalStorageParentFault] = useLocalStorage<string | null>('parent-fault', null);
+
   const LocalStorageProvider = LocalStorageContext.Provider;
 
   return (
@@ -135,7 +136,7 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
                   <Route path="/OpenquakeHazardTask/:id">
                     <OpenquakeHazardTask />
                   </Route>
-                  <Route path="/HazardSolution/:id">
+                  <Route path="/HazardSolution/:id/:tab?">
                     <OpenquakeHazardSolution />
                   </Route>
                   <Route path="/InversionSolutionNrml/:id">

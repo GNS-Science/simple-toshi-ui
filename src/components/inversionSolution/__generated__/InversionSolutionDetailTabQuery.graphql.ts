@@ -10,9 +10,11 @@ export type InversionSolutionDetailTabQueryVariables = {
 export type InversionSolutionDetailTabQueryResponse = {
     readonly node: {
         readonly id?: string | undefined;
-        readonly produced_by_id?: string | null | undefined;
+        readonly produced_by?: {
+            readonly id?: string | undefined;
+        } | null | undefined;
         readonly file_name?: string | null | undefined;
-        readonly file_size?: number | null | undefined;
+        readonly file_size?: unknown | null | undefined;
         readonly file_url?: string | null | undefined;
         readonly md5_digest?: string | null | undefined;
         readonly meta?: ReadonlyArray<{
@@ -40,7 +42,13 @@ query InversionSolutionDetailTabQuery(
     __typename
     ... on InversionSolution {
       id
-      produced_by_id
+      produced_by {
+        __typename
+        ... on Node {
+          __isNode: __typename
+          id
+        }
+      }
       file_name
       file_size
       file_url
@@ -82,11 +90,12 @@ v2 = {
   "storageKey": null
 },
 v3 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "produced_by_id",
-  "storageKey": null
+  "kind": "InlineFragment",
+  "selections": [
+    (v2/*: any*/)
+  ],
+  "type": "Node",
+  "abstractKey": "__isNode"
 },
 v4 = {
   "alias": null,
@@ -151,6 +160,13 @@ v10 = {
   "plural": true,
   "selections": (v8/*: any*/),
   "storageKey": null
+},
+v11 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "__typename",
+  "storageKey": null
 };
 return {
   "fragment": {
@@ -171,7 +187,18 @@ return {
             "kind": "InlineFragment",
             "selections": [
               (v2/*: any*/),
-              (v3/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": null,
+                "kind": "LinkedField",
+                "name": "produced_by",
+                "plural": false,
+                "selections": [
+                  (v3/*: any*/)
+                ],
+                "storageKey": null
+              },
               (v4/*: any*/),
               (v5/*: any*/),
               (v6/*: any*/),
@@ -203,18 +230,24 @@ return {
         "name": "node",
         "plural": false,
         "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "__typename",
-            "storageKey": null
-          },
+          (v11/*: any*/),
           (v2/*: any*/),
           {
             "kind": "InlineFragment",
             "selections": [
-              (v3/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": null,
+                "kind": "LinkedField",
+                "name": "produced_by",
+                "plural": false,
+                "selections": [
+                  (v11/*: any*/),
+                  (v3/*: any*/)
+                ],
+                "storageKey": null
+              },
               (v4/*: any*/),
               (v5/*: any*/),
               (v6/*: any*/),
@@ -231,14 +264,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "cab1f1eda6f3a8094964a8e4e7e491ad",
+    "cacheID": "54ecfc501703ee9b3565f1d2a9a5f8bc",
     "id": null,
     "metadata": {},
     "name": "InversionSolutionDetailTabQuery",
     "operationKind": "query",
-    "text": "query InversionSolutionDetailTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on InversionSolution {\n      id\n      produced_by_id\n      file_name\n      file_size\n      file_url\n      md5_digest\n      meta {\n        k\n        v\n      }\n      metrics {\n        k\n        v\n      }\n    }\n    id\n  }\n}\n"
+    "text": "query InversionSolutionDetailTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on InversionSolution {\n      id\n      produced_by {\n        __typename\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n      file_name\n      file_size\n      file_url\n      md5_digest\n      meta {\n        k\n        v\n      }\n      metrics {\n        k\n        v\n      }\n    }\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '05b41605a76b3cc0ac4d214415897f83';
+(node as any).hash = '1e711c5e86a1a8b3dd9dfb4394942f26';
 export default node;
