@@ -57,41 +57,18 @@ const OpenquakeHazardSolutionSourcesTab: React.FC<OpenquakeHazardSolutionSources
           </AlternatingRow>
         </TableHead>
         <TableBody>
-          {data?.node?.config?.source_models?.map((source_model) => (
-            <>
-              <AlternatingRow>
-                <TableCell>
-                  <TruncateText text={source_model?.file_name ?? ''} />
-                </TableCell>
-                <TableCell>
-                  <a href={source_model?.file_url ?? ''}>Get file</a>
-                </TableCell>
-                <TableCell>
-                  <Link to={`/${source_model?.__typename}/${source_model?.id}`}>[more]</Link>
-                </TableCell>
-              </AlternatingRow>
-              {source_model?.meta && (
-                <AlternatingRow>
-                  <TableCell colSpan={3}>
-                    <strong>Meta</strong>
-                  </TableCell>
-                </AlternatingRow>
-              )}
-              {source_model?.meta &&
-                source_model?.meta?.map((kv) => (
-                  <AlternatingRow
-                    key={kv?.k}
-                    classes={{
-                      root: classes.root,
-                    }}
-                  >
-                    <TableCell className={classes.tableCell}>{kv?.k}</TableCell>
-                    <TableCell colSpan={2} className={classes.tableCell}>
-                      {kv?.v}
-                    </TableCell>
-                  </AlternatingRow>
-                ))}
-            </>
+          {data?.node?.config?.source_models?.map((source_model, i) => (
+            <AlternatingRow key={i}>
+              <TableCell>
+                <TruncateText text={source_model?.file_name ?? ''} />
+              </TableCell>
+              <TableCell>
+                <a href={source_model?.file_url ?? ''}>Get file</a>
+              </TableCell>
+              <TableCell>
+                <Link to={`/${source_model?.__typename}/${source_model?.id}`}>[more]</Link>
+              </TableCell>
+            </AlternatingRow>
           ))}
         </TableBody>
       </Table>

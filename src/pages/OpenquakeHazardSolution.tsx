@@ -73,7 +73,7 @@ const OpenquakeHazardSolution: React.FC = () => {
             </Box>
           </React.Suspense>
         );
-      case 'Predecessors':
+      case 'Parents':
         return (
           <React.Suspense fallback={<CircularProgress />}>
             <Box className={classes.tabPanel}>
@@ -113,7 +113,7 @@ const OpenquakeHazardSolution: React.FC = () => {
         >
           <Tab label="Detail" id="openquakeHazardDetailTab" value={'Detail'} className={classes.tab} />
           <Tab label="Hazard Diags" id="DiagnosticReport" value={'DiagnosticReport'} className={classes.tab} />
-          <Tab label="Pre decessors" id="Predecessors" value={'Predecessors'} className={classes.tab} />
+          <Tab label="Parents" id="Parents" value={'Parents'} className={classes.tab} />
           <Tab label="Sources" id="Sources" value={'Sources'} className={classes.tab} />
         </Tabs>
         {renderTab()}
