@@ -25,6 +25,7 @@ const OpenquakeHazardSolutionDetailTab: React.FC<OpenquakeHazardSolutionDetailTa
   const formattedDate = created ? format(new Date(created), 'PPPppp') : '';
 
   const hazard_solution: HazardTableProps = {
+    solution_page: true,
     hazard_solution: {
       id: data?.node?.id,
       created: data?.node?.created,
@@ -65,10 +66,9 @@ const OpenquakeHazardSolutionDetailTab: React.FC<OpenquakeHazardSolutionDetailTa
           </List>
         </Grid>
       </Grid>
-      <ConfigTable config={data?.node?.config} />
+      <HazardTable hazard_solution={hazard_solution.hazard_solution} solution_page={hazard_solution.solution_page} />
+      <ConfigTable config={data?.node?.config} solution_page={true} />
       <TaskArgsTable task_args={data?.node?.task_args} />
-      <HazardTable hazard_solution={hazard_solution.hazard_solution} />
-      <PredecessorView predecessors={data?.node?.predecessors} />
     </>
   );
 };
@@ -129,21 +129,6 @@ export const openquakeHazardSolutionDetailTabQuery = graphql`
           file_name
           file_size
           file_url
-        }
-        predecessors {
-          id
-          typename
-          relationship
-          depth
-          node {
-            ... on FileInterface {
-              file_name
-              meta {
-                k
-                v
-              }
-            }
-          }
         }
       }
     }

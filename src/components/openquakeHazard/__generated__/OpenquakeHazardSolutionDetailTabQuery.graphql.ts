@@ -61,19 +61,6 @@ export type OpenquakeHazardSolutionDetailTabQueryResponse = {
             readonly file_size: unknown | null;
             readonly file_url: string | null;
         } | null | undefined;
-        readonly predecessors?: ReadonlyArray<{
-            readonly id: string | null;
-            readonly typename: string | null;
-            readonly relationship: string | null;
-            readonly depth: number | null;
-            readonly node: {
-                readonly file_name?: string | null | undefined;
-                readonly meta?: ReadonlyArray<{
-                    readonly k: string | null;
-                    readonly v: string | null;
-                } | null> | null | undefined;
-            } | null;
-        } | null> | null | undefined;
     } | null;
 };
 export type OpenquakeHazardSolutionDetailTabQuery = {
@@ -145,27 +132,6 @@ query OpenquakeHazardSolutionDetailTabQuery(
         file_name
         file_size
         file_url
-      }
-      predecessors {
-        id
-        typename
-        relationship
-        depth
-        node {
-          __typename
-          ... on FileInterface {
-            __isFileInterface: __typename
-            file_name
-            meta {
-              k
-              v
-            }
-          }
-          ... on Node {
-            __isNode: __typename
-            id
-          }
-        }
       }
     }
     id

@@ -11,6 +11,8 @@ import OpenquakeHazardSolutionDetailTab, {
   openquakeHazardSolutionDetailTabQuery,
 } from '../components/openquakeHazard/OpenquakeHazardSolutionDetailTab';
 import OpenquakeHazardSolutionDiagnosticReportTab from '../components/openquakeHazard/OpenquakeHazardSolutionDiagnosticReportTab';
+import OpenquakeHazardSolutionPredecessorTab from '../components/openquakeHazard/OpenquakeHazardSolutionPredecessorTab';
+import OpenquakeHazardSolutionSourcesTab from '../components/openquakeHazard/OpenquakeHazardSolutionSourcesTab';
 
 const PREFIX = 'OpenquakeHazardSolution';
 
@@ -71,6 +73,22 @@ const OpenquakeHazardSolution: React.FC = () => {
             </Box>
           </React.Suspense>
         );
+      case 'Predecessors':
+        return (
+          <React.Suspense fallback={<CircularProgress />}>
+            <Box className={classes.tabPanel}>
+              <OpenquakeHazardSolutionPredecessorTab id={id} />
+            </Box>
+          </React.Suspense>
+        );
+      case 'Sources':
+        return (
+          <React.Suspense fallback={<CircularProgress />}>
+            <Box className={classes.tabPanel}>
+              <OpenquakeHazardSolutionSourcesTab id={id} />
+            </Box>
+          </React.Suspense>
+        );
     }
   };
 
@@ -94,7 +112,9 @@ const OpenquakeHazardSolution: React.FC = () => {
           onChange={(e, val) => history.push(`/HazardSolution/${id}/${val}`)}
         >
           <Tab label="Detail" id="openquakeHazardDetailTab" value={'Detail'} className={classes.tab} />
-          <Tab label="Rupture Diags" id="DiagnosticReport" value={'DiagnosticReport'} className={classes.tab} />
+          <Tab label="Hazard Diags" id="DiagnosticReport" value={'DiagnosticReport'} className={classes.tab} />
+          <Tab label="Pre decessors" id="Predecessors" value={'Predecessors'} className={classes.tab} />
+          <Tab label="Sources" id="Sources" value={'Sources'} className={classes.tab} />
         </Tabs>
         {renderTab()}
       </Box>
