@@ -53,13 +53,13 @@ const OpenquakeHazardSolutionSourcesTab: React.FC<OpenquakeHazardSolutionSources
               root: classes.root,
             }}
           >
-            <TableCell colSpan={3}>Source Models</TableCell>
+            <TableCell colSpan={4}>Source Models</TableCell>
           </AlternatingRow>
         </TableHead>
         <TableBody>
           {data?.node?.config?.source_models?.map((source_model, i) => (
             <AlternatingRow key={i}>
-              <TableCell>
+              <TableCell colSpan={2}>
                 <TruncateText text={source_model?.file_name ?? ''} />
               </TableCell>
               <TableCell>
@@ -84,13 +84,17 @@ export const openquakeHazardSolutionSourcesTabQuery = graphql`
           id
           created
           source_models {
-            id
-            __typename
-            file_name
-            file_url
-            meta {
-              k
-              v
+            ... on Node {
+              id
+              __typename
+            }
+            ... on FileInterface {
+              file_name
+              file_url
+              meta {
+                k
+                v
+              }
             }
           }
         }

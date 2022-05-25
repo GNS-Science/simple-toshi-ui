@@ -2,13 +2,13 @@ import React from 'react';
 import { graphql } from 'babel-plugin-relay/macro';
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { Grid, List, ListItem, ListItemText } from '@mui/material';
-import { OpenquakeHazardSolutionDetailTabQuery } from './__generated__/OpenquakeHazardSolutionDetailTabQuery.graphql';
-import { format } from 'date-fns';
+import { format, formatDuration, intervalToDuration, secondsToMilliseconds } from 'date-fns';
 import { Link } from 'react-router-dom';
+
+import { OpenquakeHazardSolutionDetailTabQuery } from './__generated__/OpenquakeHazardSolutionDetailTabQuery.graphql';
 import HazardTable, { HazardTableProps } from './HazardTable';
 import ConfigTable from './ConfigTable';
 import TaskArgsTable from './TaskArgsTable';
-import PredecessorView from '../common/PredecessorView';
 
 interface OpenquakeHazardSolutionDetailTabProps {
   queryRef: PreloadedQuery<OpenquakeHazardSolutionDetailTabQuery, Record<string, unknown>>;
@@ -34,6 +34,15 @@ const OpenquakeHazardSolutionDetailTab: React.FC<OpenquakeHazardSolutionDetailTa
     },
   };
 
+  const duration = data?.node?.produced_by?.duration
+    ? formatDuration(
+        intervalToDuration({
+          start: 0,
+          end: secondsToMilliseconds(data?.node?.produced_by?.duration),
+        }),
+      )
+    : '-';
+
   return (
     <>
       <Grid container spacing={0} wrap={'nowrap'}>
@@ -58,10 +67,7 @@ const OpenquakeHazardSolutionDetailTab: React.FC<OpenquakeHazardSolutionDetailTa
               <ListItemText primary="Model Type" secondary={data?.node?.produced_by?.model_type} />
             </ListItem>
             <ListItem>
-              <ListItemText
-                primary="Duration"
-                secondary={`${Math.round(Number(data?.node?.produced_by?.duration))} seconds`}
-              />
+              <ListItemText primary="Duration" secondary={duration} />
             </ListItem>
           </List>
         </Grid>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql } from 'babel-plugin-relay/macro';
 import { useLazyLoadQuery } from 'react-relay/hooks';
-import PredecessorView from './PredecessorView';
+import PredecessorView from '../common/PredecessorView';
 import { OpenquakeHazardSolutionPredecessorTabQuery } from './__generated__/OpenquakeHazardSolutionPredecessorTabQuery.graphql';
 
 interface OpenquakeHazardSolutionPredecessorTabProps {

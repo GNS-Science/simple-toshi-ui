@@ -22,7 +22,7 @@ export type AggregateInversionSolutionDetailTabQueryResponse = {
         } | null> | null | undefined;
         readonly aggregation_fn?: AggregationFn | null | undefined;
         readonly common_rupture_set?: {
-            readonly id: string;
+            readonly id?: string | undefined;
         } | null | undefined;
         readonly produced_by?: {
             readonly id?: string | undefined;
@@ -55,6 +55,10 @@ query AggregateInversionSolutionDetailTabQuery(
       }
       aggregation_fn
       common_rupture_set {
+        ... on Node {
+          __isNode: __typename
+          id
+        }
         id
       }
       produced_by {
@@ -159,18 +163,13 @@ v9 = {
   "name": "aggregation_fn",
   "storageKey": null
 },
-v10 = [
-  (v2/*: any*/)
-],
-v11 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "File",
-  "kind": "LinkedField",
-  "name": "common_rupture_set",
-  "plural": false,
-  "selections": (v10/*: any*/),
-  "storageKey": null
+v10 = {
+  "kind": "InlineFragment",
+  "selections": [
+    (v2/*: any*/)
+  ],
+  "type": "Node",
+  "abstractKey": "__isNode"
 };
 return {
   "fragment": {
@@ -198,7 +197,18 @@ return {
               (v7/*: any*/),
               (v8/*: any*/),
               (v9/*: any*/),
-              (v11/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "File",
+                "kind": "LinkedField",
+                "name": "common_rupture_set",
+                "plural": false,
+                "selections": [
+                  (v10/*: any*/)
+                ],
+                "storageKey": null
+              },
               {
                 "alias": null,
                 "args": null,
@@ -255,7 +265,22 @@ return {
               (v7/*: any*/),
               (v8/*: any*/),
               (v9/*: any*/),
-              (v11/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "File",
+                "kind": "LinkedField",
+                "name": "common_rupture_set",
+                "plural": false,
+                "selections": [
+                  (v2/*: any*/),
+                  {
+                    "kind": "TypeDiscriminator",
+                    "abstractKey": "__isNode"
+                  }
+                ],
+                "storageKey": null
+              },
               {
                 "alias": null,
                 "args": null,
@@ -265,12 +290,7 @@ return {
                 "plural": false,
                 "selections": [
                   (v3/*: any*/),
-                  {
-                    "kind": "InlineFragment",
-                    "selections": (v10/*: any*/),
-                    "type": "Node",
-                    "abstractKey": "__isNode"
-                  }
+                  (v10/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -284,14 +304,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "d71efcf99c2f3cd20c0b279047625109",
+    "cacheID": "97fef7a03653ad73eb8c1eeb20dabda8",
     "id": null,
     "metadata": {},
     "name": "AggregateInversionSolutionDetailTabQuery",
     "operationKind": "query",
-    "text": "query AggregateInversionSolutionDetailTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    id\n    __typename\n    ... on AggregateInversionSolution {\n      file_name\n      file_size\n      md5_digest\n      created\n      meta {\n        k\n        v\n      }\n      aggregation_fn\n      common_rupture_set {\n        id\n      }\n      produced_by {\n        __typename\n        ... on Node {\n          __isNode: __typename\n          id\n          __typename\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query AggregateInversionSolutionDetailTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    id\n    __typename\n    ... on AggregateInversionSolution {\n      file_name\n      file_size\n      md5_digest\n      created\n      meta {\n        k\n        v\n      }\n      aggregation_fn\n      common_rupture_set {\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        id\n      }\n      produced_by {\n        __typename\n        ... on Node {\n          __isNode: __typename\n          id\n          __typename\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '2708cca757f1e6eae24f3c55da4d9298';
+(node as any).hash = 'f106286c198a924c4e2fd7abd8e389be';
 export default node;
