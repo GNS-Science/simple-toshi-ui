@@ -67,7 +67,7 @@ export const aggregateInversionSolutionDetailTabQuery = graphql`
         }
         aggregation_fn
         common_rupture_set {
-          ... on File {
+          ... on FileInterface {
             id
           }
         }
