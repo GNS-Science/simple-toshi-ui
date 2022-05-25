@@ -87,6 +87,7 @@ const openquakeHazardTaskQuery = graphql`
           source_models {
             ... on Node {
               id
+              __typename
             }
             ... on File {
               file_name

@@ -42,6 +42,7 @@ export interface ConfigTableProps {
         readonly created: unknown | null;
         readonly source_models: ReadonlyArray<{
           readonly id?: string | undefined;
+          readonly __typename?: string | undefined;
           readonly file_name?: string | null | undefined;
           readonly file_url?: string | null | undefined;
           readonly meta?:
@@ -117,7 +118,13 @@ const ConfigTable: React.FC<ConfigTableProps> = ({ config, solution_page }) => {
                       <a href={source_model?.file_url ?? ''}>Get file</a>
                     </TableCell>
                     <TableCell>
-                      <Link to={`/InversionSolutionNrml/${source_model?.id}`}>[more]</Link>
+                      <Link
+                        to={`/${source_model?.__typename === 'File' ? 'FileDetail' : source_model?.__typename}/${
+                          source_model?.id
+                        }`}
+                      >
+                        [more]
+                      </Link>
                     </TableCell>
                   </AlternatingRow>
                 </>
