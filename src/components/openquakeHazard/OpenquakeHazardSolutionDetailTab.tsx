@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import HazardTable, { HazardTableProps } from './HazardTable';
 import ConfigTable from './ConfigTable';
 import TaskArgsTable from './TaskArgsTable';
-import PredecessorView from './PredecessorView';
+import PredecessorView from '../common/PredecessorView';
 
 interface OpenquakeHazardSolutionDetailTabProps {
   queryRef: PreloadedQuery<OpenquakeHazardSolutionDetailTabQuery, Record<string, unknown>>;

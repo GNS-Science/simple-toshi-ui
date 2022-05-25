@@ -30,8 +30,11 @@ export type AggregateInversionSolutionQueryResponse = {
         readonly file_size?: unknown | null | undefined;
         readonly md5_digest?: string | null | undefined;
         readonly created?: unknown | null | undefined;
+        readonly meta?: ReadonlyArray<{
+            readonly k: string | null;
+            readonly v: string | null;
+        } | null> | null | undefined;
         readonly aggregation_fn?: AggregationFn | null | undefined;
-        readonly common_rupture_set?: string | null | undefined;
         readonly produced_by?: {
             readonly id?: string | undefined;
             readonly __typename?: string | undefined;
@@ -61,8 +64,11 @@ query AggregateInversionSolutionQuery(
       file_size
       md5_digest
       created
+      meta {
+        k
+        v
+      }
       aggregation_fn
-      common_rupture_set
       produced_by {
         __typename
         ... on Node {
@@ -168,15 +174,33 @@ v7 = {
 v8 = {
   "alias": null,
   "args": null,
-  "kind": "ScalarField",
-  "name": "aggregation_fn",
+  "concreteType": "KeyValuePair",
+  "kind": "LinkedField",
+  "name": "meta",
+  "plural": true,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "k",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "v",
+      "storageKey": null
+    }
+  ],
   "storageKey": null
 },
 v9 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "common_rupture_set",
+  "name": "aggregation_fn",
   "storageKey": null
 },
 v10 = [
@@ -214,31 +238,7 @@ v13 = {
 v14 = {
   "kind": "InlineFragment",
   "selections": [
-    {
-      "alias": null,
-      "args": null,
-      "concreteType": "KeyValuePair",
-      "kind": "LinkedField",
-      "name": "meta",
-      "plural": true,
-      "selections": [
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "k",
-          "storageKey": null
-        },
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "v",
-          "storageKey": null
-        }
-      ],
-      "storageKey": null
-    },
+    (v8/*: any*/),
     (v4/*: any*/)
   ],
   "type": "FileInterface",
@@ -439,14 +439,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "9cac55855a81419fed79bf9694abc91d",
+    "cacheID": "4bdaf931099aec7a2723943a2e140995",
     "id": null,
     "metadata": {},
     "name": "AggregateInversionSolutionQuery",
     "operationKind": "query",
-    "text": "query AggregateInversionSolutionQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    id\n    __typename\n    ... on AggregateInversionSolution {\n      file_name\n      file_size\n      md5_digest\n      created\n      aggregation_fn\n      common_rupture_set\n      produced_by {\n        __typename\n        ... on Node {\n          __isNode: __typename\n          id\n          __typename\n        }\n      }\n      source_solutions {\n        __typename\n        ... on Node {\n          __isNode: __typename\n          id\n          __typename\n        }\n      }\n    }\n    ... on PredecessorsInterface {\n      __isPredecessorsInterface: __typename\n      predecessors {\n        id\n        typename\n        depth\n        relationship\n        node {\n          __typename\n          ... on FileInterface {\n            __isFileInterface: __typename\n            meta {\n              k\n              v\n            }\n            file_name\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query AggregateInversionSolutionQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    id\n    __typename\n    ... on AggregateInversionSolution {\n      file_name\n      file_size\n      md5_digest\n      created\n      meta {\n        k\n        v\n      }\n      aggregation_fn\n      produced_by {\n        __typename\n        ... on Node {\n          __isNode: __typename\n          id\n          __typename\n        }\n      }\n      source_solutions {\n        __typename\n        ... on Node {\n          __isNode: __typename\n          id\n          __typename\n        }\n      }\n    }\n    ... on PredecessorsInterface {\n      __isPredecessorsInterface: __typename\n      predecessors {\n        id\n        typename\n        depth\n        relationship\n        node {\n          __typename\n          ... on FileInterface {\n            __isFileInterface: __typename\n            meta {\n              k\n              v\n            }\n            file_name\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '15f7678eee3de2e3144f042a133d6251';
+(node as any).hash = '255a267b7744e234fa47a3cc49c6be27';
 export default node;

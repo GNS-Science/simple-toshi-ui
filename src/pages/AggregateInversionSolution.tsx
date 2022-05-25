@@ -1,100 +1,118 @@
 import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { Typography } from '@mui/material';
 import { graphql } from 'babel-plugin-relay/macro';
-import { useLazyLoadQuery } from 'react-relay';
-import { AggregateInversionSolutionQuery } from './__generated__/AggregateInversionSolutionQuery.graphql';
-import PredecessorView from '../components/openquakeHazard/PredecessorView';
+import { useLazyLoadQuery, useQueryLoader } from 'react-relay';
 import { styled } from '@mui/material/styles';
-import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { Box, CircularProgress, Tab, Tabs } from '@mui/material';
+
+import { AggregateInversionSolutionQuery } from './__generated__/AggregateInversionSolutionQuery.graphql';
+import { AggregateInversionSolutionDetailTabQuery } from '../components/aggregateInversionSolution/__generated__/AggregateInversionSolutionDetailTabQuery.graphql';
+import AggregateInversionSolutionDetailTab, {
+  aggregateInversionSolutionDetailTabQuery,
+} from '../components/aggregateInversionSolution/AggregateInversionSolutionDetailTab';
+import AggregateInversionSolutionPredecessorTab from '../components/aggregateInversionSolution/AggregateInversionSolutionPredecessorTab';
+import AggregateInversionSolutionSourcesTab from '../components/aggregateInversionSolution/AggregateInversionSolutionSourcesTab';
 
 const PREFIX = 'AggregateInversionSolution';
 
 const classes = {
   root: `${PREFIX}-root`,
-  root2: `${PREFIX}-root2`,
-  table: `${PREFIX}-table`,
-  tableCell: `${PREFIX}-tableCell`,
+  tabPanel: `${PREFIX}-tabPanel`,
+  tab: `${PREFIX}-tab`,
 };
 
-const StyledPaper = styled(Paper)({
-  [`& .${classes.root2}`]: {
-    marginTop: '40px',
-    marginBottom: '40px',
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classes.root}`]: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.paper,
+    display: 'flex',
   },
-  [`& .${classes.table}`]: {
-    tableLayout: 'fixed',
-    wordWrap: 'break-word',
-  },
-  [`& .${classes.tableCell}`]: {
-    borderBottom: 'none',
-  },
-});
 
-const AlternatingRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
+  [`& .${classes.tabPanel}`]: {
+    width: '80%',
+    padding: theme.spacing(2),
+  },
+
+  [`& .${classes.tab}`]: {
+    width: '20%',
+    borderRight: `1px solid ${theme.palette.divider}`,
   },
 }));
 
 interface AggregateInversionSolutionParams {
   id: string;
+  tab: string;
 }
 const AggregateInversionSolution: React.FC = () => {
-  const { id } = useParams<AggregateInversionSolutionParams>();
+  const { id, tab } = useParams<AggregateInversionSolutionParams>();
   const data = useLazyLoadQuery<AggregateInversionSolutionQuery>(aggregateInversionSolutionQuery, { id });
+  const history = useHistory();
+  const [queryRef, loadQuery] = useQueryLoader<AggregateInversionSolutionDetailTabQuery>(
+    aggregateInversionSolutionDetailTabQuery,
+  );
+
+  React.useEffect(() => {
+    if (tab === undefined || tab === 'Detail') {
+      loadQuery({ id });
+    }
+  }, [id, loadQuery, tab]);
+
+  const renderTab = () => {
+    switch (tab) {
+      default:
+        return (
+          <Box className={classes.tabPanel}>
+            <React.Suspense fallback={<CircularProgress />}>
+              {queryRef && <AggregateInversionSolutionDetailTab queryRef={queryRef} />}
+            </React.Suspense>
+          </Box>
+        );
+      case 'Parent':
+        return (
+          <Box className={classes.tabPanel}>
+            <React.Suspense fallback={<CircularProgress />}>
+              <AggregateInversionSolutionPredecessorTab id={id} />
+            </React.Suspense>
+          </Box>
+        );
+      case 'Sources':
+        return (
+          <Box className={classes.tabPanel}>
+            <React.Suspense fallback={<CircularProgress />}>
+              <AggregateInversionSolutionSourcesTab id={id} />
+            </React.Suspense>
+          </Box>
+        );
+    }
+  };
+
+  if (!data?.node) {
+    return (
+      <Typography variant="h5" gutterBottom>
+        File ID Not Found
+      </Typography>
+    );
+  }
 
   return (
-    <>
+    <Root>
       <Typography variant="h5" gutterBottom>
         Aggregate Inversion Solution (id: {data?.node?.id as string})
       </Typography>
-      <Typography>
-        <strong>File name:</strong> {data?.node?.file_name}
-      </Typography>
-      <Typography>
-        <strong>File size:</strong> {data?.node?.file_size ?? 0}
-      </Typography>
-      <Typography>
-        <strong>Produced By:</strong>{' '}
-        <Link to={`/AutomationTask/${data?.node?.produced_by?.id}`}>{data?.node?.produced_by?.id}</Link>
-      </Typography>
-      <Typography>
-        <strong>MD5 digest:</strong> {data?.node?.md5_digest}
-      </Typography>
-      <Typography>
-        <strong>Aggregation Function:</strong> {data?.node?.aggregation_fn}
-      </Typography>
-      <Typography>
-        <strong>Common Rupture Set:</strong> {data?.node?.common_rupture_set ?? 'None'}
-      </Typography>
-      <StyledPaper>
-        <Table stickyHeader size="small" className={classes.table}>
-          <TableHead>
-            <AlternatingRow
-              classes={{
-                root: classes.root,
-              }}
-            >
-              <TableCell colSpan={2}>Source Models</TableCell>
-            </AlternatingRow>
-          </TableHead>
-          <TableBody>
-            {data?.node?.source_solutions?.map((source_solution) => (
-              <>
-                <AlternatingRow classes={{ root: classes.root }}>
-                  <TableCell className={classes.tableCell}>{source_solution?.id ?? ''}</TableCell>
-                  <TableCell className={classes.tableCell}>
-                    <Link to={`/${source_solution?.__typename}/${source_solution?.id}`}>[more]</Link>
-                  </TableCell>
-                </AlternatingRow>
-              </>
-            ))}
-          </TableBody>
-        </Table>
-        <PredecessorView predecessors={data?.node?.predecessors} />
-      </StyledPaper>
-    </>
+      <Box className={classes.root}>
+        <Tabs
+          orientation="vertical"
+          value={tab ?? 'Detail'}
+          onChange={(e, val) => history.push(`/AggregateInversionSolution/${id}/${val}`)}
+        >
+          <Tab label="Detail" id="Detail" value="Detail" className={classes.tab} />
+          <Tab label="Parent" id="parent" value="Parent" className={classes.tab} />
+          <Tab label="Sources" id="sources" value="Sources" className={classes.tab} />
+        </Tabs>
+        {renderTab()}
+      </Box>
+    </Root>
   );
 };
 
@@ -108,8 +126,12 @@ export const aggregateInversionSolutionQuery = graphql`
         file_size
         md5_digest
         created
+        meta {
+          k
+          v
+        }
         aggregation_fn
-        common_rupture_set
+        # common_rupture_set
         produced_by {
           ... on Node {
             id
