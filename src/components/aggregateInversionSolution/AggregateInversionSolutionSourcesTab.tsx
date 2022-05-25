@@ -55,13 +55,13 @@ const AggregateInversionSolutionSourcesTab: React.FC<AggregateInversionSolutionS
               root: classes.root,
             }}
           >
-            <TableCell colSpan={3}>Source Models</TableCell>
+            <TableCell colSpan={4}>Source Models</TableCell>
           </AlternatingRow>
         </TableHead>
         <TableBody>
           {data?.node?.source_solutions?.map((source_model, i) => (
             <AlternatingRow key={i}>
-              <TableCell>
+              <TableCell colSpan={2}>
                 <TruncateText text={source_model?.file_name ?? ''} />
               </TableCell>
               <TableCell>

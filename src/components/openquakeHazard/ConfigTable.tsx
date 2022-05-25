@@ -40,13 +40,16 @@ export interface ConfigTableProps {
         readonly id: string;
         readonly created: unknown | null;
         readonly source_models: ReadonlyArray<{
-          readonly id: string;
-          readonly file_name: string | null;
-          readonly file_url: string | null;
-          readonly meta: ReadonlyArray<{
-            readonly k: string | null;
-            readonly v: string | null;
-          } | null> | null;
+          readonly id?: string | undefined;
+          readonly file_name?: string | null | undefined;
+          readonly file_url?: string | null | undefined;
+          readonly meta?:
+            | ReadonlyArray<{
+                readonly k: string | null;
+                readonly v: string | null;
+              } | null>
+            | null
+            | undefined;
         } | null> | null;
         readonly template_archive: {
           readonly meta: ReadonlyArray<{

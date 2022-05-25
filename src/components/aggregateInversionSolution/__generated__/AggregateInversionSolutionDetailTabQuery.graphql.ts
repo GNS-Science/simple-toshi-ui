@@ -21,6 +21,9 @@ export type AggregateInversionSolutionDetailTabQueryResponse = {
             readonly v: string | null;
         } | null> | null | undefined;
         readonly aggregation_fn?: AggregationFn | null | undefined;
+        readonly common_rupture_set?: {
+            readonly id: string;
+        } | null | undefined;
         readonly produced_by?: {
             readonly id?: string | undefined;
             readonly __typename?: string | undefined;
@@ -51,6 +54,9 @@ query AggregateInversionSolutionDetailTabQuery(
         v
       }
       aggregation_fn
+      common_rupture_set {
+        id
+      }
       produced_by {
         __typename
         ... on Node {
@@ -152,6 +158,19 @@ v9 = {
   "kind": "ScalarField",
   "name": "aggregation_fn",
   "storageKey": null
+},
+v10 = [
+  (v2/*: any*/)
+],
+v11 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "File",
+  "kind": "LinkedField",
+  "name": "common_rupture_set",
+  "plural": false,
+  "selections": (v10/*: any*/),
+  "storageKey": null
 };
 return {
   "fragment": {
@@ -179,6 +198,7 @@ return {
               (v7/*: any*/),
               (v8/*: any*/),
               (v9/*: any*/),
+              (v11/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -235,6 +255,7 @@ return {
               (v7/*: any*/),
               (v8/*: any*/),
               (v9/*: any*/),
+              (v11/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -246,9 +267,7 @@ return {
                   (v3/*: any*/),
                   {
                     "kind": "InlineFragment",
-                    "selections": [
-                      (v2/*: any*/)
-                    ],
+                    "selections": (v10/*: any*/),
                     "type": "Node",
                     "abstractKey": "__isNode"
                   }
@@ -265,14 +284,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "a83ddb6f4d8626087e59a6062fea6135",
+    "cacheID": "d71efcf99c2f3cd20c0b279047625109",
     "id": null,
     "metadata": {},
     "name": "AggregateInversionSolutionDetailTabQuery",
     "operationKind": "query",
-    "text": "query AggregateInversionSolutionDetailTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    id\n    __typename\n    ... on AggregateInversionSolution {\n      file_name\n      file_size\n      md5_digest\n      created\n      meta {\n        k\n        v\n      }\n      aggregation_fn\n      produced_by {\n        __typename\n        ... on Node {\n          __isNode: __typename\n          id\n          __typename\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query AggregateInversionSolutionDetailTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    id\n    __typename\n    ... on AggregateInversionSolution {\n      file_name\n      file_size\n      md5_digest\n      created\n      meta {\n        k\n        v\n      }\n      aggregation_fn\n      common_rupture_set {\n        id\n      }\n      produced_by {\n        __typename\n        ... on Node {\n          __isNode: __typename\n          id\n          __typename\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '658d8898047501b2ff9ca1f6b3f3ba74';
+(node as any).hash = '2708cca757f1e6eae24f3c55da4d9298';
 export default node;

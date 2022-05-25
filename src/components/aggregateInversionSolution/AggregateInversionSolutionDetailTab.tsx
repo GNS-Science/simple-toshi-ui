@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
-import { Typography } from '@mui/material';
+import { Typography, styled } from '@mui/material';
 import { graphql } from 'babel-plugin-relay/macro';
 import KeyValueTable from '../common/KeyValueTable';
 import { AggregateInversionSolutionDetailTabQuery } from './__generated__/AggregateInversionSolutionDetailTabQuery.graphql';
@@ -10,6 +10,11 @@ import { formatBytes } from '../FileDetail';
 interface AggregateInversionSolutionDetailTabProps {
   queryRef: PreloadedQuery<AggregateInversionSolutionDetailTabQuery, Record<string, unknown>>;
 }
+
+const DetailText = styled(Typography)({
+  fontSize: '0.875rem',
+  margin: 2,
+});
 
 export const AggregateInversionSolutionDetailTab: React.FC<AggregateInversionSolutionDetailTabProps> = ({
   queryRef,
@@ -21,22 +26,26 @@ export const AggregateInversionSolutionDetailTab: React.FC<AggregateInversionSol
 
   return (
     <>
-      <Typography>
+      <DetailText>
         <strong>File name:</strong> {data?.node?.file_name}
-      </Typography>
-      <Typography>
+      </DetailText>
+      <DetailText>
         <strong>File size:</strong> {formatBytes(Number(data?.node?.file_size)) ?? 0}
-      </Typography>
-      <Typography>
+      </DetailText>
+      <DetailText>
         <strong>Produced By:</strong>{' '}
         <Link to={`/AutomationTask/${data?.node?.produced_by?.id}`}>{data?.node?.produced_by?.id}</Link>
-      </Typography>
-      <Typography>
+      </DetailText>
+      <DetailText>
         <strong>MD5 digest:</strong> {data?.node?.md5_digest}
-      </Typography>
-      <Typography>
+      </DetailText>
+      <DetailText>
         <strong>Aggregation Function:</strong> {data?.node?.aggregation_fn}
-      </Typography>
+      </DetailText>
+      <DetailText>
+        <strong>Common Rupture Set: </strong>{' '}
+        <Link to={`/FileDetail/${data?.node?.common_rupture_set?.id}`}>{data?.node?.common_rupture_set?.id}</Link>
+      </DetailText>
       <KeyValueTable header={'Meta'} data={data?.node?.meta ?? []} />
     </>
   );
@@ -57,7 +66,11 @@ export const aggregateInversionSolutionDetailTabQuery = graphql`
           v
         }
         aggregation_fn
-        # common_rupture_set
+        common_rupture_set {
+          ... on File {
+            id
+          }
+        }
         produced_by {
           ... on Node {
             id

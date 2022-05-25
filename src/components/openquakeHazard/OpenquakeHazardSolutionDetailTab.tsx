@@ -95,16 +95,15 @@ export const openquakeHazardSolutionDetailTabQuery = graphql`
           id
           created
           source_models {
-            id
-            file_name
-            file_url
-            meta {
-              k
-              v
+            ... on Node {
+              id
             }
-            source_solution {
-              ... on Node {
-                id
+            ... on File {
+              file_name
+              file_url
+              meta {
+                k
+                v
               }
             }
           }

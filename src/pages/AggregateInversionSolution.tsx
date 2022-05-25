@@ -53,7 +53,7 @@ const AggregateInversionSolution: React.FC = () => {
   );
 
   React.useEffect(() => {
-    if (tab === undefined || tab === 'Detail') {
+    if (tab === undefined || tab === 'Details') {
       loadQuery({ id });
     }
   }, [id, loadQuery, tab]);
@@ -68,7 +68,7 @@ const AggregateInversionSolution: React.FC = () => {
             </React.Suspense>
           </Box>
         );
-      case 'Parent':
+      case 'Parents':
         return (
           <Box className={classes.tabPanel}>
             <React.Suspense fallback={<CircularProgress />}>
@@ -103,11 +103,11 @@ const AggregateInversionSolution: React.FC = () => {
       <Box className={classes.root}>
         <Tabs
           orientation="vertical"
-          value={tab ?? 'Detail'}
+          value={tab ?? 'Details'}
           onChange={(e, val) => history.push(`/AggregateInversionSolution/${id}/${val}`)}
         >
-          <Tab label="Detail" id="Detail" value="Detail" className={classes.tab} />
-          <Tab label="Parent" id="parent" value="Parent" className={classes.tab} />
+          <Tab label="Details" id="details" value="Details" className={classes.tab} />
+          <Tab label="Parents" id="parents" value="Parents" className={classes.tab} />
           <Tab label="Sources" id="sources" value="Sources" className={classes.tab} />
         </Tabs>
         {renderTab()}
@@ -121,48 +121,6 @@ export const aggregateInversionSolutionQuery = graphql`
     node(id: $id) {
       id
       __typename
-      ... on AggregateInversionSolution {
-        file_name
-        file_size
-        md5_digest
-        created
-        meta {
-          k
-          v
-        }
-        aggregation_fn
-        # common_rupture_set
-        produced_by {
-          ... on Node {
-            id
-            __typename
-          }
-        }
-        source_solutions {
-          ... on Node {
-            id
-            __typename
-          }
-        }
-      }
-      ... on PredecessorsInterface {
-        predecessors {
-          id
-          typename
-          depth
-          relationship
-          node {
-            __typename
-            ... on FileInterface {
-              meta {
-                k
-                v
-              }
-              file_name
-            }
-          }
-        }
-      }
     }
   }
 `;

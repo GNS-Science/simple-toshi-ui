@@ -24,12 +24,19 @@ export type Predecessor =
   | undefined;
 
 const PredecessorCard = styled(Card)({
-  marginBottom: 10,
+  marginBottom: 5,
 });
 
 const PredecessorContainer = styled(Card)({
-  padding: 10,
+  padding: 5,
   borderRadius: 5,
+  fontSize: '0.875rem',
+});
+
+const PredecessorTitle = styled(Typography)({
+  fontWeight: 500,
+  fontSize: '0.875rem',
+  padding: 5,
 });
 
 interface PredecessorViewProps {
@@ -66,9 +73,7 @@ const PredecessorView: React.FC<PredecessorViewProps> = ({ predecessors }: Prede
   return (
     <>
       <PredecessorContainer>
-        <Typography>
-          <strong>Predecessors</strong>
-        </Typography>
+        <PredecessorTitle>Predecessors</PredecessorTitle>
         {predecessors &&
           predecessors.map((predecessor) => {
             if (predecessor !== null) {

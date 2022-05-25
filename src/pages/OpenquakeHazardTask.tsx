@@ -85,12 +85,16 @@ const openquakeHazardTaskQuery = graphql`
           id
           created
           source_models {
-            id
-            file_name
-            file_url
-            meta {
-              k
-              v
+            ... on Node {
+              id
+            }
+            ... on File {
+              file_name
+              file_url
+              meta {
+                k
+                v
+              }
             }
           }
           template_archive {
