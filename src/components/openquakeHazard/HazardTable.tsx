@@ -34,6 +34,7 @@ const AlternatingRow = styled(TableRow)(({ theme }) => ({
 }));
 
 export interface HazardTableProps {
+  solution_page: boolean;
   readonly hazard_solution?:
     | {
         readonly id: string | undefined;
@@ -61,7 +62,7 @@ export interface HazardTableProps {
     | undefined;
 }
 
-const HazardTable: React.FC<HazardTableProps> = ({ hazard_solution }: HazardTableProps) => {
+const HazardTable: React.FC<HazardTableProps> = ({ hazard_solution, solution_page }: HazardTableProps) => {
   return (
     <StyledPaper className={classes.root}>
       <Table stickyHeader size="small" className={classes.table}>
@@ -78,16 +79,18 @@ const HazardTable: React.FC<HazardTableProps> = ({ hazard_solution }: HazardTabl
           </AlternatingRow>
         </TableHead>
         <TableBody>
-          <AlternatingRow
-            classes={{
-              root: classes.root,
-            }}
-          >
-            <TableCell colSpan={2}>{hazard_solution?.id}</TableCell>
-            <TableCell>
-              <Link to={`/HazardSolution/${hazard_solution?.id}`}>[more]</Link>
-            </TableCell>
-          </AlternatingRow>
+          {!solution_page && (
+            <AlternatingRow
+              classes={{
+                root: classes.root,
+              }}
+            >
+              <TableCell colSpan={2}>{hazard_solution?.id}</TableCell>
+              <TableCell>
+                <Link to={`/HazardSolution/${hazard_solution?.id}`}>[more]</Link>
+              </TableCell>
+            </AlternatingRow>
+          )}
 
           <AlternatingRow
             classes={{

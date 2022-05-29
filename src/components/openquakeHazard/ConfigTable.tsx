@@ -35,12 +35,14 @@ const AlternatingRow = styled(TableRow)(({ theme }) => ({
 }));
 
 export interface ConfigTableProps {
+  solution_page: boolean;
   readonly config?:
     | {
         readonly id: string;
         readonly created: unknown | null;
         readonly source_models: ReadonlyArray<{
           readonly id?: string | undefined;
+          readonly __typename?: string | undefined;
           readonly file_name?: string | null | undefined;
           readonly file_url?: string | null | undefined;
           readonly meta?:
@@ -66,7 +68,7 @@ export interface ConfigTableProps {
     | undefined;
 }
 
-const ConfigTable: React.FC<ConfigTableProps> = ({ config }) => {
+const ConfigTable: React.FC<ConfigTableProps> = ({ config, solution_page }) => {
   const created = config?.created ? (config?.created as string) : undefined;
   const formattedDate = created ? format(new Date(created), 'PPPppp') : '';
   return (
@@ -94,32 +96,42 @@ const ConfigTable: React.FC<ConfigTableProps> = ({ config }) => {
             <TableCell colSpan={2}>{formattedDate}</TableCell>
           </AlternatingRow>
         </TableBody>
-        <TableHead>
-          <AlternatingRow
-            classes={{
-              root: classes.root,
-            }}
-          >
-            <TableCell colSpan={3}>Source Models</TableCell>
-          </AlternatingRow>
-        </TableHead>
-        <TableBody>
-          {config?.source_models?.map((source_model) => (
-            <>
-              <AlternatingRow key={Math.random()} classes={{ root: classes.root }}>
-                <TableCell>
-                  <TruncateText text={source_model?.file_name ?? ''} />
-                </TableCell>
-                <TableCell>
-                  <a href={source_model?.file_url ?? ''}>Get file</a>
-                </TableCell>
-                <TableCell>
-                  <Link to={`/InversionSolutionNrml/${source_model?.id}`}>[more]</Link>
-                </TableCell>
+        {!solution_page && (
+          <>
+            <TableHead>
+              <AlternatingRow
+                classes={{
+                  root: classes.root,
+                }}
+              >
+                <TableCell colSpan={3}>Source Models</TableCell>
               </AlternatingRow>
-            </>
-          ))}
-        </TableBody>
+            </TableHead>
+            <TableBody>
+              {config?.source_models?.map((source_model) => (
+                <>
+                  <AlternatingRow key={Math.random()} classes={{ root: classes.root }}>
+                    <TableCell>
+                      <TruncateText text={source_model?.file_name ?? ''} />
+                    </TableCell>
+                    <TableCell>
+                      <a href={source_model?.file_url ?? ''}>Get file</a>
+                    </TableCell>
+                    <TableCell>
+                      <Link
+                        to={`/${source_model?.__typename === 'File' ? 'FileDetail' : source_model?.__typename}/${
+                          source_model?.id
+                        }`}
+                      >
+                        [more]
+                      </Link>
+                    </TableCell>
+                  </AlternatingRow>
+                </>
+              ))}
+            </TableBody>
+          </>
+        )}
       </Table>
     </StyledPaper>
   );

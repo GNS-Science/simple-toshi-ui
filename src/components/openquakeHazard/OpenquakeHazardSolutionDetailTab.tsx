@@ -2,13 +2,13 @@ import React from 'react';
 import { graphql } from 'babel-plugin-relay/macro';
 import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { Grid, List, ListItem, ListItemText } from '@mui/material';
-import { OpenquakeHazardSolutionDetailTabQuery } from './__generated__/OpenquakeHazardSolutionDetailTabQuery.graphql';
-import { format } from 'date-fns';
+import { format, formatDuration, intervalToDuration, secondsToMilliseconds } from 'date-fns';
 import { Link } from 'react-router-dom';
+
+import { OpenquakeHazardSolutionDetailTabQuery } from './__generated__/OpenquakeHazardSolutionDetailTabQuery.graphql';
 import HazardTable, { HazardTableProps } from './HazardTable';
 import ConfigTable from './ConfigTable';
 import TaskArgsTable from './TaskArgsTable';
-import PredecessorView from '../common/PredecessorView';
 
 interface OpenquakeHazardSolutionDetailTabProps {
   queryRef: PreloadedQuery<OpenquakeHazardSolutionDetailTabQuery, Record<string, unknown>>;
@@ -25,6 +25,7 @@ const OpenquakeHazardSolutionDetailTab: React.FC<OpenquakeHazardSolutionDetailTa
   const formattedDate = created ? format(new Date(created), 'PPPppp') : '';
 
   const hazard_solution: HazardTableProps = {
+    solution_page: true,
     hazard_solution: {
       id: data?.node?.id,
       created: data?.node?.created,
@@ -32,6 +33,15 @@ const OpenquakeHazardSolutionDetailTab: React.FC<OpenquakeHazardSolutionDetailTa
       hdf5_archive: data?.node?.hdf5_archive,
     },
   };
+
+  const duration = data?.node?.produced_by?.duration
+    ? formatDuration(
+        intervalToDuration({
+          start: 0,
+          end: secondsToMilliseconds(data?.node?.produced_by?.duration),
+        }),
+      )
+    : '-';
 
   return (
     <>
@@ -57,18 +67,14 @@ const OpenquakeHazardSolutionDetailTab: React.FC<OpenquakeHazardSolutionDetailTa
               <ListItemText primary="Model Type" secondary={data?.node?.produced_by?.model_type} />
             </ListItem>
             <ListItem>
-              <ListItemText
-                primary="Duration"
-                secondary={`${Math.round(Number(data?.node?.produced_by?.duration))} seconds`}
-              />
+              <ListItemText primary="Duration" secondary={duration} />
             </ListItem>
           </List>
         </Grid>
       </Grid>
-      <ConfigTable config={data?.node?.config} />
+      <HazardTable hazard_solution={hazard_solution.hazard_solution} solution_page={hazard_solution.solution_page} />
+      <ConfigTable config={data?.node?.config} solution_page={true} />
       <TaskArgsTable task_args={data?.node?.task_args} />
-      <HazardTable hazard_solution={hazard_solution.hazard_solution} />
-      <PredecessorView predecessors={data?.node?.predecessors} />
     </>
   );
 };
@@ -129,21 +135,6 @@ export const openquakeHazardSolutionDetailTabQuery = graphql`
           file_name
           file_size
           file_url
-        }
-        predecessors {
-          id
-          typename
-          relationship
-          depth
-          node {
-            ... on FileInterface {
-              file_name
-              meta {
-                k
-                v
-              }
-            }
-          }
         }
       }
     }
