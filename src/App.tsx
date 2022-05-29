@@ -16,6 +16,7 @@ import InversionSolution from './pages/InversionSolution';
 import ScaledInversionSolution from './pages/ScaledInversionSolution';
 import OpenquakeHazardTask from './pages/OpenquakeHazardTask';
 import OpenquakeHazardSolution from './pages/OpenquakeHazardSolution';
+import AggregateInversionSolution from './pages/AggregateInversionSolution';
 
 /* preview views (with no test coverage...) */
 import Preview from './pages/Preview';
@@ -141,6 +142,9 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
                   </Route>
                   <Route path="/InversionSolutionNrml/:id">
                     <InversionSolutionNrml />
+                  </Route>
+                  <Route path="/AggregateInversionSolution/:id/:tab?">
+                    <AggregateInversionSolution />
                   </Route>
                   <Route path="/Find/:id?">
                     <Find />

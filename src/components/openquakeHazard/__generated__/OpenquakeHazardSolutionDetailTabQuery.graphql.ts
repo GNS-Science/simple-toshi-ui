@@ -30,16 +30,13 @@ export type OpenquakeHazardSolutionDetailTabQueryResponse = {
             readonly id: string;
             readonly created: unknown | null;
             readonly source_models: ReadonlyArray<{
-                readonly id: string;
-                readonly file_name: string | null;
-                readonly file_url: string | null;
-                readonly meta: ReadonlyArray<{
+                readonly id?: string | undefined;
+                readonly file_name?: string | null | undefined;
+                readonly file_url?: string | null | undefined;
+                readonly meta?: ReadonlyArray<{
                     readonly k: string | null;
                     readonly v: string | null;
-                } | null> | null;
-                readonly source_solution: {
-                    readonly id?: string | undefined;
-                } | null;
+                } | null> | null | undefined;
             } | null> | null;
             readonly template_archive: {
                 readonly meta: ReadonlyArray<{
@@ -64,19 +61,6 @@ export type OpenquakeHazardSolutionDetailTabQueryResponse = {
             readonly file_size: unknown | null;
             readonly file_url: string | null;
         } | null | undefined;
-        readonly predecessors?: ReadonlyArray<{
-            readonly id: string | null;
-            readonly typename: string | null;
-            readonly relationship: string | null;
-            readonly depth: number | null;
-            readonly node: {
-                readonly file_name?: string | null | undefined;
-                readonly meta?: ReadonlyArray<{
-                    readonly k: string | null;
-                    readonly v: string | null;
-                } | null> | null | undefined;
-            } | null;
-        } | null> | null | undefined;
     } | null;
 };
 export type OpenquakeHazardSolutionDetailTabQuery = {
@@ -111,18 +95,17 @@ query OpenquakeHazardSolutionDetailTabQuery(
         id
         created
         source_models {
-          id
-          file_name
-          file_url
-          meta {
-            k
-            v
+          __typename
+          ... on Node {
+            __isNode: __typename
+            id
           }
-          source_solution {
-            __typename
-            ... on Node {
-              __isNode: __typename
-              id
+          ... on File {
+            file_name
+            file_url
+            meta {
+              k
+              v
             }
           }
         }
@@ -149,27 +132,6 @@ query OpenquakeHazardSolutionDetailTabQuery(
         file_name
         file_size
         file_url
-      }
-      predecessors {
-        id
-        typename
-        relationship
-        depth
-        node {
-          __typename
-          ... on FileInterface {
-            __isFileInterface: __typename
-            file_name
-            meta {
-              k
-              v
-            }
-          }
-          ... on Node {
-            __isNode: __typename
-            id
-          }
-        }
       }
     }
     id
@@ -275,6 +237,14 @@ v7 = {
   "storageKey": null
 },
 v8 = {
+  "kind": "InlineFragment",
+  "selections": [
+    (v2/*: any*/)
+  ],
+  "type": "Node",
+  "abstractKey": "__isNode"
+},
+v9 = {
   "alias": null,
   "args": null,
   "concreteType": "KeyValuePair",
@@ -299,85 +269,57 @@ v8 = {
   ],
   "storageKey": null
 },
-v9 = {
+v10 = {
   "kind": "InlineFragment",
   "selections": [
-    (v2/*: any*/)
+    (v5/*: any*/),
+    (v6/*: any*/),
+    (v9/*: any*/)
   ],
-  "type": "Node",
-  "abstractKey": "__isNode"
+  "type": "File",
+  "abstractKey": null
 },
-v10 = {
+v11 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "file_size",
   "storageKey": null
 },
-v11 = {
+v12 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "md5_digest",
   "storageKey": null
 },
-v12 = [
+v13 = [
   (v2/*: any*/),
   (v5/*: any*/),
-  (v10/*: any*/),
+  (v11/*: any*/),
   (v6/*: any*/)
 ],
-v13 = {
+v14 = {
   "alias": null,
   "args": null,
   "concreteType": "File",
   "kind": "LinkedField",
   "name": "csv_archive",
   "plural": false,
-  "selections": (v12/*: any*/),
+  "selections": (v13/*: any*/),
   "storageKey": null
 },
-v14 = {
+v15 = {
   "alias": null,
   "args": null,
   "concreteType": "File",
   "kind": "LinkedField",
   "name": "hdf5_archive",
   "plural": false,
-  "selections": (v12/*: any*/),
-  "storageKey": null
-},
-v15 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "typename",
+  "selections": (v13/*: any*/),
   "storageKey": null
 },
 v16 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "relationship",
-  "storageKey": null
-},
-v17 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "depth",
-  "storageKey": null
-},
-v18 = {
-  "kind": "InlineFragment",
-  "selections": [
-    (v5/*: any*/),
-    (v8/*: any*/)
-  ],
-  "type": "FileInterface",
-  "abstractKey": "__isFileInterface"
-},
-v19 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -419,27 +361,13 @@ return {
                   {
                     "alias": null,
                     "args": null,
-                    "concreteType": "InversionSolutionNrml",
+                    "concreteType": null,
                     "kind": "LinkedField",
                     "name": "source_models",
                     "plural": true,
                     "selections": [
-                      (v2/*: any*/),
-                      (v5/*: any*/),
-                      (v6/*: any*/),
                       (v8/*: any*/),
-                      {
-                        "alias": null,
-                        "args": null,
-                        "concreteType": null,
-                        "kind": "LinkedField",
-                        "name": "source_solution",
-                        "plural": false,
-                        "selections": [
-                          (v9/*: any*/)
-                        ],
-                        "storageKey": null
-                      }
+                      (v10/*: any*/)
                     ],
                     "storageKey": null
                   },
@@ -451,46 +379,19 @@ return {
                     "name": "template_archive",
                     "plural": false,
                     "selections": [
-                      (v8/*: any*/),
+                      (v9/*: any*/),
                       (v5/*: any*/),
-                      (v10/*: any*/),
+                      (v11/*: any*/),
                       (v6/*: any*/),
-                      (v11/*: any*/)
+                      (v12/*: any*/)
                     ],
                     "storageKey": null
                   }
                 ],
                 "storageKey": null
               },
-              (v13/*: any*/),
               (v14/*: any*/),
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "Predecessor",
-                "kind": "LinkedField",
-                "name": "predecessors",
-                "plural": true,
-                "selections": [
-                  (v2/*: any*/),
-                  (v15/*: any*/),
-                  (v16/*: any*/),
-                  (v17/*: any*/),
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": null,
-                    "kind": "LinkedField",
-                    "name": "node",
-                    "plural": false,
-                    "selections": [
-                      (v18/*: any*/)
-                    ],
-                    "storageKey": null
-                  }
-                ],
-                "storageKey": null
-              }
+              (v15/*: any*/)
             ],
             "type": "OpenquakeHazardSolution",
             "abstractKey": null
@@ -516,7 +417,7 @@ return {
         "name": "node",
         "plural": false,
         "selections": [
-          (v19/*: any*/),
+          (v16/*: any*/),
           (v2/*: any*/),
           {
             "kind": "InlineFragment",
@@ -537,28 +438,14 @@ return {
                   {
                     "alias": null,
                     "args": null,
-                    "concreteType": "InversionSolutionNrml",
+                    "concreteType": null,
                     "kind": "LinkedField",
                     "name": "source_models",
                     "plural": true,
                     "selections": [
-                      (v2/*: any*/),
-                      (v5/*: any*/),
-                      (v6/*: any*/),
+                      (v16/*: any*/),
                       (v8/*: any*/),
-                      {
-                        "alias": null,
-                        "args": null,
-                        "concreteType": null,
-                        "kind": "LinkedField",
-                        "name": "source_solution",
-                        "plural": false,
-                        "selections": [
-                          (v19/*: any*/),
-                          (v9/*: any*/)
-                        ],
-                        "storageKey": null
-                      }
+                      (v10/*: any*/)
                     ],
                     "storageKey": null
                   },
@@ -570,11 +457,11 @@ return {
                     "name": "template_archive",
                     "plural": false,
                     "selections": [
-                      (v8/*: any*/),
+                      (v9/*: any*/),
                       (v5/*: any*/),
-                      (v10/*: any*/),
-                      (v6/*: any*/),
                       (v11/*: any*/),
+                      (v6/*: any*/),
+                      (v12/*: any*/),
                       (v2/*: any*/)
                     ],
                     "storageKey": null
@@ -582,37 +469,8 @@ return {
                 ],
                 "storageKey": null
               },
-              (v13/*: any*/),
               (v14/*: any*/),
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "Predecessor",
-                "kind": "LinkedField",
-                "name": "predecessors",
-                "plural": true,
-                "selections": [
-                  (v2/*: any*/),
-                  (v15/*: any*/),
-                  (v16/*: any*/),
-                  (v17/*: any*/),
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": null,
-                    "kind": "LinkedField",
-                    "name": "node",
-                    "plural": false,
-                    "selections": [
-                      (v19/*: any*/),
-                      (v18/*: any*/),
-                      (v9/*: any*/)
-                    ],
-                    "storageKey": null
-                  }
-                ],
-                "storageKey": null
-              }
+              (v15/*: any*/)
             ],
             "type": "OpenquakeHazardSolution",
             "abstractKey": null
@@ -623,14 +481,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "1dec1b8d490a85eaa2e7e89dcadca5d8",
+    "cacheID": "1cbb613de9edd0bc3587f5036df54d52",
     "id": null,
     "metadata": {},
     "name": "OpenquakeHazardSolutionDetailTabQuery",
     "operationKind": "query",
-    "text": "query OpenquakeHazardSolutionDetailTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on OpenquakeHazardSolution {\n      id\n      created\n      produced_by {\n        id\n        model_type\n        duration\n        state\n        result\n      }\n      task_args {\n        file_name\n        file_url\n        id\n      }\n      config {\n        id\n        created\n        source_models {\n          id\n          file_name\n          file_url\n          meta {\n            k\n            v\n          }\n          source_solution {\n            __typename\n            ... on Node {\n              __isNode: __typename\n              id\n            }\n          }\n        }\n        template_archive {\n          meta {\n            k\n            v\n          }\n          file_name\n          file_size\n          file_url\n          md5_digest\n          id\n        }\n      }\n      csv_archive {\n        id\n        file_name\n        file_size\n        file_url\n      }\n      hdf5_archive {\n        id\n        file_name\n        file_size\n        file_url\n      }\n      predecessors {\n        id\n        typename\n        relationship\n        depth\n        node {\n          __typename\n          ... on FileInterface {\n            __isFileInterface: __typename\n            file_name\n            meta {\n              k\n              v\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n    id\n  }\n}\n"
+    "text": "query OpenquakeHazardSolutionDetailTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on OpenquakeHazardSolution {\n      id\n      created\n      produced_by {\n        id\n        model_type\n        duration\n        state\n        result\n      }\n      task_args {\n        file_name\n        file_url\n        id\n      }\n      config {\n        id\n        created\n        source_models {\n          __typename\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n          ... on File {\n            file_name\n            file_url\n            meta {\n              k\n              v\n            }\n          }\n        }\n        template_archive {\n          meta {\n            k\n            v\n          }\n          file_name\n          file_size\n          file_url\n          md5_digest\n          id\n        }\n      }\n      csv_archive {\n        id\n        file_name\n        file_size\n        file_url\n      }\n      hdf5_archive {\n        id\n        file_name\n        file_size\n        file_url\n      }\n    }\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '98bd03a98623eb0fdfcfafddc22965dc';
+(node as any).hash = '94ed4d1162c9f20e59955b3bbe045f1d';
 export default node;

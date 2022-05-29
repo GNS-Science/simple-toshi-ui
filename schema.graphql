@@ -52,9 +52,7 @@ type AggregateInversionSolution implements Node & FileInterface & PredecessorsIn
   """deprecated"""
   mfd_table: Table
   produced_by: AutomationTaskUnion
-
-  """aggregations must use solutions based on the saem rupture set."""
-  common_rupture_set: ID
+  common_rupture_set: File
 
   """The solutions used to build the aggregate"""
   source_solutions: [SourceSolutionUnion]
@@ -211,12 +209,16 @@ input CreateAggregateInversionSolutionInput {
   """additional file meta data, as a list of Key Value pairs."""
   meta: [KeyValuePairInput]
 
-  """aggregations must use solutions based on the saem rupture set."""
-  common_rupture_set: ID
+  """
+  ID of common rupture set. Aggregations must use solutions based on the same rupture set.
+  """
+  common_rupture_set: ID!
+
+  """The solutions used to build the aggregate"""
+  source_solutions: [ID]!
 
   """aggregation function on rupture rates."""
-  aggregation_fn: AggregationFn
-  source_solutions: [ID]
+  aggregation_fn: AggregationFn!
   produced_by: ID
 
   """When the solution was created"""
@@ -644,7 +646,7 @@ enum FileRole {
   UNDEFINED
 }
 
-union FileUnion = SmsFile | File | InversionSolution | ScaledInversionSolution | InversionSolutionNrml
+union FileUnion = SmsFile | File | InversionSolution | ScaledInversionSolution | AggregateInversionSolution | InversionSolutionNrml
 
 """
 A General Task capture metadata and related inputs/outputs for arbitrary tasks
@@ -996,8 +998,8 @@ type OpenquakeHazardConfig implements Node & Thing {
   """Children of this thing"""
   children(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
 
-  """List of Source NRML"""
-  source_models: [InversionSolutionNrml]
+  """List of Source NRML files"""
+  source_models: [OpenquakeNrmlUnion]
 
   """
   An archive of all the configuration files (besides those in source_models
@@ -1146,6 +1148,9 @@ input OpenquakeHazardTaskUpdateInput {
   metrics: [KeyValuePairInput]
   hazard_solution: ID
 }
+
+"""Some NRML files are just files i.e BG seismicity XML."""
+union OpenquakeNrmlUnion = File | InversionSolutionNrml
 
 """
 The Relay compliant `PageInfo` type, containing data necessary to paginate this connection.

@@ -46,13 +46,14 @@ export type OpenquakeHazardTaskQueryResponse = {
             readonly id: string;
             readonly created: unknown | null;
             readonly source_models: ReadonlyArray<{
-                readonly id: string;
-                readonly file_name: string | null;
-                readonly file_url: string | null;
-                readonly meta: ReadonlyArray<{
+                readonly id?: string | undefined;
+                readonly __typename?: string | undefined;
+                readonly file_name?: string | null | undefined;
+                readonly file_url?: string | null | undefined;
+                readonly meta?: ReadonlyArray<{
                     readonly k: string | null;
                     readonly v: string | null;
-                } | null> | null;
+                } | null> | null | undefined;
             } | null> | null;
             readonly template_archive: {
                 readonly meta: ReadonlyArray<{
@@ -115,12 +116,19 @@ query OpenquakeHazardTaskQuery(
         id
         created
         source_models {
-          id
-          file_name
-          file_url
-          meta {
-            k
-            v
+          __typename
+          ... on Node {
+            __isNode: __typename
+            id
+            __typename
+          }
+          ... on File {
+            file_name
+            file_url
+            meta {
+              k
+              v
+            }
           }
         }
         template_archive {
@@ -297,6 +305,13 @@ v15 = {
 v16 = {
   "alias": null,
   "args": null,
+  "kind": "ScalarField",
+  "name": "__typename",
+  "storageKey": null
+},
+v17 = {
+  "alias": null,
+  "args": null,
   "concreteType": "KeyValuePair",
   "kind": "LinkedField",
   "name": "meta",
@@ -304,22 +319,17 @@ v16 = {
   "selections": (v13/*: any*/),
   "storageKey": null
 },
-v17 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "InversionSolutionNrml",
-  "kind": "LinkedField",
-  "name": "source_models",
-  "plural": true,
+v18 = {
+  "kind": "InlineFragment",
   "selections": [
-    (v2/*: any*/),
     (v8/*: any*/),
     (v10/*: any*/),
-    (v16/*: any*/)
+    (v17/*: any*/)
   ],
-  "storageKey": null
+  "type": "File",
+  "abstractKey": null
 },
-v18 = {
+v19 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -363,7 +373,27 @@ return {
                 "selections": [
                   (v2/*: any*/),
                   (v6/*: any*/),
-                  (v17/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": null,
+                    "kind": "LinkedField",
+                    "name": "source_models",
+                    "plural": true,
+                    "selections": [
+                      {
+                        "kind": "InlineFragment",
+                        "selections": [
+                          (v2/*: any*/),
+                          (v16/*: any*/)
+                        ],
+                        "type": "Node",
+                        "abstractKey": "__isNode"
+                      },
+                      (v18/*: any*/)
+                    ],
+                    "storageKey": null
+                  },
                   {
                     "alias": null,
                     "args": null,
@@ -372,11 +402,11 @@ return {
                     "name": "template_archive",
                     "plural": false,
                     "selections": [
-                      (v16/*: any*/),
+                      (v17/*: any*/),
                       (v8/*: any*/),
                       (v9/*: any*/),
                       (v10/*: any*/),
-                      (v18/*: any*/)
+                      (v19/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -408,13 +438,7 @@ return {
         "name": "node",
         "plural": false,
         "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "__typename",
-            "storageKey": null
-          },
+          (v16/*: any*/),
           (v2/*: any*/),
           {
             "kind": "InlineFragment",
@@ -437,7 +461,27 @@ return {
                 "selections": [
                   (v2/*: any*/),
                   (v6/*: any*/),
-                  (v17/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": null,
+                    "kind": "LinkedField",
+                    "name": "source_models",
+                    "plural": true,
+                    "selections": [
+                      (v16/*: any*/),
+                      {
+                        "kind": "InlineFragment",
+                        "selections": [
+                          (v2/*: any*/)
+                        ],
+                        "type": "Node",
+                        "abstractKey": "__isNode"
+                      },
+                      (v18/*: any*/)
+                    ],
+                    "storageKey": null
+                  },
                   {
                     "alias": null,
                     "args": null,
@@ -446,11 +490,11 @@ return {
                     "name": "template_archive",
                     "plural": false,
                     "selections": [
-                      (v16/*: any*/),
+                      (v17/*: any*/),
                       (v8/*: any*/),
                       (v9/*: any*/),
                       (v10/*: any*/),
-                      (v18/*: any*/),
+                      (v19/*: any*/),
                       (v2/*: any*/)
                     ],
                     "storageKey": null
@@ -468,14 +512,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "aae56a2bb1c536436a3e3f5371924698",
+    "cacheID": "bb1a170ebab6fa59bb4a986a1a03e40b",
     "id": null,
     "metadata": {},
     "name": "OpenquakeHazardTaskQuery",
     "operationKind": "query",
-    "text": "query OpenquakeHazardTaskQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on OpenquakeHazardTask {\n      id\n      state\n      result\n      duration\n      created\n      model_type\n      hazard_solution {\n        id\n        created\n        csv_archive {\n          id\n          file_name\n          file_size\n          file_url\n        }\n        hdf5_archive {\n          id\n          file_name\n          file_size\n          file_url\n        }\n      }\n      metrics {\n        k\n        v\n      }\n      arguments {\n        k\n        v\n      }\n      config {\n        id\n        created\n        source_models {\n          id\n          file_name\n          file_url\n          meta {\n            k\n            v\n          }\n        }\n        template_archive {\n          meta {\n            k\n            v\n          }\n          file_name\n          file_size\n          file_url\n          md5_digest\n          id\n        }\n      }\n    }\n    id\n  }\n}\n"
+    "text": "query OpenquakeHazardTaskQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on OpenquakeHazardTask {\n      id\n      state\n      result\n      duration\n      created\n      model_type\n      hazard_solution {\n        id\n        created\n        csv_archive {\n          id\n          file_name\n          file_size\n          file_url\n        }\n        hdf5_archive {\n          id\n          file_name\n          file_size\n          file_url\n        }\n      }\n      metrics {\n        k\n        v\n      }\n      arguments {\n        k\n        v\n      }\n      config {\n        id\n        created\n        source_models {\n          __typename\n          ... on Node {\n            __isNode: __typename\n            id\n            __typename\n          }\n          ... on File {\n            file_name\n            file_url\n            meta {\n              k\n              v\n            }\n          }\n        }\n        template_archive {\n          meta {\n            k\n            v\n          }\n          file_name\n          file_size\n          file_url\n          md5_digest\n          id\n        }\n      }\n    }\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '7dfaa9df2e05e7a59a71c6af873d30a0';
+(node as any).hash = 'af26ffe6e6f81ddbcff21ef67bc9a8c7';
 export default node;

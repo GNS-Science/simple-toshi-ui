@@ -40,9 +40,9 @@ const OpenquakeHazardTask: React.FC = () => {
         model_type={data?.node?.model_type}
       />
       {data?.node.arguments && <KeyValueTable header="Arguments" data={data?.node.arguments} />}
-      <HazardTable hazard_solution={data?.node?.hazard_solution} />
+      <HazardTable hazard_solution={data?.node?.hazard_solution} solution_page={false} />
       <TemplateArchiveTable template_archive={data?.node?.config?.template_archive} />
-      <ConfigTable config={data?.node?.config} />
+      <ConfigTable config={data?.node?.config} solution_page={false} />
     </>
   );
 };
@@ -85,12 +85,17 @@ const openquakeHazardTaskQuery = graphql`
           id
           created
           source_models {
-            id
-            file_name
-            file_url
-            meta {
-              k
-              v
+            ... on Node {
+              id
+              __typename
+            }
+            ... on File {
+              file_name
+              file_url
+              meta {
+                k
+                v
+              }
             }
           }
           template_archive {
