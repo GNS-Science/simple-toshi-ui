@@ -89,7 +89,7 @@ const openquakeHazardTaskQuery = graphql`
               id
               __typename
             }
-            ... on File {
+            ... on FileInterface {
               file_name
               file_url
               meta {
