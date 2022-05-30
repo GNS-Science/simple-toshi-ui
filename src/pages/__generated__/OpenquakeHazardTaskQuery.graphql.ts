@@ -122,7 +122,8 @@ query OpenquakeHazardTaskQuery(
             id
             __typename
           }
-          ... on File {
+          ... on FileInterface {
+            __isFileInterface: __typename
             file_name
             file_url
             meta {
@@ -326,8 +327,8 @@ v18 = {
     (v10/*: any*/),
     (v17/*: any*/)
   ],
-  "type": "File",
-  "abstractKey": null
+  "type": "FileInterface",
+  "abstractKey": "__isFileInterface"
 },
 v19 = {
   "alias": null,
@@ -512,14 +513,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "bb1a170ebab6fa59bb4a986a1a03e40b",
+    "cacheID": "ce4e4625ea89ee3bab2a2a18b6fa3b42",
     "id": null,
     "metadata": {},
     "name": "OpenquakeHazardTaskQuery",
     "operationKind": "query",
-    "text": "query OpenquakeHazardTaskQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on OpenquakeHazardTask {\n      id\n      state\n      result\n      duration\n      created\n      model_type\n      hazard_solution {\n        id\n        created\n        csv_archive {\n          id\n          file_name\n          file_size\n          file_url\n        }\n        hdf5_archive {\n          id\n          file_name\n          file_size\n          file_url\n        }\n      }\n      metrics {\n        k\n        v\n      }\n      arguments {\n        k\n        v\n      }\n      config {\n        id\n        created\n        source_models {\n          __typename\n          ... on Node {\n            __isNode: __typename\n            id\n            __typename\n          }\n          ... on File {\n            file_name\n            file_url\n            meta {\n              k\n              v\n            }\n          }\n        }\n        template_archive {\n          meta {\n            k\n            v\n          }\n          file_name\n          file_size\n          file_url\n          md5_digest\n          id\n        }\n      }\n    }\n    id\n  }\n}\n"
+    "text": "query OpenquakeHazardTaskQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ... on OpenquakeHazardTask {\n      id\n      state\n      result\n      duration\n      created\n      model_type\n      hazard_solution {\n        id\n        created\n        csv_archive {\n          id\n          file_name\n          file_size\n          file_url\n        }\n        hdf5_archive {\n          id\n          file_name\n          file_size\n          file_url\n        }\n      }\n      metrics {\n        k\n        v\n      }\n      arguments {\n        k\n        v\n      }\n      config {\n        id\n        created\n        source_models {\n          __typename\n          ... on Node {\n            __isNode: __typename\n            id\n            __typename\n          }\n          ... on FileInterface {\n            __isFileInterface: __typename\n            file_name\n            file_url\n            meta {\n              k\n              v\n            }\n          }\n        }\n        template_archive {\n          meta {\n            k\n            v\n          }\n          file_name\n          file_size\n          file_url\n          md5_digest\n          id\n        }\n      }\n    }\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'af26ffe6e6f81ddbcff21ef67bc9a8c7';
+(node as any).hash = 'de4bb18e84021e0ab7004ab5653b1a98';
 export default node;
