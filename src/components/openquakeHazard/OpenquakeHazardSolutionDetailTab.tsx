@@ -104,7 +104,7 @@ export const openquakeHazardSolutionDetailTabQuery = graphql`
             ... on Node {
               id
             }
-            ... on File {
+            ... on FileInterface {
               file_name
               file_url
               meta {
