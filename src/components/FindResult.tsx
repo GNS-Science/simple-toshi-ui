@@ -45,6 +45,9 @@ const FindResult: React.FC<FindResultProps> = ({ queryRef }: FindResultProps) =>
         case 'AggregateInversionSolution':
           history.push(`/AggregateInversionSolution/${data?.node?.id}`);
           break;
+        case 'TimeDependentInversionSolution':
+          history.push(`/TimeDependentInversionSolution/${data?.node?.id}`);
+          break;
         default:
           break;
       }

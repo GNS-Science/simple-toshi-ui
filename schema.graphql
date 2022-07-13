@@ -519,6 +519,36 @@ type CreateTaskTaskRelation {
   thing_relation: TaskTaskRelation
 }
 
+input CreateTimeDependentInversionSolutionInput {
+  """The name of the file"""
+  file_name: String
+
+  """The base64-encoded md5 digest of the file"""
+  md5_digest: String
+
+  """The size of the file in bytes"""
+  file_size: BigInt
+
+  """additional file meta data, as a list of Key Value pairs."""
+  meta: [KeyValuePairInput]
+  source_solution: ID
+  produced_by: ID
+
+  """When the solution was created"""
+  created: DateTime
+
+  """list of predecessors"""
+  predecessors: [PredecessorInput]
+  clientMutationId: String
+}
+
+"""Create a TimeDependentInversionSolution file"""
+type CreateTimeDependentInversionSolutionPayload {
+  solution: TimeDependentInversionSolution
+  ok: Boolean
+  clientMutationId: String
+}
+
 """
 The `DateTime` scalar type represents a DateTime
 value as specified by
@@ -646,7 +676,7 @@ enum FileRole {
   UNDEFINED
 }
 
-union FileUnion = SmsFile | File | InversionSolution | ScaledInversionSolution | AggregateInversionSolution | InversionSolutionNrml
+union FileUnion = SmsFile | File | InversionSolution | ScaledInversionSolution | AggregateInversionSolution | InversionSolutionNrml | TimeDependentInversionSolution
 
 """
 A General Task capture metadata and related inputs/outputs for arbitrary tasks
@@ -936,6 +966,9 @@ type MutationRoot {
   """Create a ScaledInversionSolution file"""
   create_scaled_inversion_solution(input: CreateScaledInversionSolutionInput!): CreateScaledInversionSolutionPayload
 
+  """Create a TimeDependentInversionSolution file"""
+  create_time_dependent_inversion_solution(input: CreateTimeDependentInversionSolutionInput!): CreateTimeDependentInversionSolutionPayload
+
   """Create a InversionSolutionNrml file"""
   create_inversion_solution_nrml(input: CreateInversionSolutionNrmlInput!): CreateInversionSolutionNrmlPayload
 
@@ -1200,7 +1233,7 @@ interface PredecessorsInterface {
   predecessors: [Predecessor]
 }
 
-union PredecessorUnion = File | InversionSolution | ScaledInversionSolution | InversionSolutionNrml
+union PredecessorUnion = File | InversionSolution | ScaledInversionSolution | InversionSolutionNrml | TimeDependentInversionSolution
 
 """This is the entry point for all graphql query operations"""
 type QueryRoot {
@@ -1343,7 +1376,7 @@ type Search {
   search_result(before: String, after: String, first: Int, last: Int): SearchResultConnection
 }
 
-union SearchResult = File | RuptureGenerationTask | StrongMotionStation | SmsFile | GeneralTask | Table | InversionSolution | AutomationTask
+union SearchResult = File | RuptureGenerationTask | StrongMotionStation | SmsFile | GeneralTask | Table | InversionSolution | AutomationTask | ScaledInversionSolution | TimeDependentInversionSolution
 
 type SearchResultConnection {
   """Pagination data for this connection."""
@@ -1414,7 +1447,7 @@ enum SmsSiteClassBasis {
   su
 }
 
-union SourceSolutionUnion = InversionSolution | ScaledInversionSolution
+union SourceSolutionUnion = InversionSolution | ScaledInversionSolution | TimeDependentInversionSolution
 
 """A Strong Motion Station """
 type StrongMotionStation implements Node & Thing {
@@ -1532,6 +1565,7 @@ enum TaskSubType {
   AGGREGATE_SOLUTION
   SOLUTION_TO_NRML
   OPENQUAKE_HAZARD
+  TIME_DEPENDENT_SOLUTION
 }
 
 type TaskTaskRelation {
@@ -1572,6 +1606,62 @@ interface Thing {
 
   """Children of this thing"""
   children(before: String, after: String, first: Int, last: Int): TaskTaskRelationConnection
+}
+
+"""
+Represents a TimeDependent Inversion Solution file
+
+NB the  arguments used to scaling this solution (relatve to the source_solution)
+should be captured as in meta field.
+"""
+type TimeDependentInversionSolution implements Node & FileInterface & PredecessorsInterface & InversionSolutionInterface {
+  """The ID of the object."""
+  id: ID!
+
+  """The name of the file"""
+  file_name: String
+
+  """The base64-encoded md5 digest of the file"""
+  md5_digest: String
+
+  """The size of the file in bytes"""
+  file_size: BigInt
+
+  """A pre-signed URL to download the file from s3"""
+  file_url: String
+
+  """A pre-signed URL to post the data to s3"""
+  post_url: String
+
+  """additional file meta data, as a list of Key Value pairs."""
+  meta: [KeyValuePair]
+
+  """things related to this data file"""
+  relations(before: String, after: String, first: Int, last: Int): FileRelationConnection
+
+  """list of predecessor info"""
+  predecessors: [Predecessor]
+
+  """When the solution was created"""
+  created: DateTime
+
+  """result metrics from the task, as a list of Key Value pairs."""
+  metrics: [KeyValuePair]
+
+  """deprecated"""
+  mfd_table_id: ID
+  hazard_table_id: ID
+  tables: [LabelledTableRelation]
+
+  """deprecated"""
+  hazard_table: Table
+
+  """deprecated"""
+  mfd_table: Table
+  produced_by: AutomationTaskUnion
+
+  """The original soloution as produced by opensha"""
+  source_solution: InversionSolution
 }
 
 type UpdateAutomationTask {
