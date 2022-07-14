@@ -136,7 +136,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       const tvzValue = unifiedInversionSolutions[currentImage].solution?.meta?.filter(
         (kv) => kv?.k && kv?.k === 'enable_tvz_mfd',
       )[0]?.v;
-      if (tvzValue === 'False') {
+      if (tvzValue === 'False' || tvzValue === undefined) {
         setRegional(false);
       } else if (tvzValue === 'True') {
         setRegional(true);
