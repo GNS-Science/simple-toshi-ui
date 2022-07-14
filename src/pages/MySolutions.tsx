@@ -150,6 +150,7 @@ export const mySolutionsQuery = graphql`
             __typename
             ... on AutomationTask {
               id
+              task_type
               parents {
                 edges {
                   node {

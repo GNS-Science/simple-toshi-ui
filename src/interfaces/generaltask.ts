@@ -67,6 +67,7 @@ type Meta = Array<{
 export enum UnifiedInversionSolutionType {
   SCALED_INVERSION_SOLUTION,
   INVERSION_SOLUTION,
+  TIME_DEPENDENT_SOLUTION,
 }
 
 export type ScaledSourceSolution = {

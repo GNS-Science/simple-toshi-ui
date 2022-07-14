@@ -125,6 +125,22 @@ export const inversionSolutionDiagnosticContainerQuery = graphql`
                           }
                         }
                       }
+
+                      #for TimeDependent InversionSolutions
+                      ... on TimeDependentInversionSolution {
+                        id
+                        meta {
+                          k
+                          v
+                        }
+                        source_solution {
+                          id
+                          meta {
+                            k
+                            v
+                          }
+                        }
+                      }
                     }
                   }
                 }

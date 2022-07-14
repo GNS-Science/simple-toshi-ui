@@ -101,13 +101,22 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   const [hazardId, setHazardId] = useState<string>('');
   const [filteredMeta, setFilteredMeta] = useState<MetaArguments>([]);
   const [regional, setRegional] = useState<boolean>(true);
-  const [isScaledSolution, setIsScaledSolution] = useState<boolean>(false);
+  const [solutionType, setSolutionType] = useState<string>('');
 
   useEffect(() => {
-    unifiedInversionSolutions[currentImage] &&
-      setIsScaledSolution(
-        unifiedInversionSolutions[currentImage].type === UnifiedInversionSolutionType.SCALED_INVERSION_SOLUTION,
-      );
+    if (unifiedInversionSolutions[currentImage]) {
+      switch (unifiedInversionSolutions[currentImage].type) {
+        case UnifiedInversionSolutionType.SCALED_INVERSION_SOLUTION:
+          setSolutionType('SCALED_INVERSION_SOLUTION');
+          break;
+        case UnifiedInversionSolutionType.INVERSION_SOLUTION:
+          setSolutionType('INVERSION_SOLUTION');
+          break;
+        case UnifiedInversionSolutionType.TIME_DEPENDENT_SOLUTION:
+          setSolutionType('TIME_DEPENDENT_SOLUTION');
+          break;
+      }
+    }
   }, [unifiedInversionSolutions, currentImage]);
 
   useEffect(() => {
@@ -198,7 +207,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
               automationTasksLength={unifiedInversionSolutions.length}
               generalViews={generalViews}
               setGeneralViews={setGeneralViews}
-              isScaledSolution={isScaledSolution}
+              solutionType={solutionType}
             />
           </DiagnosticReportTabPanel>
         );
@@ -270,13 +279,20 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       <Card className={classes.root}>
         <CardContent>
           <h4>
-            {isScaledSolution ? 'Scaled Inversion Solution' : 'Inversion Solution'}:&nbsp;
+            {solutionType === 'SCALED_INVERSION_SOLUTION'
+              ? 'Scaled Inversion Solution'
+              : solutionType === 'INVERSION_SOLUTION'
+              ? 'Inversion Solution'
+              : 'Time Dependent Inversion Solution'}
+            :&nbsp;
             {unifiedInversionSolutions[currentImage].solution.id}&nbsp;&nbsp;&nbsp;
             <Link
               to={
-                isScaledSolution
+                solutionType === 'SCALED_INVERSION_SOLUTION'
                   ? `/ScaledInversionSolution/${unifiedInversionSolutions[currentImage].solution.id}`
-                  : `/InversionSolution/${unifiedInversionSolutions[currentImage].solution.id}`
+                  : solutionType === 'INVERSION_SOLUTION'
+                  ? `/InversionSolution/${unifiedInversionSolutions[currentImage].solution.id}`
+                  : `/TimeDependentInversionSolution/${unifiedInversionSolutions[currentImage].solution.id}`
               }
             >
               [more]
@@ -297,19 +313,19 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
             <Tab
               label="MFD Solutions"
               id="simple-tab-1"
-              disabled={modelType !== 'CRUSTAL' || isScaledSolution}
+              disabled={modelType !== 'CRUSTAL' || solutionType === 'SCALED_INVERSION_SOLUTION'}
               disableFocusRipple
             />
             <Tab
               label="Named Faults"
               id="simple-tab-2"
-              disabled={modelType !== 'CRUSTAL' || isScaledSolution}
+              disabled={modelType !== 'CRUSTAL' || solutionType === 'SCALED_INVERSION_SOLUTION'}
               disableFocusRipple
             />
             <Tab
               label="Parent Faults"
               id="simple-tab-3"
-              disabled={modelType !== 'CRUSTAL' || isScaledSolution}
+              disabled={modelType !== 'CRUSTAL' || solutionType === 'SCALED_INVERSION_SOLUTION'}
               disableFocusRipple
             />
             <Tab label="Hazard Charts" id="simple-tab-4" disabled={!hazardId.length} disableFocusRipple />
