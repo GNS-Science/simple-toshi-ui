@@ -38,10 +38,10 @@ const MiniFile: React.FC<MiniFileProps> = ({ id, __typename, file_size, file_nam
         <strong>File size:</strong> {formatBytes(file_size ?? 0)}
       </Typography>
       <Typography>
-        {__typename == 'InversionSolution' ? (
-          <Link to={`/InversionSolution/${id}`}>[more]</Link>
-        ) : (
+        {__typename === 'File' ? (
           <Link to={`/FileDetail/${id}`}>[more]</Link>
+        ) : (
+          <Link to={`/${__typename}/${id}`}>[more]</Link>
         )}
       </Typography>
     </StyledCard>
