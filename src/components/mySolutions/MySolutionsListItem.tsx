@@ -24,7 +24,6 @@ interface MySolutionsListItemProps {
 const MySolutionsListItem: React.FC<MySolutionsListItemProps> = ({ automationTask }: MySolutionsListItemProps) => {
   const parentTask = automationTask?.parents?.edges[0]?.node?.parent;
 
-  console.log(automationTask);
   return (
     <Root>
       <Card className={classes.card}>

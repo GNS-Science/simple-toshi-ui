@@ -19,7 +19,6 @@ const SearchResult: React.FC<SearchResultProps> = ({ queryRef }: SearchResultPro
       <Box>
         {data?.search?.search_result?.edges?.map((edge) => {
           const searchType = edge?.node?.__typename;
-          console.log(searchType);
           switch (searchType) {
             case searchType == 'File' ||
             searchType == 'InversionSolution' ||
