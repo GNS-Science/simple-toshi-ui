@@ -59,6 +59,8 @@ const FileTable: React.FC<FileTableProps> = ({ data }: FileTableProps) => {
         return <Link to={`/InversionSolutionNrml/${id}`}>[more]</Link>;
       case 'AggregateInversionSolution':
         return <Link to={`/AggregateInversionSolution/${id}`}>[more]</Link>;
+      case 'TimeDependentInversionSolution':
+        return <Link to={`/TimeDependentInversionSolution/${id}`}>[more]</Link>;
       default:
         return <Link to={`/FileDetail/${id}`}>[more]</Link>;
     }

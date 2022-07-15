@@ -23,25 +23,33 @@ interface MySolutionsListItemProps {
 }
 const MySolutionsListItem: React.FC<MySolutionsListItemProps> = ({ automationTask }: MySolutionsListItemProps) => {
   const parentTask = automationTask?.parents?.edges[0]?.node?.parent;
-  const inversionSolution = automationTask?.inversion_solution;
-  const scaledInversionSolutionFile = automationTask?.files?.edges.filter((file) => file?.node?.file?.source_solution);
-  const scaledInversionSolution = scaledInversionSolutionFile && scaledInversionSolutionFile[0]?.node?.file;
 
   return (
     <Root>
       <Card className={classes.card}>
         <CardContent>
           <Typography variant="h5">
-            {inversionSolution ? 'Inversion solution' : 'Scaled Inversion Solution'}:&nbsp;
-            {inversionSolution && !scaledInversionSolution ? inversionSolution?.id : scaledInversionSolution?.id}
+            {automationTask?.task_type === 'TIME_DEPENDENT_SOLUTION'
+              ? 'Time Dependent Solution'
+              : automationTask?.task_type === 'SCALE_SOLUTION'
+              ? 'Scaled Inversion Solution'
+              : 'Inversion Solution'}
+            :&nbsp;
+            {automationTask?.id}
             &nbsp;&nbsp;
-            <Link
-              to={`/${inversionSolution ? 'InversionSolution' : 'ScaledInversionSolution'}/${
-                inversionSolution && !scaledInversionSolution ? inversionSolution?.id : scaledInversionSolution?.id
-              }`}
-            >
-              [more]
-            </Link>
+            {() => {
+              switch (automationTask?.task_type) {
+                case 'TIME_DEPENDENT_SOLUTION':
+                  <Link to={`/TimeDependentSolution/${automationTask?.id}`}>[more]</Link>;
+                  break;
+                case 'INVERSION':
+                  <Link to={`/InversionSolution/${automationTask?.id}`}>[more]</Link>;
+                  break;
+                case 'SCALE_SOLUTION':
+                  <Link to={`/ScaledInversionSolution/${automationTask?.id}`}>[more]</Link>;
+                  break;
+              }
+            }}
           </Typography>
           <Grid container spacing={1}>
             <Grid item xs={5}>

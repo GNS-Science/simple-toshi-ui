@@ -17,6 +17,7 @@ import ScaledInversionSolution from './pages/ScaledInversionSolution';
 import OpenquakeHazardTask from './pages/OpenquakeHazardTask';
 import OpenquakeHazardSolution from './pages/OpenquakeHazardSolution';
 import AggregateInversionSolution from './pages/AggregateInversionSolution';
+import TimeDependentInversionSolution from './pages/TimeDependentInversionSolution';
 
 /* preview views (with no test coverage...) */
 import Preview from './pages/Preview';
@@ -124,6 +125,9 @@ function AppRoot(props: { environment?: Environment }): React.ReactElement {
                   </Route>
                   <Route path="/ScaledInversionSolution/:id/:tab?">
                     <ScaledInversionSolution />
+                  </Route>
+                  <Route path="/TimeDependentInversionSolution/:id/:tab?">
+                    <TimeDependentInversionSolution />
                   </Route>
                   <Route path="/Search">
                     <Search />

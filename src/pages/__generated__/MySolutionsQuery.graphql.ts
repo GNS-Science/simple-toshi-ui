@@ -6,6 +6,7 @@ import { ConcreteRequest } from "relay-runtime";
 
 export type ModelType = "COMPOSITE" | "CRUSTAL" | "SUBDUCTION" | "%future added value";
 export type TableType = "GENERAL" | "HAZARD_GRIDDED" | "HAZARD_SITES" | "MFD_CURVES" | "MFD_CURVES_V2" | "%future added value";
+export type TaskSubType = "AGGREGATE_SOLUTION" | "HAZARD" | "INVERSION" | "OPENQUAKE_HAZARD" | "REPORT" | "RUPTURE_SET" | "SCALE_SOLUTION" | "SOLUTION_TO_NRML" | "TIME_DEPENDENT_SOLUTION" | "%future added value";
 export type MySolutionsQueryVariables = {
     id?: Array<string> | null | undefined;
 };
@@ -16,6 +17,7 @@ export type MySolutionsQueryResponse = {
                 readonly node: ({
                     readonly __typename: "AutomationTask";
                     readonly id: string;
+                    readonly task_type: TaskSubType | null;
                     readonly parents: {
                         readonly edges: ReadonlyArray<{
                             readonly node: {
@@ -94,6 +96,7 @@ query MySolutionsQuery(
           __typename
           ... on AutomationTask {
             id
+            task_type
             parents {
               edges {
                 node {
@@ -193,7 +196,14 @@ v3 = {
   "name": "id",
   "storageKey": null
 },
-v4 = [
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "task_type",
+  "storageKey": null
+},
+v5 = [
   {
     "alias": null,
     "args": null,
@@ -209,7 +219,7 @@ v4 = [
     "storageKey": null
   }
 ],
-v5 = {
+v6 = {
   "alias": null,
   "args": null,
   "concreteType": "TaskTaskRelationConnection",
@@ -291,7 +301,7 @@ v5 = {
                   "kind": "LinkedField",
                   "name": "argument_lists",
                   "plural": true,
-                  "selections": (v4/*: any*/),
+                  "selections": (v5/*: any*/),
                   "storageKey": null
                 }
               ],
@@ -306,21 +316,21 @@ v5 = {
   ],
   "storageKey": null
 },
-v6 = {
+v7 = {
   "alias": null,
   "args": null,
   "concreteType": "KeyValuePair",
   "kind": "LinkedField",
   "name": "meta",
   "plural": true,
-  "selections": (v4/*: any*/),
+  "selections": (v5/*: any*/),
   "storageKey": null
 },
-v7 = {
+v8 = {
   "kind": "InlineFragment",
   "selections": [
     (v3/*: any*/),
-    (v6/*: any*/),
+    (v7/*: any*/),
     {
       "alias": null,
       "args": null,
@@ -330,7 +340,7 @@ v7 = {
       "plural": false,
       "selections": [
         (v3/*: any*/),
-        (v6/*: any*/)
+        (v7/*: any*/)
       ],
       "storageKey": null
     }
@@ -338,7 +348,7 @@ v7 = {
   "type": "ScaledInversionSolution",
   "abstractKey": null
 },
-v8 = {
+v9 = {
   "alias": null,
   "args": null,
   "concreteType": "InversionSolution",
@@ -354,7 +364,7 @@ v8 = {
       "name": "mfd_table_id",
       "storageKey": null
     },
-    (v6/*: any*/),
+    (v7/*: any*/),
     {
       "alias": null,
       "args": null,
@@ -383,7 +393,7 @@ v8 = {
   ],
   "storageKey": null
 },
-v9 = {
+v10 = {
   "kind": "InlineFragment",
   "selections": [
     (v3/*: any*/)
@@ -435,7 +445,8 @@ return {
                         "kind": "InlineFragment",
                         "selections": [
                           (v3/*: any*/),
-                          (v5/*: any*/),
+                          (v4/*: any*/),
+                          (v6/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -468,7 +479,7 @@ return {
                                         "name": "file",
                                         "plural": false,
                                         "selections": [
-                                          (v7/*: any*/)
+                                          (v8/*: any*/)
                                         ],
                                         "storageKey": null
                                       }
@@ -481,7 +492,7 @@ return {
                             ],
                             "storageKey": null
                           },
-                          (v8/*: any*/)
+                          (v9/*: any*/)
                         ],
                         "type": "AutomationTask",
                         "abstractKey": null
@@ -545,7 +556,8 @@ return {
                         "kind": "InlineFragment",
                         "selections": [
                           (v3/*: any*/),
-                          (v5/*: any*/),
+                          (v4/*: any*/),
+                          (v6/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -579,8 +591,8 @@ return {
                                         "plural": false,
                                         "selections": [
                                           (v2/*: any*/),
-                                          (v7/*: any*/),
-                                          (v9/*: any*/)
+                                          (v8/*: any*/),
+                                          (v10/*: any*/)
                                         ],
                                         "storageKey": null
                                       }
@@ -593,12 +605,12 @@ return {
                             ],
                             "storageKey": null
                           },
-                          (v8/*: any*/)
+                          (v9/*: any*/)
                         ],
                         "type": "AutomationTask",
                         "abstractKey": null
                       },
-                      (v9/*: any*/)
+                      (v10/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -614,14 +626,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "5cfbe06f958003add0258d064329872f",
+    "cacheID": "242f0f440027d3cf2463e6a92cd41960",
     "id": null,
     "metadata": {},
     "name": "MySolutionsQuery",
     "operationKind": "query",
-    "text": "query MySolutionsQuery(\n  $id: [ID!]\n) {\n  nodes(id_in: $id) {\n    result {\n      edges {\n        node {\n          __typename\n          ... on AutomationTask {\n            id\n            parents {\n              edges {\n                node {\n                  parent {\n                    id\n                    created\n                    title\n                    description\n                    model_type\n                    swept_arguments\n                    notes\n                    argument_lists {\n                      k\n                      v\n                    }\n                  }\n                }\n              }\n            }\n            files {\n              edges {\n                node {\n                  file {\n                    __typename\n                    ... on ScaledInversionSolution {\n                      id\n                      meta {\n                        k\n                        v\n                      }\n                      source_solution {\n                        id\n                        meta {\n                          k\n                          v\n                        }\n                      }\n                    }\n                    ... on Node {\n                      __isNode: __typename\n                      id\n                    }\n                  }\n                }\n              }\n            }\n            inversion_solution {\n              id\n              mfd_table_id\n              meta {\n                k\n                v\n              }\n              tables {\n                table_id\n                table_type\n              }\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query MySolutionsQuery(\n  $id: [ID!]\n) {\n  nodes(id_in: $id) {\n    result {\n      edges {\n        node {\n          __typename\n          ... on AutomationTask {\n            id\n            task_type\n            parents {\n              edges {\n                node {\n                  parent {\n                    id\n                    created\n                    title\n                    description\n                    model_type\n                    swept_arguments\n                    notes\n                    argument_lists {\n                      k\n                      v\n                    }\n                  }\n                }\n              }\n            }\n            files {\n              edges {\n                node {\n                  file {\n                    __typename\n                    ... on ScaledInversionSolution {\n                      id\n                      meta {\n                        k\n                        v\n                      }\n                      source_solution {\n                        id\n                        meta {\n                          k\n                          v\n                        }\n                      }\n                    }\n                    ... on Node {\n                      __isNode: __typename\n                      id\n                    }\n                  }\n                }\n              }\n            }\n            inversion_solution {\n              id\n              mfd_table_id\n              meta {\n                k\n                v\n              }\n              tables {\n                table_id\n                table_type\n              }\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'dfb5faea838fffff26a28177c228979b';
+(node as any).hash = '81764bfee897cfda541b69439781290d';
 export default node;
