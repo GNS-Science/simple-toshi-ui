@@ -100,7 +100,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
   const [currentTab, setCurrentTab] = useState<number>(0);
   const [hazardId, setHazardId] = useState<string>('');
   const [filteredMeta, setFilteredMeta] = useState<MetaArguments>([]);
-  const [regional, setRegional] = useState<boolean>(true);
+  const [regional, setRegional] = useState<boolean>(false);
   const [solutionType, setSolutionType] = useState<string>('');
 
   useEffect(() => {
@@ -136,9 +136,12 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       const tvzValue = unifiedInversionSolutions[currentImage].solution?.meta?.filter(
         (kv) => kv?.k && kv?.k === 'enable_tvz_mfd',
       )[0]?.v;
-      if (tvzValue === 'False' || tvzValue === undefined) {
+      const sourceTvz = unifiedInversionSolutions[currentImage].solution?.source_solution?.meta?.filter(
+        (kv) => kv?.k && kv?.k === 'enable_tvz_mfd',
+      )[0]?.v;
+      if (tvzValue === 'False' || sourceTvz === 'False') {
         setRegional(false);
-      } else if (tvzValue === 'True') {
+      } else if (tvzValue === 'True' || sourceTvz === 'True') {
         setRegional(true);
       }
     }
