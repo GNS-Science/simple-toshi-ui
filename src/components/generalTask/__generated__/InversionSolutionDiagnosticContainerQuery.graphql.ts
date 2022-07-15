@@ -5,7 +5,7 @@
 import { ConcreteRequest } from "relay-runtime";
 
 export type TableType = "GENERAL" | "HAZARD_GRIDDED" | "HAZARD_SITES" | "MFD_CURVES" | "MFD_CURVES_V2" | "%future added value";
-export type TaskSubType = "AGGREGATE_SOLUTION" | "HAZARD" | "INVERSION" | "OPENQUAKE_HAZARD" | "REPORT" | "RUPTURE_SET" | "SCALE_SOLUTION" | "SOLUTION_TO_NRML" | "%future added value";
+export type TaskSubType = "AGGREGATE_SOLUTION" | "HAZARD" | "INVERSION" | "OPENQUAKE_HAZARD" | "REPORT" | "RUPTURE_SET" | "SCALE_SOLUTION" | "SOLUTION_TO_NRML" | "TIME_DEPENDENT_SOLUTION" | "%future added value";
 export type InversionSolutionDiagnosticContainerQueryVariables = {
     id?: Array<string> | null | undefined;
 };
@@ -86,6 +86,20 @@ query InversionSolutionDiagnosticContainerQuery(
                   file {
                     __typename
                     ... on ScaledInversionSolution {
+                      id
+                      meta {
+                        k
+                        v
+                      }
+                      source_solution {
+                        id
+                        meta {
+                          k
+                          v
+                        }
+                      }
+                    }
+                    ... on TimeDependentInversionSolution {
                       id
                       meta {
                         k
@@ -200,29 +214,36 @@ v6 = {
   ],
   "storageKey": null
 },
-v7 = {
+v7 = [
+  (v5/*: any*/),
+  (v6/*: any*/),
+  {
+    "alias": null,
+    "args": null,
+    "concreteType": "InversionSolution",
+    "kind": "LinkedField",
+    "name": "source_solution",
+    "plural": false,
+    "selections": [
+      (v5/*: any*/),
+      (v6/*: any*/)
+    ],
+    "storageKey": null
+  }
+],
+v8 = {
   "kind": "InlineFragment",
-  "selections": [
-    (v5/*: any*/),
-    (v6/*: any*/),
-    {
-      "alias": null,
-      "args": null,
-      "concreteType": "InversionSolution",
-      "kind": "LinkedField",
-      "name": "source_solution",
-      "plural": false,
-      "selections": [
-        (v5/*: any*/),
-        (v6/*: any*/)
-      ],
-      "storageKey": null
-    }
-  ],
+  "selections": (v7/*: any*/),
   "type": "ScaledInversionSolution",
   "abstractKey": null
 },
-v8 = {
+v9 = {
+  "kind": "InlineFragment",
+  "selections": (v7/*: any*/),
+  "type": "TimeDependentInversionSolution",
+  "abstractKey": null
+},
+v10 = {
   "alias": null,
   "args": null,
   "concreteType": "InversionSolution",
@@ -274,7 +295,7 @@ v8 = {
   ],
   "storageKey": null
 },
-v9 = {
+v11 = {
   "kind": "InlineFragment",
   "selections": [
     (v5/*: any*/)
@@ -360,7 +381,8 @@ return {
                                         "name": "file",
                                         "plural": false,
                                         "selections": [
-                                          (v7/*: any*/)
+                                          (v8/*: any*/),
+                                          (v9/*: any*/)
                                         ],
                                         "storageKey": null
                                       }
@@ -373,7 +395,7 @@ return {
                             ],
                             "storageKey": null
                           },
-                          (v8/*: any*/)
+                          (v10/*: any*/)
                         ],
                         "type": "AutomationTask",
                         "abstractKey": null
@@ -472,8 +494,9 @@ return {
                                         "plural": false,
                                         "selections": [
                                           (v2/*: any*/),
-                                          (v7/*: any*/),
-                                          (v9/*: any*/)
+                                          (v8/*: any*/),
+                                          (v9/*: any*/),
+                                          (v11/*: any*/)
                                         ],
                                         "storageKey": null
                                       }
@@ -486,12 +509,12 @@ return {
                             ],
                             "storageKey": null
                           },
-                          (v8/*: any*/)
+                          (v10/*: any*/)
                         ],
                         "type": "AutomationTask",
                         "abstractKey": null
                       },
-                      (v9/*: any*/)
+                      (v11/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -507,14 +530,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "2e0547e7960ad79f9ba85262548f6474",
+    "cacheID": "be7240175b6f8459ca9ab8e21054bf28",
     "id": null,
     "metadata": {},
     "name": "InversionSolutionDiagnosticContainerQuery",
     "operationKind": "query",
-    "text": "query InversionSolutionDiagnosticContainerQuery(\n  $id: [ID!]\n) {\n  nodes(id_in: $id) {\n    result {\n      edges {\n        node {\n          __typename\n          ... on AutomationTask {\n            created\n            task_type\n            id\n            files {\n              edges {\n                node {\n                  file {\n                    __typename\n                    ... on ScaledInversionSolution {\n                      id\n                      meta {\n                        k\n                        v\n                      }\n                      source_solution {\n                        id\n                        meta {\n                          k\n                          v\n                        }\n                      }\n                    }\n                    ... on Node {\n                      __isNode: __typename\n                      id\n                    }\n                  }\n                }\n              }\n            }\n            inversion_solution {\n              id\n              file_name\n              mfd_table_id\n              meta {\n                k\n                v\n              }\n              tables {\n                table_id\n                table_type\n              }\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query InversionSolutionDiagnosticContainerQuery(\n  $id: [ID!]\n) {\n  nodes(id_in: $id) {\n    result {\n      edges {\n        node {\n          __typename\n          ... on AutomationTask {\n            created\n            task_type\n            id\n            files {\n              edges {\n                node {\n                  file {\n                    __typename\n                    ... on ScaledInversionSolution {\n                      id\n                      meta {\n                        k\n                        v\n                      }\n                      source_solution {\n                        id\n                        meta {\n                          k\n                          v\n                        }\n                      }\n                    }\n                    ... on TimeDependentInversionSolution {\n                      id\n                      meta {\n                        k\n                        v\n                      }\n                      source_solution {\n                        id\n                        meta {\n                          k\n                          v\n                        }\n                      }\n                    }\n                    ... on Node {\n                      __isNode: __typename\n                      id\n                    }\n                  }\n                }\n              }\n            }\n            inversion_solution {\n              id\n              file_name\n              mfd_table_id\n              meta {\n                k\n                v\n              }\n              tables {\n                table_id\n                table_type\n              }\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '8518b83202d5900d8513e7838849e64d';
+(node as any).hash = 'adfd94fef09df09218e8266b6ac2411c';
 export default node;

@@ -65,7 +65,7 @@ interface GeneralViewProps {
   currentImage: number;
   automationTasksLength: number;
   setGeneralViews: (selection: string[]) => void;
-  isScaledSolution: boolean;
+  solutionType: string;
 }
 
 const GeneralView: React.FC<GeneralViewProps> = ({
@@ -77,14 +77,14 @@ const GeneralView: React.FC<GeneralViewProps> = ({
   setGeneralViews,
   currentImage,
   automationTasksLength,
-  isScaledSolution,
+  solutionType,
 }: GeneralViewProps) => {
   const [viewOptions, setViewOptions] = useState<SolutionDiagnosticsOption[]>([diagnosticReportViewOptions[0]]);
   const [generalViewSelections, setGeneralViewSelections] = useState<SolutionDiagnosticsOption[]>([viewOptions[0]]);
 
   useEffect(() => {
     let scaledReportViewOptions: SolutionDiagnosticsOption[] = [];
-    if (isScaledSolution) {
+    if (solutionType === 'SCALED_INVERSION_SOLUTION' || solutionType === 'TIME_DEPENDENT_SOLUTION') {
       scaledReportViewOptions = diagnosticReportViewOptions.filter(
         (option) =>
           option.displayName !== 'Perturbations & Non-Zero Rates' &&
@@ -96,7 +96,7 @@ const GeneralView: React.FC<GeneralViewProps> = ({
     } else {
       setViewOptions(diagnosticReportViewOptions);
     }
-  }, [isScaledSolution]);
+  }, [solutionType]);
 
   useEffect(() => {
     const filtered = viewOptions.filter((option) => generalViews.includes(option.displayName));
@@ -123,7 +123,7 @@ const GeneralView: React.FC<GeneralViewProps> = ({
             if (
               (option.finalPath === 'mfd_plot_Total_MFD.png' ||
                 option.finalPath === 'mfd_plot_Total_MFD_cumulative.png') &&
-              isScaledSolution === false
+              solutionType === 'INVERSION_SOLUTION'
             ) {
               return (
                 <GeneralViewMfdDynamicDialog

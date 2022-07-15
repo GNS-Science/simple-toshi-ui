@@ -1,9 +1,10 @@
 import { TableType } from '../components/generalTask/__generated__/InversionSolutionDiagnosticContainerQuery.graphql';
-import { ModelType } from '../pages/__generated__/MySolutionsQuery.graphql';
+import { ModelType, TaskSubType } from '../pages/__generated__/MySolutionsQuery.graphql';
 
 export interface SolutionItem {
   readonly __typename: 'AutomationTask';
   readonly id: string;
+  readonly task_type: TaskSubType | null;
   readonly parents: {
     readonly edges: ReadonlyArray<{
       readonly node: {

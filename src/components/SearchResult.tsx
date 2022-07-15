@@ -20,7 +20,12 @@ const SearchResult: React.FC<SearchResultProps> = ({ queryRef }: SearchResultPro
         {data?.search?.search_result?.edges?.map((edge) => {
           const searchType = edge?.node?.__typename;
           switch (searchType) {
-            case searchType == 'File' || searchType == 'InversionSolution' ? searchType : null: {
+            case searchType == 'File' ||
+            searchType == 'InversionSolution' ||
+            searchType == 'ScaledInversionSolution' ||
+            searchType == 'TimeDependentInversionSolution'
+              ? searchType
+              : null: {
               return (
                 <MiniFile
                   key={edge?.node?.id}

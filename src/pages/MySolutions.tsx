@@ -150,6 +150,7 @@ export const mySolutionsQuery = graphql`
             __typename
             ... on AutomationTask {
               id
+              task_type
               parents {
                 edges {
                   node {
@@ -176,6 +177,20 @@ export const mySolutionsQuery = graphql`
                   node {
                     file {
                       ... on ScaledInversionSolution {
+                        id
+                        meta {
+                          k
+                          v
+                        }
+                        source_solution {
+                          id
+                          meta {
+                            k
+                            v
+                          }
+                        }
+                      }
+                      ... on TimeDependentInversionSolution {
                         id
                         meta {
                           k

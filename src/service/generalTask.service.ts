@@ -48,12 +48,10 @@ export const validateUnifiedInversionSolutions = (
 ): UnifiedInversionSolution[] => {
   const subtasks = data?.nodes?.result?.edges.map((subtask) => subtask?.node);
   const unifiedInversionSolutions: UnifiedInversionSolution[] = [];
-
   subtasks?.map((subtask) => {
     if (subtask && subtask.__typename === 'AutomationTask') {
       const scaledFile = subtask.files?.edges.filter((file) => file?.node?.file?.source_solution);
       const scaledIS = scaledFile && scaledFile[0]?.node?.file;
-
       if (subtask.inversion_solution) {
         const hazardTable = subtask.inversion_solution.tables?.find((table) => table?.table_type === 'HAZARD_SITES');
         const hazardId = hazardTable ? hazardTable?.table_id : '';
@@ -83,7 +81,10 @@ export const validateUnifiedInversionSolutions = (
         unifiedInversionSolutions.push(newUnifiedInversionSolution);
       } else if (scaledIS && scaledIS.source_solution) {
         const newUnifiedInversionSolution: UnifiedInversionSolution = {
-          type: UnifiedInversionSolutionType.SCALED_INVERSION_SOLUTION,
+          type:
+            subtask.task_type === 'TIME_DEPENDENT_SOLUTION'
+              ? UnifiedInversionSolutionType.TIME_DEPENDENT_SOLUTION
+              : UnifiedInversionSolutionType.SCALED_INVERSION_SOLUTION,
           id: subtask.id,
           solution: {
             id: scaledIS.id as string,
