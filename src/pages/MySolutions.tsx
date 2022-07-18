@@ -190,6 +190,8 @@ export const mySolutionsQuery = graphql`
                           }
                         }
                       }
+                    }
+                    file {
                       ... on TimeDependentInversionSolution {
                         id
                         meta {

@@ -139,6 +139,20 @@ query MySolutionsQuery(
                       __isNode: __typename
                       id
                     }
+                    ... on TimeDependentInversionSolution {
+                      id
+                      meta {
+                        k
+                        v
+                      }
+                      source_solution {
+                        id
+                        meta {
+                          k
+                          v
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -326,29 +340,36 @@ v7 = {
   "selections": (v5/*: any*/),
   "storageKey": null
 },
-v8 = {
+v8 = [
+  (v3/*: any*/),
+  (v7/*: any*/),
+  {
+    "alias": null,
+    "args": null,
+    "concreteType": "InversionSolution",
+    "kind": "LinkedField",
+    "name": "source_solution",
+    "plural": false,
+    "selections": [
+      (v3/*: any*/),
+      (v7/*: any*/)
+    ],
+    "storageKey": null
+  }
+],
+v9 = {
   "kind": "InlineFragment",
-  "selections": [
-    (v3/*: any*/),
-    (v7/*: any*/),
-    {
-      "alias": null,
-      "args": null,
-      "concreteType": "InversionSolution",
-      "kind": "LinkedField",
-      "name": "source_solution",
-      "plural": false,
-      "selections": [
-        (v3/*: any*/),
-        (v7/*: any*/)
-      ],
-      "storageKey": null
-    }
-  ],
+  "selections": (v8/*: any*/),
   "type": "ScaledInversionSolution",
   "abstractKey": null
 },
-v9 = {
+v10 = {
+  "kind": "InlineFragment",
+  "selections": (v8/*: any*/),
+  "type": "TimeDependentInversionSolution",
+  "abstractKey": null
+},
+v11 = {
   "alias": null,
   "args": null,
   "concreteType": "InversionSolution",
@@ -393,7 +414,7 @@ v9 = {
   ],
   "storageKey": null
 },
-v10 = {
+v12 = {
   "kind": "InlineFragment",
   "selections": [
     (v3/*: any*/)
@@ -479,7 +500,8 @@ return {
                                         "name": "file",
                                         "plural": false,
                                         "selections": [
-                                          (v8/*: any*/)
+                                          (v9/*: any*/),
+                                          (v10/*: any*/)
                                         ],
                                         "storageKey": null
                                       }
@@ -492,7 +514,7 @@ return {
                             ],
                             "storageKey": null
                           },
-                          (v9/*: any*/)
+                          (v11/*: any*/)
                         ],
                         "type": "AutomationTask",
                         "abstractKey": null
@@ -591,7 +613,8 @@ return {
                                         "plural": false,
                                         "selections": [
                                           (v2/*: any*/),
-                                          (v8/*: any*/),
+                                          (v9/*: any*/),
+                                          (v12/*: any*/),
                                           (v10/*: any*/)
                                         ],
                                         "storageKey": null
@@ -605,12 +628,12 @@ return {
                             ],
                             "storageKey": null
                           },
-                          (v9/*: any*/)
+                          (v11/*: any*/)
                         ],
                         "type": "AutomationTask",
                         "abstractKey": null
                       },
-                      (v10/*: any*/)
+                      (v12/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -626,14 +649,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "242f0f440027d3cf2463e6a92cd41960",
+    "cacheID": "b899612d05dd5bcfe9c9876278bd6367",
     "id": null,
     "metadata": {},
     "name": "MySolutionsQuery",
     "operationKind": "query",
-    "text": "query MySolutionsQuery(\n  $id: [ID!]\n) {\n  nodes(id_in: $id) {\n    result {\n      edges {\n        node {\n          __typename\n          ... on AutomationTask {\n            id\n            task_type\n            parents {\n              edges {\n                node {\n                  parent {\n                    id\n                    created\n                    title\n                    description\n                    model_type\n                    swept_arguments\n                    notes\n                    argument_lists {\n                      k\n                      v\n                    }\n                  }\n                }\n              }\n            }\n            files {\n              edges {\n                node {\n                  file {\n                    __typename\n                    ... on ScaledInversionSolution {\n                      id\n                      meta {\n                        k\n                        v\n                      }\n                      source_solution {\n                        id\n                        meta {\n                          k\n                          v\n                        }\n                      }\n                    }\n                    ... on Node {\n                      __isNode: __typename\n                      id\n                    }\n                  }\n                }\n              }\n            }\n            inversion_solution {\n              id\n              mfd_table_id\n              meta {\n                k\n                v\n              }\n              tables {\n                table_id\n                table_type\n              }\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query MySolutionsQuery(\n  $id: [ID!]\n) {\n  nodes(id_in: $id) {\n    result {\n      edges {\n        node {\n          __typename\n          ... on AutomationTask {\n            id\n            task_type\n            parents {\n              edges {\n                node {\n                  parent {\n                    id\n                    created\n                    title\n                    description\n                    model_type\n                    swept_arguments\n                    notes\n                    argument_lists {\n                      k\n                      v\n                    }\n                  }\n                }\n              }\n            }\n            files {\n              edges {\n                node {\n                  file {\n                    __typename\n                    ... on ScaledInversionSolution {\n                      id\n                      meta {\n                        k\n                        v\n                      }\n                      source_solution {\n                        id\n                        meta {\n                          k\n                          v\n                        }\n                      }\n                    }\n                    ... on Node {\n                      __isNode: __typename\n                      id\n                    }\n                    ... on TimeDependentInversionSolution {\n                      id\n                      meta {\n                        k\n                        v\n                      }\n                      source_solution {\n                        id\n                        meta {\n                          k\n                          v\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n            inversion_solution {\n              id\n              mfd_table_id\n              meta {\n                k\n                v\n              }\n              tables {\n                table_id\n                table_type\n              }\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '81764bfee897cfda541b69439781290d';
+(node as any).hash = '9e7185b390413c4e175af4db2ac54ad7';
 export default node;
