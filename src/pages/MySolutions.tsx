@@ -176,17 +176,44 @@ export const mySolutionsQuery = graphql`
                 edges {
                   node {
                     file {
+                      __typename
                       ... on ScaledInversionSolution {
                         id
                         meta {
                           k
                           v
                         }
-                        source_solution {
-                          id
-                          meta {
-                            k
-                            v
+                        # source_solution {
+                        #   id
+                        #   meta {
+                        #     k
+                        #     v
+                        #   }
+                        # }
+                        predecessors {
+                          __typename
+                          pre_id: id
+                          relationship
+                          depth
+                          node {
+                            ... on File {
+                              file_meta: meta {
+                                k
+                                v
+                              }
+                            }
+                            ... on InversionSolution {
+                              is_meta: meta {
+                                k
+                                v
+                              }
+                            }
+                            ... on TimeDependentInversionSolution {
+                              td_meta: meta {
+                                k
+                                v
+                              }
+                            }
                           }
                         }
                       }
@@ -196,13 +223,43 @@ export const mySolutionsQuery = graphql`
                           k
                           v
                         }
-                        source_solution {
-                          id
-                          meta {
-                            k
-                            v
+                        # source_solution {
+                        #   id
+                        #   meta {
+                        #     k
+                        #     v
+                        #   }
+                        # }
+                        predecessors {
+                          __typename
+                          pre_id: id
+                          relationship
+                          depth
+                          node {
+                            ... on File {
+                              file_meta: meta {
+                                k
+                                v
+                              }
+                            }
+                            ... on InversionSolution {
+                              is_meta: meta {
+                                k
+                                v
+                              }
+                            }
+                            ... on TimeDependentInversionSolution {
+                              td_meta: meta {
+                                k
+                                v
+                              }
+                            }
                           }
                         }
+                      }
+                      ... on Node {
+                        __isNode: __typename
+                        id
                       }
                     }
                   }
@@ -210,6 +267,7 @@ export const mySolutionsQuery = graphql`
               }
               inversion_solution {
                 id
+                file_name
                 mfd_table_id
                 meta {
                   k
@@ -220,6 +278,10 @@ export const mySolutionsQuery = graphql`
                   table_type
                 }
               }
+            }
+            ... on Node {
+              __isNode: __typename
+              id
             }
           }
         }
