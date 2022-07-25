@@ -183,13 +183,6 @@ export const mySolutionsQuery = graphql`
                           k
                           v
                         }
-                        # source_solution {
-                        #   id
-                        #   meta {
-                        #     k
-                        #     v
-                        #   }
-                        # }
                         predecessors {
                           __typename
                           pre_id: id
@@ -223,13 +216,6 @@ export const mySolutionsQuery = graphql`
                           k
                           v
                         }
-                        # source_solution {
-                        #   id
-                        #   meta {
-                        #     k
-                        #     v
-                        #   }
-                        # }
                         predecessors {
                           __typename
                           pre_id: id
@@ -259,7 +245,7 @@ export const mySolutionsQuery = graphql`
                       }
                       ... on Node {
                         __isNode: __typename
-                        id
+                        node_id: id
                       }
                     }
                   }

@@ -117,13 +117,6 @@ export const inversionSolutionDiagnosticContainerQuery = graphql`
                           k
                           v
                         }
-                        # source_solution {
-                        #   id
-                        #   meta {
-                        #     k
-                        #     v
-                        #   }
-                        # }
                         predecessors {
                           __typename
                           pre_id: id
@@ -157,13 +150,6 @@ export const inversionSolutionDiagnosticContainerQuery = graphql`
                           k
                           v
                         }
-                        # source_solution {
-                        #   id
-                        #   meta {
-                        #     k
-                        #     v
-                        #   }
-                        # }
                         predecessors {
                           __typename
                           pre_id: id
@@ -193,7 +179,7 @@ export const inversionSolutionDiagnosticContainerQuery = graphql`
                       }
                       ... on Node {
                         __isNode: __typename
-                        id
+                        node_id: id
                       }
                     }
                   }
