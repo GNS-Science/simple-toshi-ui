@@ -165,7 +165,10 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       }
 
       if (
-        [0, 2].includes(unifiedInversionSolutions[currentImage].type) &&
+        [
+          UnifiedInversionSolutionType.SCALED_INVERSION_SOLUTION,
+          UnifiedInversionSolutionType.TIME_DEPENDENT_SOLUTION,
+        ].includes(unifiedInversionSolutions[currentImage].type) &&
         unifiedInversionSolutions[currentImage]?.solution?.source_solution?.meta !== undefined
       ) {
         const sourceMeta = unifiedInversionSolutions[currentImage]?.solution?.source_solution?.meta;
