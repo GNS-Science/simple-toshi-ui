@@ -70,7 +70,7 @@ export enum UnifiedInversionSolutionType {
   TIME_DEPENDENT_SOLUTION,
 }
 
-export type ScaledSourceSolution = {
+export type SourceSolution = {
   id: string;
   meta: Meta;
 };
@@ -84,7 +84,7 @@ export type UnifiedInversionSolution = {
     meta: Meta;
     hazardId: string | null;
     mfdTableId: string | null;
-    source_solution: ScaledSourceSolution | null;
+    source_solution: SourceSolution | null;
   };
 };
 
