@@ -50,8 +50,6 @@ export const validateUnifiedInversionSolutions = (
   const unifiedInversionSolutions: UnifiedInversionSolution[] = [];
   subtasks?.map((subtask) => {
     if (subtask && subtask.__typename === 'AutomationTask') {
-      const scaledFile = subtask.files?.edges.filter((file) => file?.node?.file?.source_solution);
-      const scaledIS = scaledFile && scaledFile[0]?.node?.file;
       if (subtask.inversion_solution) {
         const hazardTable = subtask.inversion_solution.tables?.find((table) => table?.table_type === 'HAZARD_SITES');
         const hazardId = hazardTable ? hazardTable?.table_id : '';
@@ -65,7 +63,7 @@ export const validateUnifiedInversionSolutions = (
 
         const newUnifiedInversionSolution: UnifiedInversionSolution = {
           type: UnifiedInversionSolutionType.INVERSION_SOLUTION,
-          id: subtask.id,
+          id: subtask.id || '',
           solution: {
             id: subtask.inversion_solution.id,
             meta: [],
@@ -79,28 +77,45 @@ export const validateUnifiedInversionSolutions = (
             kv !== null && newUnifiedInversionSolution.solution.meta.push(kv);
           });
         unifiedInversionSolutions.push(newUnifiedInversionSolution);
-      } else if (scaledIS && scaledIS.source_solution) {
+      } else if (
+        (subtask && subtask.task_type === 'SCALE_SOLUTION') ||
+        (subtask && subtask.task_type === 'TIME_DEPENDENT_SOLUTION')
+      ) {
+        const predecessorsFile = subtask.files?.edges.filter((file) => file?.node?.file?.predecessors);
+
+        const sourceSolution =
+          predecessorsFile &&
+          predecessorsFile[0]?.node?.file?.predecessors?.filter(
+            (predecessor) => predecessor && predecessor.__typename === 'InversionSolution',
+          )[0];
+
+        const scaledOrTimeDependentSolution = subtask?.files?.edges?.filter(
+          (file) =>
+            file?.node?.file?.__typename &&
+            ['ScaledInversionSolution', 'TimeDependentInversionSolution'].includes(file?.node?.file?.__typename),
+        )[0]?.node?.file;
+
         const newUnifiedInversionSolution: UnifiedInversionSolution = {
           type:
             subtask.task_type === 'TIME_DEPENDENT_SOLUTION'
               ? UnifiedInversionSolutionType.TIME_DEPENDENT_SOLUTION
               : UnifiedInversionSolutionType.SCALED_INVERSION_SOLUTION,
-          id: subtask.id,
+          id: subtask.id || '',
           solution: {
-            id: scaledIS.id as string,
+            id: scaledOrTimeDependentSolution?.id || '',
             meta: [],
             hazardId: null,
             mfdTableId: null,
             source_solution: {
-              id: scaledIS.source_solution.id,
+              id: (sourceSolution && sourceSolution.pre_id) || '',
               meta: [],
             },
           },
         };
-        scaledIS?.meta?.map((kv) => {
+        scaledOrTimeDependentSolution?.meta?.map((kv) => {
           kv !== null && newUnifiedInversionSolution.solution.meta.push(kv);
         });
-        scaledIS?.source_solution?.meta?.map((kv) => {
+        sourceSolution?.node?.is_meta?.map((kv) => {
           kv !== null &&
             newUnifiedInversionSolution.solution.source_solution &&
             newUnifiedInversionSolution.solution.source_solution.meta.push(kv);
@@ -109,7 +124,6 @@ export const validateUnifiedInversionSolutions = (
       }
     }
   });
-
   return unifiedInversionSolutions;
 };
 

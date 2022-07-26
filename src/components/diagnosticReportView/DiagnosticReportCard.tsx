@@ -9,7 +9,12 @@ import NamedFaultsView from './NamedFaultsView';
 import RegionalMfdView from './RegionalMfdView';
 import InversionSolutionHazardCharts from '../inversionSolution/InversionSolutionHazardCharts';
 import ParentFaultView from './ParentFaultViews';
-import { SweepArguments, UnifiedInversionSolution, UnifiedInversionSolutionType } from '../../interfaces/generaltask';
+import {
+  SweepArgument,
+  SweepArguments,
+  UnifiedInversionSolution,
+  UnifiedInversionSolutionType,
+} from '../../interfaces/generaltask';
 import { MetaArguments } from '../../interfaces/mySolutions';
 import { filteredMetaGT, filterMetaArguments } from '../../service/diagnosticReports.service';
 import SolutionAnalysisTab from '../inversionSolution/SolutionAnalysisTab';
@@ -152,10 +157,28 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
       const hazardTableId = unifiedInversionSolutions[currentImage].solution.hazardId;
       hazardTableId ? setHazardId(hazardTableId) : setHazardId('');
       let metaList: MetaArguments = [];
+
       if (sweepArgs) {
         metaList = filteredMetaGT(unifiedInversionSolutions[currentImage].solution.meta, sweepArgs);
       } else if (sweepList) {
         metaList = filterMetaArguments(unifiedInversionSolutions[currentImage].solution.meta, sweepList);
+      }
+
+      if (
+        [
+          UnifiedInversionSolutionType.SCALED_INVERSION_SOLUTION,
+          UnifiedInversionSolutionType.TIME_DEPENDENT_SOLUTION,
+        ].includes(unifiedInversionSolutions[currentImage].type) &&
+        unifiedInversionSolutions[currentImage]?.solution?.source_solution?.meta !== undefined
+      ) {
+        const sourceMeta = unifiedInversionSolutions[currentImage]?.solution?.source_solution?.meta;
+        const sweepArgs: (SweepArgument | null)[] = [];
+        sourceMeta?.map((kv) => {
+          kv?.v && kv?.v.includes('tag') && sweepArgs.push(kv as SweepArgument);
+        });
+        if (sourceMeta !== undefined) {
+          metaList = filteredMetaGT(sourceMeta, sweepArgs as SweepArguments);
+        }
       }
       setFilteredMeta(metaList);
     }

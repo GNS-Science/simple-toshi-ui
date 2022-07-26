@@ -23,7 +23,7 @@ const DiagnosticReportTab: React.FC<DiagnosticReportTabProps> = ({ id }: Diagnos
   const baseUrl = process.env.REACT_APP_REPORTS_URL;
   return (
     <Root>
-      <iframe className={classes.iframe} src={`${baseUrl}/opensha/DATA/${id}/solution_report/`} />
+      <iframe className={classes.iframe} src={`${baseUrl}/opensha/DATA/${id}/solution_report/index.html`} />
     </Root>
   );
 };

@@ -110,42 +110,81 @@ export const inversionSolutionDiagnosticContainerQuery = graphql`
                 edges {
                   node {
                     file {
-                      #for ScaledInversionSolutions
+                      __typename
                       ... on ScaledInversionSolution {
                         id
                         meta {
                           k
                           v
                         }
-                        source_solution {
-                          id
-                          meta {
-                            k
-                            v
+                        predecessors {
+                          __typename
+                          pre_id: id
+                          relationship
+                          depth
+                          node {
+                            ... on File {
+                              file_meta: meta {
+                                k
+                                v
+                              }
+                            }
+                            ... on InversionSolution {
+                              is_meta: meta {
+                                k
+                                v
+                              }
+                            }
+                            ... on TimeDependentInversionSolution {
+                              td_meta: meta {
+                                k
+                                v
+                              }
+                            }
                           }
                         }
                       }
-
-                      #for TimeDependent InversionSolutions
                       ... on TimeDependentInversionSolution {
                         id
                         meta {
                           k
                           v
                         }
-                        source_solution {
-                          id
-                          meta {
-                            k
-                            v
+                        predecessors {
+                          __typename
+                          pre_id: id
+                          relationship
+                          depth
+                          node {
+                            ... on File {
+                              file_meta: meta {
+                                k
+                                v
+                              }
+                            }
+                            ... on InversionSolution {
+                              is_meta: meta {
+                                k
+                                v
+                              }
+                            }
+                            ... on TimeDependentInversionSolution {
+                              td_meta: meta {
+                                k
+                                v
+                              }
+                            }
                           }
                         }
+                      }
+                      ... on Node {
+                        __isNode: __typename
+                        node_id: id
                       }
                     }
                   }
                 }
               }
-              #for InversionSolutions
               inversion_solution {
                 id
                 file_name
@@ -159,6 +198,10 @@ export const inversionSolutionDiagnosticContainerQuery = graphql`
                   table_type
                 }
               }
+            }
+            ... on Node {
+              __isNode: __typename
+              id
             }
           }
         }
