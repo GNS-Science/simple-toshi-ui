@@ -3,12 +3,18 @@ schema {
   mutation: MutationRoot
 }
 
+"""Exposes a URL that specifies the behaviour of this scalar."""
+directive @specifiedBy(
+  """The URL that specifies the behaviour of this scalar."""
+  url: String!
+) on SCALAR
+
 """
-Represents a Aggregate Inversion Solution file produced fby applying the 
-aggregate_fn to the rates of each source solution. 
+Represents a Aggregate Inversion Solution file produced fby applying the
+aggregate_fn to the rates of each source solution.
 """
 type AggregateInversionSolution implements Node & FileInterface & PredecessorsInterface & InversionSolutionInterface {
-  """The ID of the object."""
+  """The ID of the object"""
   id: ID!
 
   """The name of the file"""
@@ -80,7 +86,7 @@ type AppendInversionSolutionTablesPayload {
 
 """An AutomationTask in the NSHM process"""
 type AutomationTask implements Node & Thing & AutomationTaskInterface {
-  """The ID of the object."""
+  """The ID of the object"""
   id: ID!
 
   """The time the event was created"""
@@ -256,8 +262,8 @@ input CreateGeneralTaskInput {
 
   """count of subtasks"""
   subtask_count: Int
-  subtask_type: TaskSubType
-  model_type: ModelType
+  subtask_type: TaskSubType = null
+  model_type: ModelType = null
   subtask_result: EventResult
 
   """When the taskrecord was created"""
@@ -572,7 +578,7 @@ enum EventState {
 
 """A data file"""
 type File implements Node & FileInterface & PredecessorsInterface {
-  """The ID of the object."""
+  """The ID of the object"""
   id: ID!
 
   """The name of the file"""
@@ -683,7 +689,7 @@ A General Task capture metadata and related inputs/outputs for arbitrary tasks
 that may not happen often enough to justify automation and/or a custom schema type.
 """
 type GeneralTask implements Node & Thing {
-  """The ID of the object."""
+  """The ID of the object"""
   id: ID!
 
   """When the task record was created"""
@@ -731,7 +737,7 @@ type GeneralTask implements Node & Thing {
 
 """Represents an Inversion Solution file"""
 type InversionSolution implements Node & InversionSolutionInterface & FileInterface & PredecessorsInterface {
-  """The ID of the object."""
+  """The ID of the object"""
   id: ID!
 
   """When the solution was created"""
@@ -806,7 +812,7 @@ This is a zip archive containing two XML source files that have been converted f
 NB any arguments used to generate this object should be captured as in meta field.
 """
 type InversionSolutionNrml implements Node & FileInterface & PredecessorsInterface {
-  """The ID of the object."""
+  """The ID of the object"""
   id: ID!
 
   """The name of the file"""
@@ -836,7 +842,7 @@ type InversionSolutionNrml implements Node & FileInterface & PredecessorsInterfa
   """When the scaled solution file was created"""
   created: DateTime
 
-  """The original solution."""
+  """The original soloution as produced by opensha"""
   source_solution: SourceSolutionUnion
 }
 
@@ -880,9 +886,8 @@ input KeyValuePairInput {
 a unique, labelled table relationship.
 
 This is intended to be used as an internal structure within an InversionSolution (or similar).
-It must be stored internally in the parent object, so does not implement the
-node interface. New instances must be mutated via the
-parent class.
+It must be stored internally in the parent object, so does not implement the node interface.
+New instances must be mutated via the parent class.
 """
 type LabelledTableRelation {
   """an internal unique UUID to support mutations."""
@@ -919,7 +924,7 @@ input LabelledTableRelationInput {
   table_id: ID
 
   """table type"""
-  table_type: TableType
+  table_type: TableType = null
 
   """table dimensions, as a list of Key Value List pairs."""
   dimensions: [KeyValueListPairInput]
@@ -976,7 +981,7 @@ type MutationRoot {
   create_openquake_hazard_solution(input: CreateOpenquakeHazardSolutionInput!): CreateOpenquakeHazardSolutionPayload
   create_openquake_hazard_config(input: CreateOpenquakeHazardConfigInput!): CreateOpenquakeHazardConfigPayload
   create_openquake_hazard_task(input: OpenquakeHazardTaskInput!): CreateOpenquakeHazardTask
-  update_openquake_hazard_task(input: OpenquakeHazardTaskUpdateInput!): UpdateOpenquakeHazardTask
+  update_openquake_hazard_task(input: OpenquakeHazardTaskUpdateInput): UpdateOpenquakeHazardTask
 }
 
 input NewAutomationTaskInput {
@@ -999,13 +1004,13 @@ input NewAutomationTaskInput {
 
   """result metrics from the task, as a list of Key Value pairs."""
   metrics: [KeyValuePairInput]
-  model_type: ModelType
+  model_type: ModelType = null
   task_type: TaskSubType!
 }
 
 """An object with an ID"""
 interface Node {
-  """The ID of the object."""
+  """The ID of the object"""
   id: ID!
 }
 
@@ -1014,9 +1019,35 @@ type NodeFilter {
   result(before: String, after: String, first: Int, last: Int): SearchResultConnection
 }
 
+type ObjectIdentitiesConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ObjectIdentitiesEdge]!
+}
+
+"""A Relay edge containing a `ObjectIdentities` and its cursor."""
+type ObjectIdentitiesEdge {
+  """The item at the end of the edge"""
+  node: ObjectIdentity
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type ObjectIdentity implements Node {
+  """The ID of the object"""
+  id: ID!
+  object_type: String
+  object_id: String
+  clazz_name: String
+  node_id: ID
+}
+
 """An OpenquakeHazardConfig in the NSHM process"""
 type OpenquakeHazardConfig implements Node & Thing {
-  """The ID of the object."""
+  """The ID of the object"""
   id: ID!
 
   """When the thing was created"""
@@ -1051,7 +1082,7 @@ This has :
 NB any arguments used to generate this object should be captured as in meta field.
 """
 type OpenquakeHazardSolution implements Node & Thing & PredecessorsInterface {
-  """The ID of the object."""
+  """The ID of the object"""
   id: ID!
 
   """When it was created (UTZ)"""
@@ -1098,7 +1129,7 @@ type OpenquakeHazardSolution implements Node & Thing & PredecessorsInterface {
 
 """An OpenquakeHazardTask in the NSHM process"""
 type OpenquakeHazardTask implements Node & Thing & AutomationTaskInterface {
-  """The ID of the object."""
+  """The ID of the object"""
   id: ID!
 
   """The time the event was created"""
@@ -1135,6 +1166,7 @@ type OpenquakeHazardTask implements Node & Thing & AutomationTaskInterface {
   """The openquake solution"""
   hazard_solution: OpenquakeHazardSolution
   model_type: ModelType
+  task_type: OpenquakeTaskType
 }
 
 input OpenquakeHazardTaskInput {
@@ -1159,6 +1191,7 @@ input OpenquakeHazardTaskInput {
   metrics: [KeyValuePairInput]
   config: ID!
   model_type: ModelType!
+  task_type: OpenquakeTaskType = HAZARD
 }
 
 input OpenquakeHazardTaskUpdateInput {
@@ -1184,6 +1217,12 @@ input OpenquakeHazardTaskUpdateInput {
 
 """Some NRML files are just files i.e BG seismicity XML."""
 union OpenquakeNrmlUnion = File | InversionSolutionNrml
+
+enum OpenquakeTaskType {
+  HAZARD
+  DISAGG
+  UNDEFINED
+}
 
 """
 The Relay compliant `PageInfo` type, containing data necessary to paginate this connection.
@@ -1224,7 +1263,7 @@ input PredecessorInput {
   id: ID
 
   """The predecessor relationship numerically"""
-  depth: Int
+  depth: Int = null
 }
 
 """A interface for things having predecessors"""
@@ -1233,10 +1272,16 @@ interface PredecessorsInterface {
   predecessors: [Predecessor]
 }
 
-union PredecessorUnion = File | InversionSolution | ScaledInversionSolution | InversionSolutionNrml | TimeDependentInversionSolution
+union PredecessorUnion = File | AggregateInversionSolution | InversionSolution | ScaledInversionSolution | InversionSolutionNrml | TimeDependentInversionSolution
 
 """This is the entry point for all graphql query operations"""
 type QueryRoot {
+  """About this API """
+  about: String
+
+  """API version string"""
+  version: String
+
   """List Opensha Rupture Generation tasks."""
   rupture_generation_tasks(before: String, after: String, first: Int, last: Int): RuptureGenerationTaskConnection
 
@@ -1247,7 +1292,12 @@ type QueryRoot {
     id: ID!
   ): Node
   nodes(id_in: [ID]): NodeFilter
+
+  """reindex objects with the Search (ES) service"""
+  reindex(id_in: [ID]): NodeFilter
   search(search_term: String): Search
+  object_identities(object_type: String, before: String, after: String, first: Int, last: Int): ObjectIdentitiesConnection
+  legacy_object_identities(store_type: String, before: String, after: String, first: Int, last: Int): ObjectIdentitiesConnection
   strong_motion_station(id: ID!): StrongMotionStation
 
   """The list of strong motion stations"""
@@ -1264,7 +1314,7 @@ enum RowItemType {
 
 """An RuptureGenerationTask in the NSHM process"""
 type RuptureGenerationTask implements Node & Thing & AutomationTaskInterface {
-  """The ID of the object."""
+  """The ID of the object"""
   id: ID!
 
   """The time the event was created"""
@@ -1322,7 +1372,7 @@ NB the  arguments used to scaling this solution (relatve to the source_solution)
 should be captured as in meta field.
 """
 type ScaledInversionSolution implements Node & FileInterface & PredecessorsInterface & InversionSolutionInterface {
-  """The ID of the object."""
+  """The ID of the object"""
   id: ID!
 
   """The name of the file"""
@@ -1368,7 +1418,7 @@ type ScaledInversionSolution implements Node & FileInterface & PredecessorsInter
   produced_by: AutomationTaskUnion
 
   """The original soloution as produced by opensha"""
-  source_solution: InversionSolution
+  source_solution: SourceSolutionUnion
 }
 
 type Search {
@@ -1376,7 +1426,7 @@ type Search {
   search_result(before: String, after: String, first: Int, last: Int): SearchResultConnection
 }
 
-union SearchResult = File | RuptureGenerationTask | StrongMotionStation | SmsFile | GeneralTask | Table | InversionSolution | AutomationTask | ScaledInversionSolution | TimeDependentInversionSolution
+union SearchResult = AggregateInversionSolution | AutomationTask | File | GeneralTask | InversionSolution | InversionSolutionNrml | OpenquakeHazardConfig | OpenquakeHazardSolution | OpenquakeHazardTask | RuptureGenerationTask | ScaledInversionSolution | SmsFile | StrongMotionStation | TimeDependentInversionSolution
 
 type SearchResultConnection {
   """Pagination data for this connection."""
@@ -1397,7 +1447,7 @@ type SearchResultEdge {
 }
 
 type SmsFile implements Node & FileInterface {
-  """The ID of the object."""
+  """The ID of the object"""
   id: ID!
 
   """The name of the file"""
@@ -1447,11 +1497,11 @@ enum SmsSiteClassBasis {
   su
 }
 
-union SourceSolutionUnion = InversionSolution | ScaledInversionSolution | TimeDependentInversionSolution
+union SourceSolutionUnion = AggregateInversionSolution | InversionSolution | ScaledInversionSolution | TimeDependentInversionSolution
 
-"""A Strong Motion Station """
+"""A Strong Motion Station"""
 type StrongMotionStation implements Node & Thing {
-  """The ID of the object."""
+  """The ID of the object"""
   id: ID!
 
   """When the SMS record was created"""
@@ -1514,7 +1564,7 @@ type StrongMotionStationEdge {
 
 """CSV-list structure for floats Distribution"""
 type Table implements Node {
-  """The ID of the object."""
+  """The ID of the object"""
   id: ID!
 
   """a name for the table"""
@@ -1615,7 +1665,7 @@ NB the  arguments used to scaling this solution (relatve to the source_solution)
 should be captured as in meta field.
 """
 type TimeDependentInversionSolution implements Node & FileInterface & PredecessorsInterface & InversionSolutionInterface {
-  """The ID of the object."""
+  """The ID of the object"""
   id: ID!
 
   """The name of the file"""
@@ -1689,8 +1739,8 @@ input UpdateGeneralTaskInput {
 
   """count of subtasks"""
   subtask_count: Int
-  subtask_type: TaskSubType
-  model_type: ModelType
+  subtask_type: TaskSubType = null
+  model_type: ModelType = null
   subtask_result: EventResult
   task_id: ID!
 
