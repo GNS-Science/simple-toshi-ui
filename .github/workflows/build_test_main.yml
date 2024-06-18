@@ -18,7 +18,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [20.x,]
+        node-version: [16.x,]
         # chrisbc: dropping 10.x as it's not supported by D3 , also 12.x, 14.x, 
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
