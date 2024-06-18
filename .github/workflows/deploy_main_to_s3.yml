@@ -39,7 +39,7 @@ jobs:
     - run: yarn build
     - run: yarn test
     - name: Deploy to S3
-      uses: GNS_Science/s3-sync-action@master
+      uses: GNS-Science/s3-sync-action@master
       with:
         args: --acl public-read --delete
       env:
