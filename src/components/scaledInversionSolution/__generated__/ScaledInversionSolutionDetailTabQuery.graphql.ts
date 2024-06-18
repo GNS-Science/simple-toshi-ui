@@ -23,7 +23,7 @@ export type ScaledInversionSolutionDetailTabQueryResponse = {
         } | null> | null | undefined;
         readonly source_solution?: {
             readonly id?: string | undefined;
-            readonly created: unknown | null;
+            readonly created?: unknown | null | undefined;
         } | null | undefined;
         readonly relations?: {
             readonly total_count: number | null;
@@ -60,12 +60,15 @@ query ScaledInversionSolutionDetailTabQuery(
         v
       }
       source_solution {
+        __typename
         ... on Node {
           __isNode: __typename
           id
         }
-        created
-        id
+        ... on InversionSolutionInterface {
+          __isInversionSolutionInterface: __typename
+          created
+        }
       }
       relations {
         total_count
@@ -159,6 +162,14 @@ v8 = {
   "storageKey": null
 },
 v9 = {
+  "kind": "InlineFragment",
+  "selections": [
+    (v6/*: any*/)
+  ],
+  "type": "InversionSolutionInterface",
+  "abstractKey": "__isInversionSolutionInterface"
+},
+v10 = {
   "alias": null,
   "args": null,
   "concreteType": "FileRelationConnection",
@@ -215,17 +226,17 @@ return {
               {
                 "alias": null,
                 "args": null,
-                "concreteType": "InversionSolution",
+                "concreteType": null,
                 "kind": "LinkedField",
                 "name": "source_solution",
                 "plural": false,
                 "selections": [
-                  (v6/*: any*/),
-                  (v7/*: any*/)
+                  (v7/*: any*/),
+                  (v9/*: any*/)
                 ],
                 "storageKey": null
               },
-              (v9/*: any*/)
+              (v10/*: any*/)
             ],
             "type": "ScaledInversionSolution",
             "abstractKey": null
@@ -276,21 +287,18 @@ return {
               {
                 "alias": null,
                 "args": null,
-                "concreteType": "InversionSolution",
+                "concreteType": null,
                 "kind": "LinkedField",
                 "name": "source_solution",
                 "plural": false,
                 "selections": [
-                  (v6/*: any*/),
-                  (v3/*: any*/),
-                  {
-                    "kind": "TypeDiscriminator",
-                    "abstractKey": "__isNode"
-                  }
+                  (v2/*: any*/),
+                  (v7/*: any*/),
+                  (v9/*: any*/)
                 ],
                 "storageKey": null
               },
-              (v9/*: any*/)
+              (v10/*: any*/)
             ],
             "type": "ScaledInversionSolution",
             "abstractKey": null
@@ -301,14 +309,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "c816babc2eac20becf5e08e9bf2e8d08",
+    "cacheID": "7d0c9c6ce707b3c3c970ea96c8347e25",
     "id": null,
     "metadata": {},
     "name": "ScaledInversionSolutionDetailTabQuery",
     "operationKind": "query",
-    "text": "query ScaledInversionSolutionDetailTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    id\n    ... on ScaledInversionSolution {\n      file_name\n      file_url\n      created\n      produced_by {\n        __typename\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n      meta {\n        k\n        v\n      }\n      source_solution {\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        created\n        id\n      }\n      relations {\n        total_count\n      }\n    }\n  }\n}\n"
+    "text": "query ScaledInversionSolutionDetailTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    id\n    ... on ScaledInversionSolution {\n      file_name\n      file_url\n      created\n      produced_by {\n        __typename\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n      meta {\n        k\n        v\n      }\n      source_solution {\n        __typename\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on InversionSolutionInterface {\n          __isInversionSolutionInterface: __typename\n          created\n        }\n      }\n      relations {\n        total_count\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '790557774898476f4c03954f57eb9243';
+(node as any).hash = '03ca4ee803d2f0a398acebfc56015ff3';
 export default node;

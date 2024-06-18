@@ -131,7 +131,7 @@ const scaledInversionSolutionQuery = graphql`
           ... on Node {
             id
           }
-          ... on InversionSolution {
+          ... on InversionSolutionInterface {
             created
           }
         }

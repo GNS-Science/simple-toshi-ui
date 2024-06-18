@@ -18,14 +18,14 @@ jobs:
       
     strategy:
       matrix:
-        node-version: [15.x,]
+        node-version: [16.x,]
         # chrisbc: dropping 10.x as it's not supported by D3 , also 12.x, 14.x, 
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
     - run: yarn install --frozen-lockfile
