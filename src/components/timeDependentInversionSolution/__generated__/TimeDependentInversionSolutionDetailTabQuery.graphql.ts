@@ -23,7 +23,7 @@ export type TimeDependentInversionSolutionDetailTabQueryResponse = {
         } | null> | null | undefined;
         readonly source_solution?: {
             readonly id?: string | undefined;
-            readonly created: unknown | null;
+            readonly created?: unknown | null | undefined;
         } | null | undefined;
         readonly relations?: {
             readonly total_count: number | null;
@@ -64,7 +64,10 @@ query TimeDependentInversionSolutionDetailTabQuery(
           __isNode: __typename
           id
         }
-        created
+        ... on InversionSolutionInterface {
+          __isInversionSolutionInterface: __typename
+          created
+        }
         id
       }
       relations {
@@ -159,6 +162,14 @@ v8 = {
   "storageKey": null
 },
 v9 = {
+  "kind": "InlineFragment",
+  "selections": [
+    (v6/*: any*/)
+  ],
+  "type": "InversionSolutionInterface",
+  "abstractKey": "__isInversionSolutionInterface"
+},
+v10 = {
   "alias": null,
   "args": null,
   "concreteType": "FileRelationConnection",
@@ -220,12 +231,12 @@ return {
                 "name": "source_solution",
                 "plural": false,
                 "selections": [
-                  (v6/*: any*/),
-                  (v7/*: any*/)
+                  (v7/*: any*/),
+                  (v9/*: any*/)
                 ],
                 "storageKey": null
               },
-              (v9/*: any*/)
+              (v10/*: any*/)
             ],
             "type": "TimeDependentInversionSolution",
             "abstractKey": null
@@ -281,16 +292,16 @@ return {
                 "name": "source_solution",
                 "plural": false,
                 "selections": [
-                  (v6/*: any*/),
                   (v3/*: any*/),
                   {
                     "kind": "TypeDiscriminator",
                     "abstractKey": "__isNode"
-                  }
+                  },
+                  (v9/*: any*/)
                 ],
                 "storageKey": null
               },
-              (v9/*: any*/)
+              (v10/*: any*/)
             ],
             "type": "TimeDependentInversionSolution",
             "abstractKey": null
@@ -301,14 +312,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "84702385a257f20ceb4e4c18049a34b6",
+    "cacheID": "a3efacea1582d21f58f3cd121ed4b203",
     "id": null,
     "metadata": {},
     "name": "TimeDependentInversionSolutionDetailTabQuery",
     "operationKind": "query",
-    "text": "query TimeDependentInversionSolutionDetailTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    id\n    ... on TimeDependentInversionSolution {\n      file_name\n      file_url\n      created\n      produced_by {\n        __typename\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n      meta {\n        k\n        v\n      }\n      source_solution {\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        created\n        id\n      }\n      relations {\n        total_count\n      }\n    }\n  }\n}\n"
+    "text": "query TimeDependentInversionSolutionDetailTabQuery(\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    id\n    ... on TimeDependentInversionSolution {\n      file_name\n      file_url\n      created\n      produced_by {\n        __typename\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n      meta {\n        k\n        v\n      }\n      source_solution {\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on InversionSolutionInterface {\n          __isInversionSolutionInterface: __typename\n          created\n        }\n        id\n      }\n      relations {\n        total_count\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'd9fcfa88f7e7de1ce91e251056c3520e';
+(node as any).hash = 'd5f6c78aa2063aaedb458df3eb4b01a3';
 export default node;

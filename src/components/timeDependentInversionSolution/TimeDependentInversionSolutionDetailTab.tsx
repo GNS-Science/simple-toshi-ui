@@ -29,7 +29,7 @@ export const timeDependentInversionSolutionDetailTabQuery = graphql`
           ... on Node {
             id
           }
-          ... on InversionSolution {
+          ... on InversionSolutionInterface {
             created
           }
         }
