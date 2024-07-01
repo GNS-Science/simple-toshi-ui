@@ -119,8 +119,11 @@ type AutomationTask implements Node & Thing & AutomationTaskInterface {
   model_type: ModelType
   task_type: TaskSubType
 
-  """the primary result of this task (only for task_type == INVERSION."""
-  inversion_solution: InversionSolution
+  """
+  the result of this task. NB only available for task_types:INVERSION,
+  SCALE_SOLUTION, AGGREGATE_SOLUTION, TIME_DEPENDENT_SOLUTION.
+  """
+  inversion_solution: InversionSolutionUnion
 }
 
 input AutomationTaskInput {
@@ -845,6 +848,8 @@ type InversionSolutionNrml implements Node & FileInterface & PredecessorsInterfa
   """The original soloution as produced by opensha"""
   source_solution: SourceSolutionUnion
 }
+
+union InversionSolutionUnion = InversionSolution | ScaledInversionSolution | AggregateInversionSolution | TimeDependentInversionSolution
 
 """Simple container for KVL lists of strings"""
 type KeyValueListPair {

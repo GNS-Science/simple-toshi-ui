@@ -56,8 +56,8 @@
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "react-scripts --openssl-legacy-provider start",
+    "build": "react-scripts --openssl-legacy-provider build",
     "test": "react-scripts test --watchAll=false --coverage",
     "eject": "react-scripts eject",
     "relay": "relay-compiler --src ./src --schema ./schema.graphql --language typescript",

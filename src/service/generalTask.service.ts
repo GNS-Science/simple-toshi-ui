@@ -14,9 +14,9 @@ import { MySolutionsQueryResponse } from '../pages/__generated__/MySolutionsQuer
 export const maxLength = parseInt(process.env.REACT_APP_REPORTS_LIMIT ?? '24');
 export const sweepsList = (
   arg_lists: GeneralTaskKeyValueListPairs,
-  sweeps: readonly (string | null)[],
+  sweeps: readonly (string | null)[] | null | undefined,
 ): GeneralTaskKeyValueListPairs => {
-  if (arg_lists) return arg_lists.filter((el) => sweeps.includes(el ? el.k : ''));
+  if (sweeps && arg_lists) return arg_lists.filter((el) => sweeps.includes(el ? el.k : ''));
   return [];
 };
 
@@ -189,7 +189,7 @@ export const getGeneralTaskDetailsFromQueryResponse = (data: GeneralTaskQueryRes
     title: data?.node?.title ?? '',
     id: data?.node?.id ?? '',
     created: (data?.node?.created as string) ?? '',
-    model_type: data?.node?.model_type ?? '',
+    model_type: data?.node?.model_type,
     description: data?.node?.description ?? '',
     notes: data?.node?.notes ?? '',
     swept_arguments: (data?.node?.swept_arguments as string[]) ?? [],

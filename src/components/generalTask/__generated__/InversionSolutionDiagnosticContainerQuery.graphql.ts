@@ -56,17 +56,17 @@ export type InversionSolutionDiagnosticContainerQueryResponse = {
                         } | null>;
                     } | null | undefined;
                     readonly inversion_solution?: {
-                        readonly id: string;
-                        readonly file_name: string | null;
-                        readonly mfd_table_id: string | null;
-                        readonly meta: ReadonlyArray<{
+                        readonly id?: string | undefined;
+                        readonly file_name?: string | null | undefined;
+                        readonly meta?: ReadonlyArray<{
                             readonly k: string | null;
                             readonly v: string | null;
-                        } | null> | null;
-                        readonly tables: ReadonlyArray<{
+                        } | null> | null | undefined;
+                        readonly mfd_table_id?: string | null | undefined;
+                        readonly tables?: ReadonlyArray<{
                             readonly table_id: string | null;
                             readonly table_type: TableType | null;
-                        } | null> | null;
+                        } | null> | null | undefined;
                     } | null | undefined;
                 } | null;
             } | null>;
@@ -186,16 +186,26 @@ query InversionSolutionDiagnosticContainerQuery(
               }
             }
             inversion_solution {
-              id
-              file_name
-              mfd_table_id
-              meta {
-                k
-                v
+              __typename
+              ... on Node {
+                __isNode: __typename
+                id
               }
-              tables {
-                table_id
-                table_type
+              ... on FileInterface {
+                __isFileInterface: __typename
+                file_name
+                meta {
+                  k
+                  v
+                }
+              }
+              ... on InversionSolutionInterface {
+                __isInversionSolutionInterface: __typename
+                mfd_table_id
+                tables {
+                  table_id
+                  table_type
+                }
               }
             }
           }
@@ -399,14 +409,16 @@ v16 = {
   "storageKey": null
 },
 v17 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "InversionSolution",
-  "kind": "LinkedField",
-  "name": "inversion_solution",
-  "plural": false,
+  "kind": "InlineFragment",
   "selections": [
-    (v5/*: any*/),
+    (v5/*: any*/)
+  ],
+  "type": "Node",
+  "abstractKey": "__isNode"
+},
+v18 = {
+  "kind": "InlineFragment",
+  "selections": [
     {
       "alias": null,
       "args": null,
@@ -414,6 +426,14 @@ v17 = {
       "name": "file_name",
       "storageKey": null
     },
+    (v7/*: any*/)
+  ],
+  "type": "FileInterface",
+  "abstractKey": "__isFileInterface"
+},
+v19 = {
+  "kind": "InlineFragment",
+  "selections": [
     {
       "alias": null,
       "args": null,
@@ -421,7 +441,6 @@ v17 = {
       "name": "mfd_table_id",
       "storageKey": null
     },
-    (v7/*: any*/),
     {
       "alias": null,
       "args": null,
@@ -448,17 +467,10 @@ v17 = {
       "storageKey": null
     }
   ],
-  "storageKey": null
+  "type": "InversionSolutionInterface",
+  "abstractKey": "__isInversionSolutionInterface"
 },
-v18 = {
-  "kind": "InlineFragment",
-  "selections": [
-    (v5/*: any*/)
-  ],
-  "type": "Node",
-  "abstractKey": "__isNode"
-},
-v19 = [
+v20 = [
   (v5/*: any*/),
   (v7/*: any*/),
   {
@@ -485,7 +497,7 @@ v19 = [
           (v11/*: any*/),
           (v12/*: any*/),
           (v13/*: any*/),
-          (v18/*: any*/)
+          (v17/*: any*/)
         ],
         "storageKey": null
       },
@@ -606,7 +618,20 @@ return {
                             ],
                             "storageKey": null
                           },
-                          (v17/*: any*/)
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": null,
+                            "kind": "LinkedField",
+                            "name": "inversion_solution",
+                            "plural": false,
+                            "selections": [
+                              (v17/*: any*/),
+                              (v18/*: any*/),
+                              (v19/*: any*/)
+                            ],
+                            "storageKey": null
+                          }
                         ],
                         "type": "AutomationTask",
                         "abstractKey": null
@@ -716,13 +741,13 @@ return {
                                           (v2/*: any*/),
                                           {
                                             "kind": "InlineFragment",
-                                            "selections": (v19/*: any*/),
+                                            "selections": (v20/*: any*/),
                                             "type": "ScaledInversionSolution",
                                             "abstractKey": null
                                           },
                                           {
                                             "kind": "InlineFragment",
-                                            "selections": (v19/*: any*/),
+                                            "selections": (v20/*: any*/),
                                             "type": "TimeDependentInversionSolution",
                                             "abstractKey": null
                                           },
@@ -747,12 +772,26 @@ return {
                             ],
                             "storageKey": null
                           },
-                          (v17/*: any*/)
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": null,
+                            "kind": "LinkedField",
+                            "name": "inversion_solution",
+                            "plural": false,
+                            "selections": [
+                              (v2/*: any*/),
+                              (v17/*: any*/),
+                              (v18/*: any*/),
+                              (v19/*: any*/)
+                            ],
+                            "storageKey": null
+                          }
                         ],
                         "type": "AutomationTask",
                         "abstractKey": null
                       },
-                      (v18/*: any*/)
+                      (v17/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -768,14 +807,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "5ba5b33d6a1a56bf0e46f90d554e2472",
+    "cacheID": "9ba182cc59dd3f967ae72083b8c3fb51",
     "id": null,
     "metadata": {},
     "name": "InversionSolutionDiagnosticContainerQuery",
     "operationKind": "query",
-    "text": "query InversionSolutionDiagnosticContainerQuery(\n  $id: [ID!]\n) {\n  nodes(id_in: $id) {\n    result {\n      edges {\n        node {\n          __typename\n          ... on AutomationTask {\n            created\n            task_type\n            id\n            files {\n              edges {\n                node {\n                  file {\n                    __typename\n                    ... on ScaledInversionSolution {\n                      id\n                      meta {\n                        k\n                        v\n                      }\n                      predecessors {\n                        __typename\n                        pre_id: id\n                        relationship\n                        depth\n                        node {\n                          __typename\n                          ... on File {\n                            file_meta: meta {\n                              k\n                              v\n                            }\n                          }\n                          ... on InversionSolution {\n                            is_meta: meta {\n                              k\n                              v\n                            }\n                          }\n                          ... on TimeDependentInversionSolution {\n                            td_meta: meta {\n                              k\n                              v\n                            }\n                          }\n                          ... on Node {\n                            __isNode: __typename\n                            id\n                          }\n                        }\n                        id\n                      }\n                    }\n                    ... on TimeDependentInversionSolution {\n                      id\n                      meta {\n                        k\n                        v\n                      }\n                      predecessors {\n                        __typename\n                        pre_id: id\n                        relationship\n                        depth\n                        node {\n                          __typename\n                          ... on File {\n                            file_meta: meta {\n                              k\n                              v\n                            }\n                          }\n                          ... on InversionSolution {\n                            is_meta: meta {\n                              k\n                              v\n                            }\n                          }\n                          ... on TimeDependentInversionSolution {\n                            td_meta: meta {\n                              k\n                              v\n                            }\n                          }\n                          ... on Node {\n                            __isNode: __typename\n                            id\n                          }\n                        }\n                        id\n                      }\n                    }\n                    ... on Node {\n                      __isNode: __typename\n                      node_id: id\n                      id\n                    }\n                  }\n                }\n              }\n            }\n            inversion_solution {\n              id\n              file_name\n              mfd_table_id\n              meta {\n                k\n                v\n              }\n              tables {\n                table_id\n                table_type\n              }\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query InversionSolutionDiagnosticContainerQuery(\n  $id: [ID!]\n) {\n  nodes(id_in: $id) {\n    result {\n      edges {\n        node {\n          __typename\n          ... on AutomationTask {\n            created\n            task_type\n            id\n            files {\n              edges {\n                node {\n                  file {\n                    __typename\n                    ... on ScaledInversionSolution {\n                      id\n                      meta {\n                        k\n                        v\n                      }\n                      predecessors {\n                        __typename\n                        pre_id: id\n                        relationship\n                        depth\n                        node {\n                          __typename\n                          ... on File {\n                            file_meta: meta {\n                              k\n                              v\n                            }\n                          }\n                          ... on InversionSolution {\n                            is_meta: meta {\n                              k\n                              v\n                            }\n                          }\n                          ... on TimeDependentInversionSolution {\n                            td_meta: meta {\n                              k\n                              v\n                            }\n                          }\n                          ... on Node {\n                            __isNode: __typename\n                            id\n                          }\n                        }\n                        id\n                      }\n                    }\n                    ... on TimeDependentInversionSolution {\n                      id\n                      meta {\n                        k\n                        v\n                      }\n                      predecessors {\n                        __typename\n                        pre_id: id\n                        relationship\n                        depth\n                        node {\n                          __typename\n                          ... on File {\n                            file_meta: meta {\n                              k\n                              v\n                            }\n                          }\n                          ... on InversionSolution {\n                            is_meta: meta {\n                              k\n                              v\n                            }\n                          }\n                          ... on TimeDependentInversionSolution {\n                            td_meta: meta {\n                              k\n                              v\n                            }\n                          }\n                          ... on Node {\n                            __isNode: __typename\n                            id\n                          }\n                        }\n                        id\n                      }\n                    }\n                    ... on Node {\n                      __isNode: __typename\n                      node_id: id\n                      id\n                    }\n                  }\n                }\n              }\n            }\n            inversion_solution {\n              __typename\n              ... on Node {\n                __isNode: __typename\n                id\n              }\n              ... on FileInterface {\n                __isFileInterface: __typename\n                file_name\n                meta {\n                  k\n                  v\n                }\n              }\n              ... on InversionSolutionInterface {\n                __isInversionSolutionInterface: __typename\n                mfd_table_id\n                tables {\n                  table_id\n                  table_type\n                }\n              }\n            }\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '085f941d464823d6a1b597d7987ae8a6';
+(node as any).hash = 'dbea7dad1fdaa6925e6bd17d7de6cf65';
 export default node;

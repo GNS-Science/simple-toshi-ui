@@ -53,8 +53,8 @@ const Root = styled('div')(() => ({
 interface DiagnosticReportCardProps {
   unifiedInversionSolutions: UnifiedInversionSolution[];
   sweepArgs?: SweepArguments;
-  sweepList?: string[];
-  modelType: string;
+  sweepList?: readonly (string | null)[] | null | undefined;
+  modelType: string | null | undefined;
   generalViews: string[];
   setGeneralViews: (selection: string[]) => void;
   namedFaultsView: string;
@@ -215,7 +215,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
     return () => window.removeEventListener('keyup', hotkeyHandler);
   });
 
-  if (!unifiedInversionSolutions[currentImage]) {
+  if (!unifiedInversionSolutions[currentImage] || !unifiedInversionSolutions[currentImage].solution.id) {
     return <Typography> There are no valid reports to show. </Typography>;
   }
 
@@ -225,7 +225,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
         return (
           <DiagnosticReportTabPanel value={currentTab} index={0}>
             <GeneralView
-              id={unifiedInversionSolutions[currentImage].solution.id}
+              id={unifiedInversionSolutions[currentImage].solution.id || ''}
               mfdTableId={unifiedInversionSolutions[currentImage].solution.mfdTableId as string}
               meta={unifiedInversionSolutions[currentImage].solution.meta}
               filteredMeta={filteredMeta}
@@ -241,7 +241,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
         return (
           <DiagnosticReportTabPanel value={currentTab} index={1}>
             <RegionalMfdView
-              id={unifiedInversionSolutions[currentImage].solution.id}
+              id={unifiedInversionSolutions[currentImage].solution.id || ''}
               regionalViews={regionalViews}
               setRegionalViews={setRegionalViews}
               nonRegionalViews={nonRegionalViews}
@@ -254,7 +254,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
         return (
           <DiagnosticReportTabPanel value={currentTab} index={2}>
             <NamedFaultsView
-              id={unifiedInversionSolutions[currentImage].solution.id}
+              id={unifiedInversionSolutions[currentImage].solution.id || ''}
               namedFaultsView={namedFaultsView}
               setNamedFaultsView={setNamedFaultsView}
               namedFaultsLocations={namedFaultsLocations}
@@ -267,7 +267,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
         return (
           <DiagnosticReportTabPanel value={currentTab} index={3}>
             <ParentFaultView
-              id={unifiedInversionSolutions[currentImage].solution.id}
+              id={unifiedInversionSolutions[currentImage].solution.id || ''}
               parentFaultViews={parentFaultViews}
               setParentFaultViews={setParentFaultViews}
               parentFault={parentFault}
@@ -292,7 +292,7 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
         return (
           <DiagnosticReportTabPanel value={currentTab} index={5}>
             <SolutionAnalysisTab
-              id={unifiedInversionSolutions[currentImage].solution.id}
+              id={unifiedInversionSolutions[currentImage].solution.id || ''}
               setDisableHotkey={setDisableHotkey}
             />
           </DiagnosticReportTabPanel>
@@ -326,8 +326,8 @@ const DiagnosticReportCard: React.FC<DiagnosticReportCardProps> = ({
           </h4>
           <MetaToolTip meta={filteredMeta} />
           <FlipChartControls
-            id={unifiedInversionSolutions[currentImage].solution.id}
-            producedBy={unifiedInversionSolutions[currentImage].id}
+            id={unifiedInversionSolutions[currentImage].solution.id || ''}
+            producedBy={unifiedInversionSolutions[currentImage].id || ''}
             currentImage={currentImage}
             handlePrev={prevImage}
             handleNext={nextImage}
