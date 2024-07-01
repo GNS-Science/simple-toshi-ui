@@ -12,7 +12,7 @@ const Info = styled(Typography)(() => ({
   alignContent: 'space-between',
 }));
 
-export const tagToolTip = (v: string | null): JSX.Element | undefined => {
+export const tagToolTip = (v: string | null | undefined): JSX.Element | undefined => {
   if (v) {
     try {
       const cleanedJson = JSON.parse(v?.replaceAll("'", '"').replaceAll('False', 'false').replaceAll('True', 'true'));
@@ -41,11 +41,14 @@ interface MetaToolTipProps {
 export const MetaToolTip: React.FC<MetaToolTipProps> = ({ meta }: MetaToolTipProps) => {
   return (
     <Info>
-      {meta.map((kv) => (
-        <p style={{ padding: 0, margin: 0 }} key={kv?.k}>
-          <strong>{kv?.k}:</strong> {tagToolTip(kv?.v)} &nbsp;
-        </p>
-      ))}
+      {meta.map(
+        (kv) =>
+          kv && (
+            <p style={{ padding: 0, margin: 0 }} key={kv?.k}>
+              <strong>{kv?.k}:</strong> {tagToolTip(kv?.v)} &nbsp;
+            </p>
+          ),
+      )}
     </Info>
   );
 };

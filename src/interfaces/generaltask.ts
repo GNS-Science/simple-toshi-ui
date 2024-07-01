@@ -78,13 +78,13 @@ export type SourceSolution = {
 //Common inversion solution for flipchart - accomadates both scaled and normal
 export type UnifiedInversionSolution = {
   type: UnifiedInversionSolutionType;
-  id: string;
+  id: string | undefined;
   solution: {
-    id: string;
+    id: string | undefined;
     meta: Meta;
-    hazardId: string | null;
-    mfdTableId: string | null;
-    source_solution: SourceSolution | null;
+    hazardId: string | null | undefined;
+    mfdTableId: string | null | undefined;
+    source_solution: SourceSolution | null | undefined;
   };
 };
 

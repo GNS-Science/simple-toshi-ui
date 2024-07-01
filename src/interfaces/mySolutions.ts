@@ -35,6 +35,7 @@ export interface SolutionItem {
             readonly file: {
               readonly __typename: string;
               readonly __isNode?: string | undefined;
+              readonly node_id?: string | undefined;
               readonly id?: string | undefined;
               readonly meta?:
                 | ReadonlyArray<{
@@ -43,14 +44,36 @@ export interface SolutionItem {
                   } | null>
                 | null
                 | undefined;
-              readonly source_solution?:
-                | {
-                    readonly id: string;
-                    readonly meta: ReadonlyArray<{
-                      readonly k: string | null;
-                      readonly v: string | null;
-                    } | null> | null;
-                  }
+              readonly predecessors?:
+                | ReadonlyArray<{
+                    readonly __typename: string;
+                    readonly pre_id: string | null;
+                    readonly relationship: string | null;
+                    readonly depth: number | null;
+                    readonly node: {
+                      readonly file_meta?:
+                        | ReadonlyArray<{
+                            readonly k: string | null;
+                            readonly v: string | null;
+                          } | null>
+                        | null
+                        | undefined;
+                      readonly is_meta?:
+                        | ReadonlyArray<{
+                            readonly k: string | null;
+                            readonly v: string | null;
+                          } | null>
+                        | null
+                        | undefined;
+                      readonly td_meta?:
+                        | ReadonlyArray<{
+                            readonly k: string | null;
+                            readonly v: string | null;
+                          } | null>
+                        | null
+                        | undefined;
+                    } | null;
+                  } | null>
                 | null
                 | undefined;
             } | null;
@@ -61,23 +84,29 @@ export interface SolutionItem {
     | undefined;
   readonly inversion_solution?:
     | {
-        readonly id: string;
-        readonly file_name: string | null;
-        readonly mfd_table_id: string | null;
-        readonly meta: ReadonlyArray<{
-          readonly k: string | null;
-          readonly v: string | null;
-        } | null> | null;
-        readonly tables: ReadonlyArray<{
-          readonly table_id: string | null;
-          readonly table_type: TableType | null;
-        } | null> | null;
+        readonly id?: string | undefined;
+        readonly file_name?: string | null | undefined;
+        readonly meta?:
+          | ReadonlyArray<{
+              readonly k: string | null;
+              readonly v: string | null;
+            } | null>
+          | null
+          | undefined;
+        readonly mfd_table_id?: string | null | undefined;
+        readonly tables?:
+          | ReadonlyArray<{
+              readonly table_id: string | null;
+              readonly table_type: TableType | null;
+            } | null>
+          | null
+          | undefined;
       }
     | null
     | undefined;
 }
 
 export type MetaArguments = Array<{
-  readonly k: string | null;
-  readonly v: string | null;
+  readonly k: string | null | undefined;
+  readonly v: string | null | undefined;
 }>;

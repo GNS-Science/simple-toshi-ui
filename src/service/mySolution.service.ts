@@ -16,7 +16,7 @@ export const getGeneralTaskDetails = (
     id: (currentTaskParent?.id as string) ?? '',
     created: (currentTaskParent?.created as string) ?? '',
     description: (currentTaskParent?.description as string) ?? '',
-    model_type: (currentTaskParent?.model_type as string) ?? '',
+    model_type: currentTaskParent?.model_type,
     notes: (currentTaskParent?.notes as string) ?? '',
     swept_arguments: (currentTaskParent?.swept_arguments as string[]) ?? [],
     argument_lists: currentTaskParent?.argument_lists ?? [],
@@ -27,7 +27,7 @@ export const validateListItems = (data: MySolutionsQueryResponse): SolutionItem[
   const automationTasks = data?.nodes?.result?.edges.map((e) => e?.node) ?? [];
   const listItems: SolutionItem[] = [];
   automationTasks.map((item) => {
-    if (item && item !== null && item.__typename === 'AutomationTask') {
+    if (item && item.__typename === 'AutomationTask') {
       listItems.push(item);
     }
   });

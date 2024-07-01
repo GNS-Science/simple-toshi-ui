@@ -186,16 +186,22 @@ export const inversionSolutionDiagnosticContainerQuery = graphql`
                 }
               }
               inversion_solution {
-                id
-                file_name
-                mfd_table_id
-                meta {
-                  k
-                  v
+                ... on Node {
+                  id
                 }
-                tables {
-                  table_id
-                  table_type
+                ... on FileInterface {
+                  file_name
+                  meta {
+                    k
+                    v
+                  }
+                }
+                ... on InversionSolutionInterface {
+                  mfd_table_id
+                  tables {
+                    table_id
+                    table_type
+                  }
                 }
               }
             }
